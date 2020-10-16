@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace RemoteCockpit
 {
-    public class MessageHandler : NativeWindow
+    public class MessageHandler : Form
     {
         private const int WM_USER_SIMCONNECT = 0x0402;
         public EventHandler<LogMessage> LogReceived;
@@ -19,17 +19,23 @@ namespace RemoteCockpit
         {
         }
 
-        public void CreateHandle()
+        protected override void CreateHandle()
         {
             try
             {
                 WriteLog("Creating Handle");
-                CreateHandle(new CreateParams());
+                //CreateHandle(new CreateParams());
+                base.CreateHandle();
             }
             catch (Exception ex)
             {
                 WriteLog(ex.Message, EventLogEntryType.Error);
             }
+        }
+
+        protected override void DestroyHandle()
+        {
+            base.DestroyHandle();
         }
 
         protected override void WndProc(ref Message m)
@@ -39,7 +45,7 @@ namespace RemoteCockpit
                 try
                 {
                     if (MessageReceived != null)
-                        MessageReceived.DynamicInvoke(null);
+                        MessageReceived.Invoke(this, null);
                 }
                 catch (COMException ex)
                 {

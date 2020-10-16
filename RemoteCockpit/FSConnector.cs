@@ -38,7 +38,7 @@ namespace RemoteCockpit
         #region Start/Stop/Initialize/Dispose
         private void Initialize()
         {
-            DestroyHandle();
+            DisposeHandler();
             Connecting = false;
             Connected = false;
         }
@@ -88,7 +88,7 @@ namespace RemoteCockpit
                 {
                     Stop();
                     simConnect?.Dispose();
-                    handler?.DestroyHandle();
+                    handler.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
@@ -110,21 +110,20 @@ namespace RemoteCockpit
         {
             if(handler != null)
             {
-                DestroyHandle();
+                DisposeHandler();
             }
 
             handler = new MessageHandler();
             handler.MessageReceived += ReceiveMessage;
             handler.LogReceived += WriteLog;
-            handler.CreateHandle();
             m_hWnd = handler.Handle;
         }
 
-        private void DestroyHandle()
+        private void DisposeHandler()
         {
             if (handler != null)
             {
-                handler.DestroyHandle();
+                handler.Dispose();
                 WriteLog("Destroying Handle");
             }
             handler = null;
@@ -166,7 +165,7 @@ namespace RemoteCockpit
                 {
                     simConnect.Dispose();
                     simConnect = null;
-                    DestroyHandle();
+                    DisposeHandler();
                 }
                 catch (Exception ex) {
                     WriteLog(ex.Message, EventLogEntryType.Error);
@@ -205,20 +204,20 @@ namespace RemoteCockpit
 
         private void WriteLog(object sender, LogMessage message)
         {
-            WriteLog(message.Message, message.Type);
+            if (LogReceived != null)
+            {
+                LogReceived.DynamicInvoke(sender, message);
+            }
+            else
+            {
+                var strType = message.Type.ToString().Substring(0, 3);
+                Console.WriteLine("[{0}] {1}", strType, message);
+            }
         }
 
         private void WriteLog(string message, EventLogEntryType type = EventLogEntryType.Information)
         {
-            if (LogReceived != null)
-            {
-                LogReceived.DynamicInvoke(this, new LogMessage { Message = message, Type = type });
-            }
-            else
-            {
-                var strType = type.ToString().Substring(0, 3);
-                Console.WriteLine("[{0}] {1}", strType, message);
-            }
+            WriteLog(this, new LogMessage { Message = message, Type = type });
         }
         #endregion
     }
