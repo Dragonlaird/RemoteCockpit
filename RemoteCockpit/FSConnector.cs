@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.FlightSimulator.SimConnect;
 
 namespace RemoteCockpit
@@ -21,11 +23,15 @@ namespace RemoteCockpit
 
         public bool Connecting { get; private set; }
         public bool Connected { get; private set; }
+        private Task messageHandler;
+        private AutoResetEvent messageHandlerRunning = new AutoResetEvent(false);
+
 
         public EventHandler MessageReceived;
         public EventHandler<LogMessage> LogReceived;
 
         private IntPtr m_hWnd;
+        private List<SimVarRequest> simVarRequests;
 
         private IEnumerable<SimVarRequestResult> simvarRequests { get; set; }
 
@@ -34,11 +40,11 @@ namespace RemoteCockpit
             Initialize();
         }
 
-
         #region Start/Stop/Initialize/Dispose
         private void Initialize()
         {
             DisposeHandler();
+            simVarRequests = new List<SimVarRequest>();
             Connecting = false;
             Connected = false;
         }
@@ -49,8 +55,7 @@ namespace RemoteCockpit
             Connecting = true;
             try
             {
-                if (handler == null)
-                    CreateHandle();
+                CreateHandler();
 
                 simConnect = new SimConnect("Remote Cockpit", m_hWnd, WM_USER_SIMCONNECT, null, bFSXcompatible ? (uint)1 : 0);
 
@@ -105,18 +110,60 @@ namespace RemoteCockpit
         }
         #endregion
 
-        #region Window Handle Emulator
-        private void CreateHandle()
+        #region SimVar Request Handlers
+        public void RequestVariable(SimVarRequest request)
         {
-            if(handler != null)
+            if (request != null && !string.IsNullOrWhiteSpace(request.Name))
+            {
+                request.Name = request.Name.ToUpper();
+                if (string.IsNullOrWhiteSpace(request.Unit))
+                {
+                    request.Unit = SimVarUnits.DefaultUnits[request.Name].DefaultUnit;
+                }
+                if (!simVarRequests.Any(x => x.Name == request.Name.ToUpper() && request.Unit == request.Unit.ToLower()))
+                {
+                    lock (simVarRequests)
+                    {
+                        WriteLog(string.Format("Adding SimVarRequest for: {0} ({1})", request.Name, request.Unit));
+                        simVarRequests.Add(new SimVarRequest { Name = request.Name.ToUpper(), Unit = request.Unit.ToLower() });
+                    }
+                }
+                else
+                {
+                    WriteLog(string.Format("SimVarRequest already requested: {0} ({1})", request.Name.ToUpper(), request.Unit.ToLower()));
+                }
+            }
+            else
+            {
+                WriteLog(string.Format("Invalid SimVarRequest for: {0} ({1})", request?.Name?.ToUpper(), request?.Unit?.ToLower()), EventLogEntryType.Error);
+            }
+        }
+        #endregion
+
+        #region Window Handle Emulator
+        private void CreateHandler()
+        {
+            if (handler != null)
             {
                 DisposeHandler();
             }
+            messageHandler = new Task(() =>
+            {
+                handler = new MessageHandler();
+                handler.MessageReceived += ReceiveMessage;
+                handler.LogReceived += WriteLog;
+                messageHandlerRunning.Set();
+                Application.Run();
+            });
+            messageHandler.Start();
+            messageHandlerRunning.WaitOne();
 
-            handler = new MessageHandler();
-            handler.MessageReceived += ReceiveMessage;
-            handler.LogReceived += WriteLog;
+            while (handler == null)
+            {
+                Thread.Sleep(10);
+            }
             m_hWnd = handler.Handle;
+
         }
 
         private void DisposeHandler()

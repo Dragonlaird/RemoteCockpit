@@ -62,6 +62,7 @@
     <Compile Include="RemoteCockpitEnums.cs" />
     <Compile Include="SimVarRequest.cs" />
     <Compile Include="SimVarRequestResult.cs" />
+    <Compile Include="SimVarUnits.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -14,7 +14,7 @@ namespace RemoteCockpit
         static void Main(string[] args)
         {
             var remoteCockpit = new RemoteCockpit();
-            Application.Run();
+           Application.Run();
         }
 
         static void WriteLog(object sender, LogMessage message)

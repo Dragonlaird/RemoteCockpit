@@ -32,7 +32,5 @@ namespace RemoteCockpit
                 _unit = value?.ToLower();
             }
         }
-
-        public TimeSpan Frequency { get; set; }
     }
 }

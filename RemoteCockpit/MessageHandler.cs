@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,6 +27,7 @@ namespace RemoteCockpit
                 WriteLog("Creating Handle");
                 //CreateHandle(new CreateParams());
                 base.CreateHandle();
+
             }
             catch (Exception ex)
             {
