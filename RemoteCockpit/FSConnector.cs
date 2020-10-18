@@ -13,6 +13,7 @@ namespace RemoteCockpit
 {
     public class FSConnector : IDisposable
     {
+        private const int connectionCheckInterval = 10000;
         private MessageHandler handler;
         private const int WM_USER_SIMCONNECT = 0x0402;
         private bool bFSXcompatible = false;
@@ -23,10 +24,13 @@ namespace RemoteCockpit
 
         public bool Connecting { get; private set; }
         public bool Connected { get; private set; }
-        private Task messageHandler;
-        private AutoResetEvent messageHandlerRunning = new AutoResetEvent(false);
+        private static Task messageTask;
+        private AutoResetEvent messageTaskRunning = new AutoResetEvent(false);
 
+        private delegate void SetHandlerCallback();
 
+        private static System.Timers.Timer connectionCheck;
+        private CancellationTokenSource source;
         public EventHandler MessageReceived;
         public EventHandler<LogMessage> LogReceived;
 
@@ -51,8 +55,21 @@ namespace RemoteCockpit
 
         public void Start()
         {
+            StartConnector();
+            connectionCheck = new System.Timers.Timer(connectionCheckInterval);
+            // Hook up the Elapsed event for the timer. 
+            connectionCheck.Elapsed += ConnectionCheck;
+            connectionCheck.AutoReset = true;
+            connectionCheck.Enabled = true;
+
+        }
+
+        private void StartConnector()
+        {
+            Stop();
             WriteLog("Connecting");
             Connecting = true;
+            
             try
             {
                 CreateHandler();
@@ -71,18 +88,37 @@ namespace RemoteCockpit
                 /// Listen for SimVar Data
                 simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(SimConnect_OnRecvSimobjectDataBytype);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteLog(ex.Message, EventLogEntryType.Error);
                 Stop();
             }
         }
 
+        private void ConnectionCheck(object sender, EventArgs e)
+        {
+            connectionCheck?.Stop();
+            connectionCheck?.Dispose();
+            if (!Connected)
+            {
+                WriteLog("Not Connected - Retrying", EventLogEntryType.Warning);
+                StartConnector();
+            }
+            connectionCheck = new System.Timers.Timer(connectionCheckInterval);
+            // Hook up the Elapsed event for the timer. 
+            connectionCheck.Elapsed += ConnectionCheck;
+            connectionCheck.AutoReset = true;
+            connectionCheck.Enabled = true;
+        }
+
         public void Stop()
         {
             WriteLog("Disconnecting");
+            simConnect?.Dispose();
+            simConnect = null;
             Connecting = false;
             Connected = false;
+
         }
 
         protected virtual void Dispose(bool disposing)
@@ -92,6 +128,8 @@ namespace RemoteCockpit
                 if (disposing)
                 {
                     Stop();
+                    connectionCheck?.Stop();
+                    connectionCheck?.Dispose();
                     simConnect?.Dispose();
                     handler.Dispose();
                 }
@@ -141,22 +179,34 @@ namespace RemoteCockpit
         #endregion
 
         #region Window Handle Emulator
+
         private void CreateHandler()
         {
+            if (handler?.InvokeRequired == true)
+            {
+                SetHandlerCallback d = new SetHandlerCallback(CreateHandler);
+                this.handler.Invoke(d);
+                return;
+            }
             if (handler != null)
             {
                 DisposeHandler();
             }
-            messageHandler = new Task(() =>
+            if (source?.IsCancellationRequested == false)
+            {
+                source.Cancel();
+            }
+            source = new CancellationTokenSource();
+            messageTask = new Task(() =>
             {
                 handler = new MessageHandler();
                 handler.MessageReceived += ReceiveMessage;
                 handler.LogReceived += WriteLog;
-                messageHandlerRunning.Set();
-                Application.Run();
-            });
-            messageHandler.Start();
-            messageHandlerRunning.WaitOne();
+                messageTaskRunning.Set();
+                //Application.Run();
+            }, source.Token);
+            messageTask.Start();
+            messageTaskRunning.WaitOne();
 
             while (handler == null)
             {
@@ -168,7 +218,7 @@ namespace RemoteCockpit
 
         private void DisposeHandler()
         {
-            if (handler != null)
+            if (handler != null && !handler.IsDisposed)
             {
                 handler.Dispose();
                 WriteLog("Destroying Handle");
