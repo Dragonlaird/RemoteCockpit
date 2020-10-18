@@ -23,7 +23,28 @@ namespace RemoteCockpit
         private bool disposedValue;
 
         public bool Connecting { get; private set; }
-        public bool Connected { get; private set; }
+        private bool bConnected = false;
+
+        // Call Callback to advise parent if Connection is dropped or successful
+        public bool Connected
+        {
+            get
+            {
+                return bConnected;
+            }
+            private set
+            {
+                if (bConnected != value)
+                {
+                    bConnected = value;
+                    if (ConnectionStateChange != null)
+                    {
+                        ConnectionStateChange.Invoke(this, value);
+                    }
+                }
+            }
+        }
+
         private static Task messageTask;
         private AutoResetEvent messageTaskRunning = new AutoResetEvent(false);
 
@@ -31,8 +52,10 @@ namespace RemoteCockpit
 
         private static System.Timers.Timer connectionCheck;
         private CancellationTokenSource source;
-        public EventHandler MessageReceived;
+
+        public EventHandler<SimVarRequestResult> MessageReceived;
         public EventHandler<LogMessage> LogReceived;
+        public EventHandler<bool> ConnectionStateChange;
 
         private IntPtr m_hWnd;
         private List<SimVarRequest> simVarRequests;
@@ -115,6 +138,7 @@ namespace RemoteCockpit
         {
             WriteLog("Disconnecting");
             simConnect?.Dispose();
+            handler?.Dispose();
             simConnect = null;
             Connecting = false;
             Connected = false;
@@ -131,7 +155,7 @@ namespace RemoteCockpit
                     connectionCheck?.Stop();
                     connectionCheck?.Dispose();
                     simConnect?.Dispose();
-                    handler.Dispose();
+                    handler?.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
@@ -260,7 +284,7 @@ namespace RemoteCockpit
                 Stop();
                 try
                 {
-                    simConnect.Dispose();
+                    simConnect?.Dispose();
                     simConnect = null;
                     DisposeHandler();
                 }
