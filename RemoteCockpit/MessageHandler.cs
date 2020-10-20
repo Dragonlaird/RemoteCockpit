@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.FlightSimulator.SimConnect;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,67 +11,142 @@ using System.Windows.Forms;
 
 namespace RemoteCockpit
 {
-    public class MessageHandler : Form
-    {
-        private const int WM_USER_SIMCONNECT = 0x0402;
-        public EventHandler<LogMessage> LogReceived;
+    // Adaped from http://stackoverflow.com/questions/2443867/message-pump-in-net-windows-service
 
-        public EventHandler MessageReceived;
+    internal class MessageHandler : NativeWindow
+    {
+        public event EventHandler<Message> MessageReceived;
+        internal EventHandler<IntPtr> HandleSet;
+
         public MessageHandler()
         {
         }
 
-        protected override void CreateHandle()
+        internal void CreateHandle()
         {
-            try
+            CreateHandle(new CreateParams());
+            if (HandleSet != null)
             {
-                WriteLog("Creating Handle");
-                //CreateHandle(new CreateParams());
-                base.CreateHandle();
-
-            }
-            catch (Exception ex)
-            {
-                WriteLog(ex.Message, EventLogEntryType.Error);
+                HandleSet.DynamicInvoke(this, this.Handle);
             }
         }
 
-        protected override void DestroyHandle()
+        protected override void WndProc(ref Message msg)
         {
-            base.DestroyHandle();
+            // filter messages here for your purposes
+            if (msg.Msg == 1026 && MessageReceived != null)
+                MessageReceived.DynamicInvoke(this, msg);
+            else
+                base.WndProc(ref msg);
+        }
+    }
+
+    public class MessagePumpManager
+    {
+        private readonly Thread messagePump;
+        private AutoResetEvent messagePumpRunning = new AutoResetEvent(false);
+        private SimConnect simConnect = null;
+        public EventHandler<bool> SimConnect;
+        public EventHandler<SIMCONNECT_RECV_EXCEPTION> SimError;
+        public EventHandler<SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE> SimData;
+        private const int WM_USER_SIMCONNECT = 0x0402;
+        private const bool bFSXcompatible = false;
+        private IntPtr _handle;
+        public IntPtr Handle { 
+            get
+            {
+                return _handle;
+            } 
+        }
+        public MessagePumpManager()
+        {
+            // start message pump in its own thread
+            messagePump = new Thread(RunMessagePump) { Name = "ManualMessagePump" };
+            messagePump.Start();
+            messagePumpRunning.WaitOne();
         }
 
-        protected override void WndProc(ref Message m)
+        // Message Pump Thread
+        private void RunMessagePump()
         {
-            if (m.Msg == WM_USER_SIMCONNECT)
-            {
+            // Create control to handle windows messages
+            MessageHandler messageHandler = new MessageHandler();
+            messageHandler.HandleSet += GetHandle;
+            messageHandler.CreateHandle();
+            Console.WriteLine("Message Pump Thread Started");
+            ConnectFS(messageHandler);
+            messagePumpRunning.Set();
+            Application.Run();
+        }
+
+        private void MessageReceived(object sender, Message msg)
+        {
+            if (msg.Msg == WM_USER_SIMCONNECT && simConnect != null)
                 try
                 {
-                    if (MessageReceived != null)
-                        MessageReceived.Invoke(this, null);
+                    simConnect.ReceiveMessage();
                 }
-                catch (COMException ex)
+                catch(Exception ex)
                 {
-                    WriteLog(ex.Message, EventLogEntryType.Error);
+                    // Seen to happen if FS is shutting down
                 }
-            }
-            else
+        }
+
+        private void ConnectFS(MessageHandler messageHandler)
+        {
+            // SimConnect must be linked in the same thread as the Application.Run()
+            try
             {
-                base.WndProc(ref m);
+                simConnect = new SimConnect("Remote Cockpit", messageHandler.Handle, WM_USER_SIMCONNECT, null, bFSXcompatible ? (uint)1 : 0);
+
+                messageHandler.MessageReceived += MessageReceived;
+
+                /// Listen for Connect
+                simConnect.OnRecvOpen += new SimConnect.RecvOpenEventHandler(SimConnect_OnRecvOpen);
+
+                /// Listen for Disconnect
+                simConnect.OnRecvQuit += new SimConnect.RecvQuitEventHandler(SimConnect_OnRecvQuit);
+
+                /// Listen for Exceptions
+                simConnect.OnRecvException += new SimConnect.RecvExceptionEventHandler(SimConnect_OnRecvException);
+
+                /// Listen for SimVar Data
+                simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(SimConnect_OnRecvSimobjectDataBytype);
+
+            }
+            catch(Exception ex){
+
             }
         }
 
-        private void WriteLog(string message, EventLogEntryType type = EventLogEntryType.Information)
+        private void SimConnect_OnRecvSimobjectDataBytype(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
-            if (LogReceived != null)
-            {
-                LogReceived.DynamicInvoke(this, new LogMessage { Message = message, Type = type });
-            }
-            else
-            {
-                var strType = type.ToString().Substring(0, 3);
-                Console.WriteLine("[{0}] {1}", strType, message);
-            }
+            if (SimData != null)
+                SimData.DynamicInvoke(this, data);
+        }
+
+        private void SimConnect_OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
+        {
+            if (SimError != null)
+                SimError.DynamicInvoke(this, data);
+        }
+
+        private void SimConnect_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
+        {
+            if (SimConnect != null)
+                SimConnect.DynamicInvoke(this, true);
+        }
+
+        private void SimConnect_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
+        {
+            if (SimConnect != null)
+                SimConnect.DynamicInvoke(this, false);
+        }
+
+
+        private void GetHandle(object sender, IntPtr handle)
+        {
+            _handle = handle;
         }
     }
 }
