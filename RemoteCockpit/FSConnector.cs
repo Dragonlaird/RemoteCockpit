@@ -44,14 +44,16 @@ namespace RemoteCockpit
         public EventHandler<SimVarRequestResult> MessageReceived;
         public EventHandler<LogMessage> LogReceived;
         public EventHandler<bool> ConnectionStateChange;
+        public EventHandler<Exception> ErrorEvent;
+        public EventHandler<SimVarRequestResult> DataReceived;
 
         private List<SimVarRequest> simVarRequests;
-
-        private IEnumerable<SimVarRequestResult> simvarRequests { get; set; }
 
         public FSConnector()
         {
             Initialize();
+            var tempRequest = new SimVarRequest { Name = "GPS POSITION ALT" };
+            RequestVariable(tempRequest);
         }
 
         #region Start/Stop/Initialize/Dispose
@@ -135,33 +137,64 @@ namespace RemoteCockpit
                 {
                     request.Unit = SimVarUnits.DefaultUnits[request.Name].DefaultUnit;
                 }
-                if (!simVarRequests.Any(x => x.Name == request.Name.ToUpper() && request.Unit == request.Unit.ToLower()))
+                if (!simVarRequests.Any(x => x.Name == request.Name && request.Unit == request.Unit))
                 {
+                    if (simVarRequests.Count() == 0)
+                    {
+                        request.ID = 1;
+                    }
+                    else
+                    {
+                        request.ID = simVarRequests.Max(x => x.ID) + 1;
+                    }
                     lock (simVarRequests)
                     {
-                        WriteLog(string.Format("Adding SimVarRequest for: {0} ({1})", request.Name, request.Unit));
-                        simVarRequests.Add(new SimVarRequest { Name = request.Name.ToUpper(), Unit = request.Unit.ToLower() });
+                        WriteLog(string.Format("Adding SimVarRequest for ID: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
+                        simVarRequests.Add(request);
+                    }
+                    try
+                    {
+                        AddSimVarRequest(request);
+                    }
+                    catch(Exception ex)
+                    {
+                        WriteLog(string.Format("SimVarRequest Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
                     }
                 }
                 else
                 {
-                    WriteLog(string.Format("SimVarRequest already requested: {0} ({1})", request.Name.ToUpper(), request.Unit.ToLower()));
+                    request = simVarRequests.First(x => x.Name == request.Name && x.Unit == request.Unit);
+                    WriteLog(string.Format("SimVarRequest already requested: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
                 }
             }
             else
             {
-                WriteLog(string.Format("Invalid SimVarRequest for: {0} ({1})", request?.Name?.ToUpper(), request?.Unit?.ToLower()), EventLogEntryType.Error);
+                WriteLog(string.Format("Invalid SimVarRequest for: {0} ({1})", request?.Name, request?.Unit), EventLogEntryType.Error);
             }
+        }
+
+        private void AddSimVarRequest(SimVarRequest request)
+        {
+            if (Connected && handler != null)
+                try
+                {
+                    handler.AddRequest(request);
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(string.Format("SimVarRequest Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
+                }
+
         }
         #endregion
 
-        #region Window Handle Emulator
+        #region Window Message Handler Emulator
         private void CreateHandler()
         {
             if (handler == null)
             {
                 handler = new MessagePumpManager();               
-                handler.SimConnect += Sim_Connection;
+                handler.SimConnected += Sim_Connection;
                 handler.SimError += Sim_Error;
                 handler.SimData += Sim_Data;
             }
@@ -176,11 +209,14 @@ namespace RemoteCockpit
         #region SimConnect Event Handlers
         void Sim_Error(object sender, SIMCONNECT_RECV_EXCEPTION error)
         {
-
+            WriteLog(string.Format("SimConnect Exception: {0}", error.dwException), EventLogEntryType.Error);
+            if (ErrorEvent != null)
+                ErrorEvent.DynamicInvoke(this, new Exception(string.Format("SimConnect Exception: {0}", error.dwException)));
         }
 
         void Sim_Data(object sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
+            WriteLog(string.Format("SimConnect Data: {0}={1}", data.dwRequestID, data.dwData));
 
         }
 
@@ -190,6 +226,11 @@ namespace RemoteCockpit
             {
                 Connected = true;
                 WriteLog("Connected");
+                // New connection to FS - resubmit all previous SimVariable requests
+                foreach(var request in simVarRequests)
+                {
+                    AddSimVarRequest(request);
+                }
             }
             else
             {
@@ -198,69 +239,6 @@ namespace RemoteCockpit
             }
             Connecting = false;
         }
-/*
-        void SimConnect_OnRecvSimobjectDataBytype(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
-        {
-            // Find Request in SimVarRequestModel. If value has changed, update it and invoke MessageReceived
-            uint iObject = data.dwObjectID;
-            DEFINITION simVarId = (DEFINITION)data.dwDefineID;
-            var simVarRequest = simvarRequests.FirstOrDefault(x => x.DefId == simVarId);
-            if (simVarRequest != null)
-            {
-                if (simVarRequest.Value == (double)data.dwData[0])
-                    return;
-
-                simVarRequest.Value = (double)data.dwData[0];
-            }
-
-            if (MessageReceived != null)
-                MessageReceived.DynamicInvoke(sender, simVarRequest);
-        }
-
-
-        void SimConnect_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
-        {
-        }
-
-        void SimConnect_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
-        {
-            if (simConnect != null && (Connected | Connecting))
-            {
-                Stop();
-                try
-                {
-                    simConnect?.Dispose();
-                    simConnect = null;
-                    DisposeHandler();
-                }
-                catch (Exception ex) {
-                    WriteLog(ex.Message, EventLogEntryType.Error);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Already disconnected");
-            }
-        }
-
-        void SimConnect_OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
-        {
-            SIMCONNECT_EXCEPTION eException = (SIMCONNECT_EXCEPTION)data.dwException;
-            var errorType = Enum.GetName(typeof(SIMCONNECT_EXCEPTION), data.dwException);
-            Console.WriteLine(string.Format("SimConnect Error: {0}", errorType));
-            if (simConnect != null)
-            {
-                try
-                {
-                    SimConnect_OnRecvQuit(sender, null);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(string.Format("SimConnect Dispose Error: {0}", ex.Message));
-                }
-            }
-        }
-*/
         #endregion
 
         #region Message and Log Handlers

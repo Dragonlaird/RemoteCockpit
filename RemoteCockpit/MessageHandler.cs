@@ -46,7 +46,7 @@ namespace RemoteCockpit
         private readonly Thread messagePump;
         private AutoResetEvent messagePumpRunning = new AutoResetEvent(false);
         private SimConnect simConnect = null;
-        public EventHandler<bool> SimConnect;
+        public EventHandler<bool> SimConnected;
         public EventHandler<SIMCONNECT_RECV_EXCEPTION> SimError;
         public EventHandler<SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE> SimData;
         private const int WM_USER_SIMCONNECT = 0x0402;
@@ -64,6 +64,12 @@ namespace RemoteCockpit
             messagePump = new Thread(RunMessagePump) { Name = "ManualMessagePump" };
             messagePump.Start();
             messagePumpRunning.WaitOne();
+        }
+
+        public void AddRequest(SimVarRequest request)
+        {
+            simConnect.AddToDataDefinition((DEFINITION)request.ID, request.Name, request.Unit, SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+            simConnect.RegisterDataDefineStruct<double>((DEFINITION)request.ID);
         }
 
         // Message Pump Thread
@@ -133,14 +139,14 @@ namespace RemoteCockpit
 
         private void SimConnect_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
         {
-            if (SimConnect != null)
-                SimConnect.DynamicInvoke(this, true);
+            if (SimConnected != null)
+                SimConnected.DynamicInvoke(this, true);
         }
 
         private void SimConnect_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
         {
-            if (SimConnect != null)
-                SimConnect.DynamicInvoke(this, false);
+            if (SimConnected != null)
+                SimConnected.DynamicInvoke(this, false);
         }
 
 

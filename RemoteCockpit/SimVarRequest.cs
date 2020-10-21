@@ -10,6 +10,7 @@ namespace RemoteCockpit
     {
         private string _name;
         private string _unit;
+        public int ID { get; set; }
         public string Name
         {
             get
