@@ -15,8 +15,15 @@ namespace RemoteCockpit
         {
             fsConnector = new FSConnector();
             fsConnector.LogReceived += WriteLog;
-            fsConnector.MessageReceived += MessageReceived;
+            fsConnector.DataReceived += MessageReceived;
             fsConnector.ConnectionStateChange += ConnectionStateChanged;
+            var tempRequest = new SimVarRequest { Name = "GPS POSITION ALT" };
+            fsConnector.RequestVariable(tempRequest);
+            tempRequest = new SimVarRequest { Name = "AMBIENT WIND VELOCITY" };
+            fsConnector.RequestVariable(tempRequest);
+            tempRequest = new SimVarRequest { Name = "AMBIENT WIND DIRECTION" };
+            fsConnector.RequestVariable(tempRequest);
+            fsConnector.ValueRequestInterval = 3;
             fsConnector.Start();
         }
 
@@ -27,6 +34,7 @@ namespace RemoteCockpit
         /// <param name="e">SimVarRequestResult containing requested valiable, unit and value</param>
         private void MessageReceived(object sender, SimVarRequestResult e)
         {
+            WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = System.Diagnostics.EventLogEntryType.Information });
         }
 
         /// <summary>

@@ -16,7 +16,6 @@ namespace RemoteCockpit
     internal class MessageHandler : NativeWindow
     {
         public event EventHandler<Message> MessageReceived;
-        internal EventHandler<IntPtr> HandleSet;
 
         public MessageHandler()
         {
@@ -25,10 +24,6 @@ namespace RemoteCockpit
         internal void CreateHandle()
         {
             CreateHandle(new CreateParams());
-            if (HandleSet != null)
-            {
-                HandleSet.DynamicInvoke(this, this.Handle);
-            }
         }
 
         protected override void WndProc(ref Message msg)
@@ -51,13 +46,7 @@ namespace RemoteCockpit
         public EventHandler<SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE> SimData;
         private const int WM_USER_SIMCONNECT = 0x0402;
         private const bool bFSXcompatible = false;
-        private IntPtr _handle;
-        public IntPtr Handle { 
-            get
-            {
-                return _handle;
-            } 
-        }
+
         public MessagePumpManager()
         {
             // start message pump in its own thread
@@ -68,8 +57,8 @@ namespace RemoteCockpit
 
         public void AddRequest(SimVarRequest request)
         {
-            simConnect.AddToDataDefinition((DEFINITION)request.ID, request.Name, request.Unit, SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-            simConnect.RegisterDataDefineStruct<double>((DEFINITION)request.ID);
+            simConnect.AddToDataDefinition(request.DefID, request.Name, request.Unit, SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+            simConnect.RegisterDataDefineStruct<double>(request.DefID);
         }
 
         // Message Pump Thread
@@ -77,9 +66,7 @@ namespace RemoteCockpit
         {
             // Create control to handle windows messages
             MessageHandler messageHandler = new MessageHandler();
-            messageHandler.HandleSet += GetHandle;
             messageHandler.CreateHandle();
-            Console.WriteLine("Message Pump Thread Started");
             ConnectFS(messageHandler);
             messagePumpRunning.Set();
             Application.Run();
@@ -96,6 +83,18 @@ namespace RemoteCockpit
                 {
                     // Seen to happen if FS is shutting down
                 }
+        }
+
+        public void GetValue(SimVarRequest request)
+        {
+            try
+            {
+                simConnect?.RequestDataOnSimObjectType(request.ReqID, request.DefID, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
+            }
+            catch(Exception ex)
+            {
+                // Likely cause, no request for this variable has been received
+            }
         }
 
         private void ConnectFS(MessageHandler messageHandler)
@@ -147,12 +146,6 @@ namespace RemoteCockpit
         {
             if (SimConnected != null)
                 SimConnected.DynamicInvoke(this, false);
-        }
-
-
-        private void GetHandle(object sender, IntPtr handle)
-        {
-            _handle = handle;
         }
     }
 }

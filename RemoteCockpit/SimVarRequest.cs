@@ -33,5 +33,19 @@ namespace RemoteCockpit
                 _unit = value?.ToLower();
             }
         }
+        public REQUEST ReqID
+        {
+            get
+            {
+                return (REQUEST)this.ID;
+            }
+        }
+        public DEFINITION DefID
+        {
+            get
+            {
+                return (DEFINITION)this.ID;
+            }
+        }
     }
 }

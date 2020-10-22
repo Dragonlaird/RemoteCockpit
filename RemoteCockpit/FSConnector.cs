@@ -13,13 +13,36 @@ namespace RemoteCockpit
 {
     public class FSConnector : IDisposable
     {
-        private const int connectionCheckInterval = 10000;
+        private const int connectionCheckInterval = 10; // Seconds to recheck for FS connection 
+        private int _valueRequestInterval = 5; // Seconds between each batch of requests for variable updates
         private MessagePumpManager handler;
 
         private bool disposedValue;
 
         public bool Connecting { get; private set; }
         private bool bConnected = false;
+        private System.Threading.Timer requestTimer;
+        public int ValueRequestInterval
+        {
+            get
+            {
+                return _valueRequestInterval;
+            }
+            set
+            {
+                if (value != _valueRequestInterval && value > 0)
+                {
+                    WriteLog(string.Format("Value Request Frequency changed from {0} to {1} seconds", _valueRequestInterval, value));
+                    _valueRequestInterval = value;
+                    if (requestTimer != null)
+                    {
+                        requestTimer.Dispose();
+                        requestTimer = new System.Threading.Timer(RequestAllValues);
+                        requestTimer.Change(10, _valueRequestInterval * 1000);
+                    }
+                }
+            }
+        }
 
         // Call Callback to advise parent if Connection is dropped or successful
         public bool Connected
@@ -41,19 +64,17 @@ namespace RemoteCockpit
             }
         }
 
-        public EventHandler<SimVarRequestResult> MessageReceived;
+        public EventHandler<SimVarRequestResult> DataReceived;
         public EventHandler<LogMessage> LogReceived;
         public EventHandler<bool> ConnectionStateChange;
         public EventHandler<Exception> ErrorEvent;
-        public EventHandler<SimVarRequestResult> DataReceived;
+        //public EventHandler<SimVarRequestResult> DataReceived;
 
         private List<SimVarRequest> simVarRequests;
 
         public FSConnector()
         {
             Initialize();
-            var tempRequest = new SimVarRequest { Name = "GPS POSITION ALT" };
-            RequestVariable(tempRequest);
         }
 
         #region Start/Stop/Initialize/Dispose
@@ -68,7 +89,10 @@ namespace RemoteCockpit
         public void Start()
         {
             System.Threading.Timer connectTimer = new System.Threading.Timer(StartConnector);
-            connectTimer.Change(10, connectionCheckInterval);
+            connectTimer.Change(10, connectionCheckInterval * 1000);
+            requestTimer = new System.Threading.Timer(RequestAllValues);
+            requestTimer.Change(10, ValueRequestInterval * 1000);
+
             //StartConnector();
         }
 
@@ -149,7 +173,7 @@ namespace RemoteCockpit
                     }
                     lock (simVarRequests)
                     {
-                        WriteLog(string.Format("Adding SimVarRequest for ID: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
+                        WriteLog(string.Format("Queing Request for ID: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
                         simVarRequests.Add(request);
                     }
                     try
@@ -158,18 +182,18 @@ namespace RemoteCockpit
                     }
                     catch(Exception ex)
                     {
-                        WriteLog(string.Format("SimVarRequest Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
+                        WriteLog(string.Format("Request Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
                     }
                 }
                 else
                 {
                     request = simVarRequests.First(x => x.Name == request.Name && x.Unit == request.Unit);
-                    WriteLog(string.Format("SimVarRequest already requested: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
+                    WriteLog(string.Format("Request already submitted: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
                 }
             }
             else
             {
-                WriteLog(string.Format("Invalid SimVarRequest for: {0} ({1})", request?.Name, request?.Unit), EventLogEntryType.Error);
+                WriteLog(string.Format("Invalid Request for: {0} ({1})", request?.Name, request?.Unit), EventLogEntryType.Error);
             }
         }
 
@@ -178,13 +202,24 @@ namespace RemoteCockpit
             if (Connected && handler != null)
                 try
                 {
+                    WriteLog(string.Format("Requesting Variable: {0} - {1} ({2})", request?.ID, request?.Name, request?.Unit));
                     handler.AddRequest(request);
                 }
                 catch (Exception ex)
                 {
                     WriteLog(string.Format("SimVarRequest Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
                 }
+        }
 
+        private void RequestAllValues(object state)
+        {
+            if(Connected && handler != null)
+            {
+                foreach(var request in simVarRequests)
+                {
+                    handler?.GetValue(request);
+                }
+            }
         }
         #endregion
 
@@ -216,20 +251,29 @@ namespace RemoteCockpit
 
         void Sim_Data(object sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
-            WriteLog(string.Format("SimConnect Data: {0}={1}", data.dwRequestID, data.dwData));
-
+            //WriteLog(string.Format("SimConnect Data: {0}={1}", data.dwRequestID, data.dwData));
+            var request = simVarRequests.SingleOrDefault(x => (int)x.ReqID == (int)data.dwRequestID);
+            if (request != null && data?.dwData?.Length > 0 && DataReceived != null)
+            {
+                var result = new SimVarRequestResult { Request = request, Value = (double)data.dwData[0] };
+                DataReceived.DynamicInvoke(this, result);
+            }
         }
 
         void Sim_Connection(object sender, bool connected)
         {
             if (connected)
             {
-                Connected = true;
-                WriteLog("Connected");
-                // New connection to FS - resubmit all previous SimVariable requests
-                foreach(var request in simVarRequests)
+                // Can occasionally receive multiple connected notices from SimConnect, particularly when FS is starting
+                if (!Connected)
                 {
-                    AddSimVarRequest(request);
+                    Connected = true;
+                    WriteLog("Connected");
+                    // New connection to FS - resubmit all previous SimVariable requests
+                    foreach (var request in simVarRequests)
+                    {
+                        AddSimVarRequest(request);
+                    }
                 }
             }
             else
