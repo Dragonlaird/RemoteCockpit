@@ -40,6 +40,7 @@
       <HintPath>..\..\..\..\..\..\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -51,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsynchronousSocketListener.cs" />
     <Compile Include="FSConnector.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="MessageHandler.cs">
@@ -63,6 +65,7 @@
     <Compile Include="SimVarRequest.cs" />
     <Compile Include="SimVarRequestResult.cs" />
     <Compile Include="SimVarUnits.cs" />
+    <Compile Include="SocketListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

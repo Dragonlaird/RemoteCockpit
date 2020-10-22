@@ -16,12 +16,15 @@ namespace RemoteCockpit
         private const int connectionCheckInterval = 10; // Seconds to recheck for FS connection 
         private int _valueRequestInterval = 5; // Seconds between each batch of requests for variable updates
         private MessagePumpManager handler;
-
         private bool disposedValue;
-
-        public bool Connecting { get; private set; }
+        private List<SimVarRequest> simVarRequests;
         private bool bConnected = false;
         private System.Threading.Timer requestTimer;
+        public EventHandler<SimVarRequestResult> DataReceived;
+        public EventHandler<LogMessage> LogReceived;
+        public EventHandler<bool> ConnectionStateChange;
+        public EventHandler<Exception> ErrorEvent;
+
         public int ValueRequestInterval
         {
             get
@@ -44,6 +47,8 @@ namespace RemoteCockpit
             }
         }
 
+        public bool Connecting { get; private set; }
+
         // Call Callback to advise parent if Connection is dropped or successful
         public bool Connected
         {
@@ -63,14 +68,6 @@ namespace RemoteCockpit
                 }
             }
         }
-
-        public EventHandler<SimVarRequestResult> DataReceived;
-        public EventHandler<LogMessage> LogReceived;
-        public EventHandler<bool> ConnectionStateChange;
-        public EventHandler<Exception> ErrorEvent;
-        //public EventHandler<SimVarRequestResult> DataReceived;
-
-        private List<SimVarRequest> simVarRequests;
 
         public FSConnector()
         {

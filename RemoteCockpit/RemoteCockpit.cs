@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +12,15 @@ namespace RemoteCockpit
     {
         public EventHandler<LogMessage> LogReceived;
         private FSConnector fsConnector;
+        private SocketListener listener;
         private bool fsConnected = false;
         public RemoteCockpit()
+        {
+            StartConnector();
+            StartListener();
+        }
+
+        private void StartConnector()
         {
             fsConnector = new FSConnector();
             fsConnector.LogReceived += WriteLog;
@@ -25,6 +34,17 @@ namespace RemoteCockpit
             fsConnector.RequestVariable(tempRequest);
             fsConnector.ValueRequestInterval = 3;
             fsConnector.Start();
+
+        }
+
+        private void StartListener()
+        {
+            var ipAddress = ConfigurationManager.AppSettings.Get(@"ipAddress");
+            var ipPort = int.Parse(ConfigurationManager.AppSettings.Get(@"ipPort"));
+            var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
+            listener = new SocketListener(endPoint);
+            listener.LogReceived += WriteLog;
+            listener.Start();
         }
 
         /// <summary>
