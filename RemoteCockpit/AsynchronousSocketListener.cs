@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RemoteCockpit
 {
+    /// <summary>
+    /// Original code from: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-server-socket-example
+    /// </summary>
     // State object for reading client data asynchronously  
     public class StateObject
     {
