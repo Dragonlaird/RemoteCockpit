@@ -1,9 +1,6 @@
-﻿using System;
+﻿using Microsoft.FlightSimulator.SimConnect;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Markup;
 
 namespace RemoteCockpit
 {
@@ -765,7 +762,7 @@ namespace RemoteCockpit
             {"GPS WP NEXT ID",new SimVarDefinition("GPS WP NEXT ID","ID of next GPS waypoint","string",null,true,false)},
             {"GPS WP PREV ID",new SimVarDefinition("GPS WP PREV ID","ID of previous GPS waypoint","string",null,true,false)},
             {"HSI STATION IDENT",new SimVarDefinition("HSI STATION IDENT","Tuned station identifier","string(6)",null,true,false)},
-            {"TITLE",new SimVarDefinition("TITLE","Title from aircraft.cfg","variable length string",null,true,false)},
+            {"TITLE",new SimVarDefinition("TITLE","Title from aircraft.cfg","variable length string",ConvertType("string"),true,false)},
             {"ELEVATOR TRIM NEUTRAL",new SimVarDefinition("ELEVATOR TRIM NEUTRAL","Elevator trim neutral","radians",ConvertType("float64"),true,false)},
             {"ENGINE CONTROL SELECT",new SimVarDefinition("ENGINE CONTROL SELECT","Selected engines (combination of bit flags)","mask",ConvertType("flags"),false,false)},
             {"ENGINE TYPE",new SimVarDefinition("ENGINE TYPE","Engine type:[index]","enum",null,true,false)},
@@ -911,7 +908,7 @@ namespace RemoteCockpit
 
         };
 
-        private static Type ConvertType(string simVarType)
+        public static Type ConvertType(string simVarType)
         {
             var result = simVarType;
             switch (simVarType?.ToLower())
@@ -933,15 +930,16 @@ namespace RemoteCockpit
                     result = "System.UInt32";
                     break;
                 case "uint64":
-                    result = "	System.UInt64";
+                    result = "System.UInt64";
                     break;
                 case "sint16":
                     result = "System.Int16";
                     break;
                 case "angl16":
                 case "sint":
+                case "sint8":
                 case "sint32":
-                    result = "System.UInt32";
+                    result = "System.Int32";
                     break;
                 case "bool":
                 case "bool8":
@@ -950,12 +948,52 @@ namespace RemoteCockpit
                     result = "System.Boolean";
                     break;
                 case "flags":
+                case "flags8":
                     result = "System.Byte";
                     break;
+                case "string":
+                    result = "System.String";
+                    break;
             }
-            if ((bool)simVarType?.StartsWith("string"))
+            if (result == null && (bool)simVarType?.Contains("string"))
                 result = "System.String";
             return Type.GetType(result);
+        }
+
+        public static SIMCONNECT_DATATYPE GetSimVarType(string type)
+        {
+            SIMCONNECT_DATATYPE result;
+            switch (type)
+            {
+                case null:
+                    result = SIMCONNECT_DATATYPE.INVALID;
+                    break;
+                case "System.Double":
+                    result = SIMCONNECT_DATATYPE.FLOAT64;
+                    break;
+                case "System.Int16":
+                case "System.Int32":
+                case "System.UInt16":
+                case "System.UInt32":
+                    result = SIMCONNECT_DATATYPE.INT32;
+                    break;
+                case "System.UInt64":
+                    result = SIMCONNECT_DATATYPE.INT64;
+                    break;
+                case "System.Boolean":
+                    result = SIMCONNECT_DATATYPE.INT32;
+                    break;
+                case "System.Byte":
+                    result = SIMCONNECT_DATATYPE.INT32;
+                    break;
+                case "variable length string":
+                    result = SIMCONNECT_DATATYPE.STRINGV;
+                    break;
+                default:
+                    result = SIMCONNECT_DATATYPE.STRING256;
+                    break;
+            }
+            return result;
         }
     }
 

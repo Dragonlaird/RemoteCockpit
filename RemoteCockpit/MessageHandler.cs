@@ -49,7 +49,7 @@ namespace RemoteCockpit
 
         public MessagePumpManager()
         {
-            // start message pump in its own thread
+            // Start message pump in its own thread
             messagePump = new Thread(RunMessagePump) { Name = "ManualMessagePump" };
             messagePump.Start();
             messagePumpRunning.WaitOne();
@@ -57,8 +57,39 @@ namespace RemoteCockpit
 
         public void AddRequest(SimVarRequest request)
         {
-            simConnect.AddToDataDefinition(request.DefID, request.Name, request.Unit, SIMCONNECT_DATATYPE.FLOAT64, 0.0f, SimConnect.SIMCONNECT_UNUSED);
-            simConnect.RegisterDataDefineStruct<double>(request.DefID);
+            //simConnect.AddToDataDefinition((DEFINITION)1, "TITLE", null, SIMCONNECT_DATATYPE.STRING256, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+            //simConnect.RegisterDataDefineStruct<string>((DEFINITION)1);
+            //return;
+            var unit = request.Unit;
+            if(unit?.IndexOf("string") > -1)
+            {
+                unit = null;
+            }
+            simConnect.AddToDataDefinition(request.DefID, request.Name, unit, request.SimType, 0.0f, SimConnect.SIMCONNECT_UNUSED);
+            switch (request.Type?.FullName)
+            {
+                case "System.Double":
+                    simConnect.RegisterDataDefineStruct<double>(request.DefID);
+                    break;
+                case "System.UInt16":
+                case "System.UInt32":
+                case "System.UInt64":
+                    simConnect.RegisterDataDefineStruct<uint>(request.DefID);
+                    break;
+                case "System.Int16":
+                case "System.Int32":
+                    simConnect.RegisterDataDefineStruct<int>(request.DefID);
+                    break;
+                case "System.Boolean":
+                    simConnect.RegisterDataDefineStruct<bool>(request.DefID);
+                    break;
+                case "System.Byte":
+                    simConnect.RegisterDataDefineStruct<byte>(request.DefID);
+                    break;
+                default:
+                    simConnect.RegisterDataDefineStruct<object>(request.DefID);
+                    break;
+            }
         }
 
         // Message Pump Thread
@@ -89,9 +120,10 @@ namespace RemoteCockpit
         {
             try
             {
+                //simConnect?.RequestDataOnSimObjectType(request.ReqID, (DEFINITION)1, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
                 simConnect?.RequestDataOnSimObjectType(request.ReqID, request.DefID, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Likely cause, no request for this variable has been received
             }

@@ -8,9 +8,9 @@ namespace RemoteCockpit
 {
     public class SimVarRequestResult
     {
-        private double _value;
+        private object _value;
         public SimVarRequest Request { get; set; }
-        public double Value
+        public object Value
         {
             get
             {

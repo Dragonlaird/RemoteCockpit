@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.FlightSimulator.SimConnect;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,19 @@ namespace RemoteCockpit
                 _unit = value?.ToLower();
             }
         }
+        public Type Type { get
+            {
+                return SimVarUnits.DefaultUnits[this.Name].UnitType;
+            }
+        }
+        public SIMCONNECT_DATATYPE SimType
+        {
+            get
+            {
+                return SimVarUnits.GetSimVarType(this.Type?.ToString() ?? SimVarUnits.DefaultUnits[this.Name].DefaultUnit);
+            }
+        }
+
         public REQUEST ReqID
         {
             get

@@ -26,13 +26,13 @@ namespace RemoteCockpit
             fsConnector.LogReceived += WriteLog;
             fsConnector.DataReceived += MessageReceived;
             fsConnector.ConnectionStateChange += ConnectionStateChanged;
-            var tempRequest = new SimVarRequest { Name = "GPS POSITION ALT" };
+            //var tempRequest = new SimVarRequest { Name = "AMBIENT WIND VELOCITY" };
+            //fsConnector.RequestVariable(tempRequest);
+            //tempRequest = new SimVarRequest { Name = "AMBIENT WIND DIRECTION" };
+            //fsConnector.RequestVariable(tempRequest);
+            //fsConnector.ValueRequestInterval = 3;
+            var tempRequest = new SimVarRequest { Name = "Title", Unit = null };
             fsConnector.RequestVariable(tempRequest);
-            tempRequest = new SimVarRequest { Name = "AMBIENT WIND VELOCITY" };
-            fsConnector.RequestVariable(tempRequest);
-            tempRequest = new SimVarRequest { Name = "AMBIENT WIND DIRECTION" };
-            fsConnector.RequestVariable(tempRequest);
-            fsConnector.ValueRequestInterval = 3;
             fsConnector.Start();
 
         }

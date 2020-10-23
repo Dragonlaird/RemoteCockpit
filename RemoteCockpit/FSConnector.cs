@@ -241,9 +241,168 @@ namespace RemoteCockpit
         #region SimConnect Event Handlers
         void Sim_Error(object sender, SIMCONNECT_RECV_EXCEPTION error)
         {
-            WriteLog(string.Format("SimConnect Exception: {0}", error.dwException), EventLogEntryType.Error);
+            var reqId = error.dwSendID;
+            var paramId = error.dwIndex; // Which item in the request caused the error
+            var errorId = error.dwException;
+            var errorString = string.Format("Error: {2}; Req: {0}; Param: {1}; Desc: {3};", reqId, GetSimErrorParameter((int)paramId), errorId, GetSimError((int)errorId));
+            WriteLog(string.Format("SimConnect Exception: {0}", errorString), EventLogEntryType.Error);
             if (ErrorEvent != null)
-                ErrorEvent.DynamicInvoke(this, new Exception(string.Format("SimConnect Exception: {0}", error.dwException)));
+            {
+                ErrorEvent.DynamicInvoke(this, new Exception(errorString));
+            }
+        }
+
+        private string GetSimErrorParameter(int index)
+        {
+            var result = "";
+            switch (index)
+            {
+                case 0:
+                    result = "DefineID";
+                    break;
+                case 1:
+                    result = "DatumeName";
+                    break;
+                case 2:
+                    result = "UnitsName";
+                    break;
+                case 3:
+                    result = "DatumeType";
+                    break;
+                case 4:
+                    result = "DatumEpsilon";
+                    break;
+                case 5:
+                    result = "DatumID";
+                    break;
+                default:
+                    result = "Unknown";
+                    break;
+            }
+            return result;
+        }
+
+        private string GetSimError(int errorId)
+        {
+            var result = "";
+            switch (errorId)
+            {
+                case 0:
+                    result = "SIMCONNECT_EXCEPTION_NONE";
+                    break;
+                case 1:
+                    result = "SIMCONNECT_EXCEPTION_ERROR";
+                    break;
+                case 2:
+                    result = "SIMCONNECT_EXCEPTION_SIZE_MISMATCH";
+                    break;
+                case 3:
+                    result = "SIMCONNECT_EXCEPTION_UNRECOGNIZED_ID";
+                    break;
+                case 4:
+                    result = "SIMCONNECT_EXCEPTION_UNOPENED";
+                    break;
+                case 5:
+                    result = "SIMCONNECT_EXCEPTION_VERSION_MISMATCH";
+                    break;
+                case 6:
+                    result = "SIMCONNECT_EXCEPTION_TOO_MANY_GROUPS";
+                    break;
+                case 7:
+                    result = "SIMCONNECT_EXCEPTION_NAME_UNRECOGNIZED";
+                    break;
+                case 8:
+                    result = "SIMCONNECT_EXCEPTION_TOO_MANY_EVENT_NAMES";
+                    break;
+                case 9:
+                    result = "SIMCONNECT_EXCEPTION_EVENT_ID_DUPLICATE";
+                    break;
+                case 10:
+                    result = "SIMCONNECT_EXCEPTION_TOO_MANY_MAPS";
+                    break;
+                case 11:
+                    result = "SIMCONNECT_EXCEPTION_TOO_MANY_OBJECTS";
+                    break;
+                case 12:
+                    result = "SIMCONNECT_EXCEPTION_TOO_MANY_REQUESTS";
+                    break;
+                case 13:
+                    result = "SIMCONNECT_EXCEPTION_WEATHER_INVALID_PORT";
+                    break;
+                case 14:
+                    result = "SIMCONNECT_EXCEPTION_WEATHER_INVALID_METAR";
+                    break;
+                case 15:
+                    result = "SIMCONNECT_EXCEPTION_WEATHER_UNABLE_TO_GET_OBSERVATION";
+                    break;
+                case 16:
+                    result = "SIMCONNECT_EXCEPTION_WEATHER_UNABLE_TO_CREATE_STATION";
+                    break;
+                case 17:
+                    result = "SIMCONNECT_EXCEPTION_WEATHER_UNABLE_TO_REMOVE_STATION";
+                    break;
+                case 18:
+                    result = "SIMCONNECT_EXCEPTION_INVALID_DATA_TYPE";
+                    break;
+                case 19:
+                    result = "SIMCONNECT_EXCEPTION_INVALID_DATA_SIZE";
+                    break;
+                case 20:
+                    result = "SIMCONNECT_EXCEPTION_DATA_ERROR";
+                    break;
+                case 21:
+                    result = "SIMCONNECT_EXCEPTION_INVALID_ARRAY";
+                    break;
+                case 22:
+                    result = "SIMCONNECT_EXCEPTION_CREATE_OBJECT_FAILED";
+                    break;
+                case 23:
+                    result = "SIMCONNECT_EXCEPTION_LOAD_FLIGHTPLAN_FAILED";
+                    break;
+                case 24:
+                    result = "SIMCONNECT_EXCEPTION_OPERATION_INVALID_FOR_OJBECT_TYPE";
+                    break;
+                case 25:
+                    result = "SIMCONNECT_EXCEPTION_ILLEGAL_OPERATION";
+                    break;
+                case 26:
+                    result = "SIMCONNECT_EXCEPTION_ALREADY_SUBSCRIBED";
+                    break;
+                case 27:
+                    result = "SIMCONNECT_EXCEPTION_INVALID_ENUM";
+                    break;
+                case 28:
+                    result = "SIMCONNECT_EXCEPTION_DEFINITION_ERROR";
+                    break;
+                case 29:
+                    result = "SIMCONNECT_EXCEPTION_DUPLICATE_ID";
+                    break;
+                case 30:
+                    result = "SIMCONNECT_EXCEPTION_DATUM_ID";
+                    break;
+                case 31:
+                    result = "SIMCONNECT_EXCEPTION_OUT_OF_BOUNDS";
+                    break;
+                case 32:
+                    result = "SIMCONNECT_EXCEPTION_ALREADY_CREATED";
+                    break;
+                case 33:
+                    result = "SIMCONNECT_EXCEPTION_OBJECT_OUTSIDE_REALITY_BUBBLE";
+                    break;
+                case 34:
+                    result = "SIMCONNECT_EXCEPTION_OBJECT_CONTAINER";
+                    break;
+                case 35:
+                    result = "SIMCONNECT_EXCEPTION_OBJECT_AI";
+                    break;
+                case 36:
+                    result = "SIMCONNECT_EXCEPTION_OBJECT_ATC";
+                    break;
+                case 37:
+                    result = "SIMCONNECT_EXCEPTION_OBJECT_SCHEDULE";
+                    break;
+            }
+            return result;
         }
 
         void Sim_Data(object sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
