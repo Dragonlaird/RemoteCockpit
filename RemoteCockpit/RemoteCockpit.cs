@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using RemoteCockpitClasses;
 
 namespace RemoteCockpit
 {
@@ -31,8 +32,8 @@ namespace RemoteCockpit
             //tempRequest = new SimVarRequest { Name = "AMBIENT WIND DIRECTION" };
             //fsConnector.RequestVariable(tempRequest);
             //fsConnector.ValueRequestInterval = 3;
-            var tempRequest = new SimVarRequest { Name = "Title", Unit = null };
-            fsConnector.RequestVariable(tempRequest);
+            //var tempRequest = new SimVarRequest { Name = "Title", Unit = null };
+            //fsConnector.RequestVariable(tempRequest);
             fsConnector.Start();
 
         }
@@ -44,7 +45,22 @@ namespace RemoteCockpit
             var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
             listener = new SocketListener(endPoint);
             listener.LogReceived += WriteLog;
+            listener.ClientRequest += ClientRequest;
             listener.Start();
+        }
+
+        /// <summary>
+        /// If a Client has requested a SimVar variable and this is the first request from any client - Submit the request to FSConnector
+        /// </summary>
+        /// <param name="sender">Listener</param>
+        /// <param name="request">Variable requested</param>
+        private void ClientRequest(object sender, SimVarRequest request)
+        {
+            // Remote Client has requested a variable - add it to our request connection for FSConnector
+            if(fsConnector != null)
+            {
+                fsConnector.RequestVariable(request);
+            }
         }
 
         /// <summary>
@@ -55,6 +71,8 @@ namespace RemoteCockpit
         private void MessageReceived(object sender, SimVarRequestResult e)
         {
             WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = System.Diagnostics.EventLogEntryType.Information });
+            // Send this variable to Socket Listener to retransmit values to Remote Clients
+
         }
 
         /// <summary>

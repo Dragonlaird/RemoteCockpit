@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RemoteCockpitClasses;
+
 
 namespace RemoteCockpit
 {
@@ -86,6 +88,9 @@ namespace RemoteCockpit
                 case "System.Byte":
                     simConnect.RegisterDataDefineStruct<byte>(request.DefID);
                     break;
+                case "System.String":
+                    simConnect.RegisterDataDefineStruct<SimVarString>(request.DefID);
+                    break;
                 default:
                     simConnect.RegisterDataDefineStruct<object>(request.DefID);
                     break;
@@ -150,6 +155,8 @@ namespace RemoteCockpit
                 /// Listen for SimVar Data
                 simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(SimConnect_OnRecvSimobjectDataBytype);
 
+                simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(SimConnect_OnRecvSimobjectData);
+
             }
             catch(Exception ex){
 
@@ -160,6 +167,11 @@ namespace RemoteCockpit
         {
             if (SimData != null)
                 SimData.DynamicInvoke(this, data);
+        }
+
+        private void SimConnect_OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
+        {
+
         }
 
         private void SimConnect_OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
@@ -179,5 +191,11 @@ namespace RemoteCockpit
             if (SimConnected != null)
                 SimConnected.DynamicInvoke(this, false);
         }
+    }
+
+    public struct SimVarString
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+        public string Value;
     }
 }

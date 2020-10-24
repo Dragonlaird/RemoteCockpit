@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RemoteCockpit
+namespace RemoteCockpitClasses
 {
     public class SimVarUnits
     {

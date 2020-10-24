@@ -1,0 +1,16 @@
+{
+  "Requests": [
+    {
+      "Name": "TITLE",
+      "Unit": null
+    },
+    {
+      "Name": "AMBIENT WIND VELOCITY",
+      "Unit": "knots"
+    },
+    {
+      "Name": "AMBIENT WIND DIRECTION",
+      "Unit": "degrees"
+    }
+  ]
+}

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.FlightSimulator.SimConnect;
+using RemoteCockpitClasses;
 
 namespace RemoteCockpit
 {
@@ -411,7 +412,7 @@ namespace RemoteCockpit
             var request = simVarRequests.SingleOrDefault(x => (int)x.ReqID == (int)data.dwRequestID);
             if (request != null && data?.dwData?.Length > 0 && DataReceived != null)
             {
-                var result = new SimVarRequestResult { Request = request, Value = (double)data.dwData[0] };
+                var result = new SimVarRequestResult { Request = request, Value = data.dwData[0] is SimVarString ? ((SimVarString)data.dwData[0]).Value : data.dwData[0] };
                 DataReceived.DynamicInvoke(this, result);
             }
         }

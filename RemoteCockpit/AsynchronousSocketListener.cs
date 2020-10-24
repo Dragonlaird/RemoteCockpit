@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RemoteCockpitClasses;
+using Newtonsoft.Json;
 
 namespace RemoteCockpit
 {
@@ -14,24 +16,14 @@ namespace RemoteCockpit
     /// Original code from: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-server-socket-example
     /// </summary>
     // State object for reading client data asynchronously  
-    public class StateObject
-    {
-        public int ConnectionID { get; internal set; }
-        // Size of receive buffer.  
-        public const int BufferSize = 1024;
 
-        // Receive buffer.  
-        public byte[] buffer = new byte[BufferSize];
 
-        // Received content
-        public StringBuilder sb = new StringBuilder();
-
-        // Client socket.
-        public Socket workSocket = null;
-    }
     public class AsynchronousSocketListener
     {
         public static EventHandler<StateObject> NewConnection;
+        public static EventHandler<Exception> SocketError;
+        public static EventHandler<ClientRequest> RequestReceived;
+
         private static int lastConnectionId = 0;
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
@@ -86,7 +78,7 @@ namespace RemoteCockpit
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                ErrorHandler(listener, e);
             }
         }
 
@@ -118,6 +110,7 @@ namespace RemoteCockpit
                 catch(Exception ex)
                 {
                     // Stop any issues with the controlling service causing the listener to crash
+                    ErrorHandler(handler, ex);
                 }
         }
 
@@ -144,14 +137,23 @@ namespace RemoteCockpit
                 if (content.IndexOf("\r\r") > -1)
                 {
                     // All the data has been read from the client.
-                    // Echo the data back to the client.  
-                    Send(handler, content);
+                    if(RequestReceived != null)
+                    {
+                        try
+                        {
+                            RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(content));
+                        }
+                        catch(Exception ex)
+                        {
+                            ErrorHandler(state, ex);
+                        }
+                    }
                 }
                 else
                 {
                     // Not all data received. Get more.  
                     handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReadCallback), state);
+                        new AsyncCallback(ReadCallback), state);
                 }
             }
         }
@@ -166,12 +168,25 @@ namespace RemoteCockpit
                 new AsyncCallback(SendCallback), handler);
         }
 
+        private static void ErrorHandler(object sender, Exception ex)
+        {
+            if(SocketError != null)
+            {
+                try
+                {
+                    SocketError.DynamicInvoke(sender, ex);
+                }
+                catch { }
+            }
+        }
+
         private static void SendCallback(IAsyncResult ar)
         {
+            Socket handler = null;
             try
             {
                 // Retrieve the socket from the state object.  
-                Socket handler = (Socket)ar.AsyncState;
+                handler = (Socket)ar.AsyncState;
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
@@ -180,9 +195,9 @@ namespace RemoteCockpit
                 handler.Close();
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.ToString());
+                ErrorHandler(handler, ex);
             }
         }
     }
