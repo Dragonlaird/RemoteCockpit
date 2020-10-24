@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RemoteCockpitClasses;
 
 namespace RemoteCockpit
@@ -20,11 +22,13 @@ namespace RemoteCockpit
         public EventHandler<Exception> ClientError;
 
         private List<ClientConnection> clients;
+        private List<SimVarRequestResult> latestValues;
 
         public SocketListener(IPEndPoint endPoint)
         {
             _endPoint = endPoint;
             clients = new List<ClientConnection>();
+            latestValues = new List<SimVarRequestResult>();
         }
 
         public void Start()
@@ -68,20 +72,11 @@ namespace RemoteCockpit
                         Name = request.Name,
                         Unit = request.Units
                     };
-                    var previousRequest = clients
-                        .Where(x => 
-                            x.Requests.Any(y => 
-                                y.Name.ToUpper() == simVarRequest.Name.ToUpper() 
-                                && y.Unit?.ToLower() == y.Unit?.ToLower()
-                            ))
-                        .Select(x => 
-                            x.Requests.FirstOrDefault(y => 
-                                y.Name.ToUpper() == simVarRequest.Name.ToUpper() 
-                                && y.Unit?.ToLower() == y.Unit?.ToLower()
-                            ))
-                        .SingleOrDefault();
+                    var previousRequest = latestValues.Where(x => x.Request.Name == simVarRequest.Name && x.Request.Unit == simVarRequest.Unit).Select(x => x.Request).SingleOrDefault();
                     if (previousRequest != null)
                         simVarRequest = previousRequest;
+                    else
+                        latestValues.Add(new SimVarRequestResult { Request = simVarRequest });
                     if (!client.Requests.Any(x => x.Name.ToUpper() == simVarRequest.Name.ToUpper() && x.Unit?.ToLower() == simVarRequest.Unit?.ToLower()))
                     {
                         // This client has not requested this variable before - add it
@@ -99,6 +94,22 @@ namespace RemoteCockpit
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public void SendVariable(SimVarRequestResult result)
+        {
+            // Find any Clients requesting this variable and send latest result to them
+            if(latestValues.Any(x=> x.Request == result.Request && x.Value != result.Value))
+            {
+                // Value has been changed - rmember latest value and send to all subscribed clients
+                latestValues.Single(x => x.Request == result.Request).Value = result.Value;
+                var subscribedClients = clients.Where(x => x.Requests.Any(y => y.Name == result.Request.Name && y.Unit == result.Request.Unit));
+                var resultString = JsonConvert.SerializeObject(result);
+                foreach(var client in subscribedClients)
+                {
+                    client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
                 }
             }
         }

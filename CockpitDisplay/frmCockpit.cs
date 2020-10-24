@@ -28,8 +28,16 @@ namespace CockpitDisplay
             Thread.Sleep(1000);
             RequestVariable(new ClientRequest
             {
-                Name="TITLE",
-                Units=null
+                Name="TITLE"
+            });
+            // Requesting more variables to test
+            RequestVariable(new ClientRequest
+            {
+                Name = Name = "AMBIENT WIND VELOCITY",
+            });
+            RequestVariable(new ClientRequest
+            {
+                Name = Name = "AMBIENT WIND DIRECTION",
             });
         }
 
@@ -52,12 +60,39 @@ namespace CockpitDisplay
                 var ipPort = int.Parse(ConfigurationManager.AppSettings.Get(@"ipPort"));
                 var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
                 connection.Connection.Connect(endPoint);
+                connection.Connection.BeginReceive(new byte[1000], 0, 1000, 0,
+                    new AsyncCallback(ReadCallback), connection.Connection);
             }
             catch(Exception ex)
             {
 
             }
         }
+
+        public void ReadCallback(IAsyncResult ar)
+        {
+            String content = String.Empty;
+
+            Socket handler = (Socket)ar.AsyncState;
+            StringBuilder sb = new StringBuilder();
+            // Read data from the client socket.
+            int bytesRead = handler.EndReceive(ar);
+
+            if (bytesRead > 0)
+            {
+                var buffer = new byte[bytesRead];
+                // There  might be more data, so store the data received so far.  
+                sb.Append(Encoding.ASCII.GetString(
+                    buffer, 0, bytesRead));
+                // Check for end-of-file tag. If it is not there, read
+                // more data.  
+                content = sb.ToString()?.Replace("\n", "").Replace("\0", "");
+                // Get more data/requests
+                handler.BeginReceive(new byte[1000], 0, 1000, 0,
+                    new AsyncCallback(ReadCallback), handler);
+            }
+        }
+
 
         private void RequestVariable(ClientRequest request)
         {
@@ -67,6 +102,11 @@ namespace CockpitDisplay
                 var requestBytes = Encoding.UTF8.GetBytes(requestString.ToArray());
                 connection.Connection.Send(requestBytes,SocketFlags.None);
             }
+        }
+
+        private void ReceiveRemoteResponse(object sender, EventArgs e)
+        {
+
         }
     }
 }

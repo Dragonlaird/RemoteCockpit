@@ -20,6 +20,7 @@ namespace RemoteCockpit
 
     public class AsynchronousSocketListener
     {
+        private const string requestSeparator = "\r\r";
         public static EventHandler<StateObject> NewConnection;
         public static EventHandler<Exception> SocketError;
         public static EventHandler<ClientRequest> RequestReceived;
@@ -134,27 +135,36 @@ namespace RemoteCockpit
                 // Check for end-of-file tag. If it is not there, read
                 // more data.  
                 content = state.sb.ToString()?.Replace("\n", "");
-                if (content.IndexOf("\r\r") > -1)
+                if (content.IndexOf(requestSeparator) > -1)
                 {
                     // All the data has been read from the client.
-                    if(RequestReceived != null)
+                    if (RequestReceived != null)
                     {
                         try
                         {
-                            RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(content));
+                            foreach (var request in content.Split(new string[] { requestSeparator }, StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                try
+                                {
+                                    RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(request));
+                                }
+                                catch(Exception ex)
+                                {
+                                    ErrorHandler(state, ex);
+                                }
+                            }
+                            state.sb = new StringBuilder();
+                            state.sb.Append(content.Substring(content.LastIndexOf(requestSeparator)));
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             ErrorHandler(state, ex);
                         }
                     }
                 }
-                else
-                {
-                    // Not all data received. Get more.  
-                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                        new AsyncCallback(ReadCallback), state);
-                }
+                // Get more data/requests
+                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    new AsyncCallback(ReadCallback), state);
             }
         }
 

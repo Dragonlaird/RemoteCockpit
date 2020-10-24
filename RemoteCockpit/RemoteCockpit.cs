@@ -72,7 +72,7 @@ namespace RemoteCockpit
         {
             WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = System.Diagnostics.EventLogEntryType.Information });
             // Send this variable to Socket Listener to retransmit values to Remote Clients
-
+            listener.SendVariable(e);
         }
 
         /// <summary>
