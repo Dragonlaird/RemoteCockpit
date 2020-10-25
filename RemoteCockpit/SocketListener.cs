@@ -71,7 +71,7 @@ namespace RemoteCockpit
                     var simVarRequest = new SimVarRequest
                     {
                         Name = request.Name,
-                        Unit = request.Units
+                        Unit = request.Unit
                     };
                     var previousRequest = latestValues.Where(x => x.Request.Name == simVarRequest.Name && x.Request.Unit == simVarRequest.Unit).Select(x => x.Request).SingleOrDefault();
                     if (previousRequest != null)
@@ -110,7 +110,7 @@ namespace RemoteCockpit
                 {
                     // Value has been changed - rmember latest value and send to all subscribed clients
                     latestValues.Single(x => x.Request.Name == result.Request.Name && x.Request.Unit == result.Request.Unit).Value = result.Value;
-                    var clientResponse = new ClientRequestResult { Request = new RemoteCockpitClasses.ClientRequest { Name = result.Request.Name, Units = result.Request.Unit }, Result = result.Value };
+                    var clientResponse = new ClientRequestResult { Request = new RemoteCockpitClasses.ClientRequest { Name = result.Request.Name, Unit = result.Request.Unit }, Result = result.Value };
                     var subscribedClients = clients.Where(x => x.Requests.Any(y => y.Name == result.Request.Name && y.Unit == result.Request.Unit));
                     var resultString = JsonConvert.SerializeObject(clientResponse) + "\r\r";
                     foreach (var client in subscribedClients)

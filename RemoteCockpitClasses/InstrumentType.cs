@@ -4,9 +4,10 @@ using System.Text;
 
 namespace RemoteCockpitClasses
 {
-    public class ClientRequest
+    public enum InstrumentType
     {
-        public string Name { get; set; }
-        public string Unit { get; set; }
+        Altimeter,
+        GPS
+
     }
 }

@@ -32,7 +32,7 @@ namespace CockpitDisplay
             RequestVariable(new ClientRequest
             {
                 Name = "FS CONNECTION",
-                Units = "bool"
+                Unit = "bool"
             });
             // Also, ask to be notified whenever user starts flying a different aircraft
             RequestVariable(new ClientRequest
