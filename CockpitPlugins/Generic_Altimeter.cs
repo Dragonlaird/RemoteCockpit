@@ -13,12 +13,13 @@ namespace CockpitPlugins
 
         private bool disposedValue = false;
 
-        private PictureBox control = new PictureBox();
+        private PictureBox control;
 
 
         public Generic_Altimeter()
         {
             control = new PictureBox();
+            control.BorderStyle = BorderStyle.FixedSingle;
         }
 
 
@@ -30,6 +31,7 @@ namespace CockpitPlugins
 
         private void control_Update(object sender, PaintEventArgs e)
         {
+            // Fetching the property value as accessing the propery directly can cause compiler errors, claiming the Graphics property doesn't exist in System.Drawing
             var g = (System.Drawing.Graphics)e.GetType().GetProperty("Graphics").GetValue(e);
             if (g != null)
             {            
@@ -81,8 +83,18 @@ namespace CockpitPlugins
         public Control Control {
             get
             {
+                var args = Activator.CreateInstance(typeof(System.Windows.Forms.PaintEventArgs), new object[] { 
+                    GetControlGraphics(control),
+                    control.DisplayRectangle 
+                });
+                control_Update(control, (System.Windows.Forms.PaintEventArgs)args);
                 return control;
             }
+        }
+
+        public object GetControlGraphics(Control ctrl)
+        {
+            return (System.Drawing.Graphics)ctrl.GetType().GetMethod("CreateGraphics").Invoke(ctrl, null);
         }
 
         protected virtual void Dispose(bool disposing)

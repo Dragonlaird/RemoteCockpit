@@ -129,6 +129,7 @@ namespace CockpitDisplay
                 cockpit.Show();
             }
             cockpit.LoadLayout(text);
+            cockpit.Update();
         }
 
         private void pbShowCockpit_Click(object sender, EventArgs e)

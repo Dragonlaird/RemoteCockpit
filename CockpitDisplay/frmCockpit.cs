@@ -126,6 +126,11 @@ namespace CockpitDisplay
                         instrumentPosition.Left * hScaleFactor, 
                         instrumentPosition.Height * vScaleFactor,
                         instrumentPosition.Width * hScaleFactor);
+                    // Force the control to repaint
+                    plugin.Control.Top = instrumentPosition.Top * vScaleFactor;
+                    plugin.Control.Left = instrumentPosition.Left * hScaleFactor;
+                    plugin.Control.Height = instrumentPosition.Height * vScaleFactor;
+                    plugin.Control.Width = instrumentPosition.Width * hScaleFactor;
                     AddControl(plugin.Control, this);
                 }
             }
