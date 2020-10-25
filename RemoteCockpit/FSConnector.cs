@@ -211,12 +211,13 @@ namespace RemoteCockpit
 
         private void RequestAllValues(object state)
         {
-            if(Connected && handler != null)
+            if (Connected && handler != null)
             {
-                foreach(var request in simVarRequests)
-                {
-                    handler?.GetValue(request);
-                }
+                lock (simVarRequests)
+                    foreach (var request in simVarRequests)
+                    {
+                        handler?.GetValue(request);
+                    }
             }
         }
         #endregion

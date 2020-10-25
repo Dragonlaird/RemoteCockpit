@@ -87,14 +87,16 @@ namespace RemoteCockpit
                         {
                             try
                             {
-                                ClientRequest.DynamicInvoke(this, simVarRequest);
+                                ClientRequest.DynamicInvoke(sender, simVarRequest);
                             }
                             catch(Exception ex)
                             {
-                                ClientError.DynamicInvoke(this, ex);
+                                ClientError.DynamicInvoke(sender, ex);
                             }
                         }
                     }
+                    if(simVarRequest.Name == "FS CONNECTION") // Always allow clients to requst current connection state
+                        ClientRequest.DynamicInvoke(sender, simVarRequest);
                 }
             }
         }
@@ -113,6 +115,7 @@ namespace RemoteCockpit
                     var resultString = JsonConvert.SerializeObject(clientResponse) + "\r\r";
                     foreach (var client in subscribedClients)
                     {
+                        WriteLog(string.Format("Sending Value: Client: {0}; Name: {1}; Value: {2}", client.Client.ConnectionID, result.Request.Name, result.Value));
                         client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
                     }
                 }

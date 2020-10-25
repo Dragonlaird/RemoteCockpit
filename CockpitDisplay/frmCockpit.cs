@@ -22,7 +22,7 @@ namespace CockpitDisplay
         private RemoteConnector connection;
         private List<ClientRequestResult> results;
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
-
+        private delegate void SafeControlAddDelegate(Control ctrl, Control parent);
         public frmCockpit()
         {
             InitializeComponent();
@@ -72,19 +72,28 @@ namespace CockpitDisplay
                 var existingConnectionState = this.Controls.Find("lblConnected", true);
                 if(existingConnectionState == null || existingConnectionState.Count() == 0)
                 {
-                    this.Controls.Add(new Label { Name = "lblConnected", Width = 10, Height = 10, Anchor = AnchorStyles.Top | AnchorStyles.Right });
+                    AddControl(new Label { Name = "lblConnected", Width = 10, Height = 10, Anchor = AnchorStyles.Top | AnchorStyles.Right }, this);
                     existingConnectionState = this.Controls.Find("lblConnected", true);
                 }
                 foreach(Label connectionStateLabel in existingConnectionState)
                 {
-                    if (requestResult.Result == (object)true)
+                    if ((bool)requestResult.Result)
                         UpdateObject(connectionStateLabel, "BackColor", Color.Green);
                     else
                         UpdateObject(connectionStateLabel, "BackColor", Color.Red);
-                    connectionStateLabel.Update();
-
                 }
             }
+        }
+
+        private void AddControl(Control ctrl, Control parent)
+        {
+            if (parent.InvokeRequired)
+            {
+                var d = new SafeControlAddDelegate(AddControl);
+                parent.Invoke(d, new object[] { ctrl, parent });
+                return;
+            }
+            parent.Controls.Add(ctrl);
         }
 
         private void UpdateObject(object obj, string propertyName, object value)
@@ -95,10 +104,12 @@ namespace CockpitDisplay
                 {
                     var d = new SafeCallDelegate(UpdateObject);
                     ((Control)obj).Invoke(d, new object[] { obj, propertyName, value });
+                    return;
                 }
                 if (obj.GetType().GetProperty(propertyName) != null)
                 {
                     obj.GetType().GetProperty(propertyName).SetValue(obj, value);
+                    ((Control)obj).Update();
                 }
             }
         }

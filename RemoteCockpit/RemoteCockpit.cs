@@ -76,15 +76,23 @@ namespace RemoteCockpit
         private void ClientRequest(object sender, SimVarRequest request)
         {
             // Remote Client has requested a variable - has this vaiable already been requested?
-            if (fsConnector != null && !requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
+            if (fsConnector != null && (!requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit) || request.Name == "FS CONNECTION"))
             {
-                // New request, add it to the list of known requests
-                lock (requestResults)
-                {
-                    requestResults.Add(new SimVarRequestResult { Request = request, Value = null });
-                }
+                if (!requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
+                    // New request, add it to the list of known requests
+                    lock (requestResults)
+                    {
+                        requestResults.Add(new SimVarRequestResult { Request = request, Value = null });
+                    }
                 // Send the request to FSConnector
-                fsConnector.RequestVariable(request);
+                if(request.Name == "FS CONNECTION" && sender is StateObject)
+                {
+                    ClientConnect(sender, (StateObject)sender);
+                }
+                else
+                {
+                    fsConnector.RequestVariable(request);
+                }
             }
         }
 
@@ -95,8 +103,8 @@ namespace RemoteCockpit
         /// <param name="e">SimVarRequestResult containing requested valiable, unit and value</param>
         private void MessageReceived(object sender, SimVarRequestResult e)
         {
-            var lastRequest = requestResults.SingleOrDefault(x => x.Request.Name == e.Request.Name && x.Request.Unit == e.Request.Unit && (x.Value != e.Value || AlwaysSendVariable));
-            if (lastRequest != null)
+            var lastRequest = requestResults.SingleOrDefault(x => x.Request.Name == e.Request.Name && x.Request.Unit == e.Request.Unit);
+            if (lastRequest != null && ((lastRequest.Value == null && e.Value != null) || !lastRequest.Value.Equals(e.Value) || AlwaysSendVariable))
             {
                 // Request has changed value or we are forcing retransmission - send to SockListener, for retransmission to remote clients
                 lock (requestResults)
