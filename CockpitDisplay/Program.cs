@@ -16,7 +16,7 @@ namespace CockpitDisplay
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmCockpit());
+            Application.Run(new frmMain());
         }
     }
 }

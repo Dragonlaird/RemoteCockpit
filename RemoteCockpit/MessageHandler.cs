@@ -125,7 +125,6 @@ namespace RemoteCockpit
         {
             try
             {
-                //simConnect?.RequestDataOnSimObjectType(request.ReqID, (DEFINITION)1, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
                 simConnect?.RequestDataOnSimObjectType(request.ReqID, request.DefID, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
             }
             catch (Exception ex)
@@ -155,8 +154,6 @@ namespace RemoteCockpit
                 /// Listen for SimVar Data
                 simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(SimConnect_OnRecvSimobjectDataBytype);
 
-                simConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(SimConnect_OnRecvSimobjectData);
-
             }
             catch(Exception ex){
 
@@ -166,12 +163,14 @@ namespace RemoteCockpit
         private void SimConnect_OnRecvSimobjectDataBytype(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
             if (SimData != null)
-                SimData.DynamicInvoke(this, data);
-        }
+                try
+                {
+                    SimData.DynamicInvoke(this, data);
+                }
+                catch(Exception ex)
+                {
 
-        private void SimConnect_OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
-        {
-
+                }
         }
 
         private void SimConnect_OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
@@ -193,6 +192,7 @@ namespace RemoteCockpit
         }
     }
 
+    [DebuggerDisplay("\\{SimVarString\\} {Value}")]
     public struct SimVarString
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]

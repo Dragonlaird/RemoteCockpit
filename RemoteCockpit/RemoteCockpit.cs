@@ -69,7 +69,8 @@ namespace RemoteCockpit
         }
 
         /// <summary>
-        /// If a Client has requested a SimVar variable and this is the first request from any client - Submit the request to FSConnector
+        /// If a Client has requested a SimVar variable and this is the first request from any client - Submit the request to FSConnector.
+        /// Always submit requests for FS CONNECTION to receive a response (confirms remote server is connected and responding)
         /// </summary>
         /// <param name="sender">Listener</param>
         /// <param name="request">Variable requested</param>

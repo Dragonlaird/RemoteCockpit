@@ -77,9 +77,9 @@ namespace RemoteCockpit
                     }
                 }).Start();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ErrorHandler(listener, e);
+                ErrorHandler(listener, ex);
             }
         }
 
@@ -118,64 +118,81 @@ namespace RemoteCockpit
         public static void ReadCallback(IAsyncResult ar)
         {
             String content = String.Empty;
-
-            // Retrieve the state object and the handler socket  
-            // from the asynchronous state object.  
-            StateObject state = (StateObject)ar.AsyncState;
-            Socket handler = state.workSocket;
-
-            // Read data from the client socket.
-            int bytesRead = handler.EndReceive(ar);
-
-            if (bytesRead > 0)
+            try
             {
-                // There  might be more data, so store the data received so far.  
-                state.sb.Append(Encoding.ASCII.GetString(
-                    state.buffer, 0, bytesRead));
-                // Check for end-of-file tag. If it is not there, read
-                // more data.  
-                content = state.sb.ToString()?.Replace("\n", "");
-                if (content.IndexOf(requestSeparator) > -1)
+                // Retrieve the state object and the handler socket  
+                // from the asynchronous state object.  
+                StateObject state = (StateObject)ar.AsyncState;
+                Socket handler = state.workSocket;
+
+                // Read data from the client socket.
+                int bytesRead = handler.EndReceive(ar);
+
+                if (bytesRead > 0)
                 {
-                    // All the data has been read from the client.
-                    if (RequestReceived != null)
+                    // There  might be more data, so store the data received so far.  
+                    state.sb.Append(Encoding.ASCII.GetString(
+                        state.buffer, 0, bytesRead));
+                    // Check for end-of-file tag. If it is not there, read
+                    // more data.  
+                    content = state.sb.ToString()?.Replace("\n", "");
+                    if (content.IndexOf(requestSeparator) > -1)
                     {
-                        try
+                        // All the data has been read from the client.
+                        if (RequestReceived != null)
                         {
-                            foreach (var request in content.Split(new string[] { requestSeparator }, StringSplitOptions.RemoveEmptyEntries))
+                            try
                             {
-                                try
+                                foreach (var request in content.Split(new string[] { requestSeparator }, StringSplitOptions.RemoveEmptyEntries))
                                 {
-                                    RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(request));
+                                    try
+                                    {
+                                        RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(request));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        ErrorHandler(state, ex);
+                                    }
                                 }
-                                catch(Exception ex)
-                                {
-                                    ErrorHandler(state, ex);
-                                }
+                                state.sb = new StringBuilder();
+                                state.sb.Append(content.Substring(content.LastIndexOf(requestSeparator)));
                             }
-                            state.sb = new StringBuilder();
-                            state.sb.Append(content.Substring(content.LastIndexOf(requestSeparator)));
-                        }
-                        catch (Exception ex)
-                        {
-                            ErrorHandler(state, ex);
+                            catch (Exception ex)
+                            {
+                                ErrorHandler(state, ex);
+                            }
                         }
                     }
+                    // Get more data/requests
+                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                        new AsyncCallback(ReadCallback), state);
                 }
-                // Get more data/requests
-                handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReadCallback), state);
+            }
+            catch (Exception ex)
+            {
+
+                ErrorHandler(listener, ex);
             }
         }
 
         private static void Send(Socket handler, String data)
         {
-            // Convert the string data to byte data using ASCII encoding.  
-            byte[] byteData = Encoding.ASCII.GetBytes(data);
+            if (handler.Connected)
+            {
+                // Convert the string data to byte data using ASCII encoding.  
+                byte[] byteData = Encoding.ASCII.GetBytes(data);
 
-            // Begin sending the data to the remote device.  
-            handler.BeginSend(byteData, 0, byteData.Length, 0,
-                new AsyncCallback(SendCallback), handler);
+                // Begin sending the data to the remote device.  
+                handler.BeginSend(byteData, 0, byteData.Length, 0,
+                    new AsyncCallback(SendCallback), handler);
+            }
+            else
+            {
+                // No-longer connected - drop the client connection
+                handler?.Disconnect(false);
+                handler?.Close();
+                handler?.Dispose();
+            }
         }
 
         private static void ErrorHandler(object sender, Exception ex)
@@ -203,7 +220,6 @@ namespace RemoteCockpit
 
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
-
             }
             catch (Exception ex)
             {
