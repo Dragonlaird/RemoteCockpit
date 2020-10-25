@@ -14,11 +14,20 @@ namespace RemoteCockpit
         public EventHandler<LogMessage> LogReceived;
         private FSConnector fsConnector;
         private SocketListener listener;
-        private bool fsConnected = false;
+        private List<SimVarRequestResult> requestResults;
+        private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
         public RemoteCockpit()
         {
+            InitializeComponent();
             StartConnector();
             StartListener();
+        }
+
+        private void InitializeComponent()
+        {
+            requestResults = new List<SimVarRequestResult>();
+            // Add the first Request Variable for Connection State
+            requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
         }
 
         private void StartConnector()
@@ -45,8 +54,18 @@ namespace RemoteCockpit
             var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
             listener = new SocketListener(endPoint);
             listener.LogReceived += WriteLog;
+            listener.ClientConnect += ClientConnect;
             listener.ClientRequest += ClientRequest;
             listener.Start();
+        }
+
+        private void ClientConnect(object sender, StateObject e)
+        {
+            // New client connection - always send current FS CONNECTION value
+            var currentConnection = requestResults.SingleOrDefault(x => x.Request.Name == "FS CONNECTION" && x.Request.Unit == "bool");
+            if (currentConnection != null)
+                listener.SendVariable(currentConnection, true);
+
         }
 
         /// <summary>
@@ -56,9 +75,15 @@ namespace RemoteCockpit
         /// <param name="request">Variable requested</param>
         private void ClientRequest(object sender, SimVarRequest request)
         {
-            // Remote Client has requested a variable - add it to our request connection for FSConnector
-            if(fsConnector != null)
+            // Remote Client has requested a variable - has this vaiable already been requested?
+            if (fsConnector != null && !requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
             {
+                // New request, add it to the list of known requests
+                lock (requestResults)
+                {
+                    requestResults.Add(new SimVarRequestResult { Request = request, Value = null });
+                }
+                // Send the request to FSConnector
                 fsConnector.RequestVariable(request);
             }
         }
@@ -70,9 +95,19 @@ namespace RemoteCockpit
         /// <param name="e">SimVarRequestResult containing requested valiable, unit and value</param>
         private void MessageReceived(object sender, SimVarRequestResult e)
         {
-            WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = System.Diagnostics.EventLogEntryType.Information });
-            // Send this variable to Socket Listener to retransmit values to Remote Clients
-            listener.SendVariable(e);
+            var lastRequest = requestResults.SingleOrDefault(x => x.Request.Name == e.Request.Name && x.Request.Unit == e.Request.Unit && (x.Value != e.Value || AlwaysSendVariable));
+            if (lastRequest != null)
+            {
+                // Request has changed value or we are forcing retransmission - send to SockListener, for retransmission to remote clients
+                lock (requestResults)
+                {
+                    // Update our local list to the latest value
+                    requestResults[requestResults.IndexOf(lastRequest)].Value = e.Value;
+                }
+                WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = System.Diagnostics.EventLogEntryType.Information });
+                // Send this variable to Socket Listener to retransmit values to Remote Clients
+                listener.SendVariable(e);
+            }
         }
 
         /// <summary>
@@ -82,7 +117,8 @@ namespace RemoteCockpit
         /// <param name="connected">True = Connected; False = Disconnected;</param>
         private void ConnectionStateChanged(object sender, bool connected)
         {
-            fsConnected = connected;
+            var connectionChanged = new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = connected };
+            MessageReceived(this, connectionChanged);
         }
 
         public void WriteLog(object sender, LogMessage msg)

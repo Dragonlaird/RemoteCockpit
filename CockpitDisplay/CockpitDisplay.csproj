@@ -78,6 +78,7 @@
     <Compile Include="ICockpitInstrument.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteConnector.cs" />
     <EmbeddedResource Include="frmCockpit.resx">
       <DependentUpon>frmCockpit.cs</DependentUpon>
     </EmbeddedResource>

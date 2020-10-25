@@ -29,6 +29,7 @@ namespace RemoteCockpit
             _endPoint = endPoint;
             clients = new List<ClientConnection>();
             latestValues = new List<SimVarRequestResult>();
+            latestValues.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
         }
 
         public void Start()
@@ -48,7 +49,7 @@ namespace RemoteCockpit
                 if (connection != null && connection.workSocket != null && connection.workSocket.Connected && !clients.Any(x => x.Client.ConnectionID == connection.ConnectionID))
                     lock (clients)
                     {
-                        clients.Add(new ClientConnection { Client = connection, Requests = new List<SimVarRequest>() });
+                        clients.Add(new ClientConnection { Client = connection, Requests = new List<SimVarRequest> { new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" } } });
                     }
 
                 if (ClientConnect != null)
@@ -98,18 +99,22 @@ namespace RemoteCockpit
             }
         }
 
-        public void SendVariable(SimVarRequestResult result)
+        public void SendVariable(SimVarRequestResult result, bool forceSend = false)
         {
             // Find any Clients requesting this variable and send latest result to them
-            if(latestValues.Any(x=> x.Request == result.Request && x.Value != result.Value))
+            if(latestValues.Any(x=> x.Request.Name == result.Request.Name && x.Request.Unit == result.Request.Unit))
             {
-                // Value has been changed - rmember latest value and send to all subscribed clients
-                latestValues.Single(x => x.Request == result.Request).Value = result.Value;
-                var subscribedClients = clients.Where(x => x.Requests.Any(y => y.Name == result.Request.Name && y.Unit == result.Request.Unit));
-                var resultString = JsonConvert.SerializeObject(result);
-                foreach(var client in subscribedClients)
+                if (forceSend || latestValues.Any(x => x.Request.Name == result.Request.Name && x.Request.Unit == result.Request.Unit && x.Value != result.Value))
                 {
-                    client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
+                    // Value has been changed - rmember latest value and send to all subscribed clients
+                    latestValues.Single(x => x.Request.Name == result.Request.Name && x.Request.Unit == result.Request.Unit).Value = result.Value;
+                    var clientResponse = new ClientRequestResult { Request = new RemoteCockpitClasses.ClientRequest { Name = result.Request.Name, Units = result.Request.Unit }, Result = result.Value };
+                    var subscribedClients = clients.Where(x => x.Requests.Any(y => y.Name == result.Request.Name && y.Unit == result.Request.Unit));
+                    var resultString = JsonConvert.SerializeObject(clientResponse) + "\r\r";
+                    foreach (var client in subscribedClients)
+                    {
+                        client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
+                    }
                 }
             }
         }

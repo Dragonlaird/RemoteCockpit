@@ -13,23 +13,34 @@ using System.Configuration;
 using RemoteCockpitClasses;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Reflection;
 
 namespace CockpitDisplay
 {
     public partial class frmCockpit : Form
     {
-        private ClientConnection connection;
+        private RemoteConnector connection;
+        private List<ClientRequestResult> results;
+        private delegate void SafeCallDelegate(object obj, string propertyName, object value);
+
         public frmCockpit()
         {
             InitializeComponent();
             Initialize();
-            Connect();
             // Only variable needed for this is "TITLE", to be notified whenever the aircraft type changes
-            Thread.Sleep(1000);
+            Thread.Sleep(3000);
+            // Always ask to be notified when Connection to FlightSim is made or dropped
             RequestVariable(new ClientRequest
             {
-                Name="TITLE"
+                Name = "FS CONNECTION",
+                Units = "bool"
             });
+            // Also, ask to be notified whenever user starts flying a different aircraft
+            RequestVariable(new ClientRequest
+            {
+                Name = "TITLE"
+            });
+
             // Requesting more variables to test
             RequestVariable(new ClientRequest
             {
@@ -43,70 +54,61 @@ namespace CockpitDisplay
 
         public void Initialize()
         {
+            results = new List<ClientRequestResult>();
             var ipAddress = ConfigurationManager.AppSettings.Get(@"ipAddress");
             var ipPort = int.Parse(ConfigurationManager.AppSettings.Get(@"ipPort"));
             var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
-            connection = new ClientConnection { };
-            Socket socket = new Socket(endPoint.Address.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
-            connection.Connection = socket;
+            connection = new RemoteConnector(endPoint);
+            connection.ReceiveData += ReceiveResultFromServer;
+            connection.Connect();
         }
 
-        private void Connect()
+        private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)
         {
-            try
+            // Received a new value for a request - identify which plugins need this variable and send it
+            if(requestResult.Request.Name == "FS CONNECTION")
             {
-                var ipAddress = ConfigurationManager.AppSettings.Get(@"ipAddress");
-                var ipPort = int.Parse(ConfigurationManager.AppSettings.Get(@"ipPort"));
-                var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
-                connection.Connection.Connect(endPoint);
-                connection.Connection.BeginReceive(new byte[1000], 0, 1000, 0,
-                    new AsyncCallback(ReadCallback), connection.Connection);
-            }
-            catch(Exception ex)
-            {
+                // Just informing us the current connection state to the Flight Simulator = display it on screen
+                var existingConnectionState = this.Controls.Find("lblConnected", true);
+                if(existingConnectionState == null || existingConnectionState.Count() == 0)
+                {
+                    this.Controls.Add(new Label { Name = "lblConnected", Width = 10, Height = 10, Anchor = AnchorStyles.Top | AnchorStyles.Right });
+                    existingConnectionState = this.Controls.Find("lblConnected", true);
+                }
+                foreach(Label connectionStateLabel in existingConnectionState)
+                {
+                    if (requestResult.Result == (object)true)
+                        UpdateObject(connectionStateLabel, "BackColor", Color.Green);
+                    else
+                        UpdateObject(connectionStateLabel, "BackColor", Color.Red);
+                    connectionStateLabel.Update();
 
+                }
             }
         }
 
-        public void ReadCallback(IAsyncResult ar)
+        private void UpdateObject(object obj, string propertyName, object value)
         {
-            String content = String.Empty;
-
-            Socket handler = (Socket)ar.AsyncState;
-            StringBuilder sb = new StringBuilder();
-            // Read data from the client socket.
-            int bytesRead = handler.EndReceive(ar);
-
-            if (bytesRead > 0)
+            if (obj != null && !string.IsNullOrEmpty(propertyName) && obj.GetType().GetProperty(propertyName) != null)
             {
-                var buffer = new byte[bytesRead];
-                // There  might be more data, so store the data received so far.  
-                sb.Append(Encoding.ASCII.GetString(
-                    buffer, 0, bytesRead));
-                // Check for end-of-file tag. If it is not there, read
-                // more data.  
-                content = sb.ToString()?.Replace("\n", "").Replace("\0", "");
-                // Get more data/requests
-                handler.BeginReceive(new byte[1000], 0, 1000, 0,
-                    new AsyncCallback(ReadCallback), handler);
+                if (((Control)obj).InvokeRequired)
+                {
+                    var d = new SafeCallDelegate(UpdateObject);
+                    ((Control)obj).Invoke(d, new object[] { obj, propertyName, value });
+                }
+                if (obj.GetType().GetProperty(propertyName) != null)
+                {
+                    obj.GetType().GetProperty(propertyName).SetValue(obj, value);
+                }
             }
         }
-
 
         private void RequestVariable(ClientRequest request)
         {
-            if(connection != null && connection?.Connection.Connected == true)
+            if(connection?.Connected == true)
             {
-                var requestString = JsonConvert.SerializeObject(request) + "\r\r";
-                var requestBytes = Encoding.UTF8.GetBytes(requestString.ToArray());
-                connection.Connection.Send(requestBytes,SocketFlags.None);
+                connection.RequestVariable(request);
             }
-        }
-
-        private void ReceiveRemoteResponse(object sender, EventArgs e)
-        {
-
         }
     }
 }
