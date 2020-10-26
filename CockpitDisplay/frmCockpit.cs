@@ -58,13 +58,13 @@ namespace CockpitDisplay
             parent.Controls.Remove(ctrl);
         }
 
-        private void UpdateObject(object obj, string propertyName, object value)
+        private void UpdateProperty(object obj, string propertyName, object value)
         {
             if (obj != null && !string.IsNullOrEmpty(propertyName) && obj.GetType().GetProperty(propertyName) != null)
             {
                 if (((Control)obj).InvokeRequired)
                 {
-                    var d = new SafeCallDelegate(UpdateObject);
+                    var d = new SafeCallDelegate(UpdateProperty);
                     ((Control)obj).Invoke(d, new object[] { obj, propertyName, value });
                     return;
                 }
@@ -74,6 +74,20 @@ namespace CockpitDisplay
                     ((Control)obj).Update();
                 }
             }
+        }
+
+        public void ResultUpdate(ClientRequestResult requestResult)
+        {
+            lock (instruments)
+                foreach (var instrument in instruments)
+                {
+                    if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
+                        try
+                        {
+                            instrument.ValueUpdate(requestResult);
+                        }
+                        catch { }
+                }
         }
 
         internal void LoadLayout(string text)
@@ -117,7 +131,7 @@ namespace CockpitDisplay
             foreach(var instrumentPosition in layoutDefinition.Postions)
             {
                 var plugin = instrumentPlugins.FirstOrDefault(x => x.Type == instrumentPosition.Type);
-                if(plugin != null && plugin.Control != null)
+                if(plugin != null)
                 {
                     var vScaleFactor = this.Height / 100;
                     var hScaleFactor = this.Width / 100;
@@ -126,12 +140,8 @@ namespace CockpitDisplay
                         instrumentPosition.Left * hScaleFactor, 
                         instrumentPosition.Height * vScaleFactor,
                         instrumentPosition.Width * hScaleFactor);
-                    // Force the control to repaint
-                    plugin.Control.Top = instrumentPosition.Top * vScaleFactor;
-                    plugin.Control.Left = instrumentPosition.Left * hScaleFactor;
-                    plugin.Control.Height = instrumentPosition.Height * vScaleFactor;
-                    plugin.Control.Width = instrumentPosition.Width * hScaleFactor;
                     AddControl(plugin.Control, this);
+                    this.Update();
                 }
             }
         }
@@ -164,7 +174,7 @@ namespace CockpitDisplay
         // Modified from code: https://www.c-sharpcorner.com/article/introduction-to-building-a-plug-in-architecture-using-C-Sharp/
         private static List<Assembly> LoadAvailableAssemblies()
         {
-            DirectoryInfo dInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Plugins\netstandard2.0"));
+            DirectoryInfo dInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Plugins"));
             FileInfo[] files = dInfo.GetFiles("*.dll");
             List<Assembly> plugInAssemblyList = new List<Assembly>();
 

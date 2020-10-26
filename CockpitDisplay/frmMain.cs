@@ -113,7 +113,8 @@ namespace CockpitDisplay
             {
                 cmbCockpitLayout.Enabled = false;
                 cmbCockpitLayout.Text = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Value?.ToString();
-                ReloadCockpit(cmbCockpitLayout.Text);
+                if (cockpit != null)
+                    ReloadCockpit(cmbCockpitLayout.Text);
             }
             else
             {
@@ -126,10 +127,22 @@ namespace CockpitDisplay
             if (cockpit == null)
             {
                 cockpit = new frmCockpit();
-                cockpit.Show();
             }
+            if (cbFullScreen.Checked)
+            {
+                cockpit.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                cockpit.WindowState = FormWindowState.Normal;
+                cockpit.Height = (int)txtCockpitHeight.Value;
+                cockpit.Width = (int)txtCockpitWidth.Value;
+                cbCockpitCentre_CheckedChanged(null, null);
+            }
+            cockpit.Show();
             cockpit.LoadLayout(text);
             cockpit.Update();
+            this.Focus();
         }
 
         private void pbShowCockpit_Click(object sender, EventArgs e)
@@ -139,6 +152,7 @@ namespace CockpitDisplay
             {
                 cmdButton.Text = "Hide Cockpit";
                 ReloadCockpit(cmbCockpitLayout.Text);
+                this.Focus();
             }
             else
             {
@@ -147,6 +161,70 @@ namespace CockpitDisplay
                 cockpit?.Dispose();
                 cockpit = null;
             }
+        }
+
+        private void cbFullScreen_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender is CheckBox)
+                if (((CheckBox)sender).Checked)
+                {
+                    txtCockpitHeight.Enabled = false;
+                    txtCockpitWidth.Enabled = false;
+                    txtCockpitHeight.ReadOnly = true;
+                    txtCockpitWidth.ReadOnly = true;
+                    cbCockpitCentre.Enabled = false;
+                }
+                else
+                {
+                    txtCockpitHeight.Enabled = true;
+                    txtCockpitWidth.Enabled = true;
+                    txtCockpitHeight.ReadOnly = false;
+                    txtCockpitWidth.ReadOnly = false;
+                    cbCockpitCentre.Enabled = true;
+                }
+            cbCockpitCentre_CheckedChanged(null, null);
+            if (cockpit != null)
+                ReloadCockpit(cmbCockpitLayout.Text);
+        }
+
+        private void cbCockpitCentre_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbCockpitCentre.Checked)
+            {
+                txtCockpitLeft.Enabled = false;
+                txtCockpitTop.Enabled = false;
+                txtCockpitLeft.ReadOnly = true;
+                txtCockpitTop.ReadOnly = true;
+                if (cockpit != null)
+                {
+                    var screenHeight = Screen.PrimaryScreen.WorkingArea.Height;
+                    var screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+                    var cockpitLeft = (screenWidth - txtCockpitWidth.Value) / 2;
+                    var cockpitTop = (screenHeight - txtCockpitHeight.Value) / 2;
+                    cockpitLeft += Screen.PrimaryScreen.WorkingArea.Left;
+                    cockpitTop += Screen.PrimaryScreen.WorkingArea.Top;
+                    cockpit.Top = (int)cockpitTop;
+                    cockpit.Left = (int)cockpitLeft;
+                }
+            }
+            else
+            {
+                txtCockpitLeft.Enabled = true;
+                txtCockpitTop.Enabled = true;
+                txtCockpitLeft.ReadOnly = false;
+                txtCockpitTop.ReadOnly = false;
+                if (cockpit != null)
+                {
+                    cockpit.Top = (int)txtCockpitTop.Value;
+                    cockpit.Left = (int)txtCockpitLeft.Value;
+                }
+            }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (cockpit != null)
+                cockpit.Close();
         }
     }
 }

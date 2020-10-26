@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitDisplay", "CockpitDi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteCockpitClasses", "RemoteCockpitClasses\RemoteCockpitClasses.csproj", "{2C1905B7-E26B-49BF-A521-3D9D2DE37CE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitPlugins", "CockpitPlugins\CockpitPlugins.csproj", "{DC7E5812-9253-4018-AD40-1D776DC9C6AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentPlugins", "InstrumentPlugins\InstrumentPlugins.csproj", "{6A197BAC-121C-4D34-A215-14DA7AF32C86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{2C1905B7-E26B-49BF-A521-3D9D2DE37CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C1905B7-E26B-49BF-A521-3D9D2DE37CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C1905B7-E26B-49BF-A521-3D9D2DE37CE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC7E5812-9253-4018-AD40-1D776DC9C6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC7E5812-9253-4018-AD40-1D776DC9C6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC7E5812-9253-4018-AD40-1D776DC9C6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC7E5812-9253-4018-AD40-1D776DC9C6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
