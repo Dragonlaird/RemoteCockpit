@@ -49,28 +49,27 @@ namespace CockpitPlugins
             }
             //return;
             Graphics g = e.Graphics;
-            var pen = new Pen(Color.Red, 3);
+            var pen = new Pen(Color.Black, 5);
             Rectangle rect = new Rectangle(
-                ctrl.DisplayRectangle.X,
-                ctrl.DisplayRectangle.Y,
+                ctrl.DisplayRectangle.X + (int)pen.Width,
+                ctrl.DisplayRectangle.Y + (int)pen.Width,
                 ctrl.DisplayRectangle.Width > ctrl.DisplayRectangle.Height ? ctrl.DisplayRectangle.Height : ctrl.DisplayRectangle.Width,
                 ctrl.DisplayRectangle.Height > ctrl.DisplayRectangle.Width ? ctrl.DisplayRectangle.Width : ctrl.DisplayRectangle.Height);
             // reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
-            rect.Width -= (int)pen.Width;
-            rect.Height -= (int)pen.Width;
-            g.DrawArc(pen, rect, 0, 360);
-            /*
-            var brush = new SolidBrush(Color.Red);
+            rect.Width -= 2 * (int)pen.Width;
+            rect.Height -= 2 * (int)pen.Width;
+            var brush = new SolidBrush(Color.Gainsboro);
             g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
-            */
+            g.DrawArc(pen, rect, 135, 270);
         }
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
             PictureBox needle = (PictureBox)sender;
             Graphics g = e.Graphics;
+            //g.Clear(Color.Transparent);
             needle.BackColor = Color.Transparent;
-            var rect = control.DisplayRectangle;
+            var rect = needle.Parent.DisplayRectangle;
             // // Ensure ectangle is square and find the centre for our line
             if (rect.Height > rect.Width)
                 rect.Height = rect.Width;
@@ -80,13 +79,15 @@ namespace CockpitPlugins
             // MinimumAltitude starts at 110 degrees
             // MaximumAltitude ends at 70 degrees
             // Ensure our Current Altitude with within our bounds
-            var endPointAngle = (float)(110 + 320.0 * ((float)(CurrentAltitude < MinimumAltitude ? 
+            var endPointAngle = (float)(45 + 270.0 * ((float)(CurrentAltitude < MinimumAltitude ? 
                 MinimumAltitude : 
                 CurrentAltitude > MaximumAltitude ? 
                     MaximumAltitude : 
                     CurrentAltitude) / (float)MaximumAltitude));
-            var radius = (float)(rect.Height - rect.Height / 10) / 2;
-            var endPoint = new Point { X = (int)(Math.Cos(endPointAngle)*radius), Y = (int)(Math.Sin(endPointAngle)*radius) };
+            var radius = (double)(rect.Height / 2 - rect.Height / 10);
+            var x = Math.Cos(endPointAngle) * radius;
+            var y = Math.Sin(endPointAngle) * radius;
+            var endPoint = new Point { X = (int)x, Y = (int)y };
             var pen = new Pen(Color.Black, 4);
 
             g.DrawLine(
@@ -138,7 +139,7 @@ namespace CockpitPlugins
                     // Draw the initial outline once - after that, an overlay will be used to display altitude
                     control = new PictureBox();
                     control.Visible = true;
-                    control.BackColor = Color.Gainsboro;
+                    control.BackColor = Color.Transparent;
                     control.Name = "Generic_Altimeter";
                     control.Top = controlTop;
                     control.Left = controlLeft;
