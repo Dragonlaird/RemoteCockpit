@@ -84,6 +84,7 @@ namespace CockpitDisplay
                         try
                         {
                             instrument.ValueUpdate(requestResult);
+                            instrument.Control.Update();
                         }
                         catch { }
                 }
@@ -140,6 +141,7 @@ namespace CockpitDisplay
                         instrumentPosition.Height * vScaleFactor,
                         instrumentPosition.Width * hScaleFactor);
                     AddControl(plugin.Control, this);
+                    plugin.Control.Update();
                 }
             }
         }
