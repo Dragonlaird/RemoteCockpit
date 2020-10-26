@@ -79,16 +79,16 @@ namespace CockpitPlugins
             // MinimumAltitude starts at 110 degrees
             // MaximumAltitude ends at 70 degrees
             // Ensure our Current Altitude with within our bounds
-            var endPointAngle = (float)(45 + 270.0 * ((float)(CurrentAltitude < MinimumAltitude ? 
+            var endPointAngle = (float)(270.0 * ((float)(CurrentAltitude < MinimumAltitude ? 
                 MinimumAltitude : 
                 CurrentAltitude > MaximumAltitude ? 
                     MaximumAltitude : 
                     CurrentAltitude) / (float)MaximumAltitude));
             var radius = (double)(rect.Height / 2 - rect.Height / 10);
-            var x = Math.Cos(endPointAngle) * radius;
-            var y = Math.Sin(endPointAngle) * radius;
+            var x = Math.Sin(endPointAngle) * radius;
+            var y = Math.Cos(endPointAngle) * radius;
             var endPoint = new Point { X = (int)x, Y = (int)y };
-            var pen = new Pen(Color.Black, 4);
+            var pen = new Pen(Color.Sienna, 3);
 
             g.DrawLine(
                 pen,
