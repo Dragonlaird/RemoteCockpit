@@ -35,24 +35,40 @@ namespace CockpitPlugins
             {
                 CurrentAltitude = (int)value.Result;
             }
-            Update(control, new PaintEventArgs(control.CreateGraphics(), control.DisplayRectangle));
+            Paint(control, new PaintEventArgs(control.CreateGraphics(), control.DisplayRectangle));
         }
 
-        private void Update(object sender, PaintEventArgs e)
+        private void Paint(object sender, PaintEventArgs e)
         {
-            if (sender is PictureBox && ((Control)sender).Name == "Generic_Altimeter")
+            var ctrl = (Control)sender;
+            if (ctrl.Controls.Count == 0)
             {
-                if(((PictureBox)sender).Controls.Count != 0)
-                {
-                    ((PictureBox)sender).Controls.Clear();
-                }
-                ((PictureBox)sender).Controls.Add(CreateNeedle((PictureBox)sender));
+                var needle = new PictureBox();
+                needle.Paint += PaintNeedle;
+                ctrl.Controls.Add(needle);
             }
+            //return;
+            Graphics g = e.Graphics;
+            var pen = new Pen(Color.Red, 3);
+            Rectangle rect = new Rectangle(
+                ctrl.DisplayRectangle.X,
+                ctrl.DisplayRectangle.Y,
+                ctrl.DisplayRectangle.Width > ctrl.DisplayRectangle.Height ? ctrl.DisplayRectangle.Height : ctrl.DisplayRectangle.Width,
+                ctrl.DisplayRectangle.Height > ctrl.DisplayRectangle.Width ? ctrl.DisplayRectangle.Width : ctrl.DisplayRectangle.Height);
+            // reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
+            rect.Width -= (int)pen.Width;
+            rect.Height -= (int)pen.Width;
+            g.DrawArc(pen, rect, 0, 360);
+            /*
+            var brush = new SolidBrush(Color.Red);
+            g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
+            */
         }
 
-        private PictureBox CreateNeedle(Control control)
+        private void PaintNeedle(object sender, PaintEventArgs e)
         {
-            var needle = new PictureBox();
+            PictureBox needle = (PictureBox)sender;
+            Graphics g = e.Graphics;
             needle.BackColor = Color.Transparent;
             var rect = control.DisplayRectangle;
             // // Ensure ectangle is square and find the centre for our line
@@ -73,13 +89,11 @@ namespace CockpitPlugins
             var endPoint = new Point { X = (int)(Math.Cos(endPointAngle)*radius), Y = (int)(Math.Sin(endPointAngle)*radius) };
             var pen = new Pen(Color.Black, 4);
 
-            var g = needle.CreateGraphics();
             g.DrawLine(
                 pen,
                 centrePoint,
                 endPoint
                 );
-            return needle;
         }
 
         public InstrumentType Type
@@ -130,19 +144,7 @@ namespace CockpitPlugins
                     control.Left = controlLeft;
                     control.Height = controlHeight;
                     control.Width = controlWidth;
-
-                    var g = control.CreateGraphics();
-                    g.Clear(Color.Transparent);
-                    Pen pen = new Pen(Color.Red, 3);
-                    Rectangle rect = new Rectangle(
-                        control.DisplayRectangle.X,
-                        control.DisplayRectangle.Y,
-                        control.DisplayRectangle.Width > control.DisplayRectangle.Height ? control.DisplayRectangle.Height : control.DisplayRectangle.Width,
-                        control.DisplayRectangle.Height > control.DisplayRectangle.Width ? control.DisplayRectangle.Width : control.DisplayRectangle.Height);
-                    rect.Width -= (1 + (int)pen.Width);
-                    rect.Height -= (1 + (int)pen.Width);
-                    g.DrawArc(pen, rect, 0, 360);
-                    Update(control, new PaintEventArgs(g, rect));
+                    control.Paint += this.Paint;
                 }
                 return control;
             }

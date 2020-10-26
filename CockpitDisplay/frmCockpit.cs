@@ -33,7 +33,6 @@ namespace CockpitDisplay
 
         public void Initialize()
         {
-            LoadLayout("");
         }
 
         private void AddControl(Control ctrl, Control parent)
@@ -141,7 +140,6 @@ namespace CockpitDisplay
                         instrumentPosition.Height * vScaleFactor,
                         instrumentPosition.Width * hScaleFactor);
                     AddControl(plugin.Control, this);
-                    this.Update();
                 }
             }
         }
