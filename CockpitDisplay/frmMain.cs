@@ -140,8 +140,9 @@ namespace CockpitDisplay
                 cbCockpitCentre_CheckedChanged(null, null);
             }
             cockpit.Show();
-            cockpit.LoadLayout(text);
+            cockpit.LoadLayout(text); // This should force all viible controls to be removed and re-added with new dimensions
             cockpit.Update();
+            cockpit.Focus();
             this.Focus();
         }
 

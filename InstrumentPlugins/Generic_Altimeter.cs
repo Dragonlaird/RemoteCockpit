@@ -18,7 +18,10 @@ namespace CockpitPlugins
         private const int MinimumAltitude = 0;
         private const int MaximumAltitude = 10000;
         private int CurrentAltitude { get; set; } = 0;
-
+        private int controlTop = 0;
+        private int controlLeft = 0;
+        private int controlHeight = 50;
+        private int controlWidth = 50;
 
         public Generic_Altimeter()
         {
@@ -120,7 +123,14 @@ namespace CockpitPlugins
                 {
                     // Draw the initial outline once - after that, an overlay will be used to display altitude
                     control = new PictureBox();
+                    control.Visible = true;
+                    control.BackColor = Color.Gainsboro;
                     control.Name = "Generic_Altimeter";
+                    control.Top = controlTop;
+                    control.Left = controlLeft;
+                    control.Height = controlHeight;
+                    control.Width = controlWidth;
+
                     var g = control.CreateGraphics();
                     g.Clear(Color.Transparent);
                     Pen pen = new Pen(Color.Red, 3);
@@ -165,12 +175,16 @@ namespace CockpitPlugins
 
         public void SetLayout(int top, int left, int height, int width)
         {
+            controlTop = top;
+            controlLeft = left;
+            controlHeight = height;
+            controlWidth = width;
             if (control != null)
             {
-                control.Top = top;
-                control.Left = left;
-                control.Height = height;
-                control.Width = width;
+                control.Top = controlTop;
+                control.Left = controlLeft;
+                control.Height = controlHeight;
+                control.Width = controlWidth;
             }
         }
     }
