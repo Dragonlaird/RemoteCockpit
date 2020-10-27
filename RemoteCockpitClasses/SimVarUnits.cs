@@ -296,7 +296,7 @@ namespace RemoteCockpitClasses
             {"DELTA HEADING RATE",new SimVarDefinition("DELTA HEADING RATE","Rate of turn of heading indicator","radians per second",ConvertType("sint16"),false,false)},
             {"GYRO DRIFT ERROR",new SimVarDefinition("GYRO DRIFT ERROR","Angular error of heading indicator","radians",ConvertType("sint16"),true,false)},
             {"HEADING INDICATOR",new SimVarDefinition("HEADING INDICATOR","Heading indicator (directional gyro) indication","radians",null,true,false)},
-            {"INDICATED ALTITUDE",new SimVarDefinition("INDICATED ALTITUDE","Altimeter indication","feet",null,false,false)},
+            {"INDICATED ALTITUDE",new SimVarDefinition("INDICATED ALTITUDE","Altimeter indication","feet",ConvertType("float64"),false,false)},
             {"INDICATED ALTITUDE EX1",new SimVarDefinition("INDICATED ALTITUDE EX1","Similar to INDICATED_ALTITUDE but doesn’t affect actual plan position when Setting this variable.","feet",null,false,false)},
             {"KOHLSMAN SETTING HG",new SimVarDefinition("KOHLSMAN SETTING HG","Altimeter setting","inches of mercury, inhg",ConvertType("float64"),true,false)},
             {"KOHLSMAN SETTING MB",new SimVarDefinition("KOHLSMAN SETTING MB","Altimeter setting","millibars",ConvertType("float64"),false,false)},

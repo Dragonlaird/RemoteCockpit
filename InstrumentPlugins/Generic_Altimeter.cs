@@ -33,7 +33,7 @@ namespace CockpitPlugins
             // Update our control to display latest value
             if(value.Request.Name == "INDICATED ALTITUDE")
             {
-                CurrentAltitude = (int)value.Result;
+                CurrentAltitude = (int)(double)value.Result;
             }
             Paint(control, new PaintEventArgs(control.CreateGraphics(), control.DisplayRectangle));
         }
@@ -47,9 +47,10 @@ namespace CockpitPlugins
                 needle.Paint += PaintNeedle;
                 ctrl.Controls.Add(needle);
             }
-            //return;
+            var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
+
             Graphics g = e.Graphics;
-            var pen = new Pen(Color.Black, 5);
+            var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
             Rectangle rect = new Rectangle(
                 ctrl.DisplayRectangle.X + (int)pen.Width,
                 ctrl.DisplayRectangle.Y + (int)pen.Width,
@@ -75,22 +76,29 @@ namespace CockpitPlugins
                 rect.Height = rect.Width;
             else
                 rect.Width = rect.Height;
+            var scaleFactor = (rect.Height < rect.Width ? rect.Height : rect.Width) / 100.0;
             var centrePoint = new Point { X = rect.Width / 2, Y = rect.Height / 2 };
             // MinimumAltitude starts at 110 degrees
             // MaximumAltitude ends at 70 degrees
             // Ensure our Current Altitude with within our bounds
-            var angle = 270 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude);
-            var radius = (double)(rect.Height / 2 - rect.Height / 10);
-            var x = centrePoint.X + Math.Sin(angle - 45) * radius;
-            var y = centrePoint.Y + Math.Cos(angle - 45) * radius;
+            var angle = 270.0 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude) + 135.0;
+            var angleRadians = ConvertToRadians(angle);
+            var radius = (double)rect.Height / 2 - (double)rect.Height / 10;
+            var x = centrePoint.X + Math.Cos(angleRadians) * radius;
+            var y = centrePoint.Y + Math.Sin(angleRadians) * radius;
             var endPoint = new Point { X = (int)x, Y = (int)y };
-            var pen = new Pen(Color.Sienna, 3);
+            var pen = new Pen(Color.Sienna, (int)(3 * scaleFactor));
 
             g.DrawLine(
                 pen,
                 centrePoint,
                 endPoint
                 );
+        }
+
+        private double ConvertToRadians(double angle)
+        {
+            return (Math.PI / 180) * angle;
         }
 
         public InstrumentType Type
@@ -139,8 +147,8 @@ namespace CockpitPlugins
                     control.Name = "Generic_Altimeter";
                     control.Top = controlTop;
                     control.Left = controlLeft;
-                    control.Height = controlHeight;
-                    control.Width = controlWidth;
+                    control.Height = controlHeight > controlWidth ? controlWidth : controlHeight;
+                    control.Width = controlWidth > controlHeight ? controlHeight : controlWidth;
                     control.Paint += this.Paint;
                 }
                 return control;

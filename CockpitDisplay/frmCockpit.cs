@@ -16,6 +16,7 @@ using System.Threading;
 using System.Reflection;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json.Linq;
 
 namespace CockpitDisplay
 {
@@ -23,8 +24,11 @@ namespace CockpitDisplay
     {
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
         private delegate void SafeControlAddDelegate(Control ctrl, Control parent);
+        private delegate void SafeFormUpdateDelegate(Form form);
         private List<ICockpitInstrument> instruments;
+        private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
+        public EventHandler<ClientRequest> RequestValue;
         public frmCockpit()
         {
             InitializeComponent();
@@ -33,6 +37,7 @@ namespace CockpitDisplay
 
         public void Initialize()
         {
+            layoutDefinitions = new List<LayoutDefinition>();
         }
 
         private void AddControl(Control ctrl, Control parent)
@@ -70,24 +75,38 @@ namespace CockpitDisplay
                 if (obj.GetType().GetProperty(propertyName) != null)
                 {
                     obj.GetType().GetProperty(propertyName).SetValue(obj, value);
-                    ((Control)obj).Update();
+                    UpdateCockpitItem((Control)obj);
                 }
             }
         }
 
         public void ResultUpdate(ClientRequestResult requestResult)
         {
-            lock (instruments)
-                foreach (var instrument in instruments)
-                {
-                    if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
-                        try
-                        {
-                            instrument.ValueUpdate(requestResult);
-                            instrument.Control.Update();
-                        }
-                        catch { }
-                }
+            if (instruments != null)
+                lock (instruments)
+                    foreach (var instrument in instruments)
+                    {
+                        if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
+                            try
+                            {
+                                instrument.ValueUpdate(requestResult);
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                    }
+            UpdateCockpitItem(this);
+        }
+
+        private void UpdateCockpitItem(Control obj)
+        {
+            if (obj.InvokeRequired)
+            {
+                var d = new SafeFormUpdateDelegate(UpdateCockpitItem);
+                this.Invoke(d, new object[] { obj });
+                return;
+            }
+            obj.Update();
         }
 
         internal void LoadLayout(string text)
@@ -100,6 +119,20 @@ namespace CockpitDisplay
             // Find which Instruments are used in this Cockpit
             layoutDefinition = GetLayout(text);
             // Load one of every Instrument plugin type for this layout
+            if (!string.IsNullOrEmpty(layoutDefinition.Background))
+            {
+                try
+                {
+                    var image = File.OpenRead(string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background));
+
+                    this.BackgroundImage = Image.FromStream(image);
+                    this.BackgroundImageLayout = ImageLayout.Stretch;
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
             var allAssemblies = LoadAvailableAssemblies();
             var instrumentPlugins = GetPlugIns(allAssemblies);
             instruments = new List<ICockpitInstrument>();
@@ -128,11 +161,13 @@ namespace CockpitDisplay
                 .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
             // Variable instruments contains all the plugins we can use for this layout
             // Now we simply add them to the relevant location on the form, suitably resized based on the current fom size
-            foreach(var instrumentPosition in layoutDefinition.Postions)
+            var variables = new List<ClientRequest>();
+            foreach (var instrumentPosition in layoutDefinition.Postions)
             {
                 var plugin = instrumentPlugins.FirstOrDefault(x => x.Type == instrumentPosition.Type);
                 if(plugin != null)
                 {
+                    variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
                     var vScaleFactor = this.Height / 100;
                     var hScaleFactor = this.Width / 100;
                     plugin.SetLayout(
@@ -141,33 +176,38 @@ namespace CockpitDisplay
                         instrumentPosition.Height * vScaleFactor,
                         instrumentPosition.Width * hScaleFactor);
                     AddControl(plugin.Control, this);
-                    plugin.Control.Update();
+                    UpdateCockpitItem(plugin.Control);
+                }
+            }
+            if(RequestValue != null)
+            {
+                foreach(var variable in variables)
+                {
+                    try
+                    {
+                        RequestValue.DynamicInvoke(this, variable);
+                    }
+                    catch(Exception ex) { }
                 }
             }
         }
 
         private LayoutDefinition GetLayout(string name)
         {
-            LayoutDefinition result = new LayoutDefinition
+            if (layoutDefinitions.Count == 0)
             {
-                Name = string.IsNullOrEmpty(name) ? "Generic Layout" : name,
-                Postions = new InstrumentLocation[] {
-                    new InstrumentLocation {
-                        Type = InstrumentType.Altimeter,
-                        Top = 5,
-                        Left = 5,
-                        Height = 15,
-                        Width = 15
-                    },
-                    new InstrumentLocation {
-                        Type = InstrumentType.GPS,
-                        Top = 5,
-                        Left = 20,
-                        Height = 20,
-                        Width = 20
-                    },
+                var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
+                var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
+                foreach (var layoutJson in layouts["Layouts"])
+                {
+                    var layout = layoutJson.ToObject<LayoutDefinition>();
+                    if (!layoutDefinitions.Contains(layout))
+                        layoutDefinitions.Add(layout);
                 }
-            };
+            }
+            LayoutDefinition result = layoutDefinitions.SingleOrDefault(x => x.Name == name);
+            if (result == null)
+                result = layoutDefinitions.First();
             return result;
         }
 

@@ -15,6 +15,7 @@ namespace RemoteCockpitClasses
                 return Postions?.Select(x => x.Type).ToArray();
             }
         }
+        public string Background { get; set; }
         public InstrumentLocation[] Postions { get; set; }
     }
 }

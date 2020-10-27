@@ -60,20 +60,18 @@
             // lblFSRunning
             // 
             this.lblFSRunning.AutoSize = true;
-            this.lblFSRunning.Location = new System.Drawing.Point(9, 36);
-            this.lblFSRunning.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblFSRunning.Location = new System.Drawing.Point(14, 55);
             this.lblFSRunning.Name = "lblFSRunning";
-            this.lblFSRunning.Size = new System.Drawing.Size(66, 13);
+            this.lblFSRunning.Size = new System.Drawing.Size(98, 20);
             this.lblFSRunning.TabIndex = 0;
             this.lblFSRunning.Text = "FS Running:";
             // 
             // lblServerConnected
             // 
             this.lblServerConnected.AutoSize = true;
-            this.lblServerConnected.Location = new System.Drawing.Point(13, 8);
-            this.lblServerConnected.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblServerConnected.Location = new System.Drawing.Point(20, 12);
             this.lblServerConnected.Name = "lblServerConnected";
-            this.lblServerConnected.Size = new System.Drawing.Size(62, 13);
+            this.lblServerConnected.Size = new System.Drawing.Size(91, 20);
             this.lblServerConnected.TabIndex = 1;
             this.lblServerConnected.Text = "Connected:";
             // 
@@ -81,10 +79,9 @@
             // 
             this.cbConnected.AutoSize = true;
             this.cbConnected.Enabled = false;
-            this.cbConnected.Location = new System.Drawing.Point(78, 8);
-            this.cbConnected.Margin = new System.Windows.Forms.Padding(2);
+            this.cbConnected.Location = new System.Drawing.Point(117, 12);
             this.cbConnected.Name = "cbConnected";
-            this.cbConnected.Size = new System.Drawing.Size(15, 14);
+            this.cbConnected.Size = new System.Drawing.Size(22, 21);
             this.cbConnected.TabIndex = 2;
             this.cbConnected.UseVisualStyleBackColor = true;
             // 
@@ -92,20 +89,18 @@
             // 
             this.cbFSRunning.AutoSize = true;
             this.cbFSRunning.Enabled = false;
-            this.cbFSRunning.Location = new System.Drawing.Point(78, 36);
-            this.cbFSRunning.Margin = new System.Windows.Forms.Padding(2);
+            this.cbFSRunning.Location = new System.Drawing.Point(117, 55);
             this.cbFSRunning.Name = "cbFSRunning";
-            this.cbFSRunning.Size = new System.Drawing.Size(15, 14);
+            this.cbFSRunning.Size = new System.Drawing.Size(22, 21);
             this.cbFSRunning.TabIndex = 3;
             this.cbFSRunning.UseVisualStyleBackColor = true;
             // 
             // lblCockpitLayout
             // 
             this.lblCockpitLayout.AutoSize = true;
-            this.lblCockpitLayout.Location = new System.Drawing.Point(33, 68);
-            this.lblCockpitLayout.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblCockpitLayout.Location = new System.Drawing.Point(50, 105);
             this.lblCockpitLayout.Name = "lblCockpitLayout";
-            this.lblCockpitLayout.Size = new System.Drawing.Size(42, 13);
+            this.lblCockpitLayout.Size = new System.Drawing.Size(61, 20);
             this.lblCockpitLayout.TabIndex = 4;
             this.lblCockpitLayout.Text = "Layout:";
             // 
@@ -113,29 +108,26 @@
             // 
             this.cmbCockpitLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCockpitLayout.FormattingEnabled = true;
-            this.cmbCockpitLayout.Location = new System.Drawing.Point(78, 66);
-            this.cmbCockpitLayout.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbCockpitLayout.Location = new System.Drawing.Point(117, 102);
             this.cmbCockpitLayout.Name = "cmbCockpitLayout";
-            this.cmbCockpitLayout.Size = new System.Drawing.Size(270, 21);
+            this.cmbCockpitLayout.Size = new System.Drawing.Size(403, 28);
             this.cmbCockpitLayout.TabIndex = 5;
             // 
             // lblAutoCockpitLayout
             // 
             this.lblAutoCockpitLayout.AutoSize = true;
-            this.lblAutoCockpitLayout.Location = new System.Drawing.Point(7, 97);
-            this.lblAutoCockpitLayout.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblAutoCockpitLayout.Location = new System.Drawing.Point(10, 149);
             this.lblAutoCockpitLayout.Name = "lblAutoCockpitLayout";
-            this.lblAutoCockpitLayout.Size = new System.Drawing.Size(67, 13);
+            this.lblAutoCockpitLayout.Size = new System.Drawing.Size(100, 20);
             this.lblAutoCockpitLayout.TabIndex = 6;
             this.lblAutoCockpitLayout.Text = "Auto-Layout:";
             // 
             // cbAutoCockpitLayout
             // 
             this.cbAutoCockpitLayout.AutoSize = true;
-            this.cbAutoCockpitLayout.Location = new System.Drawing.Point(78, 97);
-            this.cbAutoCockpitLayout.Margin = new System.Windows.Forms.Padding(2);
+            this.cbAutoCockpitLayout.Location = new System.Drawing.Point(117, 149);
             this.cbAutoCockpitLayout.Name = "cbAutoCockpitLayout";
-            this.cbAutoCockpitLayout.Size = new System.Drawing.Size(15, 14);
+            this.cbAutoCockpitLayout.Size = new System.Drawing.Size(22, 21);
             this.cbAutoCockpitLayout.TabIndex = 7;
             this.cbAutoCockpitLayout.UseVisualStyleBackColor = true;
             this.cbAutoCockpitLayout.CheckedChanged += new System.EventHandler(this.cbAutoCockpitLayout_CheckedChanged);
@@ -143,10 +135,9 @@
             // pbShowCockpit
             // 
             this.pbShowCockpit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbShowCockpit.Location = new System.Drawing.Point(256, 300);
-            this.pbShowCockpit.Margin = new System.Windows.Forms.Padding(2);
+            this.pbShowCockpit.Location = new System.Drawing.Point(384, 462);
             this.pbShowCockpit.Name = "pbShowCockpit";
-            this.pbShowCockpit.Size = new System.Drawing.Size(113, 23);
+            this.pbShowCockpit.Size = new System.Drawing.Size(170, 35);
             this.pbShowCockpit.TabIndex = 8;
             this.pbShowCockpit.Text = "Show Cockpit";
             this.pbShowCockpit.UseVisualStyleBackColor = true;
@@ -169,9 +160,11 @@
             this.grpCockpit.Controls.Add(this.lblHeight);
             this.grpCockpit.Controls.Add(this.cbFullScreen);
             this.grpCockpit.Controls.Add(this.lblFullScreen);
-            this.grpCockpit.Location = new System.Drawing.Point(10, 116);
+            this.grpCockpit.Location = new System.Drawing.Point(15, 178);
+            this.grpCockpit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpCockpit.Name = "grpCockpit";
-            this.grpCockpit.Size = new System.Drawing.Size(359, 168);
+            this.grpCockpit.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpCockpit.Size = new System.Drawing.Size(538, 258);
             this.grpCockpit.TabIndex = 9;
             this.grpCockpit.TabStop = false;
             this.grpCockpit.Text = "Cockpit Window";
@@ -180,9 +173,10 @@
             // 
             this.cbCockpitCentre.AutoSize = true;
             this.cbCockpitCentre.Enabled = false;
-            this.cbCockpitCentre.Location = new System.Drawing.Point(87, 39);
+            this.cbCockpitCentre.Location = new System.Drawing.Point(130, 60);
+            this.cbCockpitCentre.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbCockpitCentre.Name = "cbCockpitCentre";
-            this.cbCockpitCentre.Size = new System.Drawing.Size(15, 14);
+            this.cbCockpitCentre.Size = new System.Drawing.Size(22, 21);
             this.cbCockpitCentre.TabIndex = 13;
             this.cbCockpitCentre.UseVisualStyleBackColor = true;
             this.cbCockpitCentre.CheckedChanged += new System.EventHandler(this.cbCockpitCentre_CheckedChanged);
@@ -190,16 +184,18 @@
             // lblCentre
             // 
             this.lblCentre.AutoSize = true;
-            this.lblCentre.Location = new System.Drawing.Point(6, 39);
+            this.lblCentre.Location = new System.Drawing.Point(9, 60);
+            this.lblCentre.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCentre.Name = "lblCentre";
-            this.lblCentre.Size = new System.Drawing.Size(78, 13);
+            this.lblCentre.Size = new System.Drawing.Size(116, 20);
             this.lblCentre.TabIndex = 12;
             this.lblCentre.Text = "Centre Screen:";
             // 
             // txtCockpitLeft
             // 
             this.txtCockpitLeft.Enabled = false;
-            this.txtCockpitLeft.Location = new System.Drawing.Point(71, 84);
+            this.txtCockpitLeft.Location = new System.Drawing.Point(106, 129);
+            this.txtCockpitLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCockpitLeft.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -207,7 +203,7 @@
             0});
             this.txtCockpitLeft.Name = "txtCockpitLeft";
             this.txtCockpitLeft.ReadOnly = true;
-            this.txtCockpitLeft.Size = new System.Drawing.Size(120, 20);
+            this.txtCockpitLeft.Size = new System.Drawing.Size(180, 26);
             this.txtCockpitLeft.TabIndex = 11;
             this.txtCockpitLeft.Value = new decimal(new int[] {
             50,
@@ -219,7 +215,8 @@
             // txtCockpitTop
             // 
             this.txtCockpitTop.Enabled = false;
-            this.txtCockpitTop.Location = new System.Drawing.Point(71, 61);
+            this.txtCockpitTop.Location = new System.Drawing.Point(106, 94);
+            this.txtCockpitTop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCockpitTop.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -227,7 +224,7 @@
             0});
             this.txtCockpitTop.Name = "txtCockpitTop";
             this.txtCockpitTop.ReadOnly = true;
-            this.txtCockpitTop.Size = new System.Drawing.Size(120, 20);
+            this.txtCockpitTop.Size = new System.Drawing.Size(180, 26);
             this.txtCockpitTop.TabIndex = 10;
             this.txtCockpitTop.Value = new decimal(new int[] {
             50,
@@ -239,25 +236,28 @@
             // lblLeft
             // 
             this.lblLeft.AutoSize = true;
-            this.lblLeft.Location = new System.Drawing.Point(33, 88);
+            this.lblLeft.Location = new System.Drawing.Point(50, 135);
+            this.lblLeft.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLeft.Name = "lblLeft";
-            this.lblLeft.Size = new System.Drawing.Size(28, 13);
+            this.lblLeft.Size = new System.Drawing.Size(41, 20);
             this.lblLeft.TabIndex = 9;
             this.lblLeft.Text = "Left:";
             // 
             // lblTop
             // 
             this.lblTop.AutoSize = true;
-            this.lblTop.Location = new System.Drawing.Point(32, 65);
+            this.lblTop.Location = new System.Drawing.Point(48, 100);
+            this.lblTop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTop.Name = "lblTop";
-            this.lblTop.Size = new System.Drawing.Size(29, 13);
+            this.lblTop.Size = new System.Drawing.Size(40, 20);
             this.lblTop.TabIndex = 8;
             this.lblTop.Text = "Top:";
             // 
             // txtCockpitWidth
             // 
             this.txtCockpitWidth.Enabled = false;
-            this.txtCockpitWidth.Location = new System.Drawing.Point(71, 130);
+            this.txtCockpitWidth.Location = new System.Drawing.Point(106, 200);
+            this.txtCockpitWidth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCockpitWidth.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -265,10 +265,10 @@
             0});
             this.txtCockpitWidth.Name = "txtCockpitWidth";
             this.txtCockpitWidth.ReadOnly = true;
-            this.txtCockpitWidth.Size = new System.Drawing.Size(120, 20);
+            this.txtCockpitWidth.Size = new System.Drawing.Size(180, 26);
             this.txtCockpitWidth.TabIndex = 7;
             this.txtCockpitWidth.Value = new decimal(new int[] {
-            800,
+            1400,
             0,
             0,
             0});
@@ -277,7 +277,8 @@
             // txtCockpitHeight
             // 
             this.txtCockpitHeight.Enabled = false;
-            this.txtCockpitHeight.Location = new System.Drawing.Point(71, 107);
+            this.txtCockpitHeight.Location = new System.Drawing.Point(106, 165);
+            this.txtCockpitHeight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCockpitHeight.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -285,10 +286,10 @@
             0});
             this.txtCockpitHeight.Name = "txtCockpitHeight";
             this.txtCockpitHeight.ReadOnly = true;
-            this.txtCockpitHeight.Size = new System.Drawing.Size(120, 20);
+            this.txtCockpitHeight.Size = new System.Drawing.Size(180, 26);
             this.txtCockpitHeight.TabIndex = 6;
             this.txtCockpitHeight.Value = new decimal(new int[] {
-            600,
+            500,
             0,
             0,
             0});
@@ -297,18 +298,20 @@
             // lblWidth
             // 
             this.lblWidth.AutoSize = true;
-            this.lblWidth.Location = new System.Drawing.Point(23, 134);
+            this.lblWidth.Location = new System.Drawing.Point(34, 206);
+            this.lblWidth.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblWidth.Name = "lblWidth";
-            this.lblWidth.Size = new System.Drawing.Size(38, 13);
+            this.lblWidth.Size = new System.Drawing.Size(54, 20);
             this.lblWidth.TabIndex = 4;
             this.lblWidth.Text = "Width:";
             // 
             // lblHeight
             // 
             this.lblHeight.AutoSize = true;
-            this.lblHeight.Location = new System.Drawing.Point(24, 111);
+            this.lblHeight.Location = new System.Drawing.Point(36, 171);
+            this.lblHeight.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHeight.Name = "lblHeight";
-            this.lblHeight.Size = new System.Drawing.Size(41, 13);
+            this.lblHeight.Size = new System.Drawing.Size(60, 20);
             this.lblHeight.TabIndex = 2;
             this.lblHeight.Text = "Height:";
             // 
@@ -317,9 +320,10 @@
             this.cbFullScreen.AutoSize = true;
             this.cbFullScreen.Checked = true;
             this.cbFullScreen.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbFullScreen.Location = new System.Drawing.Point(87, 19);
+            this.cbFullScreen.Location = new System.Drawing.Point(130, 29);
+            this.cbFullScreen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbFullScreen.Name = "cbFullScreen";
-            this.cbFullScreen.Size = new System.Drawing.Size(15, 14);
+            this.cbFullScreen.Size = new System.Drawing.Size(22, 21);
             this.cbFullScreen.TabIndex = 1;
             this.cbFullScreen.UseVisualStyleBackColor = true;
             this.cbFullScreen.CheckedChanged += new System.EventHandler(this.cbFullScreen_CheckedChanged);
@@ -327,17 +331,18 @@
             // lblFullScreen
             // 
             this.lblFullScreen.AutoSize = true;
-            this.lblFullScreen.Location = new System.Drawing.Point(21, 19);
+            this.lblFullScreen.Location = new System.Drawing.Point(32, 29);
+            this.lblFullScreen.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFullScreen.Name = "lblFullScreen";
-            this.lblFullScreen.Size = new System.Drawing.Size(63, 13);
+            this.lblFullScreen.Size = new System.Drawing.Size(93, 20);
             this.lblFullScreen.TabIndex = 0;
             this.lblFullScreen.Text = "Full Screen:";
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 334);
+            this.ClientSize = new System.Drawing.Size(572, 514);
             this.Controls.Add(this.grpCockpit);
             this.Controls.Add(this.pbShowCockpit);
             this.Controls.Add(this.cbAutoCockpitLayout);
@@ -348,7 +353,6 @@
             this.Controls.Add(this.cbConnected);
             this.Controls.Add(this.lblServerConnected);
             this.Controls.Add(this.lblFSRunning);
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmMain";
             this.Text = "Remote Cockpit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);

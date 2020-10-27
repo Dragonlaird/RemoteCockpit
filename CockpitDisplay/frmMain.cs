@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,16 +39,6 @@ namespace CockpitDisplay
             RequestVariable(new ClientRequest
             {
                 Name = "TITLE"
-            });
-
-            // Requesting more variables to test
-            RequestVariable(new ClientRequest
-            {
-                Name = Name = "AMBIENT WIND VELOCITY",
-            });
-            RequestVariable(new ClientRequest
-            {
-                Name = Name = "AMBIENT WIND DIRECTION",
             });
         }
 
@@ -85,6 +76,10 @@ namespace CockpitDisplay
                     else
                         UpdateObject(connectionStateLabel, "Checked", false);
                 }
+            }
+            if(cockpit != null)
+            {
+                cockpit.ResultUpdate(requestResult);
             }
         }
 
@@ -127,16 +122,19 @@ namespace CockpitDisplay
             if (cockpit == null)
             {
                 cockpit = new frmCockpit();
+                cockpit.RequestValue += RequestVariable;
             }
             if (cbFullScreen.Checked)
             {
                 cockpit.WindowState = FormWindowState.Maximized;
+                cockpit.FormBorderStyle = FormBorderStyle.FixedDialog;
             }
             else
             {
                 cockpit.WindowState = FormWindowState.Normal;
                 cockpit.Height = (int)txtCockpitHeight.Value;
                 cockpit.Width = (int)txtCockpitWidth.Value;
+                cockpit.FormBorderStyle = FormBorderStyle.None;
                 cbCockpitCentre_CheckedChanged(null, null);
             }
             cockpit.Show();
@@ -144,6 +142,14 @@ namespace CockpitDisplay
             cockpit.Update();
             cockpit.Focus();
             this.Focus();
+        }
+
+        private void RequestVariable(object sender, ClientRequest request)
+        {
+            if(connector != null)
+            {
+                connector.RequestVariable(request);
+            }
         }
 
         private void pbShowCockpit_Click(object sender, EventArgs e)
