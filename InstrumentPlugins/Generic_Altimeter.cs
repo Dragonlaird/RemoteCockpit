@@ -13,7 +13,7 @@ namespace CockpitPlugins
 
         private bool disposedValue = false;
 
-        private PictureBox control;
+        private Control control;
 
         private const int MinimumAltitude = 0;
         private const int MaximumAltitude = 10000;
@@ -25,6 +25,16 @@ namespace CockpitPlugins
 
         public Generic_Altimeter()
         {
+            // Draw the initial outline once - after that, an overlay will be used to display altitude
+            control = new Panel();
+            control.Visible = true;
+            control.BackColor = Color.Transparent;
+            control.Name = "Generic_Altimeter";
+            control.Top = controlTop;
+            control.Left = controlLeft;
+            control.Height = controlHeight > controlWidth ? controlWidth : controlHeight;
+            control.Width = controlWidth > controlHeight ? controlHeight : controlWidth;
+            control.Paint += this.Paint;
         }
 
 
@@ -78,10 +88,10 @@ namespace CockpitPlugins
                 rect.Width = rect.Height;
             var scaleFactor = (rect.Height < rect.Width ? rect.Height : rect.Width) / 100.0;
             var centrePoint = new Point { X = rect.Width / 2, Y = rect.Height / 2 };
-            // MinimumAltitude starts at 110 degrees
-            // MaximumAltitude ends at 70 degrees
+            // MinimumAltitude starts at 135 degrees
+            // MaximumAltitude ends at 45 degrees
             // Ensure our Current Altitude with within our bounds
-            var angle = 270.0 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude) + 135.0;
+            var angle = 135 + (270.0 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude));
             var angleRadians = ConvertToRadians(angle);
             var radius = (double)rect.Height / 2 - (double)rect.Height / 10;
             var x = centrePoint.X + Math.Cos(angleRadians) * radius;
@@ -138,19 +148,6 @@ namespace CockpitPlugins
         public Control Control {
             get
             {
-                if (control == null)
-                {
-                    // Draw the initial outline once - after that, an overlay will be used to display altitude
-                    control = new PictureBox();
-                    control.Visible = true;
-                    control.BackColor = Color.Transparent;
-                    control.Name = "Generic_Altimeter";
-                    control.Top = controlTop;
-                    control.Left = controlLeft;
-                    control.Height = controlHeight > controlWidth ? controlWidth : controlHeight;
-                    control.Width = controlWidth > controlHeight ? controlHeight : controlWidth;
-                    control.Paint += this.Paint;
-                }
                 return control;
             }
         }

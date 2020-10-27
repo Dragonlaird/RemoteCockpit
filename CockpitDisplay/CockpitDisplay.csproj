@@ -128,6 +128,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\InstrumentPlugins\InstrumentPlugins.csproj">
+      <Project>{6A197BAC-121C-4D34-A215-14DA7AF32C86}</Project>
+      <Name>InstrumentPlugins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RemoteCockpitClasses\RemoteCockpitClasses.csproj">
       <Project>{2c1905b7-e26b-49bf-a521-3d9d2de37ce1}</Project>
       <Name>RemoteCockpitClasses</Name>
