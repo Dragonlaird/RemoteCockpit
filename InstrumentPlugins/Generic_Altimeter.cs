@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 namespace CockpitPlugins
@@ -82,33 +83,51 @@ namespace CockpitPlugins
             needle.BackColor = Color.Transparent;
             var rect = needle.Parent.DisplayRectangle;
             // // Ensure ectangle is square and find the centre for our line
-            if (rect.Height > rect.Width)
-                rect.Height = rect.Width;
-            else
-                rect.Width = rect.Height;
+            //if (rect.Height > rect.Width)
+            //    rect.Height = rect.Width;
+            //else
+            //    rect.Width = rect.Height;
             var scaleFactor = (rect.Height < rect.Width ? rect.Height : rect.Width) / 100.0;
-            var centrePoint = new Point { X = rect.Width / 2, Y = rect.Height / 2 };
+            var radius = (rect.Width < rect.Height ? rect.Width : rect.Height) / 2;
+            var x0 = radius;
+            var y0 = radius;
+            //var centrePoint = new Point { X = (int)radius, Y = (int)radius };
+            int currentAltitude = CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude);
+            double altitudeScale = (double)currentAltitude / (MaximumAltitude - MinimumAltitude);
+            var angle = (270.0 *  altitudeScale);
+            var angleRadians = ConvertToRadians(angle);
+
+            var x1 = radius + (Math.Cos(angleRadians) * radius); // X should be zero for  angle zero
+            var y1 = radius + (Math.Sin(angleRadians) * radius); // Y should be centrepoint.Y for angle zero
+            //var endPoint = new Point { X = (int)x0, Y =  (int)y0 };
+
             // MinimumAltitude starts at 135 degrees
             // MaximumAltitude ends at 45 degrees
             // Ensure our Current Altitude with within our bounds
+            /*
             var angle = 135 + (270.0 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude));
-            var angleRadians = ConvertToRadians(angle);
-            var radius = (double)rect.Height / 2 - (double)rect.Height / 10;
             var x = centrePoint.X + Math.Cos(angleRadians) * radius;
             var y = centrePoint.Y + Math.Sin(angleRadians) * radius;
             var endPoint = new Point { X = (int)x, Y = (int)y };
-            var pen = new Pen(Color.Sienna, (int)(3 * scaleFactor));
+            */
+            var pen = new Pen(Color.Sienna, 1 + (int)(3 * scaleFactor));
 
             g.DrawLine(
                 pen,
-                centrePoint,
-                endPoint
-                );
+                (int)x0,
+                (int)y0,
+                (int)x1,
+                (int)y1
+            );
         }
 
         private double ConvertToRadians(double angle)
         {
-            return (Math.PI / 180) * angle;
+            while (angle < 0)
+                angle += 360;
+            while (angle >= 360)
+                angle -= 360;
+            return 0.01745 * angle;
         }
 
         public InstrumentType Type
