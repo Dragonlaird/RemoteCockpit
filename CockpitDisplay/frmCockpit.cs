@@ -29,6 +29,7 @@ namespace CockpitDisplay
         private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
+        private Point ScreenDimensions;
         public frmCockpit()
         {
             InitializeComponent();
@@ -123,10 +124,16 @@ namespace CockpitDisplay
             {
                 try
                 {
-                    var image = File.OpenRead(string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background));
-
-                    this.BackgroundImage = Image.FromStream(image);
-                    this.BackgroundImageLayout = ImageLayout.Stretch;
+                    var imageFile = File.OpenRead(string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background));
+                    var image = Image.FromStream(imageFile);
+                    var imageScaleFactor = (double)this.Width / image.Width;
+                    if (image.Height * imageScaleFactor > this.Height)
+                        imageScaleFactor = (double)this.Height / image.Height;
+                    var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
+                    ScreenDimensions = new Point(backgroundImage.Width, backgroundImage.Height);
+                    var g = this.CreateGraphics();
+                    g.DrawImageUnscaled(backgroundImage, 0, 0, this.Width, this.Height);
+                    //this.BackgroundImage = backgroundImage;
                 }
                 catch(Exception ex)
                 {
@@ -168,13 +175,13 @@ namespace CockpitDisplay
                 if(plugin != null)
                 {
                     variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
-                    var vScaleFactor = this.Height / 100;
-                    var hScaleFactor = this.Width / 100;
+                    var vScaleFactor = ScreenDimensions.Y / 100;
+                    var hScaleFactor = ScreenDimensions.X / 100;
                     plugin.SetLayout(
-                        instrumentPosition.Top * vScaleFactor, 
-                        instrumentPosition.Left * hScaleFactor, 
-                        instrumentPosition.Height * vScaleFactor,
-                        instrumentPosition.Width * hScaleFactor);
+                        (int)(instrumentPosition.Top * vScaleFactor),
+                        (int)(instrumentPosition.Left * hScaleFactor),
+                        (int)(instrumentPosition.Height * vScaleFactor),
+                        (int)(instrumentPosition.Width * hScaleFactor));
                     AddControl(plugin.Control, this);
                     UpdateCockpitItem(plugin.Control);
                 }

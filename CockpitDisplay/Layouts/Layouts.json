@@ -6,17 +6,17 @@
       "Postions": [
         {
           "Type": 0, // Altimeter
-          "Top": 20,
+          "Top": 25,
           "Left": 3,
-          "Height": 25,
-          "Width": 25
+          "Height": 30,
+          "Width": 8.5
         },
         {
           "Type": 1, // Airspeed
-          "Top": 15,
-          "Left": 35,
-          "Height": 15,
-          "Width": 15
+          "Top": 25,
+          "Left": 10,
+          "Height": 25,
+          "Width": 6.5
         }
       ]
     }

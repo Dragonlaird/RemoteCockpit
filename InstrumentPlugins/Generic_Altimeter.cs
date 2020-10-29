@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
+using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
-namespace CockpitPlugins
+namespace InstrumentPlugins
 {
     public class Generic_Altimeter : ICockpitInstrument
     {
@@ -29,15 +31,76 @@ namespace CockpitPlugins
             // Draw the initial outline once - after that, an overlay will be used to display altitude
             control = new Panel();
             control.Visible = true;
-            control.BackColor = Color.Transparent;
+            //control.BackColor = Color.Transparent;
+            control.BackColor = Color.LightGray;
             control.Name = "Generic_Altimeter";
             control.Top = controlTop;
             control.Left = controlLeft;
             control.Height = controlHeight > controlWidth ? controlWidth : controlHeight;
             control.Width = controlWidth > controlHeight ? controlHeight : controlWidth;
-            control.Paint += this.Paint;
+            control.Paint += Paint;
         }
 
+        private void DrawControlForeground()
+        {
+            var needle = new PictureBox();
+            needle.Name = "Needle";
+            needle.Height = control.Height < control.Width ? control.Height : control.Width;
+            needle.Width = control.Height < control.Width ? control.Height : control.Width;
+            var img = ImageLibrary.Needle;
+            var scale = 2 * img.Width / needle.Width;
+            var resizedImage = new Bitmap(img, new Size(img.Width / scale, img.Height / scale));
+            needle.Image = resizedImage;
+            needle.Paint += PaintNeedle;
+            if (control.Controls.ContainsKey("Needle"))
+                control.Controls.RemoveByKey("Needle");
+            control.Controls.Add(needle);
+        }
+
+        private void DrawControlBackground()
+        {
+            var dial = new PictureBox();
+            dial.Name = "Dial";
+            dial.Height = control.Height < control.Width ? control.Height : control.Width;
+            dial.Width = control.Height < control.Width ? control.Height : control.Width;
+            var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
+            Graphics g = dial.CreateGraphics();
+            var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
+            Rectangle rect = new Rectangle(
+                control.DisplayRectangle.X + (int)pen.Width,
+                control.DisplayRectangle.Y + (int)pen.Width,
+                control.DisplayRectangle.Width > control.DisplayRectangle.Height ? control.DisplayRectangle.Height : control.DisplayRectangle.Width,
+                control.DisplayRectangle.Height > control.DisplayRectangle.Width ? control.DisplayRectangle.Width : control.DisplayRectangle.Height);
+            // reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
+            rect.Width -= (int)pen.Width;
+            rect.Height -= (int)pen.Width;
+            var brush = new SolidBrush(Color.Gainsboro);
+            g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
+            g.DrawArc(pen, rect, 135, 270);
+            if (control.Controls.ContainsKey("Dial"))
+                control.Controls.RemoveByKey("Dial");
+            control.Controls.Add(dial);
+        }
+
+        private Image RotateImage(Image img, float angle)
+        {
+            Image rotatedImage = (Image)img.Clone();
+            //rotatedImage.SetResolution(img.HorizontalResolution, img.VerticalResolution);
+
+            using (Graphics g = Graphics.FromImage(rotatedImage))
+            {
+                // Set the rotation point to the center in the matrix
+                g.TranslateTransform(img.Width / 2, img.Height / 2);
+                // Rotate
+                g.RotateTransform(angle);
+                // Restore rotation point in the matrix
+                g.TranslateTransform(-img.Width / 2, -img.Height / 2);
+                // Draw the image on the bitmap
+                g.DrawImage(img, new Point(0, 0));
+            }
+
+            return rotatedImage;
+        }
 
         public void ValueUpdate(ClientRequestResult value)
         {
@@ -51,32 +114,36 @@ namespace CockpitPlugins
 
         private void Paint(object sender, PaintEventArgs e)
         {
-            var ctrl = (Control)sender;
-            if (ctrl.Controls.Count == 0)
-            {
-                var needle = new PictureBox();
-                needle.Paint += PaintNeedle;
-                ctrl.Controls.Add(needle);
-            }
-            var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
+            if (!control.Controls.ContainsKey("Dial"))
+                DrawControlBackground();
+            //var ctrl = (Control)sender;
+            //if (ctrl.Controls.Count == 0)
+            //{
+            //    var needle = new PictureBox();
+            //    needle.Paint += PaintNeedle;
+            //    ctrl.Controls.Add(needle);
+            //}
+            //var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
 
-            Graphics g = e.Graphics;
-            var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
-            Rectangle rect = new Rectangle(
-                ctrl.DisplayRectangle.X + (int)pen.Width,
-                ctrl.DisplayRectangle.Y + (int)pen.Width,
-                ctrl.DisplayRectangle.Width > ctrl.DisplayRectangle.Height ? ctrl.DisplayRectangle.Height : ctrl.DisplayRectangle.Width,
-                ctrl.DisplayRectangle.Height > ctrl.DisplayRectangle.Width ? ctrl.DisplayRectangle.Width : ctrl.DisplayRectangle.Height);
-            // reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
-            rect.Width -= 2 * (int)pen.Width;
-            rect.Height -= 2 * (int)pen.Width;
-            var brush = new SolidBrush(Color.Gainsboro);
-            g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
-            g.DrawArc(pen, rect, 135, 270);
+            //Graphics g = e.Graphics;
+            //var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
+            //Rectangle rect = new Rectangle(
+            //    ctrl.DisplayRectangle.X + (int)pen.Width,
+            //    ctrl.DisplayRectangle.Y + (int)pen.Width,
+            //    ctrl.DisplayRectangle.Width > ctrl.DisplayRectangle.Height ? ctrl.DisplayRectangle.Height : ctrl.DisplayRectangle.Width,
+            //    ctrl.DisplayRectangle.Height > ctrl.DisplayRectangle.Width ? ctrl.DisplayRectangle.Width : ctrl.DisplayRectangle.Height);
+            //// reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
+            //rect.Width -= 2 * (int)pen.Width;
+            //rect.Height -= 2 * (int)pen.Width;
+            //var brush = new SolidBrush(Color.Gainsboro);
+            //g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
+            //g.DrawArc(pen, rect, 135, 270);
         }
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
+            DrawControlForeground();
+            /*
             PictureBox needle = (PictureBox)sender;
             Graphics g = e.Graphics;
             //g.Clear(Color.Transparent);
@@ -104,12 +171,10 @@ namespace CockpitPlugins
             // MinimumAltitude starts at 135 degrees
             // MaximumAltitude ends at 45 degrees
             // Ensure our Current Altitude with within our bounds
-            /*
             var angle = 135 + (270.0 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude));
             var x = centrePoint.X + Math.Cos(angleRadians) * radius;
             var y = centrePoint.Y + Math.Sin(angleRadians) * radius;
             var endPoint = new Point { X = (int)x, Y = (int)y };
-            */
             var pen = new Pen(Color.Sienna, 1 + (int)(3 * scaleFactor));
 
             g.DrawLine(
@@ -119,6 +184,7 @@ namespace CockpitPlugins
                 (int)x1,
                 (int)y1
             );
+            */
         }
 
         private double ConvertToRadians(double angle)

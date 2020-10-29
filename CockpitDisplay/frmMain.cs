@@ -119,6 +119,10 @@ namespace CockpitDisplay
 
         private void ReloadCockpit(string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                text = "Cessna 152 ASOBO";
+            }
             if (cockpit == null)
             {
                 cockpit = new frmCockpit();
@@ -127,16 +131,17 @@ namespace CockpitDisplay
             if (cbFullScreen.Checked)
             {
                 cockpit.WindowState = FormWindowState.Maximized;
-                cockpit.FormBorderStyle = FormBorderStyle.FixedDialog;
+                cockpit.FormBorderStyle = FormBorderStyle.None;
             }
             else
             {
                 cockpit.WindowState = FormWindowState.Normal;
                 cockpit.Height = (int)txtCockpitHeight.Value;
                 cockpit.Width = (int)txtCockpitWidth.Value;
-                cockpit.FormBorderStyle = FormBorderStyle.None;
+                cockpit.FormBorderStyle = FormBorderStyle.FixedDialog;
                 cbCockpitCentre_CheckedChanged(null, null);
             }
+            cockpit.Text = string.Format("Cockpit{0}", string.IsNullOrEmpty(text) ? "" : (" - " + text));
             cockpit.Show();
             cockpit.LoadLayout(text); // This should force all viible controls to be removed and re-added with new dimensions
             cockpit.Update();
