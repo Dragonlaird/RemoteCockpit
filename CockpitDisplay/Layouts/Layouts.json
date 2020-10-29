@@ -5,18 +5,18 @@
       "Background": "Cessna_152_Dashboard.png",
       "Postions": [
         {
-          "Type": 0, // Altimeter
+          "Type": 0, // 0 = Altimeter
           "Top": 25,
           "Left": 3,
           "Height": 30,
           "Width": 8.5
         },
         {
-          "Type": 1, // Airspeed
+          "Type": 1, // 1 = Airspeed
           "Top": 25,
-          "Left": 10,
-          "Height": 25,
-          "Width": 6.5
+          "Left": 12,
+          "Height": 30,
+          "Width": 8.5
         }
       ]
     }
