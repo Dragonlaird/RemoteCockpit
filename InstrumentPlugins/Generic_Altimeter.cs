@@ -20,24 +20,25 @@ namespace InstrumentPlugins
 
         private const int MinimumAltitude = 0;
         private const int MaximumAltitude = 10000;
-        private int CurrentAltitude { get; set; } = 0;
+        private int CurrentAltitude { get; set; } = -1;
         private int controlTop = 0;
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
+        private Point centre = new Point(0,0);
+        private int lastAltitude = 0;
 
         public Generic_Altimeter()
         {
             // Draw the initial outline once - after that, an overlay will be used to display altitude
             control = new Panel();
             control.Visible = true;
-            //control.BackColor = Color.Transparent;
-            control.BackColor = Color.LightGray;
+            control.BackColor = Color.Transparent;
+            //control.BackColor = Color.LightGray;
             control.Name = "Generic_Altimeter";
             control.Top = controlTop;
             control.Left = controlLeft;
-            control.Height = controlHeight > controlWidth ? controlWidth : controlHeight;
-            control.Width = controlWidth > controlHeight ? controlHeight : controlWidth;
+            //DrawControlForeground();
             control.Paint += Paint;
         }
 
@@ -45,15 +46,23 @@ namespace InstrumentPlugins
         {
             var needle = new PictureBox();
             needle.Name = "Needle";
+            needle.BackColor = Color.Transparent;
             needle.Height = control.Height < control.Width ? control.Height : control.Width;
             needle.Width = control.Height < control.Width ? control.Height : control.Width;
-            var img = ImageLibrary.Needle;
+            var g = needle.CreateGraphics();
+            Pen pen = new Pen(Color.White, 1 + needle.Width / 50);
+            g.DrawLine(pen, centre, new Point(centre.X, 0));
+            CurrentAltitude = lastAltitude;
+            /*var img = ImageLibrary.Needle;
             var scale = 2 * img.Width / needle.Width;
             var resizedImage = new Bitmap(img, new Size(img.Width / scale, img.Height / scale));
             needle.Image = resizedImage;
-            needle.Paint += PaintNeedle;
             if (control.Controls.ContainsKey("Needle"))
                 control.Controls.RemoveByKey("Needle");
+            */
+            needle.Paint += PaintNeedle;
+            if (control.Controls["Needle"] != null)
+                control.Controls.Remove(control.Controls["Needle"]);
             control.Controls.Add(needle);
         }
 
@@ -61,8 +70,18 @@ namespace InstrumentPlugins
         {
             var dial = new PictureBox();
             dial.Name = "Dial";
-            dial.Height = control.Height < control.Width ? control.Height : control.Width;
-            dial.Width = control.Height < control.Width ? control.Height : control.Width;
+            dial.BackColor = Color.Transparent;
+            var y = controlHeight > controlWidth ? controlWidth : controlHeight;
+            var x = controlWidth > controlHeight ? controlHeight : controlWidth;
+            dial.Height = x;
+            dial.Width = y;
+            var img = ImageLibrary.Background;
+            var scale = img.Width / dial.Width;
+            var resizedImage = new Bitmap(img, new Size(img.Width / scale, img.Height / scale));
+
+            dial.BackgroundImage = resizedImage;
+            centre = new Point(resizedImage.Width / 2, resizedImage.Height / 2);
+
             var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
             Graphics g = dial.CreateGraphics();
             var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
@@ -116,6 +135,8 @@ namespace InstrumentPlugins
         {
             if (!control.Controls.ContainsKey("Dial"))
                 DrawControlBackground();
+            if (!control.Controls.ContainsKey("Needle") || lastAltitude != CurrentAltitude)
+                DrawControlForeground();
             //var ctrl = (Control)sender;
             //if (ctrl.Controls.Count == 0)
             //{
@@ -142,7 +163,8 @@ namespace InstrumentPlugins
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
-            DrawControlForeground();
+            if (!control.Controls.ContainsKey("Needle") || lastAltitude != CurrentAltitude)
+                DrawControlForeground();
             /*
             PictureBox needle = (PictureBox)sender;
             Graphics g = e.Graphics;

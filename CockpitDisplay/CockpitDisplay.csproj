@@ -90,8 +90,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteConnector.cs" />
-    <None Include="Resources\Needle.png" />
-    <None Include="Resources\Needle1.png" />
     <EmbeddedResource Include="frmCockpit.resx">
       <DependentUpon>frmCockpit.cs</DependentUpon>
     </EmbeddedResource>
@@ -128,7 +126,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InstrumentPlugins\InstrumentPlugins.csproj">
       <Project>{6A197BAC-121C-4D34-A215-14DA7AF32C86}</Project>
