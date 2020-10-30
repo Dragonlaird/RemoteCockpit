@@ -53,13 +53,6 @@ namespace InstrumentPlugins
             Pen pen = new Pen(Color.White, 1 + needle.Width / 50);
             g.DrawLine(pen, centre, new Point(centre.X, 0));
             CurrentAltitude = lastAltitude;
-            /*var img = ImageLibrary.Needle;
-            var scale = 2 * img.Width / needle.Width;
-            var resizedImage = new Bitmap(img, new Size(img.Width / scale, img.Height / scale));
-            needle.Image = resizedImage;
-            if (control.Controls.ContainsKey("Needle"))
-                control.Controls.RemoveByKey("Needle");
-            */
             needle.Paint += PaintNeedle;
             if (control.Controls["Needle"] != null)
                 control.Controls.Remove(control.Controls["Needle"]);
@@ -82,22 +75,6 @@ namespace InstrumentPlugins
             dial.BackgroundImage = resizedImage;
             centre = new Point(resizedImage.Width / 2, resizedImage.Height / 2);
 
-            var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
-            Graphics g = dial.CreateGraphics();
-            var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
-            Rectangle rect = new Rectangle(
-                control.DisplayRectangle.X + (int)pen.Width,
-                control.DisplayRectangle.Y + (int)pen.Width,
-                control.DisplayRectangle.Width > control.DisplayRectangle.Height ? control.DisplayRectangle.Height : control.DisplayRectangle.Width,
-                control.DisplayRectangle.Height > control.DisplayRectangle.Width ? control.DisplayRectangle.Width : control.DisplayRectangle.Height);
-            // reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
-            rect.Width -= (int)pen.Width;
-            rect.Height -= (int)pen.Width;
-            var brush = new SolidBrush(Color.Gainsboro);
-            g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
-            g.DrawArc(pen, rect, 135, 270);
-            if (control.Controls.ContainsKey("Dial"))
-                control.Controls.RemoveByKey("Dial");
             control.Controls.Add(dial);
         }
 
