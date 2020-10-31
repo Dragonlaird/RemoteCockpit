@@ -1,15 +1,9 @@
 ﻿using RemoteCockpitClasses;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net;
-using System.Runtime.Remoting.Channels;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -22,7 +16,7 @@ namespace CockpitDisplay
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
 
 
-        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 1250 };
+        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 4250 };
 
         private frmCockpit cockpit;
         public frmMain()

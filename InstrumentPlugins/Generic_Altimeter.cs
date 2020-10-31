@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
-using System.Runtime.Versioning;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 namespace InstrumentPlugins

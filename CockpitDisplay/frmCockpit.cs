@@ -1,23 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RemoteCockpitClasses;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Configuration;
-using RemoteCockpitClasses;
-using Newtonsoft.Json;
-using System.Threading;
-using System.Reflection;
 using System.IO;
-using System.Runtime.CompilerServices;
-using Newtonsoft.Json.Linq;
-using System.Timers;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace CockpitDisplay
 {
