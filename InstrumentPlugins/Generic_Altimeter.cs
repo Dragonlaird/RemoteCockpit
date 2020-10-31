@@ -25,25 +25,18 @@ namespace InstrumentPlugins
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
-        private Point centre = new Point(0,0);
+        private Point centre = new Point(0, 0);
         private int lastAltitude = 0;
 
         public Generic_Altimeter()
         {
             // Draw the initial outline once - after that, an overlay will be used to display altitude
-            control = new Panel();
-            control.Visible = true;
-            control.BackColor = Color.Transparent;
-            //control.BackColor = Color.LightGray;
-            control.Name = "Generic_Altimeter";
-            control.Top = controlTop;
-            control.Left = controlLeft;
-            //DrawControlForeground();
-            control.Paint += Paint;
+            RedrawControl();
         }
 
         private void DrawControlForeground()
         {
+            return;
             var needle = new PictureBox();
             needle.Name = "Needle";
             needle.BackColor = Color.Transparent;
@@ -61,21 +54,36 @@ namespace InstrumentPlugins
 
         private void DrawControlBackground()
         {
-            var dial = new PictureBox();
-            dial.Name = "Dial";
-            dial.BackColor = Color.Transparent;
-            var y = controlHeight > controlWidth ? controlWidth : controlHeight;
-            var x = controlWidth > controlHeight ? controlHeight : controlWidth;
-            dial.Height = x;
-            dial.Width = y;
+            //var dial = new PictureBox();
+            //dial.Name = "Dial";
+            //dial.BackColor = Color.Transparent;
             var img = ImageLibrary.Background;
-            var scale = img.Width / dial.Width;
-            var resizedImage = new Bitmap(img, new Size(img.Width / scale, img.Height / scale));
+            var aspectRatio = (double)img.Height / img.Width;
+            // Need to rescale dial to match the aspect ratio of the image
+            var x = (int)(aspectRatio > 1 ? controlHeight : Math.Floor((double)controlWidth / aspectRatio));
+            var y = (int)(aspectRatio > 1 ? Math.Floor((double)controlHeight / aspectRatio) : controlWidth);
+            var resizedImage = new Bitmap(img, new Size(y, x));
+            control.BackgroundImage = resizedImage;
+            control.BackgroundImageLayout = ImageLayout.Center;
+            centre = new Point(control.Width / 2, control.Height / 2);
+            control.BackColor = Color.Transparent;
+            control.Height = resizedImage.Height;
+            control.Width = resizedImage.Width;
+        }
 
-            dial.BackgroundImage = resizedImage;
-            centre = new Point(resizedImage.Width / 2, resizedImage.Height / 2);
-
-            control.Controls.Add(dial);
+        private void RedrawControl()
+        {
+            if (control == null)
+            {
+                control = new PictureBox();
+                control.Name = "Generic_Altimeter";
+                control.Top = controlTop;
+                control.Left = controlLeft;
+                control.BackColor = Color.Transparent;
+                control.ForeColor = Color.Transparent;
+                control.Paint += Paint;
+            }
+            DrawControlBackground();
         }
 
         private Image RotateImage(Image img, float angle)
@@ -110,80 +118,14 @@ namespace InstrumentPlugins
 
         private void Paint(object sender, PaintEventArgs e)
         {
-            if (!control.Controls.ContainsKey("Dial"))
-                DrawControlBackground();
-            if (!control.Controls.ContainsKey("Needle") || lastAltitude != CurrentAltitude)
+            if (!control.Controls.ContainsKey("Needle"))
                 DrawControlForeground();
-            //var ctrl = (Control)sender;
-            //if (ctrl.Controls.Count == 0)
-            //{
-            //    var needle = new PictureBox();
-            //    needle.Paint += PaintNeedle;
-            //    ctrl.Controls.Add(needle);
-            //}
-            //var scaleFactor = (control.DisplayRectangle.Height < control.DisplayRectangle.Width ? control.DisplayRectangle.Height : control.DisplayRectangle.Width) / 100.0;
-
-            //Graphics g = e.Graphics;
-            //var pen = new Pen(Color.Black, (int)(5 * scaleFactor));
-            //Rectangle rect = new Rectangle(
-            //    ctrl.DisplayRectangle.X + (int)pen.Width,
-            //    ctrl.DisplayRectangle.Y + (int)pen.Width,
-            //    ctrl.DisplayRectangle.Width > ctrl.DisplayRectangle.Height ? ctrl.DisplayRectangle.Height : ctrl.DisplayRectangle.Width,
-            //    ctrl.DisplayRectangle.Height > ctrl.DisplayRectangle.Width ? ctrl.DisplayRectangle.Width : ctrl.DisplayRectangle.Height);
-            //// reduce the rect dimensions so it isn't clipped when added to the DisplayRectangle
-            //rect.Width -= 2 * (int)pen.Width;
-            //rect.Height -= 2 * (int)pen.Width;
-            //var brush = new SolidBrush(Color.Gainsboro);
-            //g.FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
-            //g.DrawArc(pen, rect, 135, 270);
         }
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
             if (!control.Controls.ContainsKey("Needle") || lastAltitude != CurrentAltitude)
                 DrawControlForeground();
-            /*
-            PictureBox needle = (PictureBox)sender;
-            Graphics g = e.Graphics;
-            //g.Clear(Color.Transparent);
-            needle.BackColor = Color.Transparent;
-            var rect = needle.Parent.DisplayRectangle;
-            // // Ensure ectangle is square and find the centre for our line
-            //if (rect.Height > rect.Width)
-            //    rect.Height = rect.Width;
-            //else
-            //    rect.Width = rect.Height;
-            var scaleFactor = (rect.Height < rect.Width ? rect.Height : rect.Width) / 100.0;
-            var radius = (rect.Width < rect.Height ? rect.Width : rect.Height) / 2;
-            var x0 = radius;
-            var y0 = radius;
-            //var centrePoint = new Point { X = (int)radius, Y = (int)radius };
-            int currentAltitude = CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude);
-            double altitudeScale = (double)currentAltitude / (MaximumAltitude - MinimumAltitude);
-            var angle = (270.0 *  altitudeScale);
-            var angleRadians = ConvertToRadians(angle);
-
-            var x1 = radius + (Math.Cos(angleRadians) * radius); // X should be zero for  angle zero
-            var y1 = radius + (Math.Sin(angleRadians) * radius); // Y should be centrepoint.Y for angle zero
-            //var endPoint = new Point { X = (int)x0, Y =  (int)y0 };
-
-            // MinimumAltitude starts at 135 degrees
-            // MaximumAltitude ends at 45 degrees
-            // Ensure our Current Altitude with within our bounds
-            var angle = 135 + (270.0 * (CurrentAltitude < MinimumAltitude ? MinimumAltitude : (CurrentAltitude > MaximumAltitude ? MaximumAltitude : CurrentAltitude)) / (MaximumAltitude - MinimumAltitude));
-            var x = centrePoint.X + Math.Cos(angleRadians) * radius;
-            var y = centrePoint.Y + Math.Sin(angleRadians) * radius;
-            var endPoint = new Point { X = (int)x, Y = (int)y };
-            var pen = new Pen(Color.Sienna, 1 + (int)(3 * scaleFactor));
-
-            g.DrawLine(
-                pen,
-                (int)x0,
-                (int)y0,
-                (int)x1,
-                (int)y1
-            );
-            */
         }
 
         private double ConvertToRadians(double angle)
@@ -274,6 +216,7 @@ namespace InstrumentPlugins
                 control.Height = controlHeight;
                 control.Width = controlWidth;
             }
+            RedrawControl();
         }
     }
 }

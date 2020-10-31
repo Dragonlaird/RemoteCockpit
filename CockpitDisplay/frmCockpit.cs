@@ -25,7 +25,8 @@ namespace CockpitDisplay
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
         private delegate void SafeControlAddDelegate(Control ctrl, Control parent);
         private delegate void SafeFormUpdateDelegate(Form form);
-        private List<ICockpitInstrument> instruments;
+        private List<ICockpitInstrument> instrumentPlugins;
+        private List<ICockpitInstrument> usedInstrumentPlugins;
         private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
@@ -39,6 +40,11 @@ namespace CockpitDisplay
         public void Initialize()
         {
             layoutDefinitions = new List<LayoutDefinition>();
+            instrumentPlugins = new List<ICockpitInstrument>();
+            usedInstrumentPlugins = new List<ICockpitInstrument>();
+            var allAssemblies = LoadAvailableAssemblies();
+            instrumentPlugins = GetPlugIns(allAssemblies);
+
         }
 
         private void AddControl(Control ctrl, Control parent)
@@ -49,6 +55,7 @@ namespace CockpitDisplay
                 parent.Invoke(d, new object[] { ctrl, parent });
                 return;
             }
+            ctrl.BackColor = Color.Transparent;
             parent.Controls.Add(ctrl);
         }
 
@@ -83,9 +90,9 @@ namespace CockpitDisplay
 
         public void ResultUpdate(ClientRequestResult requestResult)
         {
-            if (instruments != null)
-                lock (instruments)
-                    foreach (var instrument in instruments)
+            if (instrumentPlugins != null)
+                lock (instrumentPlugins)
+                    foreach (var instrument in instrumentPlugins)
                     {
                         if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
                             try
@@ -119,6 +126,7 @@ namespace CockpitDisplay
             }
             // Find which Instruments are used in this Cockpit
             layoutDefinition = GetLayout(text);
+            double aspectRatio = 0;
             // Load one of every Instrument plugin type for this layout
             if (!string.IsNullOrEmpty(layoutDefinition.Background))
             {
@@ -127,6 +135,7 @@ namespace CockpitDisplay
                     var imageFile = File.OpenRead(string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background));
                     var image = Image.FromStream(imageFile);
                     var imageScaleFactor = (double)this.Width / image.Width;
+                    aspectRatio = (double)image.Height / image.Width;
                     if (image.Height * imageScaleFactor > this.Height)
                         imageScaleFactor = (double)this.Height / image.Height;
                     var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
@@ -140,10 +149,8 @@ namespace CockpitDisplay
 
                 }
             }
-            var allAssemblies = LoadAvailableAssemblies();
-            var instrumentPlugins = GetPlugIns(allAssemblies);
-            instruments = new List<ICockpitInstrument>();
-            instruments.AddRange(instrumentPlugins
+            var layoutInstruments = new List<ICockpitInstrument>();
+            layoutInstruments.AddRange(instrumentPlugins
                 .Where(x => !string.IsNullOrEmpty(text) && x.Layouts.Contains(layoutDefinition.Name) && layoutDefinition.InstrumentTypes.Contains(x.Type)).GroupBy(
                 x => x.Type,
                 x => x.PluginDate,
@@ -155,7 +162,7 @@ namespace CockpitDisplay
                         Max = ages.Max()
                     })
                 .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
-            instruments.AddRange(instrumentPlugins.Where(x => x.Layouts.Contains("") && layoutDefinition.InstrumentTypes.Contains(x.Type) && !instruments.Any(y => y.Type == x.Type)).GroupBy(
+            layoutInstruments.AddRange(instrumentPlugins.Where(x => x.Layouts.Contains("") && layoutDefinition.InstrumentTypes.Contains(x.Type) && !layoutInstruments.Any(y => y.Type == x.Type)).GroupBy(
                 x => x.Type,
                 x => x.PluginDate,
                     (baseType, ages) => new
@@ -166,7 +173,7 @@ namespace CockpitDisplay
                         Max = ages.Max()
                     })
                 .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
-            // Variable instruments contains all the plugins we can use for this layout
+            // Variable layoutInstruments contains all the plugins we can use for this layout
             // Now we simply add them to the relevant location on the form, suitably resized based on the current fom size
             var variables = new List<ClientRequest>();
             foreach (var instrumentPosition in layoutDefinition.Postions)
@@ -175,17 +182,20 @@ namespace CockpitDisplay
                 if(plugin != null)
                 {
                     variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
-                    var vScaleFactor = ScreenDimensions.Y / 100;
-                    var hScaleFactor = ScreenDimensions.X / 100;
+                    var vScaleFactor = (double)ScreenDimensions.Y / 100;
+                    var hScaleFactor = (double)ScreenDimensions.X / 100;
                     plugin.SetLayout(
                         (int)(instrumentPosition.Top * vScaleFactor),
                         (int)(instrumentPosition.Left * hScaleFactor),
                         (int)(instrumentPosition.Height * vScaleFactor),
                         (int)(instrumentPosition.Width * hScaleFactor));
                     AddControl(plugin.Control, this);
+                    usedInstrumentPlugins.Add(plugin);
                     UpdateCockpitItem(plugin.Control);
                 }
             }
+
+            // Request all variables used by any plugin - even if they've been requested before - duplicate requests are ignored
             if(RequestValue != null)
             {
                 foreach(var variable in variables)

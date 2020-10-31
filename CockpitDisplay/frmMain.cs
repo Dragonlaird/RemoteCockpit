@@ -16,7 +16,7 @@ namespace CockpitDisplay
 {
     public partial class frmMain : Form
     {
-        private List<RemoteCockpitClasses.SimVarRequestResult> requestResults;
+        private List<ClientRequestResult> requestResults;
         private RemoteConnector connector;
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
 
@@ -53,7 +53,7 @@ namespace CockpitDisplay
 
         private void Initialize()
         {
-            requestResults = new List<RemoteCockpitClasses.SimVarRequestResult>();
+            requestResults = new List<RemoteCockpitClasses.ClientRequestResult>();
             var ipAddress = IPAddress.Parse("127.0.0.1");
             var ipPort = 5555;
             connector = new RemoteConnector(new System.Net.IPEndPoint(ipAddress, ipPort));
@@ -64,8 +64,16 @@ namespace CockpitDisplay
 
         private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)
         {
-            // Received a new value for a request - identify which plugins need this variable and send it
-            if (requestResult.Request.Name == "FS CONNECTION")
+            if (requestResults.Any(x => x.Request.Name == requestResult.Request.Name && x.Request.Unit == requestResult.Request.Unit))
+                lock (requestResults)
+                {
+                    requestResults.First(x => x.Request.Name == requestResult.Request.Name && x.Request.Unit == requestResult.Request.Unit).Result = requestResult.Result;
+                }
+            else
+                requestResults.Add(requestResult);
+
+                // Received a new value for a request - identify which plugins need this variable and send it
+                if (requestResult.Request.Name == "FS CONNECTION")
             {
                 // Just informing us the current connection state to the Flight Simulator = display it on screen
                 var existingConnectionState = this.Controls.Find("cbFSRunning", true);
@@ -107,7 +115,7 @@ namespace CockpitDisplay
             if (cb.Checked)
             {
                 cmbCockpitLayout.Enabled = false;
-                cmbCockpitLayout.Text = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Value?.ToString();
+                cmbCockpitLayout.Text = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Result?.ToString();
                 if (cockpit != null)
                     ReloadCockpit(cmbCockpitLayout.Text);
             }
@@ -144,16 +152,30 @@ namespace CockpitDisplay
             cockpit.Text = string.Format("Cockpit{0}", string.IsNullOrEmpty(text) ? "" : (" - " + text));
             cockpit.Show();
             cockpit.LoadLayout(text); // This should force all viible controls to be removed and re-added with new dimensions
-            cockpit.Update();
+            foreach(var requestResult in requestResults)
+            {
+                cockpit.ResultUpdate(requestResult);
+            }
+            //cockpit.Update();
             cockpit.Focus();
             this.Focus();
         }
 
         private void RequestVariable(object sender, ClientRequest request)
         {
-            if(connector != null)
+            // Has the variable already been requested and received?
+            if (requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
             {
-                connector.RequestVariable(request);
+                // Yes - just send the latest value, it will be updated automatically
+                cockpit.ResultUpdate(requestResults.First(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit));
+            }
+            else
+            {
+                // No - submit a new request for this variable
+                if (connector != null)
+                {
+                    connector.RequestVariable(request);
+                }
             }
         }
 
