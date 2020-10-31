@@ -107,8 +107,12 @@ namespace InstrumentPlugins
         {
             if (obj.InvokeRequired)
             {
-                var d = new SafeControlUpdateDelegate(UpdateNeelde);
-                obj.Invoke(d, new object[] { obj });
+                try
+                {
+                    var d = new SafeControlUpdateDelegate(UpdateNeelde);
+                    obj.Invoke(d, new object[] { obj });
+                }
+                catch { }
                 return;
             }
             try
@@ -136,8 +140,8 @@ namespace InstrumentPlugins
             // Only update the needle if it should move
             if (lastAltitude != CurrentAltitude && sender is PictureBox && ((PictureBox)sender).Name == "Needle")
             {
-                var g = e.Graphics;
                 var needle = (PictureBox)sender;
+
                 needle.Top = 0;
                 needle.Left = 0;
                 needle.Height = control.Height;
@@ -146,41 +150,54 @@ namespace InstrumentPlugins
 
                 // Draw the needles
                 var pen = new Pen(Color.White, 1);
+                //var g = e.Graphics;
+                Bitmap bitmap = new Bitmap(needle.Width, needle.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                bitmap.MakeTransparent();
+                Graphics graph = Graphics.FromImage(bitmap);
+
+                //  draw stuff here ...
 
                 // Short Needle
                 GraphicsPath gp = new GraphicsPath();
                 var altimeterNeedlePosition = (double)CurrentAltitude / 10000.0;
                 var altimeterNeedleLength = (double)(needle.Height / 2) * 3 / 5;
                 var altimeterNeedleAngle = 360.0 * altimeterNeedlePosition;
-                var points = GetPoints(altimeterNeedleLength, ConvertToRadians(altimeterNeedleAngle));
+                var points = GetPoints(altimeterNeedleLength, altimeterNeedleAngle);
                 gp.AddLines(points);
-                g.FillPath(pen.Brush, gp);
+                graph.FillPath(pen.Brush, gp);
 
                 // Long Needle
                 gp = new GraphicsPath();
                 altimeterNeedlePosition = (double)(CurrentAltitude % 1000 / 1000.0);
                 altimeterNeedleLength = (double)(needle.Height / 2) * 4 / 5;
                 altimeterNeedleAngle = 360.0 * altimeterNeedlePosition;
-                points = GetPoints(altimeterNeedleLength, ConvertToRadians(altimeterNeedleAngle));
+                points = GetPoints(altimeterNeedleLength, altimeterNeedleAngle);
                 gp.AddLines(points);
-                g.FillPath(pen.Brush, gp);
+                graph.FillPath(pen.Brush, gp);
+
+                needle.Image = bitmap;
 
                 needle.BringToFront();
                 lastAltitude = CurrentAltitude;
             }
         }
 
-        private PointF[] GetPoints(double length, double angleInRadians)
+        private PointF[] GetPoints(double length, double angleInDegrees)
         {
             List<PointF> results = new List<PointF>();
             PointF[] points = {
-                        new PointF((float)(centre.X - length/20), (float)(centre.Y - length/20)),
-                        new PointF((float)(centre.X + length * Math.Sin(angleInRadians)), (float)(centre.Y - length * Math.Cos(angleInRadians))),
-                        new PointF((float)(centre.X + length / 20), (float)(centre.Y - length/20))
+                        GetPoint(length / 20, angleInDegrees - 110),
+                        GetPoint(length, angleInDegrees),
+                        GetPoint(length / 20, angleInDegrees + 110)
             };
             results.AddRange(points);
 
             return results.ToArray();
+        }
+
+        private PointF GetPoint(double length, double angleInDegrees)
+        {
+            return new PointF((float)(centre.X + length * Math.Sin(ConvertToRadians(angleInDegrees))), (float)(centre.Y - length * Math.Cos(ConvertToRadians(angleInDegrees))));
         }
 
         private double ConvertToRadians(double angle)

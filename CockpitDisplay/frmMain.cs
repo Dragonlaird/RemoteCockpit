@@ -59,7 +59,7 @@ namespace CockpitDisplay
             if (cockpit != null)
             {
                 var rnd = new Random();
-                var changeAmount = rnd.Next(20);
+                var changeAmount = rnd.Next(10);
                 if (rnd.NextDouble() > 0.5)
                     changeAmount = -1 * changeAmount;
                 altitude.Result = double.Parse(altitude.Result?.ToString()) + changeAmount;
@@ -156,11 +156,14 @@ namespace CockpitDisplay
             {
                 text = "Cessna 152 ASOBO";
             }
-            if (cockpit == null)
+            if(cockpit != null)
             {
-                cockpit = new frmCockpit();
-                cockpit.RequestValue += RequestVariable;
+                cockpit.Close();
+                cockpit.Dispose();
             }
+            cockpit = new frmCockpit();
+            cockpit.RequestValue += RequestVariable;
+
             if (cbFullScreen.Checked)
             {
                 cockpit.WindowState = FormWindowState.Maximized;

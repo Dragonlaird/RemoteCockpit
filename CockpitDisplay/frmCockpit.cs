@@ -113,8 +113,12 @@ namespace CockpitDisplay
         {
             if (obj.InvokeRequired)
             {
-                var d = new SafeFormUpdateDelegate(UpdateCockpitItem);
-                this.Invoke(d, new object[] { obj });
+                try
+                {
+                    var d = new SafeFormUpdateDelegate(UpdateCockpitItem);
+                    this.Invoke(d, new object[] { obj });
+                }
+                catch { }
                 return;
             }
             try
