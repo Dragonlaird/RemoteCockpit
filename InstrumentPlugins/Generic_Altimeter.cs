@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
@@ -20,13 +21,13 @@ namespace InstrumentPlugins
 
         private const int MinimumAltitude = 0;
         private const int MaximumAltitude = 10000;
-        private int CurrentAltitude { get; set; } = -1;
+        private int CurrentAltitude { get; set; } = 0;
         private int controlTop = 0;
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
         private Point centre = new Point(0, 0);
-        private int lastAltitude = 0;
+        private int lastAltitude = -1;
 
         public Generic_Altimeter()
         {
@@ -36,17 +37,15 @@ namespace InstrumentPlugins
 
         private void DrawControlForeground()
         {
-            return;
             var needle = new PictureBox();
             needle.Name = "Needle";
             needle.BackColor = Color.Transparent;
-            needle.Height = control.Height < control.Width ? control.Height : control.Width;
-            needle.Width = control.Height < control.Width ? control.Height : control.Width;
+            needle.Height = control.Height;
+            needle.Width = control.Height;
             var g = needle.CreateGraphics();
             Pen pen = new Pen(Color.White, 1 + needle.Width / 50);
             g.DrawLine(pen, centre, new Point(centre.X, 0));
             CurrentAltitude = lastAltitude;
-            needle.Paint += PaintNeedle;
             if (control.Controls["Needle"] != null)
                 control.Controls.Remove(control.Controls["Needle"]);
             control.Controls.Add(needle);
@@ -69,6 +68,8 @@ namespace InstrumentPlugins
             control.BackColor = Color.Transparent;
             control.Height = resizedImage.Height;
             control.Width = resizedImage.Width;
+            centre = new Point(control.Width / 2, control.Height / 2);
+            control.Controls.Clear();
         }
 
         private void RedrawControl()
@@ -109,7 +110,7 @@ namespace InstrumentPlugins
         public void ValueUpdate(ClientRequestResult value)
         {
             // Update our control to display latest value
-            if(value.Request.Name == "INDICATED ALTITUDE")
+            if (value.Request.Name == "INDICATED ALTITUDE")
             {
                 CurrentAltitude = (int)(double)value.Result;
             }
@@ -118,14 +119,58 @@ namespace InstrumentPlugins
 
         private void Paint(object sender, PaintEventArgs e)
         {
+            // If we haven't already created the needle, do it now
             if (!control.Controls.ContainsKey("Needle"))
-                DrawControlForeground();
+            {
+                var needle = new PictureBox();
+                needle.Name = "Needle";
+                needle.BackColor = Color.Transparent;
+                needle.Paint += PaintNeedle;
+                control.Controls.Add(needle);
+            }
         }
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
-            if (!control.Controls.ContainsKey("Needle") || lastAltitude != CurrentAltitude)
-                DrawControlForeground();
+            // Only update the needle if it should move
+            if (lastAltitude != CurrentAltitude && sender is PictureBox && ((PictureBox)sender).Name == "Needle")
+            {
+                var g = e.Graphics;
+                var needle = (PictureBox)sender;
+                needle.Top = 0;
+                needle.Left = 0;
+                needle.Height = control.Height;
+                needle.Width = control.Width;
+                needle.Enabled = false;
+                needle.BackColor = Color.Transparent;
+                //g.Clear(Color.Transparent);
+
+                // Draw the needle
+                var penWidth = 1 + (int)((double)2 * control.Width / 100.0);
+                var penLength = needle.Height * 3 / 10;
+                var penTop = needle.Height / 2 - penLength;
+                var pen = new Pen(Color.White, penWidth);
+                var points = GetPoints(penLength, ConvertToRadians(360 * CurrentAltitude / 10000));
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddLines(points);
+                g.DrawPath(pen, gp);
+                // Ensure we don't try and move the needle again unless it needs to change
+                needle.BringToFront();
+                lastAltitude = CurrentAltitude;
+            }
+        }
+
+        private Point[] GetPoints(int length, double angleInRadians)
+        {
+            List<Point> results = new List<Point>();
+            Point[] points = {
+                        new Point((int)(centre.X - length/20), (int)(centre.Y - length/20)),
+                        new Point(centre.X, control.Height / 2 - length),
+                        new Point((int)(centre.X + length / 20), (int)(centre.Y - length/20))
+                    };
+            results.AddRange(points);
+
+            return results.ToArray();
         }
 
         private double ConvertToRadians(double angle)
@@ -211,11 +256,10 @@ namespace InstrumentPlugins
             controlWidth = width;
             if (control != null)
             {
-                control.Top = controlTop;
-                control.Left = controlLeft;
-                control.Height = controlHeight;
-                control.Width = controlWidth;
+                control.Top = top;
+                control.Left = left;
             }
+            lastAltitude = -1; // Force redraw of the needle
             RedrawControl();
         }
     }

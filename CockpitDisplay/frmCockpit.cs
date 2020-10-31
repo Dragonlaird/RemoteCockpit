@@ -114,7 +114,11 @@ namespace CockpitDisplay
                 this.Invoke(d, new object[] { obj });
                 return;
             }
-            obj.Update();
+            try
+            {
+                obj.Update();
+            }
+            catch { }
         }
 
         internal void LoadLayout(string text)
