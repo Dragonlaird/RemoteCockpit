@@ -14,6 +14,7 @@ namespace InstrumentPlugins
     public class Generic_Altimeter : ICockpitInstrument
     {
         public event EventHandler Disposed;
+        private delegate void SafeControlUpdateDelegate(Control ctrl);
 
         private bool disposedValue = false;
 
@@ -87,34 +88,34 @@ namespace InstrumentPlugins
             DrawControlBackground();
         }
 
-        private Image RotateImage(Image img, float angle)
-        {
-            Image rotatedImage = (Image)img.Clone();
-            //rotatedImage.SetResolution(img.HorizontalResolution, img.VerticalResolution);
-
-            using (Graphics g = Graphics.FromImage(rotatedImage))
-            {
-                // Set the rotation point to the center in the matrix
-                g.TranslateTransform(img.Width / 2, img.Height / 2);
-                // Rotate
-                g.RotateTransform(angle);
-                // Restore rotation point in the matrix
-                g.TranslateTransform(-img.Width / 2, -img.Height / 2);
-                // Draw the image on the bitmap
-                g.DrawImage(img, new Point(0, 0));
-            }
-
-            return rotatedImage;
-        }
 
         public void ValueUpdate(ClientRequestResult value)
         {
             // Update our control to display latest value
             if (value.Request.Name == "INDICATED ALTITUDE")
             {
-                CurrentAltitude = (int)(double)value.Result;
+                if ((int)(double)value.Result != CurrentAltitude)
+                {
+                    CurrentAltitude = (int)(double)value.Result;
+                    if (control?.Controls?.ContainsKey("Needle") == true)
+                        UpdateNeelde(control.Controls["Needle"]);
+                }
             }
-            Paint(control, new PaintEventArgs(control.CreateGraphics(), control.DisplayRectangle));
+        }
+
+        private void UpdateNeelde(Control obj)
+        {
+            if (obj.InvokeRequired)
+            {
+                var d = new SafeControlUpdateDelegate(UpdateNeelde);
+                obj.Invoke(d, new object[] { obj });
+                return;
+            }
+            try
+            {
+                PaintNeedle(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
+            }
+            catch { }
         }
 
         private void Paint(object sender, PaintEventArgs e)
@@ -142,32 +143,41 @@ namespace InstrumentPlugins
                 needle.Height = control.Height;
                 needle.Width = control.Width;
                 needle.Enabled = false;
-                needle.BackColor = Color.Transparent;
-                //g.Clear(Color.Transparent);
 
-                // Draw the needle
-                var penWidth = 1 + (int)((double)2 * control.Width / 100.0);
-                var penLength = needle.Height * 3 / 10;
-                var penTop = needle.Height / 2 - penLength;
-                var pen = new Pen(Color.White, penWidth);
-                var points = GetPoints(penLength, ConvertToRadians(360 * CurrentAltitude / 10000));
+                // Draw the needles
+                var pen = new Pen(Color.White, 1);
+
+                // Short Needle
                 GraphicsPath gp = new GraphicsPath();
+                var altimeterNeedlePosition = (double)CurrentAltitude / 10000.0;
+                var altimeterNeedleLength = (double)(needle.Height / 2) * 3 / 5;
+                var altimeterNeedleAngle = 360.0 * altimeterNeedlePosition;
+                var points = GetPoints(altimeterNeedleLength, ConvertToRadians(altimeterNeedleAngle));
                 gp.AddLines(points);
-                g.DrawPath(pen, gp);
-                // Ensure we don't try and move the needle again unless it needs to change
+                g.FillPath(pen.Brush, gp);
+
+                // Long Needle
+                gp = new GraphicsPath();
+                altimeterNeedlePosition = (double)(CurrentAltitude % 1000 / 1000.0);
+                altimeterNeedleLength = (double)(needle.Height / 2) * 4 / 5;
+                altimeterNeedleAngle = 360.0 * altimeterNeedlePosition;
+                points = GetPoints(altimeterNeedleLength, ConvertToRadians(altimeterNeedleAngle));
+                gp.AddLines(points);
+                g.FillPath(pen.Brush, gp);
+
                 needle.BringToFront();
                 lastAltitude = CurrentAltitude;
             }
         }
 
-        private Point[] GetPoints(int length, double angleInRadians)
+        private PointF[] GetPoints(double length, double angleInRadians)
         {
-            List<Point> results = new List<Point>();
-            Point[] points = {
-                        new Point((int)(centre.X - length/20), (int)(centre.Y - length/20)),
-                        new Point(centre.X, control.Height / 2 - length),
-                        new Point((int)(centre.X + length / 20), (int)(centre.Y - length/20))
-                    };
+            List<PointF> results = new List<PointF>();
+            PointF[] points = {
+                        new PointF((float)(centre.X - length/20), (float)(centre.Y - length/20)),
+                        new PointF((float)(centre.X + length * Math.Sin(angleInRadians)), (float)(centre.Y - length * Math.Cos(angleInRadians))),
+                        new PointF((float)(centre.X + length / 20), (float)(centre.Y - length/20))
+            };
             results.AddRange(points);
 
             return results.ToArray();

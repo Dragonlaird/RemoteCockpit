@@ -17,6 +17,7 @@ using System.Reflection;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json.Linq;
+using System.Timers;
 
 namespace CockpitDisplay
 {
@@ -24,13 +25,14 @@ namespace CockpitDisplay
     {
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
         private delegate void SafeControlAddDelegate(Control ctrl, Control parent);
-        private delegate void SafeFormUpdateDelegate(Form form);
+        private delegate void SafeFormUpdateDelegate(Control ctrl);
         private List<ICockpitInstrument> instrumentPlugins;
         private List<ICockpitInstrument> usedInstrumentPlugins;
         private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
         private Point ScreenDimensions;
+        private bool redrawingControls = false;
         public frmCockpit()
         {
             InitializeComponent();
@@ -44,7 +46,6 @@ namespace CockpitDisplay
             usedInstrumentPlugins = new List<ICockpitInstrument>();
             var allAssemblies = LoadAvailableAssemblies();
             instrumentPlugins = GetPlugIns(allAssemblies);
-
         }
 
         private void AddControl(Control ctrl, Control parent)
@@ -90,14 +91,16 @@ namespace CockpitDisplay
 
         public void ResultUpdate(ClientRequestResult requestResult)
         {
-            if (instrumentPlugins != null)
-                lock (instrumentPlugins)
-                    foreach (var instrument in instrumentPlugins)
+            if (usedInstrumentPlugins != null && !redrawingControls)
+                redrawingControls = true;
+                lock (usedInstrumentPlugins)
+                    foreach (var instrument in usedInstrumentPlugins)
                     {
                         if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
                             try
                             {
                                 instrument.ValueUpdate(requestResult);
+                                UpdateCockpitItem(instrument.Control);
                             }
                             catch (Exception ex)
                             {
@@ -180,6 +183,11 @@ namespace CockpitDisplay
             // Variable layoutInstruments contains all the plugins we can use for this layout
             // Now we simply add them to the relevant location on the form, suitably resized based on the current fom size
             var variables = new List<ClientRequest>();
+            while (redrawingControls)
+            {
+                Thread.Sleep(10);
+            }
+            redrawingControls = true;
             foreach (var instrumentPosition in layoutDefinition.Postions)
             {
                 var plugin = instrumentPlugins.FirstOrDefault(x => x.Type == instrumentPosition.Type);
@@ -198,9 +206,9 @@ namespace CockpitDisplay
                     UpdateCockpitItem(plugin.Control);
                 }
             }
-
+            redrawingControls = false;
             // Request all variables used by any plugin - even if they've been requested before - duplicate requests are ignored
-            if(RequestValue != null)
+            if (RequestValue != null)
             {
                 foreach(var variable in variables)
                 {
@@ -211,6 +219,7 @@ namespace CockpitDisplay
                     catch(Exception ex) { }
                 }
             }
+
         }
 
         private LayoutDefinition GetLayout(string name)

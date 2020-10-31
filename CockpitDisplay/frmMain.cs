@@ -10,6 +10,7 @@ using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace CockpitDisplay
@@ -20,6 +21,8 @@ namespace CockpitDisplay
         private RemoteConnector connector;
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
 
+
+        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 1250 };
 
         private frmCockpit cockpit;
         public frmMain()
@@ -40,6 +43,28 @@ namespace CockpitDisplay
             {
                 Name = "TITLE"
             });
+
+            var myTimer = new System.Timers.Timer();
+            // Tell the timer what to do when it elapses
+            myTimer.Elapsed += new ElapsedEventHandler(updateAlitmeter);
+            // Set it to go off every five seconds
+            myTimer.Interval = 500;
+            // And start it        
+            myTimer.Enabled = true;
+
+        }
+
+        private void updateAlitmeter(object source, ElapsedEventArgs e)
+        {
+            if (cockpit != null)
+            {
+                var rnd = new Random();
+                var changeAmount = rnd.Next(20);
+                if (rnd.NextDouble() > 0.5)
+                    changeAmount = -1 * changeAmount;
+                altitude.Result = double.Parse(altitude.Result?.ToString()) + changeAmount;
+                cockpit.ResultUpdate(altitude);
+            }
         }
 
         private void RequestVariable(ClientRequest request)
@@ -152,7 +177,7 @@ namespace CockpitDisplay
             cockpit.Text = string.Format("Cockpit{0}", string.IsNullOrEmpty(text) ? "" : (" - " + text));
             cockpit.Show();
             cockpit.LoadLayout(text); // This should force all viible controls to be removed and re-added with new dimensions
-            foreach(var requestResult in requestResults)
+            foreach (var requestResult in requestResults)
             {
                 cockpit.ResultUpdate(requestResult);
             }
