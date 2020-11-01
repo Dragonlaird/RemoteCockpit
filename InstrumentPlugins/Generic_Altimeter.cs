@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace InstrumentPlugins
@@ -19,34 +20,21 @@ namespace InstrumentPlugins
 
         private const int MinimumAltitude = 0;
         private const int MaximumAltitude = 10000;
-        private int CurrentAltitude { get; set; } = 0;
+        private double CurrentAltitude { get; set; } = 0;
         private int controlTop = 0;
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
         private Point centre = new Point(0, 0);
-        private int lastAltitude = -1;
+        private double lastAltitude = -1;
+        private double needleMoveSpeed = 0;
+        System.Timers.Timer animateTimer;
+
 
         public Generic_Altimeter()
         {
             // Draw the initial outline once - after that, an overlay will be used to display altitude
             RedrawControl();
-        }
-
-        private void DrawControlForeground()
-        {
-            var needle = new PictureBox();
-            needle.Name = "Needle";
-            needle.BackColor = Color.Transparent;
-            needle.Height = control.Height;
-            needle.Width = control.Height;
-            var g = needle.CreateGraphics();
-            Pen pen = new Pen(Color.White, 1 + needle.Width / 50);
-            g.DrawLine(pen, centre, new Point(centre.X, 0));
-            CurrentAltitude = lastAltitude;
-            if (control.Controls["Needle"] != null)
-                control.Controls.Remove(control.Controls["Needle"]);
-            control.Controls.Add(needle);
         }
 
         private void DrawControlBackground()
@@ -94,19 +82,31 @@ namespace InstrumentPlugins
                 if ((int)(double)value.Result != CurrentAltitude)
                 {
                     CurrentAltitude = (int)(double)value.Result;
+                    needleMoveSpeed = ((CurrentAltitude > lastAltitude ? ((double)CurrentAltitude - (double)lastAltitude) : ((double)lastAltitude - (double)CurrentAltitude)) / 2000);
                     if (control?.Controls?.ContainsKey("Needle") == true)
-                        UpdateNeelde(control.Controls["Needle"]);
+                    {
+                        //UpdateNeedle(control.Controls["Needle"]);
+                        // Only need to start the timer if it isn't already running
+                        if (animateTimer == null || !animateTimer.Enabled)
+                        {
+                            animateTimer = new System.Timers.Timer(30);
+                            animateTimer.Elapsed += MoveNeedle;
+                            animateTimer.AutoReset = true;
+                            animateTimer.Enabled = true;
+                            animateTimer.Start();
+                        }
+                    }
                 }
             }
         }
 
-        private void UpdateNeelde(Control obj)
+        private void UpdateNeedle(Control obj)
         {
             if (obj.InvokeRequired)
             {
                 try
                 {
-                    var d = new SafeControlUpdateDelegate(UpdateNeelde);
+                    var d = new SafeControlUpdateDelegate(UpdateNeedle);
                     obj.Invoke(d, new object[] { obj });
                 }
                 catch { }
@@ -117,6 +117,21 @@ namespace InstrumentPlugins
                 PaintNeedle(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
             }
             catch { }
+        }
+
+        private void MoveNeedle(object sender, ElapsedEventArgs e)
+        {
+            if (control?.Controls.ContainsKey("Needle") == true)
+            {
+                var needle = control.Controls["Needle"];
+                UpdateNeedle(control.Controls["Needle"]);
+            }
+            else
+            {
+                animateTimer?.Stop();
+                animateTimer?.Dispose();
+                animateTimer = null;
+            }
         }
 
         private void Paint(object sender, PaintEventArgs e)
@@ -134,11 +149,11 @@ namespace InstrumentPlugins
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
+            
             // Only update the needle if it should move
             if (lastAltitude != CurrentAltitude && sender is PictureBox && ((PictureBox)sender).Name == "Needle")
             {
                 var needle = (PictureBox)sender;
-
                 needle.Top = 0;
                 needle.Left = 0;
                 needle.Height = control.Height;
@@ -152,11 +167,31 @@ namespace InstrumentPlugins
                 bitmap.MakeTransparent();
                 Graphics graph = Graphics.FromImage(bitmap);
 
-                //  draw stuff here ...
+                // Determine new needle step poisition by moving 5 feet
+                var nextAltitude = lastAltitude;
+                if(nextAltitude < CurrentAltitude)
+                {
+                    nextAltitude += needleMoveSpeed;
+                    if (nextAltitude > CurrentAltitude)
+                        nextAltitude = CurrentAltitude;
+                }
+                else
+                {
+                    nextAltitude -= needleMoveSpeed;
+                    if(nextAltitude < CurrentAltitude)
+                        nextAltitude = CurrentAltitude;
+                }
 
+                // Reached our target position, no need for any more drawing
+                if (nextAltitude == CurrentAltitude && animateTimer != null)
+                {
+                    animateTimer.Stop();
+                    animateTimer?.Dispose();
+                    animateTimer = null;
+                }
                 // Short Needle
                 GraphicsPath gp = new GraphicsPath();
-                var altimeterNeedlePosition = (double)CurrentAltitude / 10000.0;
+                var altimeterNeedlePosition = nextAltitude / 10000.0;
                 var altimeterNeedleLength = (double)(needle.Height / 2) * 3 / 5;
                 var altimeterNeedleAngle = 360.0 * altimeterNeedlePosition;
                 var points = GetPoints(altimeterNeedleLength, altimeterNeedleAngle);
@@ -165,7 +200,7 @@ namespace InstrumentPlugins
 
                 // Long Needle
                 gp = new GraphicsPath();
-                altimeterNeedlePosition = (double)(CurrentAltitude % 1000 / 1000.0);
+                altimeterNeedlePosition = nextAltitude % 1000 / 1000.0;
                 altimeterNeedleLength = (double)(needle.Height / 2) * 4 / 5;
                 altimeterNeedleAngle = 360.0 * altimeterNeedlePosition;
                 points = GetPoints(altimeterNeedleLength, altimeterNeedleAngle);
@@ -175,7 +210,7 @@ namespace InstrumentPlugins
                 needle.Image = bitmap;
 
                 needle.BringToFront();
-                lastAltitude = CurrentAltitude;
+                lastAltitude = nextAltitude;
             }
         }
 

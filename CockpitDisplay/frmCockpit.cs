@@ -24,7 +24,6 @@ namespace CockpitDisplay
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
         private Point ScreenDimensions;
-        private bool redrawingControls = false;
         public frmCockpit()
         {
             InitializeComponent();
@@ -83,22 +82,27 @@ namespace CockpitDisplay
 
         public void ResultUpdate(ClientRequestResult requestResult)
         {
-            if (usedInstrumentPlugins != null && !redrawingControls)
-                redrawingControls = true;
-                lock (usedInstrumentPlugins)
-                    foreach (var instrument in usedInstrumentPlugins)
-                    {
-                        if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
-                            try
-                            {
-                                instrument.ValueUpdate(requestResult);
-                                UpdateCockpitItem(instrument.Control);
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                    }
-            UpdateCockpitItem(this);
+            try
+            {
+                if (usedInstrumentPlugins != null)
+                {
+                    lock (usedInstrumentPlugins)
+                        foreach (var instrument in usedInstrumentPlugins)
+                        {
+                            if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
+                                try
+                                {
+                                    instrument.ValueUpdate(requestResult);
+                                    UpdateCockpitItem(instrument.Control);
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                        }
+                    UpdateCockpitItem(this);
+                }
+            }
+            catch { }
         }
 
         private void UpdateCockpitItem(Control obj)
@@ -122,6 +126,9 @@ namespace CockpitDisplay
 
         internal void LoadLayout(string text)
         {
+            //this.SetStyle(ControlStyles.UserPaint, true);
+            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             // Here we would clear the current cockpit layout and load all the plugins for the new layout
             foreach (Control control in this.Controls)
             {
@@ -143,11 +150,13 @@ namespace CockpitDisplay
                         imageScaleFactor = (double)this.Height / image.Height;
                     var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
                     ScreenDimensions = new Point(backgroundImage.Width, backgroundImage.Height);
-                    var g = this.CreateGraphics();
-                    g.DrawImageUnscaled(backgroundImage, 0, 0, this.Width, this.Height);
-                    //this.BackgroundImage = backgroundImage;
+                    var pictureBox = new PictureBox();
+                    pictureBox.Height = this.Height;
+                    pictureBox.Width = this.Width;
+                    pictureBox.Image = backgroundImage;
+                    this.Controls.Add(pictureBox);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }
@@ -179,30 +188,29 @@ namespace CockpitDisplay
             // Variable layoutInstruments contains all the plugins we can use for this layout
             // Now we simply add them to the relevant location on the form, suitably resized based on the current fom size
             var variables = new List<ClientRequest>();
-            while (redrawingControls)
+            try
             {
-                Thread.Sleep(10);
-            }
-            redrawingControls = true;
-            foreach (var instrumentPosition in layoutDefinition.Postions)
-            {
-                var plugin = instrumentPlugins.FirstOrDefault(x => x.Type == instrumentPosition.Type);
-                if(plugin != null)
+                foreach (var instrumentPosition in layoutDefinition.Postions)
                 {
-                    variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
-                    var vScaleFactor = (double)ScreenDimensions.Y / 100;
-                    var hScaleFactor = (double)ScreenDimensions.X / 100;
-                    plugin.SetLayout(
-                        (int)(instrumentPosition.Top * vScaleFactor),
-                        (int)(instrumentPosition.Left * hScaleFactor),
-                        (int)(instrumentPosition.Height * vScaleFactor),
-                        (int)(instrumentPosition.Width * hScaleFactor));
-                    AddControl(plugin.Control, this);
-                    usedInstrumentPlugins.Add(plugin);
-                    UpdateCockpitItem(plugin.Control);
+                    var plugin = instrumentPlugins.FirstOrDefault(x => x.Type == instrumentPosition.Type);
+                    if (plugin != null)
+                    {
+                        variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
+                        var vScaleFactor = (double)ScreenDimensions.Y / 100;
+                        var hScaleFactor = (double)ScreenDimensions.X / 100;
+                        plugin.SetLayout(
+                            (int)(instrumentPosition.Top * vScaleFactor),
+                            (int)(instrumentPosition.Left * hScaleFactor),
+                            (int)(instrumentPosition.Height * vScaleFactor),
+                            (int)(instrumentPosition.Width * hScaleFactor));
+                        AddControl(plugin.Control, this);
+                        usedInstrumentPlugins.Add(plugin);
+                        UpdateCockpitItem(plugin.Control);
+                        plugin.Control.BringToFront();
+                    }
                 }
             }
-            redrawingControls = false;
+            catch { }
             // Request all variables used by any plugin - even if they've been requested before - duplicate requests are ignored
             if (RequestValue != null)
             {

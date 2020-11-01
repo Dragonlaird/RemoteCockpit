@@ -19,6 +19,9 @@ namespace CockpitDisplay
         private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 4250 };
 
         private frmCockpit cockpit;
+
+        private System.Timers.Timer altimeterUpdateTimer;
+
         public frmMain()
         {
             InitializeComponent();
@@ -38,13 +41,23 @@ namespace CockpitDisplay
                 Name = "TITLE"
             });
 
-            var myTimer = new System.Timers.Timer();
+            TestAltimeter();
+        }
+
+        private void TestAltimeter()
+        {
+            if(altimeterUpdateTimer != null)
+            {
+                altimeterUpdateTimer.Stop();
+                altimeterUpdateTimer.Dispose();
+                altimeterUpdateTimer = null;
+            }
+            // Set it to go off every ten seconds
+            altimeterUpdateTimer = new System.Timers.Timer(1000);
             // Tell the timer what to do when it elapses
-            myTimer.Elapsed += new ElapsedEventHandler(updateAlitmeter);
-            // Set it to go off every five seconds
-            myTimer.Interval = 500;
+            altimeterUpdateTimer.Elapsed += new ElapsedEventHandler(updateAlitmeter);
             // And start it        
-            myTimer.Enabled = true;
+            altimeterUpdateTimer.Start();
 
         }
 
@@ -53,7 +66,7 @@ namespace CockpitDisplay
             if (cockpit != null)
             {
                 var rnd = new Random();
-                var changeAmount = rnd.Next(10);
+                var changeAmount = rnd.Next(100);
                 if (rnd.NextDouble() > 0.5)
                     changeAmount = -1 * changeAmount;
                 altitude.Result = double.Parse(altitude.Result?.ToString()) + changeAmount;
