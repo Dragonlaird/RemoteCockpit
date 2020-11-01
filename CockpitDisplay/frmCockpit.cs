@@ -206,7 +206,7 @@ namespace CockpitDisplay
                         AddControl(plugin.Control, this);
                         usedInstrumentPlugins.Add(plugin);
                         UpdateCockpitItem(plugin.Control);
-                        plugin.Control.BringToFront();
+                        plugin.Control.BringToFront(); // Ensure control is displayed on top of the background image
                     }
                 }
             }
