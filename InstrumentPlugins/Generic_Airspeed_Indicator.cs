@@ -96,6 +96,9 @@ namespace InstrumentPlugins
                 Bitmap bitmap = new Bitmap(needle.Width, needle.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 bitmap.MakeTransparent();
                 Graphics graph = Graphics.FromImage(bitmap);
+                graph.SmoothingMode = SmoothingMode.AntiAlias;
+                graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                 var nextAirspeed = LastAirspeed;
                 if (nextAirspeed < CurrentAirspeed)
