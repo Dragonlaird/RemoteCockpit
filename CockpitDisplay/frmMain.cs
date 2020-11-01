@@ -16,7 +16,7 @@ namespace CockpitDisplay
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
 
 
-        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 4250 };
+        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
 
         private frmCockpit cockpit;
 

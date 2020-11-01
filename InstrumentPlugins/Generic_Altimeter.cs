@@ -192,7 +192,7 @@ namespace InstrumentPlugins
                 // Update digital readout
                 var digitalReadoutPen = new Pen(Color.Red, 1);
                 var digitalReadoutTop = (double)control.Height * 0.28;
-                var digitalReadoutLeft = (double)control.Width * 0.38;
+                var digitalReadoutLeft = (double)control.Width * 0.355;
                 var digitalReadoutHeight = (double)control.Height * 0.175;
                 var digitalReadoutWidth = (double)control.Width * 0.325;
                 Rectangle textRect = new Rectangle((int)digitalReadoutLeft, (int)digitalReadoutTop, (int)digitalReadoutWidth, (int)digitalReadoutHeight);
@@ -202,7 +202,7 @@ namespace InstrumentPlugins
                 graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 var altText = string.Format("{0:0#,##0}", nextAltitude);
                 var fontSize = (float)(digitalReadoutHeight / 2.65);
-                graph.DrawString(altText, new Font("Tahoma", fontSize), Brushes.Gainsboro, textRect);
+                graph.DrawString(altText, new Font("Courier", fontSize), Brushes.Gainsboro, textRect);
                 // Short Needle
                 GraphicsPath gp = new GraphicsPath();
                 var altimeterNeedlePosition = nextAltitude / 10000.0;
