@@ -16,5 +16,7 @@ namespace RemoteCockpitClasses
         VOR_Indicator = 7,
         NDB_Indicator = 8,
         GPS = 9,
+        Clock = 10,
+        Other = 11
     }
 }

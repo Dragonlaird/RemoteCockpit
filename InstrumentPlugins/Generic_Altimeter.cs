@@ -89,7 +89,7 @@ namespace InstrumentPlugins
                         // Only need to start the timer if it isn't already running
                         if (animateTimer == null || !animateTimer.Enabled)
                         {
-                            animateTimer = new System.Timers.Timer(30);
+                            animateTimer = new System.Timers.Timer(50);
                             animateTimer.Elapsed += MoveNeedle;
                             animateTimer.AutoReset = true;
                             animateTimer.Enabled = true;
@@ -199,10 +199,10 @@ namespace InstrumentPlugins
                 graph.SmoothingMode = SmoothingMode.AntiAlias;
                 graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                var altText = string.Format("{0:0#,##0}", nextAltitude);
-                var fontSize = (float)(digitalReadoutHeight / 2.7);
+                var altText = string.Format("{0:0#,##0}", nextAltitude < 0 ? nextAltitude * -1 : nextAltitude);
+                var fontSize = (float)(digitalReadoutWidth / 5);
                 var digitalReadoutFont = new Font("Courier", fontSize, FontStyle.Bold);
-                graph.DrawString(altText, digitalReadoutFont, Brushes.Gainsboro, textRect);
+                graph.DrawString(altText, digitalReadoutFont, nextAltitude < 0 ? Brushes.RosyBrown : Brushes.Gainsboro, textRect);
 
                 // Short Needle
                 GraphicsPath gp = new GraphicsPath();
@@ -234,7 +234,9 @@ namespace InstrumentPlugins
             List<PointF> results = new List<PointF>();
             PointF[] points = {
                         GetPoint(length / 20, angleInDegrees - 110),
+                        GetPoint(length * 0.8, angleInDegrees - 4),
                         GetPoint(length, angleInDegrees),
+                        GetPoint(length * 0.8, angleInDegrees + 4),
                         GetPoint(length / 20, angleInDegrees + 110)
             };
             results.AddRange(points);

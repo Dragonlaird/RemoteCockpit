@@ -63,6 +63,26 @@ namespace InstrumentPlugins {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Airspeed_Background {
+            get {
+                object obj = ResourceManager.GetObject("Airspeed_Background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Attitude_Background {
+            get {
+                object obj = ResourceManager.GetObject("Attitude_Background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Background {
             get {
                 object obj = ResourceManager.GetObject("Background", resourceCulture);

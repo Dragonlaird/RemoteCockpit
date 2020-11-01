@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace RemoteCockpitClasses
 {
+    [DebuggerDisplay("\\{ClientRequestResult\\} {Request.Name}")]
     public class ClientRequestResult
     {
         private object _result;

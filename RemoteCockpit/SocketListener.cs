@@ -116,7 +116,14 @@ namespace RemoteCockpit
                     foreach (var client in subscribedClients)
                     {
                         WriteLog(string.Format("Sending Value: Client: {0}; Name: {1}; Value: {2}", client.Client.ConnectionID, result.Request.Name, result.Value));
-                        client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
+                        try
+                        {
+                            client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
+                        }
+                        catch(Exception ex)
+                        {
+                            // Often happens if the connection is dropped - should be removed from subscribedClients list
+                        }
                     }
                 }
             }

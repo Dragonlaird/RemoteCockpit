@@ -101,10 +101,14 @@ namespace CockpitDisplay
                         {
                             try
                             {
-                                var requestResult = JsonConvert.DeserializeObject<ClientRequestResult>(result);
-                                result = result.Substring(result.IndexOf("\r\r") + 2);
-                                state.sb = new StringBuilder(result);
-                                ReceiveData.DynamicInvoke(state, requestResult);
+                                while (result.IndexOf("\r\r") > -1)
+                                {
+                                    var firstResult = result.Substring(0, result.IndexOf("\r\r") + 2);
+                                    var requestResult = JsonConvert.DeserializeObject<ClientRequestResult>(firstResult);
+                                    result = result.Substring(result.IndexOf("\r\r") + 2);
+                                    state.sb = new StringBuilder(result);
+                                    ReceiveData.DynamicInvoke(state, requestResult);
+                                }
                             }
                             catch(Exception ex)
                             {

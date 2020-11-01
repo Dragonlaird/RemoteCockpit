@@ -283,7 +283,7 @@ namespace RemoteCockpitClasses
             {"TOTAL AIR TEMPERATURE",new SimVarDefinition("TOTAL AIR TEMPERATURE","Total air temperature is the air temperature at the front of the aircraft where the ram pressure from the speed of the aircraft is taken into account.","celsius",ConvertType("float64"),true,false)},
             {"WINDSHIELD RAIN EFFECT AVAILABLE",new SimVarDefinition("WINDSHIELD RAIN EFFECT AVAILABLE","Is visual effect available on this aircraft","bool",null,true,false)},
             {"AIRSPEED BARBER POLE",new SimVarDefinition("AIRSPEED BARBER POLE","Redline airspeed (dynamic on some aircraft)","knots",ConvertType("var32"),true,false)},
-            {"AIRSPEED INDICATED",new SimVarDefinition("AIRSPEED INDICATED","Indicated airspeed","knots",null,false,false)},
+            {"AIRSPEED INDICATED",new SimVarDefinition("AIRSPEED INDICATED","Indicated airspeed","knots",ConvertType("float64"),false,false)},
             {"AIRSPEED MACH",new SimVarDefinition("AIRSPEED MACH","Current mach","mach",ConvertType("uint16"),true,false)},
             {"AIRSPEED TRUE",new SimVarDefinition("AIRSPEED TRUE","True airspeed","knots",null,false,false)},
             {"AIRSPEED TRUE CALIBRATE",new SimVarDefinition("AIRSPEED TRUE CALIBRATE","Angle of True calibration scale on airspeed indicator","degrees",ConvertType("float64"),false,true)},

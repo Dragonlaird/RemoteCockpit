@@ -43,12 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generic_Airspeed_Indicator.cs" />
     <Compile Include="Generic_Altimeter.cs" />
     <Compile Include="ImageLibrary.Designer.cs">
       <DependentUpon>ImageLibrary.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Generic_Attitude_Indicator.cs" />
+    <Compile Include="Initial_Instrument_Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Needle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Airspeed_Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Attitude_Background.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Background.png" />

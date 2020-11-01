@@ -41,7 +41,7 @@ namespace CockpitDisplay
                 Name = "TITLE"
             });
 
-            TestAltimeter();
+            //TestAltimeter();
         }
 
         private void TestAltimeter()
@@ -187,10 +187,21 @@ namespace CockpitDisplay
             cockpit.Text = string.Format("Cockpit{0}", string.IsNullOrEmpty(text) ? "" : (" - " + text));
             cockpit.Show();
             cockpit.LoadLayout(text); // This should force all viible controls to be removed and re-added with new dimensions
-            foreach (var requestResult in requestResults)
+            try
             {
-                cockpit.ResultUpdate(requestResult);
+                foreach (var requestResult in requestResults)
+                {
+                    try
+                    {
+                        cockpit.ResultUpdate(requestResult);
+                    }
+                    catch
+                    {
+                        // If one plugin generates an error, it should not prevent others from being updated
+                    }
+                }
             }
+            catch { }
             //cockpit.Update();
             cockpit.Focus();
             this.Focus();
