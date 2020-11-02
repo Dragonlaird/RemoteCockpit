@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,10 +61,13 @@ namespace InstrumentPlugins
             var x = (int)(aspectRatio > 1 ? controlHeight : Math.Floor((double)controlWidth / aspectRatio));
             var y = (int)(aspectRatio > 1 ? Math.Floor((double)controlHeight / aspectRatio) : controlWidth);
             var resizedImage = new Bitmap(img, new Size(y, x));
+
             control.Height = resizedImage.Height;
             control.Width = resizedImage.Width;
+
             control.BackgroundImage = resizedImage;
             control.BackgroundImageLayout = ImageLayout.Center;
+
             centre = new Point(control.Width / 2, control.Height / 2);
         }
 
@@ -74,6 +78,8 @@ namespace InstrumentPlugins
             {
                 var needle = new PictureBox();
                 needle.Name = "Needle";
+                needle.Height = control.Height;
+                needle.Width = control.Width;
                 needle.BackColor = Color.Transparent;
                 needle.Paint += PaintNeedle;
                 control.Controls.Add(needle);
@@ -82,6 +88,24 @@ namespace InstrumentPlugins
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
+            var needle = control.Controls["Needle"];
+
+            // Circluar clip for gimbal to allow image to be overlaid onto instrument
+            GraphicsPath gp = new GraphicsPath();
+            gp.AddEllipse(
+                (float)((double)control.Width * .2),
+                (float)((double)control.Height * .2),
+                (float)((double)control.Width * .8),
+                (float)((double)control.Height * .8));
+            Region region = new Region(gp);
+
+            // Draw the outline of the region.
+            Pen pen = Pens.Black;
+            var g = needle.CreateGraphics();
+            g.DrawPath(pen, gp);
+
+            // Set the clipping region of the Graphics object.
+            g.SetClip(region, CombineMode.Replace);
 
         }
         /// <summary>
