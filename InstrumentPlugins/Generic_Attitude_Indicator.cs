@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,26 +89,147 @@ namespace InstrumentPlugins
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
-            var needle = control.Controls["Needle"];
+            var needle = (PictureBox)control.Controls["Needle"];
+            var gimbal = ImageLibrary.Attitude_Indicator_Gimbal;
+            var resizedImage = new Bitmap(gimbal, new Size(needle.Width, needle.Height));
 
-            // Circluar clip for gimbal to allow image to be overlaid onto instrument
-            GraphicsPath gp = new GraphicsPath();
-            gp.AddEllipse(
-                (float)((double)control.Width * .2),
-                (float)((double)control.Height * .2),
-                (float)((double)control.Width * .8),
-                (float)((double)control.Height * .8));
-            Region region = new Region(gp);
+            // Now move the resized image, based on updated attitude values
+            //resizedImage.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            CurrentBank = 0.35;
+            var rotatedImage = RotateImage(resizedImage, (float)CurrentBank, true, false, Color.Transparent);
 
-            // Draw the outline of the region.
-            Pen pen = Pens.Black;
-            var g = needle.CreateGraphics();
-            g.DrawPath(pen, gp);
+            // Add the clipped image to our instrument
+            var dstImage = ClipToCircle(rotatedImage, centre, 0.7f * (float)resizedImage.Width / 2.0f, Color.Transparent);
 
-            // Set the clipping region of the Graphics object.
-            g.SetClip(region, CombineMode.Replace);
+            needle.Image = dstImage;
 
         }
+
+        /// <summary>
+        /// Method to rotate an Image object. The result can be one of three cases:
+        /// - upsizeOk = true: output image will be larger than the input, and no clipping occurs 
+        /// - upsizeOk = false & clipOk = true: output same size as input, clipping occurs
+        /// - upsizeOk = false & clipOk = false: output same size as input, image reduced, no clipping
+        /// 
+        /// A background color must be specified, and this color will fill the edges that are not 
+        /// occupied by the rotated image. If color = transparent the output image will be 32-bit, 
+        /// otherwise the output image will be 24-bit.
+        /// 
+        /// Note that this method always returns a new Bitmap object, even if rotation is zero - in 
+        /// which case the returned object is a clone of the input object. 
+        /// </summary>
+        /// <param name="inputImage">input Image object, is not modified</param>
+        /// <param name="angleRadians">angle of rotation, in radians</param>
+        /// <param name="upsizeOk">see comments above</param>
+        /// <param name="clipOk">see comments above, not used if upsizeOk = true</param>
+        /// <param name="backgroundColor">color to fill exposed parts of the background</param>
+        /// <returns>new Bitmap object, may be larger than input image</returns>
+        public Bitmap RotateImage(Image inputImage, float angleRadians, bool upsizeOk,
+                                         bool clipOk, Color backgroundColor)
+        {
+            // Test for zero rotation and return a clone of the input image
+            if (angleRadians == 0f)
+                return (Bitmap)inputImage.Clone();
+
+            // Set up old and new image dimensions, assuming upsizing not wanted and clipping OK
+            float oldWidth = inputImage.Width;
+            float oldHeight = inputImage.Height;
+            int newWidth = (int)oldWidth;
+            int newHeight = (int)oldHeight;
+            float scaleFactor = 1f;
+
+            // If upsizing wanted or clipping not OK calculate the size of the resulting bitmap
+            if (upsizeOk || !clipOk)
+            {
+                //double angleRadians = angleDegrees * Math.PI / 180d;
+
+                double cos = Math.Abs(Math.Cos(angleRadians));
+                double sin = Math.Abs(Math.Sin(angleRadians));
+                newWidth = (int)Math.Round(oldWidth * cos + oldHeight * sin);
+                newHeight = (int)Math.Round(oldWidth * sin + oldHeight * cos);
+            }
+
+            // If upsizing not wanted and clipping not OK need a scaling factor
+            if (!upsizeOk && !clipOk)
+            {
+                scaleFactor = Math.Min((float)oldWidth / newWidth, (float)oldHeight / newHeight);
+                newWidth = (int)oldWidth;
+                newHeight = (int)oldHeight;
+            }
+
+            // Create the new bitmap object. If background color is transparent it must be 32-bit, 
+            //  otherwise 24-bit is good enough.
+            Bitmap newBitmap = new Bitmap((int)newWidth, (int)newHeight, backgroundColor == Color.Transparent ?
+                                             PixelFormat.Format32bppArgb : PixelFormat.Format24bppRgb);
+            newBitmap.SetResolution(inputImage.HorizontalResolution, inputImage.VerticalResolution);
+
+            // Create the Graphics object that does the work
+            using (Graphics graphicsObject = Graphics.FromImage(newBitmap))
+            {
+
+                graphicsObject.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphicsObject.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphicsObject.SmoothingMode = SmoothingMode.HighQuality;
+
+                // Fill in the specified background color if necessary
+                if (backgroundColor != Color.Transparent)
+                    graphicsObject.Clear(backgroundColor);
+
+                // Set up the built-in transformation matrix to do the rotation and maybe scaling
+                Matrix matrix = new Matrix();
+
+                // Rotate about image center point
+                matrix.RotateAt(20, new PointF(newWidth / 2f, newHeight / 2f));
+                var transformX = oldWidth / 2;
+                var transformY = oldHeight / 2;
+                matrix.Translate(transformX, transformY);
+                // Move the transform point back to the top left
+                //graphicsObject.TranslateTransform(-1*(newWidth - oldWidth), -1*(newHeight - oldHeight));
+
+                graphicsObject.Transform = matrix;
+                graphicsObject.DrawImage(newBitmap, new Point());
+                //graphicsObject.TranslateTransform(newWidth / 2f, newHeight / 2f);
+                if (scaleFactor != 1f)
+                    graphicsObject.ScaleTransform(scaleFactor, scaleFactor);
+
+                //graphicsObject.RotateTransform(angleRadians);
+                graphicsObject.TranslateTransform(-oldWidth / 2f, -oldHeight / 2f);
+
+                // Draw the result 
+                graphicsObject.DrawImage(inputImage, 0, 0);
+            }
+
+            return newBitmap;
+        }
+
+        private Image ClipToCircle(Image srcImage, PointF center, float radius, Color backGround)
+        {
+            Image dstImage = new Bitmap(srcImage.Width, srcImage.Height, srcImage.PixelFormat);
+
+            using (Graphics g = Graphics.FromImage(dstImage))
+            {
+                RectangleF r = new RectangleF(center.X - radius, center.Y - radius,
+                                                         radius * 2, radius * 2);
+
+                // enables smoothing of the edge of the circle (less pixelated)
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // fills background color
+                using (Brush br = new SolidBrush(backGround))
+                {
+                    g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
+                }
+
+                // adds the new ellipse & draws the image again 
+                GraphicsPath path = new GraphicsPath();
+                path.AddEllipse(r);
+                g.SetClip(path);
+                g.DrawImage(srcImage, 0, 0);
+
+                return dstImage;
+            }
+        }
+
         /// <summary>
         /// An array or list of SimVar (FS SDK Variables) this instrument needs.
         /// These values will be requsted and returned every time FS provides a new value for each.
