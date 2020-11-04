@@ -124,7 +124,7 @@ namespace CockpitDisplay
             catch { }
         }
 
-        internal void LoadLayout(string text)
+        public void LoadLayout(string text)
         {
             //this.SetStyle(ControlStyles.UserPaint, true);
             //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -249,6 +249,11 @@ namespace CockpitDisplay
         private static List<Assembly> LoadAvailableAssemblies()
         {
             DirectoryInfo dInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Plugins"));
+            if (!dInfo.Exists)
+            {
+                MessageBox.Show("Plugins folder doesn't exist", "Folder Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Assembly>();
+            }
             FileInfo[] files = dInfo.GetFiles("*.dll");
             List<Assembly> plugInAssemblyList = new List<Assembly>();
 
