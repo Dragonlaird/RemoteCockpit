@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace RemoteCockpitClasses.Generic_Instrument
 {
+    [DebuggerDisplay("\\{Configuration\\} {Name}")]
     public class Configuration
     {
         public string Name { get; set; }
+        public string Author { get; set; }
         public InstrumentType Type { get; set; }
         public DateTime CreateDate { get; set; }
         public string BackgroundImagePath { get; set; }

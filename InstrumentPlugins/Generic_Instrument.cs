@@ -18,6 +18,7 @@ namespace InstrumentPlugins
     public class Generic_Instrument : ICockpitInstrument
     {
         private Configuration config;
+        private string configPath;
         private System.Timers.Timer animateTimer;
         private double aspectRatio;
         private int controlTop = 0;
@@ -33,23 +34,31 @@ namespace InstrumentPlugins
 
         public Generic_Instrument(string filePath)
         {
-            var result = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(filePath));
+            configPath = filePath;
             Initialize();
         }
 
         private void Initialize()
         {
-            var imageFile = File.OpenRead(config.BackgroundImagePath);
-            var image = Image.FromStream(imageFile);
-            aspectRatio = (double)image.Height / image.Width;
-            var imageScaleFactor = controlHeight < controlWidth ? image.Width / controlWidth : controlHeight / image.Height;
-            var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
             Control = new Panel();
-            Control.Height = image.Height;
-            Control.Width = image.Width;
+            config = new Configuration();
+            try
+            {
+                config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configPath));
+                var imageFile = File.OpenRead(config.BackgroundImagePath);
+                var image = Image.FromStream(imageFile);
+                aspectRatio = (double)image.Height / image.Width;
+                var imageScaleFactor = controlHeight < controlWidth ? image.Width / controlWidth : controlHeight / image.Height;
+                var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
+                controlHeight = backgroundImage.Height;
+                controlWidth = backgroundImage.Width;
+                Control.BackgroundImage = backgroundImage;
+            }
+            catch { }
             Control.Top = controlTop;
             Control.Left = controlLeft;
-            Control.BackgroundImage = backgroundImage;
+            Control.Height = controlHeight;
+            Control.Width = controlWidth;
             lastResults = new List<ClientRequestResult>();
             foreach(var clientRequest in config.Animations.Select(x => x.Request))
             {
@@ -57,15 +66,45 @@ namespace InstrumentPlugins
             }
         }
 
+        public void LoadConfigFile(string filePath)
+        {
+            configPath = filePath;
+            Initialize();
+        }
+
         private bool disposedValue;
 
-        public IEnumerable<ClientRequest> RequiredValues { get; private set; }
+        public IEnumerable<ClientRequest> RequiredValues
+        {
+            get
+            {
+                return config?.ClientRequests;
+            }
+        }
 
-        public string[] Layouts { get; private set; }
+        public string[] Layouts
+        {
+            get
+            {
+                return config?.Aircraft;
+            }
+        }
 
-        public DateTime PluginDate { get; private set; }
+        public DateTime PluginDate
+        {
+            get
+            {
+                return config?.CreateDate ?? DateTime.MinValue;
+            }
+        }
 
-        public InstrumentType Type { get; private set; }
+        public InstrumentType Type
+        {
+            get
+            {
+                return config?.Type?? InstrumentType.Other;
+            }
+        }
 
         public Control Control { get; private set; }
 
