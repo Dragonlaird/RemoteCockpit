@@ -14,6 +14,14 @@ namespace RemoteCockpitClasses
         IEnumerable<ClientRequest> RequiredValues { get; }
 
         /// <summary>
+        /// Name of this plugin
+        /// </summary>
+        string Name { get; }
+        /// <summary>
+        /// Author of this plugin
+        /// </summary>
+        string Author { get; }
+        /// <summary>
         /// Called whenever one of the RequiredValues recieves an update
         /// </summary>
         /// <param name="value">SimVarRequestResult, containing SimVarRequest and Value</param>
