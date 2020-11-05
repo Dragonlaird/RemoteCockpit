@@ -307,6 +307,10 @@ namespace InstrumentPlugins
         /// </summary>
         public ISite Site { get; set; }
 
+        public string Name => "Generic Attitude Indicator";
+
+        public string Author => "Dragonlaird";
+
         /// <summary>
         /// Notify the cockpit form if the instrument is disposed.
         /// Not currently used by the cockpit form but retained for future use.

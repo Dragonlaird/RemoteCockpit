@@ -250,6 +250,10 @@ namespace InstrumentPlugins
 
         public ISite Site { get; set; }
 
+        public string Name => "Genereic Airspeed Indicator";
+
+        public string Author => "Dragonlaird";
+
         public event EventHandler Disposed;
 
         protected virtual void Dispose(bool disposing)

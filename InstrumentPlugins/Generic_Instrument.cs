@@ -60,7 +60,9 @@ namespace InstrumentPlugins
             Control.Height = controlHeight;
             Control.Width = controlWidth;
             lastResults = new List<ClientRequestResult>();
-            foreach(var clientRequest in config.Animations.Select(x => x.Request))
+            foreach (var clientRequest in config.Animations
+                .Where(x => x.Trigger.Type == AnimationTriggerType.ClientRequest)
+                .Select(x => ((AnimationTriggerClientRequest)x.Trigger).Request).Distinct())
             {
                 lastResults.Add(new ClientRequestResult { Request = clientRequest, Result = null });
             }
@@ -74,41 +76,21 @@ namespace InstrumentPlugins
 
         private bool disposedValue;
 
-        public IEnumerable<ClientRequest> RequiredValues
-        {
-            get
-            {
-                return config?.ClientRequests;
-            }
-        }
+        public IEnumerable<ClientRequest> RequiredValues => config?.ClientRequests;
 
-        public string[] Layouts
-        {
-            get
-            {
-                return config?.Aircraft;
-            }
-        }
+        public string[] Layouts => config?.Aircraft;
 
-        public DateTime PluginDate
-        {
-            get
-            {
-                return config?.CreateDate ?? DateTime.MinValue;
-            }
-        }
+        public DateTime PluginDate=> config?.CreateDate ?? DateTime.MinValue;
 
-        public InstrumentType Type
-        {
-            get
-            {
-                return config?.Type?? InstrumentType.Other;
-            }
-        }
+        public InstrumentType Type => config?.Type ?? InstrumentType.Other;
 
         public Control Control { get; private set; }
 
         public ISite Site { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public string Name => config?.Name;
+
+        public string Author => config?.Author;
 
         public event EventHandler Disposed;
 
@@ -123,7 +105,12 @@ namespace InstrumentPlugins
 
         public void ValueUpdate(ClientRequestResult value)
         {
-            throw new NotImplementedException();
+            var lastResult = lastResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
+            if (lastResult != null)
+            {
+                lastResult.Result = value.Result;
+                // Check if any animations use this ClientRequest, if so - set timer to perform update
+            }
         }
 
         protected virtual void Dispose(bool disposing)
@@ -133,6 +120,8 @@ namespace InstrumentPlugins
                 if (disposing)
                 {
                     config = null;
+                    lastResults?.Clear();
+                    lastResults = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

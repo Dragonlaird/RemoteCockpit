@@ -299,6 +299,10 @@ namespace InstrumentPlugins
             }
         }
 
+        public string Name => "Generic Altimeter";
+
+        public string Author => "Dragonlaird";
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

@@ -20,7 +20,9 @@ namespace RemoteCockpitClasses.Generic_Instrument
         {
             get
             {
-                return Animations?.Select(x => x.Request).Distinct().ToArray();
+                return Animations?
+                    .Where(x => x.Trigger.Type == AnimationTriggerType.ClientRequest)
+                    .Select(x => ((AnimationTriggerClientRequest)x.Trigger).Request).Distinct().ToArray();
             }
         }
 

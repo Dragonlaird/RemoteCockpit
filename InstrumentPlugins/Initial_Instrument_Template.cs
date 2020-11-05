@@ -99,6 +99,18 @@ namespace InstrumentPlugins
         public ISite Site { get; set; }
 
         /// <summary>
+        /// Name of the instrument this plugin generates
+        /// Typically the type of instrument this control creates and aircraft it can be used on
+        /// e.g. Airspeed Indicator for Cessna 152
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Name of the organisation or person who created this instrument plugin
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
         /// Notify the cockpit form if the instrument is disposed.
         /// Not currently used by the cockpit form but retained for future use.
         /// </summary>
