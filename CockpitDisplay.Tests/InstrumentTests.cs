@@ -17,7 +17,13 @@ namespace CockpitDisplay.Tests
 
         private Configuration GetConfiguration()
         {
-            var config = new Configuration();
+            var config = new Configuration
+            {
+                Name = "Test Instrument for all aircraft",
+                Author = "Dragonlaird",
+                Aircraft = new string[] { "" },
+                Type = InstrumentType.Airspeed_Indicator
+            };
 
             return config;
         }
