@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RemoteCockpitClasses
+namespace RemoteCockpitClasses.Generic_Instrument
 {
     public interface IAnimationTrigger
     {
-        AnimationTriggerType Type { get; set; }
+        AnimationTriggerTypeEnum Type { get; set; }
     }
 }

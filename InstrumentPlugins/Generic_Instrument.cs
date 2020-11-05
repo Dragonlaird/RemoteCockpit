@@ -30,21 +30,30 @@ namespace InstrumentPlugins
         public Generic_Instrument()
         {
             config = new Configuration();
+            configPath = null;
         }
 
         public Generic_Instrument(string filePath)
         {
             configPath = filePath;
+            config = null;
+            Initialize();
+        }
+
+        public Generic_Instrument(Configuration configuration)
+        {
+            config = configuration;
+            configPath = null;
             Initialize();
         }
 
         private void Initialize()
         {
             Control = new Panel();
-            config = new Configuration();
             try
             {
-                config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configPath));
+                if (!string.IsNullOrEmpty(configPath))
+                    config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configPath));
                 var imageFile = File.OpenRead(config.BackgroundImagePath);
                 var image = Image.FromStream(imageFile);
                 aspectRatio = (double)image.Height / image.Width;
@@ -61,7 +70,7 @@ namespace InstrumentPlugins
             Control.Width = controlWidth;
             lastResults = new List<ClientRequestResult>();
             foreach (var clientRequest in config.Animations
-                .Where(x => x.Trigger.Type == AnimationTriggerType.ClientRequest)
+                .Where(x => x.Trigger.Type == AnimationTriggerTypeEnum.ClientRequest)
                 .Select(x => ((AnimationTriggerClientRequest)x.Trigger).Request).Distinct())
             {
                 lastResults.Add(new ClientRequestResult { Request = clientRequest, Result = null });

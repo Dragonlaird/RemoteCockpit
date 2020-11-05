@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RemoteCockpitClasses
+namespace RemoteCockpitClasses.Generic_Instrument
 {
-    public enum AnimationTriggerType
+    public enum AnimationTriggerTypeEnum
     {
         Timer,
         ClientRequest

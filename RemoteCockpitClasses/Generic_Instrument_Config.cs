@@ -21,7 +21,7 @@ namespace RemoteCockpitClasses.Generic_Instrument
             get
             {
                 return Animations?
-                    .Where(x => x.Trigger.Type == AnimationTriggerType.ClientRequest)
+                    .Where(x => x.Trigger.Type == AnimationTriggerTypeEnum.ClientRequest)
                     .Select(x => ((AnimationTriggerClientRequest)x.Trigger).Request).Distinct().ToArray();
             }
         }
