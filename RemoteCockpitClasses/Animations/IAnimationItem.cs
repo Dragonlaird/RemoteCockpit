@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RemoteCockpitClasses.Generic_Instrument
+namespace RemoteCockpitClasses.Animations
 {
     public interface IAnimationItem
     {
-        AnimationItemTypeEnum Type { get; set; }
+        AnimationItemTypeEnum Type { get; }
+        string Name { get; set; }
     }
 }

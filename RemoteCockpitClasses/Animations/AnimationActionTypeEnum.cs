@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RemoteCockpitClasses.Generic_Instrument
+namespace RemoteCockpitClasses.Animations
 {
     public enum AnimationActionTypeEnum
     {

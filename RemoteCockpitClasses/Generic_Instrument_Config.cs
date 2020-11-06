@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace RemoteCockpitClasses.Generic_Instrument
+namespace RemoteCockpitClasses.Animations
 {
     [DebuggerDisplay("\\{Configuration\\} {Name}")]
     public class Configuration

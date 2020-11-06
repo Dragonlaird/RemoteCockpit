@@ -4,8 +4,10 @@ using System.Text;
 
 namespace RemoteCockpitClasses.Animations
 {
-    public interface IAnimationAction
+    public enum AnimationScaleMethodEnum
     {
-        AnimationTriggerTypeEnum Type { get; set; }
+        None,
+        ScaleToBackground,
+        ScaleToSelf
     }
 }

@@ -88,6 +88,7 @@
     <None Include="Resources\Attitude Indicator Gimbal.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Backgrounds\Airspeed_Background.png" />
     <Content Include="engine_speed.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
