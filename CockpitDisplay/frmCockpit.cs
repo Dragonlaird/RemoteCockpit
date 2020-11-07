@@ -163,7 +163,7 @@ namespace CockpitDisplay
             }
             var layoutInstruments = new List<ICockpitInstrument>();
             layoutInstruments.AddRange(instrumentPlugins
-                .Where(x => !string.IsNullOrEmpty(text) && x.Layouts.Contains(layoutDefinition.Name) && layoutDefinition.InstrumentTypes.Contains(x.Type)).GroupBy(
+                .Where(x => !string.IsNullOrEmpty(text) && x.Layouts != null && x.Layouts.Contains(layoutDefinition.Name) && layoutDefinition.InstrumentTypes.Contains(x.Type)).GroupBy(
                 x => x.Type,
                 x => x.PluginDate,
                     (baseType, ages) => new
@@ -174,7 +174,7 @@ namespace CockpitDisplay
                         Max = ages.Max()
                     })
                 .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
-            layoutInstruments.AddRange(instrumentPlugins.Where(x => x.Layouts.Contains("") && layoutDefinition.InstrumentTypes.Contains(x.Type) && !layoutInstruments.Any(y => y.Type == x.Type)).GroupBy(
+            layoutInstruments.AddRange(instrumentPlugins.Where(x => x.Layouts != null && x.Layouts.Contains("") && layoutDefinition.InstrumentTypes.Contains(x.Type) && !layoutInstruments.Any(y => y.Type == x.Type)).GroupBy(
                 x => x.Type,
                 x => x.PluginDate,
                     (baseType, ages) => new

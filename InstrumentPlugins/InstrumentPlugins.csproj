@@ -88,6 +88,9 @@
     <None Include="Resources\Attitude Indicator Gimbal.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CockpitBackgrounds\Cockpit_Background.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="InstrumentBackgrounds\Airspeed_Background.png" />
     <Content Include="engine_speed.xml" />
   </ItemGroup>

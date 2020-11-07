@@ -9,6 +9,7 @@ using InstrumentPlugins;
 using System.Windows.Forms;
 using RemoteCockpitClasses.Animations;
 using System.Drawing;
+using System.IO;
 
 namespace CockpitDisplay.Tests
 {
@@ -66,6 +67,14 @@ namespace CockpitDisplay.Tests
             return config;
         }
 
+        private Image LoadImage(string imagePath, double scaleFactor)
+        {
+            var imageFile = File.OpenRead(imagePath);
+            var image = Image.FromStream(imageFile);
+            var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
+            return resizedImage;
+        }
+
         //private PointF GetPoint(double length, double angleInDegrees)
         //{
         //    return new PointF((float)(length * Math.Sin(ConvertToRadians(angleInDegrees))), (float)(length * Math.Cos(ConvertToRadians(angleInDegrees))));
@@ -91,9 +100,11 @@ namespace CockpitDisplay.Tests
         public void CreateGeneriAirspeedcInstrument()
         {
             Form testForm = new Form();
+            var scaleFactor = testForm.Width < testForm.Height ? testForm.Width / testForm.Height : testForm.Height / testForm.Width;
             instrument = new Generic_Instrument(GetConfiguration());
             instrument.SetLayout(50, 50, 200, 200);
             var clientRequest = instrument.RequiredValues;
+            testForm.BackgroundImage = LoadImage(".\\CockpitBackgrounds\\Cockpit_Background.jpg", scaleFactor);
             testForm.Controls.Add(instrument.Control);
             testForm.Invalidate();
             testForm.Show();

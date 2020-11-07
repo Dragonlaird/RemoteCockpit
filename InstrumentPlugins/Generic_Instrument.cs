@@ -64,6 +64,7 @@ namespace InstrumentPlugins
                 var backgroundImage = LoadImage(config.BackgroundImagePath); //new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
                 controlHeight = backgroundImage.Height;
                 controlWidth = backgroundImage.Width;
+                Control.BackColor = Color.Transparent;
                 Control.BackgroundImage = backgroundImage;
             }
             catch(Exception ex) { }
