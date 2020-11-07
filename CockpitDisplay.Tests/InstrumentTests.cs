@@ -31,21 +31,20 @@ namespace CockpitDisplay.Tests
                     new AnimationDrawing
                     {
                             Name = "Needle",
-                            PointMap = new PointF[]
+                            PointMap = new AnimationPoint[]
                             {
-                                GetPoint(0, 0),
-                                GetPoint(1.5, 1.5),
-                                GetPoint(-24, 4),
-                                GetPoint(-30, 0),
-                                GetPoint(-24, -4),
-                                GetPoint(-1.5, -1.5)
+                                new AnimationPoint(0, 0),
+                                new AnimationPoint(-1.25f, -1.25f),
+                                new AnimationPoint(-2.5f, 20.0f),
+                                new AnimationPoint(0, 27.0f),
+                                new AnimationPoint(2.5f, 20.0f),
+                                new AnimationPoint(1.25f, -1.25f)
                             },
                             RelativeX = 50,
                             RelativeY = 50,
-                            FillColor = Color.SkyBlue,
+                            FillColor = Color.CornflowerBlue,
                             FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
                             ScaleMethod = AnimationScaleMethodEnum.Percent,
-                            ScaleSize = 0.4,
                             Triggers = new List<IAnimationTrigger>{
                                 new AnimationTriggerClientRequest
                                 {
@@ -67,19 +66,19 @@ namespace CockpitDisplay.Tests
             return config;
         }
 
-        private PointF GetPoint(double length, double angleInDegrees)
-        {
-            return new PointF((float)(length * Math.Sin(ConvertToRadians(angleInDegrees))), (float)(length * Math.Cos(ConvertToRadians(angleInDegrees))));
-        }
+        //private PointF GetPoint(double length, double angleInDegrees)
+        //{
+        //    return new PointF((float)(length * Math.Sin(ConvertToRadians(angleInDegrees))), (float)(length * Math.Cos(ConvertToRadians(angleInDegrees))));
+        //}
 
-        private double ConvertToRadians(double angle)
-        {
-            while (angle < 0)
-                angle += 360;
-            while (angle >= 360)
-                angle -= 360;
-            return 0.01745 * angle;
-        }
+        //private double ConvertToRadians(double angle)
+        //{
+        //    while (angle < 0)
+        //        angle += 360;
+        //    while (angle >= 360)
+        //        angle -= 360;
+        //    return 0.01745 * angle;
+        //}
 
         [TestMethod]
         public void CreateAltimeter()

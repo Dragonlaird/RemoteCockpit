@@ -211,12 +211,12 @@ namespace InstrumentPlugins
                     // Resize image using the current scale 
                     absoluteX = imageHolder.Width * item.RelativeX / (float)100;
                     absoluteY = imageHolder.Height * item.RelativeY / (float)100;
-                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)scaleFactor, (float)(imageHolder.Width > imageHolder.Height ? imageHolder.Height : imageHolder.Width));
+                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)imageHolder.Width < imageHolder.Height ? imageHolder.Width : imageHolder.Height);
                 }
                 if(item.ScaleMethod == AnimationScaleMethodEnum.None)
                 {
                     // Use unmodified dimensions (no scaling)
-                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, 1.0f, (float)(imageHolder.Width > imageHolder.Height ? imageHolder.Height : imageHolder.Width));
+                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)imageHolder.Width < imageHolder.Height ? imageHolder.Width : imageHolder.Height);
                 }
                 gp.AddLines(points);
                 graph.FillPath(pen.Brush, gp);
@@ -225,15 +225,17 @@ namespace InstrumentPlugins
             return null;
         }
 
-        public PointF[] RemapPoints(PointF[] points, float absoluteX, float absoluteY, float scale, float baseSize)
+        public PointF[] RemapPoints(AnimationPoint[] points, float absoluteX, float absoluteY, float imageSize)
         {
             List<PointF> remappedPoints = new List<PointF>();
-            foreach(var point in points)
+            var onePercentInPixelsX = imageSize / 100;
+            var onePercentInPixelsY = imageSize / 100;
+            foreach (var point in points)
             {
                 remappedPoints.Add(new PointF
                 {
-                    X = point.X * scale * baseSize + absoluteX, //(point.X * scaleX) + absoluteX,
-                    Y = point.Y * scale * baseSize + absoluteY //(point.Y * scaleY) + absoluteY
+                    X = point.Point.X * onePercentInPixelsX + absoluteX, //(point.X * scaleX) + absoluteX,
+                    Y = point.Point.Y * onePercentInPixelsY + absoluteY //(point.Y * scaleY) + absoluteY
                 });
             }
             return remappedPoints.ToArray();
