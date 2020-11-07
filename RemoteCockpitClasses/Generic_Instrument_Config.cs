@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace RemoteCockpitClasses.Animations
@@ -15,14 +16,17 @@ namespace RemoteCockpitClasses.Animations
         public DateTime CreateDate { get; set; }
         public string BackgroundImagePath { get; set; }
         public string [] Aircraft { get; set; }
-        public Animation[] Animations { get; set; }
+        public IAnimationItem[] Animations { get; set; }
         public ClientRequest[] ClientRequests
         {
             get
             {
-                return Animations?
-                    .Where(x => x.Trigger.Type == AnimationTriggerTypeEnum.ClientRequest)
-                    .Select(x => ((AnimationTriggerClientRequest)x.Trigger).Request).Distinct().ToArray();
+                return Animations
+                    .Where(x => x.Triggers?.Any(y => y.Type == AnimationTriggerTypeEnum.ClientRequest) == true)
+                    .SelectMany(x => x.Triggers?
+                        .Where(y => y.Type == AnimationTriggerTypeEnum.ClientRequest)
+                        .Select(y => ((AnimationTriggerClientRequest)y).Request))
+                    .ToArray();
             }
         }
 

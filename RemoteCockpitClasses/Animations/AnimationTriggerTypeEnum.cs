@@ -7,6 +7,7 @@ namespace RemoteCockpitClasses.Animations
     public enum AnimationTriggerTypeEnum
     {
         Timer,
-        ClientRequest
+        ClientRequest,
+        MouseClick
     }
 }

@@ -23,41 +23,45 @@ namespace CockpitDisplay.Tests
             {
                 Name = "Test Instrument for all aircraft",
                 Author = "Dragonlaird",
-                Aircraft = new string[] { "" },
+                Aircraft = new string[] { "Cessna 152 ASOBO" },
                 Type = InstrumentType.Airspeed_Indicator,
                 BackgroundImagePath = ".\\Backgrounds\\Airspeed_Indicator.png",
-                Animations = new Animation[]
+                Animations = new IAnimationItem[]
                 {
-                    new Animation
+                    new AnimationDrawing
                     {
-                        Item = new AnimationDrawing
-                        {
                             Name = "Needle",
                             PointMap = new PointF[]
                             {
-                                GetPoint(30 / 20, 0 - 110),
-                                GetPoint(30 * 0.8, 0 - 4),
-                                GetPoint(30, 0),
-                                GetPoint(30 * 0.8, 0 + 4),
-                                GetPoint(30 / 20, 0 + 110)
+                                GetPoint(0, 0),
+                                GetPoint(1.5, 1.5),
+                                GetPoint(-24, 4),
+                                GetPoint(-30, 0),
+                                GetPoint(-24, -4),
+                                GetPoint(-1.5, -1.5)
                             },
                             RelativeX = 50,
                             RelativeY = 50,
                             FillColor = Color.SkyBlue,
                             FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
-                            ScaleMethod = AnimationScaleMethodEnum.ScaleToBackground,
-                            ScaleSize = 0.4
-                        },
-                        Trigger = new AnimationTriggerClientRequest
-                        {
-                            Type = AnimationTriggerTypeEnum.ClientRequest,
-                            Request = new ClientRequest
-                            {
-                                Name = "INDICATED AIRSPEED", Unit = "knots"
+                            ScaleMethod = AnimationScaleMethodEnum.Percent,
+                            ScaleSize = 0.4,
+                            Triggers = new List<IAnimationTrigger>{
+                                new AnimationTriggerClientRequest
+                                {
+                                    Type = AnimationTriggerTypeEnum.ClientRequest,
+                                    Request = new ClientRequest
+                                    {
+                                        Name = "INDICATED AIRSPEED", Unit = "knots"
+                                    },
+                                    Actions = new List<IAnimationAction>
+                                    {
+
+                                    }
+                                }
                             }
-                        }
+                        },
                     }
-                }
             };
 
             return config;
@@ -90,6 +94,7 @@ namespace CockpitDisplay.Tests
             Form testForm = new Form();
             instrument = new Generic_Instrument(GetConfiguration());
             instrument.SetLayout(50, 50, 200, 200);
+            var clientRequest = instrument.RequiredValues;
             testForm.Controls.Add(instrument.Control);
             testForm.Invalidate();
             testForm.Show();

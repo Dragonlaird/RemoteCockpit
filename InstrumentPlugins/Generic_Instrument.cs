@@ -26,7 +26,9 @@ namespace InstrumentPlugins
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
-        private List<ClientRequestResult> lastResults = new List<ClientRequestResult>();
+        private double scaleFactor = 1;
+        private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
+        private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
 
         public Generic_Instrument()
         {
@@ -55,11 +57,11 @@ namespace InstrumentPlugins
             {
                 if (!string.IsNullOrEmpty(configPath))
                     config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configPath));
-                var imageFile = File.OpenRead(config.BackgroundImagePath);
-                var image = Image.FromStream(imageFile);
+                scaleFactor = 1.0;
+                var image = LoadImage(config.BackgroundImagePath);
                 aspectRatio = (double)image.Height / image.Width;
-                var imageScaleFactor = controlHeight < controlWidth ? (double)controlWidth / image.Width : (double)controlHeight / image.Height;
-                var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
+                scaleFactor = controlHeight < controlWidth ? (double)controlWidth / image.Width : (double)controlHeight / image.Height;
+                var backgroundImage = LoadImage(config.BackgroundImagePath); //new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
                 controlHeight = backgroundImage.Height;
                 controlWidth = backgroundImage.Width;
                 Control.BackgroundImage = backgroundImage;
@@ -69,14 +71,13 @@ namespace InstrumentPlugins
             Control.Left = controlLeft;
             Control.Height = controlHeight;
             Control.Width = controlWidth;
-            lastResults = new List<ClientRequestResult>();
+            previousResults = new List<ClientRequestResult>();
             if (config.Animations != null)
             {
-                foreach (var clientRequest in config.Animations
-                    .Where(x => x?.Trigger?.Type == AnimationTriggerTypeEnum.ClientRequest)
-                    .Select(x => ((AnimationTriggerClientRequest)x?.Trigger)?.Request).Distinct())
+                foreach (var clientRequest in config?.ClientRequests)
                 {
-                    lastResults.Add(new ClientRequestResult { Request = clientRequest, Result = (object)null });
+                    previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (object)-1 });
+                    currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (object)0 });
                 }
                 Control.Paint += PaintControl;
                 Control.Invalidate();
@@ -89,48 +90,107 @@ namespace InstrumentPlugins
             //throw new NotImplementedException();
             if(config?.Animations != null)
             {
-                Image image = null;
+                //Image image = null;
                 // We have a foreground to update
                 foreach(var animation in config.Animations)
                 {
-                    if(animation.Item.Type == AnimationItemTypeEnum.Drawing)
-                    {
-                        image = DrawPoints((AnimationDrawing)animation.Item);
+                    foreach (var trigger in animation.Triggers) {
+                        //if (animation.Type == AnimationItemTypeEnum.Drawing)
+                        //{
+                        //    image = DrawPoints((AnimationDrawing)animation);
+                        //}
+                        //if (animation.Type == AnimationItemTypeEnum.Image)
+                        //{
+                        //    image = LoadImage(((AnimationImage)animation).ImagePath);
+                        //}
+                        var imagePanel = new Panel();
+                        imagePanel.Width = Control.Width;
+                        imagePanel.Height = Control.Height;
+                        imagePanel.Name = animation.Name;
+                        imagePanel.BackColor = Color.Transparent;
+                        //imagePanel.BackgroundImage = image;
+                        imagePanel.Paint += PaintAnimation;
+                        if (!Control.Controls.ContainsKey(animation.Name))
+                        {
+                            //Control.Controls.RemoveByKey(animation.Name);
+                            Control.Controls.Add(imagePanel);
+                            PaintAnimation(imagePanel, new PaintEventArgs(imagePanel.CreateGraphics(), imagePanel.DisplayRectangle));
+                        }
+                        imagePanel.Invalidate();
+                        imagePanel.BringToFront();
                     }
-                    if(animation.Item.Type == AnimationItemTypeEnum.Image)
-                    {
-                        image = LoadImage((AnimationImage)animation.Item);
-                    }
-                    var picture = new PictureBox();
-                    picture.Name = animation.Item.Name;
-                    picture.Image = image;
-                    if (Control.Controls[animation.Item.Name] != null)
-                        Control.Controls.RemoveByKey(animation.Item.Name);
-                    Control.Controls.Add(picture);
                 }
+                /*
+                var g = Control.CreateGraphics();
+                foreach (Control c in Control.Controls)
+                {
+                    if (c.Bounds.IntersectsWith(Control.Bounds) && c.Visible)
+                    {
+                        // Load appearance of underlying control and redraw it on this background
+                        Bitmap bmp = new Bitmap(c.Width, c.Height, g);
+                        c.DrawToBitmap(bmp, c.ClientRectangle);
+                        g.TranslateTransform(c.Left - Control.Left, c.Top - Control.Top);
+                        g.DrawImageUnscaled(bmp, Point.Empty);
+                        g.TranslateTransform(Control.Left - c.Left, Control.Top - c.Top);
+                        bmp.Dispose();
+                    }
+                }
+                */
             }
         }
 
-        private Image LoadImage(AnimationImage item)
+        private void PaintAnimation(object sender, PaintEventArgs e)
         {
-            var imageFile = File.OpenRead(item.ImagePath);
+            var animationName = ((Control)sender).Name;
+            // Repaint Animation Image here - if not already upto date
+            var animation = config.Animations.First(x => x.Name == animationName);
+            bool redrawImage = false;
+            foreach (var trigger in animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest))
+            {
+                var clientRequest = ((AnimationTriggerClientRequest)trigger).Request;
+                var previousResult = previousResults.First(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit);
+                var currentResult = currentResults.First(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit);
+                if (previousResult.Result?.ToString() != currentResult.Result?.ToString())
+                {
+                    redrawImage = true;
+                    break;
+                }
+            }
+            if (redrawImage)
+            {
+
+                // Attribute least 1 ClientRequest has been updated - redraw the image using new value
+                var panel = Control.Controls[animationName];
+                Image image = null;
+                if (animation.Type == AnimationItemTypeEnum.Drawing)
+                {
+                    image = DrawPoints((AnimationDrawing)animation);
+                }
+                if (animation.Type == AnimationItemTypeEnum.Image)
+                {
+                    image = LoadImage(((AnimationImage)animation).ImagePath);
+                }
+                ((Control)sender).BackgroundImage = image;
+                // Record the new value so we don't redraw again
+            }
+        }
+
+        private Image LoadImage(string imagePath)
+        {
+            var imageFile = File.OpenRead(imagePath);
             var image = Image.FromStream(imageFile);
-            var imageScaleFactor = (double)Control.Width / image.Width;
             aspectRatio = (double)image.Height / image.Width;
-            if (image.Height * imageScaleFactor > Control.Height)
-                imageScaleFactor = (double)Control.Height / image.Height;
-            var resizedImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
+            var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
             return resizedImage;
         }
 
         private Image DrawPoints(AnimationDrawing item)
         {
-            var points = item.PointMap;
-            if (points?.Count() > 0)
+            if (item.PointMap?.Count() > 0)
             {
                 var imageHolder = new PictureBox();
-                imageHolder.Top = 0;
-                imageHolder.Left = 0;
+                //imageHolder.Top = 0;
+                //imageHolder.Left = 0;
                 imageHolder.Height = Control.Height;
                 imageHolder.Width = Control.Width;
                 imageHolder.Enabled = false;
@@ -143,27 +203,37 @@ namespace InstrumentPlugins
                 graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 GraphicsPath gp = new GraphicsPath();
-                var absoluteX = imageHolder.Width * (float)100 / item.RelativeX;
-                var absoluteY = imageHolder.Height * (float)100 / item.RelativeY;
-                var scaleX = item.ScaleSize * imageHolder.Width / absoluteX;
-                var scaleY = item.ScaleSize * imageHolder.Height / absoluteY;
-
-                gp.AddLines(RemapPoints(points, (float)absoluteX, (float)absoluteY, (float)scaleX, (float)scaleY));
+                double absoluteX = item.RelativeX;
+                double absoluteY = item.RelativeY;
+                PointF[] points = null;
+                if (item.ScaleMethod == AnimationScaleMethodEnum.Percent)
+                {
+                    // Resize image using the current scale 
+                    absoluteX = imageHolder.Width * item.RelativeX / (float)100;
+                    absoluteY = imageHolder.Height * item.RelativeY / (float)100;
+                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)scaleFactor, (float)(imageHolder.Width > imageHolder.Height ? imageHolder.Height : imageHolder.Width));
+                }
+                if(item.ScaleMethod == AnimationScaleMethodEnum.None)
+                {
+                    // Use unmodified dimensions (no scaling)
+                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, 1.0f, (float)(imageHolder.Width > imageHolder.Height ? imageHolder.Height : imageHolder.Width));
+                }
+                gp.AddLines(points);
                 graph.FillPath(pen.Brush, gp);
                 return bitmap;
             }
             return null;
         }
 
-        public PointF[] RemapPoints(PointF[] points, float absoluteX, float absoluteY, float scaleX, float scaleY)
+        public PointF[] RemapPoints(PointF[] points, float absoluteX, float absoluteY, float scale, float baseSize)
         {
             List<PointF> remappedPoints = new List<PointF>();
             foreach(var point in points)
             {
                 remappedPoints.Add(new PointF
                 {
-                    X = (point.X * scaleX) + absoluteX,
-                    Y = (point.Y * scaleY) + absoluteY
+                    X = point.X * scale * baseSize + absoluteX, //(point.X * scaleX) + absoluteX,
+                    Y = point.Y * scale * baseSize + absoluteY //(point.Y * scaleY) + absoluteY
                 });
             }
             return remappedPoints.ToArray();
@@ -206,9 +276,12 @@ namespace InstrumentPlugins
 
         public void ValueUpdate(ClientRequestResult value)
         {
-            var lastResult = lastResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
+            var lastResult = previousResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
+            var currenResult = currentResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
             if (lastResult != null)
             {
+                if (currentResults != null)
+                    lastResult.Result = currenResult.Result;
                 lastResult.Result = value.Result;
                 // Check if any animations use this ClientRequest, if so - set timer to perform update
             }
@@ -221,8 +294,10 @@ namespace InstrumentPlugins
                 if (disposing)
                 {
                     config = null;
-                    lastResults?.Clear();
-                    lastResults = null;
+                    previousResults?.Clear();
+                    previousResults = null;
+                    currentResults?.Clear();
+                    currentResults = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

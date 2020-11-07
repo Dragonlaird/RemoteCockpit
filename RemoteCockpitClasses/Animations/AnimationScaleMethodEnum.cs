@@ -7,7 +7,6 @@ namespace RemoteCockpitClasses.Animations
     public enum AnimationScaleMethodEnum
     {
         None,
-        ScaleToBackground,
-        ScaleToSelf
+        Percent
     }
 }

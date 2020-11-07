@@ -19,5 +19,6 @@ namespace RemoteCockpitClasses.Animations
         public double ScaleSize { get; set; }
         public double RelativeX { get; set; }
         public double RelativeY { get; set; }
+        public IEnumerable<IAnimationTrigger> Triggers { get; set; }
     }
 }

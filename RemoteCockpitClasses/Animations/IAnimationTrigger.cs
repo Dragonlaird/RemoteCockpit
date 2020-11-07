@@ -7,5 +7,6 @@ namespace RemoteCockpitClasses.Animations
     public interface IAnimationTrigger
     {
         AnimationTriggerTypeEnum Type { get; set; }
+        IEnumerable<IAnimationAction> Actions { get; set; }
     }
 }

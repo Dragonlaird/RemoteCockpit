@@ -8,5 +8,6 @@ namespace RemoteCockpitClasses.Animations
     {
         public AnimationTriggerTypeEnum Type { get { return AnimationTriggerTypeEnum.ClientRequest; } set { } }
         public ClientRequest Request { get; set; }
+        public IEnumerable<IAnimationAction> Actions { get; set; }
     }
 }
