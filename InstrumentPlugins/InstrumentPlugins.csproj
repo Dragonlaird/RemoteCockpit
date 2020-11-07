@@ -56,6 +56,9 @@
     </Compile>
     <Compile Include="Generic_Attitude_Indicator.cs" />
     <Compile Include="Initial_Instrument_Template.cs" />
+    <Compile Include="InstrumentPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +75,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GenericInstruments\Cessna_152_Altimeter.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\Needle.png" />
   </ItemGroup>
@@ -91,8 +97,13 @@
     <Content Include="CockpitBackgrounds\Cockpit_Background.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="InstrumentBackgrounds\Airspeed_Background.png" />
+    <Content Include="InstrumentBackgrounds\Airspeed_Background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="engine_speed.xml" />
+    <Content Include="InstrumentBackgrounds\Cessna_152_Airspeed_Indicator.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InstrumentConfigurations\" />

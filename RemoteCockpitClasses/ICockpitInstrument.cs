@@ -30,7 +30,7 @@ namespace RemoteCockpitClasses
         /// Cockpit Layouts this can be used on.
         /// An empty string means it can be used on any Cockpit Layout (not too useful)
         /// </summary>
-        string [] Layouts { get; }
+        string [] Aircraft { get; }
         /// <summary>
         /// Date this CockpitInstrument was created (not published or updated).
         /// Newest date is used in preference over generic Cockpit Instruments, for specified Cockpit Layouts

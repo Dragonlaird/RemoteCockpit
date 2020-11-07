@@ -49,7 +49,7 @@ namespace InstrumentPlugins
         /// <summary>
         /// A simple array of FS Aircraft names that this instrument can be used with.
         /// </summary>
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {

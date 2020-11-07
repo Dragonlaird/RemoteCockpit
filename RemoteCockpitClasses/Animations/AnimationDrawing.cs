@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Newtonsoft.Json;
 
 namespace RemoteCockpitClasses.Animations
 {
@@ -18,6 +19,7 @@ namespace RemoteCockpitClasses.Animations
         public AnimationScaleMethodEnum ScaleMethod { get; set; }
         public double RelativeX { get; set; }
         public double RelativeY { get; set; }
+        [JsonConverter(typeof(ConcreteConverter<List<AnimationTriggerClientRequest>>))]
         public IEnumerable<IAnimationTrigger> Triggers { get; set; }
     }
 }

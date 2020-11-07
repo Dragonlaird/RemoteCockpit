@@ -37,7 +37,7 @@ namespace InstrumentPlugins
         {
             if (control == null)
             {
-                control = new PictureBox();
+                control = new Panel();
                 control.Name = "Generic_Airspeed_Indicator";
                 control.Top = controlTop;
                 control.Left = controlLeft;
@@ -216,7 +216,7 @@ namespace InstrumentPlugins
             }
         }
 
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {

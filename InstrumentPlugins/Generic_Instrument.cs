@@ -13,6 +13,9 @@ using System.IO;
 using System.Drawing;
 using RemoteCockpitClasses.Animations;
 using System.Drawing.Drawing2D;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Drawing.Imaging;
 
 namespace InstrumentPlugins
 {
@@ -20,7 +23,6 @@ namespace InstrumentPlugins
     {
         private Configuration config;
         private string configPath;
-        private System.Timers.Timer animateTimer;
         private double aspectRatio;
         private int controlTop = 0;
         private int controlLeft = 0;
@@ -29,6 +31,9 @@ namespace InstrumentPlugins
         private double scaleFactor = 1;
         private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
+        private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
+        private List<double> animationSpeed = new List<double>();
+        private delegate void SafeUpdateDelegate(Control ctrl);
 
         public Generic_Instrument()
         {
@@ -73,12 +78,17 @@ namespace InstrumentPlugins
             Control.Height = controlHeight;
             Control.Width = controlWidth;
             previousResults = new List<ClientRequestResult>();
-            if (config.Animations != null)
+            currentResults = new List<ClientRequestResult>();
+            animateTimers = new List<System.Timers.Timer>();
+            animationSpeed = new List<double>();
+            if (config?.Animations != null)
             {
                 foreach (var clientRequest in config?.ClientRequests)
                 {
-                    previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (object)-1 });
-                    currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (object)0 });
+                    currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
+                    previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
+                    animateTimers.Add(null);
+                    animationSpeed.Add(0);
                 }
                 Control.Paint += PaintControl;
                 Control.Invalidate();
@@ -105,10 +115,12 @@ namespace InstrumentPlugins
                         //    image = LoadImage(((AnimationImage)animation).ImagePath);
                         //}
                         var imagePanel = new Panel();
+                        
                         imagePanel.Width = Control.Width;
                         imagePanel.Height = Control.Height;
                         imagePanel.Name = animation.Name;
-                        imagePanel.BackColor = Color.Transparent;
+                        //imagePanel.BackColor = Color.Transparent;
+                        //imagePanel.Opacity = 0;
                         //imagePanel.BackgroundImage = image;
                         imagePanel.Paint += PaintAnimation;
                         if (!Control.Controls.ContainsKey(animation.Name))
@@ -159,7 +171,6 @@ namespace InstrumentPlugins
             }
             if (redrawImage)
             {
-
                 // Attribute least 1 ClientRequest has been updated - redraw the image using new value
                 var panel = Control.Controls[animationName];
                 Image image = null;
@@ -169,7 +180,7 @@ namespace InstrumentPlugins
                 }
                 if (animation.Type == AnimationItemTypeEnum.Image)
                 {
-                    image = LoadImage(((AnimationImage)animation).ImagePath);
+                    image = LoadImage(((AnimationImage)(IAnimationItem)animation).ImagePath);
                 }
                 ((Control)sender).BackgroundImage = image;
                 // Record the new value so we don't redraw again
@@ -178,7 +189,8 @@ namespace InstrumentPlugins
 
         private Image LoadImage(string imagePath)
         {
-            var imageFile = File.OpenRead(imagePath);
+            var diretory = Directory.GetCurrentDirectory();
+            var imageFile = File.OpenRead(new Uri(Path.Combine(diretory,imagePath)).AbsolutePath);
             var image = Image.FromStream(imageFile);
             aspectRatio = (double)image.Height / image.Width;
             var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
@@ -252,7 +264,7 @@ namespace InstrumentPlugins
 
         public IEnumerable<ClientRequest> RequiredValues => config?.ClientRequests;
 
-        public string[] Layouts => config?.Aircraft;
+        public string[] Aircraft => config?.Aircraft;
 
         public DateTime PluginDate=> config?.CreateDate ?? DateTime.MinValue;
 
@@ -280,13 +292,235 @@ namespace InstrumentPlugins
         public void ValueUpdate(ClientRequestResult value)
         {
             var lastResult = previousResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
-            var currenResult = currentResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
             if (lastResult != null)
             {
-                if (currentResults != null)
-                    lastResult.Result = currenResult.Result;
-                lastResult.Result = value.Result;
-                // Check if any animations use this ClientRequest, if so - set timer to perform update
+                var resultIdx = previousResults.IndexOf(lastResult);
+                var currentResult = currentResults[resultIdx];
+                var animateTimer = animateTimers[resultIdx];
+                currentResult.Result = value.Result;
+                // Set timer to perform update, if not already running
+                if (animateTimer == null || !animateTimer.Enabled)
+                {
+                    var currentValue = (double)(currentResult.Result == null ? (double)0 : (double)currentResult.Result);
+                    var previousValue = (double)(lastResult.Result == null ? (double)0 : (double)lastResult.Result);
+                    var animSpeed = Math.Abs(currentValue - previousValue);
+                    if (animSpeed != 0)
+                    {
+                        animationSpeed[resultIdx] = animSpeed;
+                        animateTimer = new System.Timers.Timer(1000 / animSpeed);
+                        animateTimer.Elapsed += ExecuteAnimation;
+                        animateTimer.AutoReset = true;
+                        animateTimer.Enabled = true;
+                        animateTimer.Start();
+                        animateTimers[resultIdx] = animateTimer;
+                    }
+                }
+            }
+        }
+
+        private void ExecuteAnimation(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            var animateTimer = (System.Timers.Timer)sender;
+            var animateTimerIdx = animateTimers.IndexOf(animateTimer);
+            if (animateTimerIdx > -1)
+            {
+                var currentResult = currentResults[animateTimerIdx];
+                var previousResult = previousResults[animateTimerIdx];
+                var increaseValue = animationSpeed[animateTimerIdx];
+                if(increaseValue > 0 && (double)previousResult.Result + increaseValue > (double)currentResult.Result)
+                {
+                    increaseValue = (double)currentResult.Result - (double)previousResult.Result;
+                    animateTimer.Stop();
+                    animateTimers[animateTimerIdx].Stop();
+                    animateTimers[animateTimerIdx] = null;
+                }
+                if (increaseValue < 0 && (double)previousResult.Result + increaseValue < (double)currentResult.Result)
+                {
+                    increaseValue = (double)currentResult.Result - (double)previousResult.Result;
+                    animateTimer.Stop();
+                    animateTimers[animateTimerIdx].Stop();
+                    animateTimers[animateTimerIdx] = null;
+                }
+                var newValue = new ClientRequestResult
+                {
+                    Request = currentResult.Request,
+                    Result = (double)currentResult.Result + increaseValue
+                };
+                var animations = config.Animations.Where(x => x.Triggers?.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == currentResult.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == currentResult.Request.Unit) == true);
+                foreach (var animation in animations)
+                {
+                    if (Control.Controls.ContainsKey(animation.Name))
+                    {
+                        var ctrl = Control.Controls[animation.Name];
+                        var triggers = animation.Triggers.Where(x => ((AnimationTriggerClientRequest)x).Request.Name == currentResult.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == currentResult.Request.Unit);
+                        foreach (var trigger in triggers)
+                        {
+                            foreach (var action in trigger.Actions)
+                            {
+                                if(action is AnimationActionRotate)
+                                {
+                                    // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                                    var rotateAction = (AnimationActionRotate)action;
+                                    var rotateAngle = (float)((Math.PI * 2 * (double)newValue.Result) / rotateAction.MaximumValueExpected);
+                                    Image initialImage = null;
+                                    if(animation.Type == AnimationItemTypeEnum.Drawing)
+                                        initialImage = DrawPoints((AnimationDrawing)animation);
+                                    if (initialImage != null)
+                                    {
+                                        ctrl.BackgroundImage = RotateImage(initialImage, rotateAngle, true, false, Color.Transparent);
+                                        UpdateInstrument(ctrl);
+                                    }
+                                }
+                            }
+                        }
+                        previousResults[animateTimerIdx] = newValue;
+                    }
+                }
+            }
+        }
+
+        private void UpdateInstrument(Control obj)
+        {
+            if (obj.InvokeRequired)
+            {
+                try
+                {
+                    var d = new SafeUpdateDelegate(UpdateInstrument);
+                    obj.Invoke(d, new object[] { obj });
+                }
+                catch { }
+                return;
+            }
+            try
+            {
+                obj.Update();
+                PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Method to rotate an Image object. The result can be one of three cases:
+        /// - upsizeOk = true: output image will be larger than the input, and no clipping occurs 
+        /// - upsizeOk = false & clipOk = true: output same size as input, clipping occurs
+        /// - upsizeOk = false & clipOk = false: output same size as input, image reduced, no clipping
+        /// 
+        /// A background color must be specified, and this color will fill the edges that are not 
+        /// occupied by the rotated image. If color = transparent the output image will be 32-bit, 
+        /// otherwise the output image will be 24-bit.
+        /// 
+        /// Note that this method always returns a new Bitmap object, even if rotation is zero - in 
+        /// which case the returned object is a clone of the input object. 
+        /// </summary>
+        /// <param name="inputImage">input Image object, is not modified</param>
+        /// <param name="angleRadians">angle of rotation, in radians</param>
+        /// <param name="upsizeOk">see comments above</param>
+        /// <param name="clipOk">see comments above, not used if upsizeOk = true</param>
+        /// <param name="backgroundColor">color to fill exposed parts of the background</param>
+        /// <returns>new Bitmap object, may be larger than input image</returns>
+        private Bitmap RotateImage(Image inputImage, float angleRadians, bool upsizeOk,
+                                         bool clipOk, Color backgroundColor)
+        {
+            // Test for zero rotation and return a clone of the input image
+            if (angleRadians == 0f)
+                return (Bitmap)inputImage.Clone();
+
+            // Set up old and new image dimensions, assuming upsizing not wanted and clipping OK
+            float oldWidth = inputImage.Width;
+            float oldHeight = inputImage.Height;
+            int newWidth = (int)oldWidth;
+            int newHeight = (int)oldHeight;
+            float scaleFactor = 1f;
+
+            // If upsizing wanted or clipping not OK calculate the size of the resulting bitmap
+            if (upsizeOk || !clipOk)
+            {
+                //double angleRadians = angleDegrees * Math.PI / 180d;
+
+                double cos = Math.Abs(Math.Cos(angleRadians));
+                double sin = Math.Abs(Math.Sin(angleRadians));
+                newWidth = (int)Math.Round(oldWidth * cos + oldHeight * sin);
+                newHeight = (int)Math.Round(oldWidth * sin + oldHeight * cos);
+            }
+
+            // If upsizing not wanted and clipping not OK need a scaling factor
+            if (!upsizeOk && !clipOk)
+            {
+                scaleFactor = Math.Min((float)oldWidth / newWidth, (float)oldHeight / newHeight);
+                newWidth = (int)oldWidth;
+                newHeight = (int)oldHeight;
+            }
+
+            // Create the new bitmap object. If background color is transparent it must be 32-bit, 
+            //  otherwise 24-bit is good enough.
+            Bitmap newBitmap = new Bitmap((int)newWidth, (int)newHeight, backgroundColor == Color.Transparent ?
+                                             PixelFormat.Format32bppArgb : PixelFormat.Format24bppRgb);
+            newBitmap.SetResolution(inputImage.HorizontalResolution, inputImage.VerticalResolution);
+
+            // Create the Graphics object that does the work
+            using (Graphics graphicsObject = Graphics.FromImage(newBitmap))
+            {
+
+                graphicsObject.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphicsObject.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphicsObject.SmoothingMode = SmoothingMode.HighQuality;
+
+                // Fill in the specified background color if necessary
+                if (backgroundColor != Color.Transparent)
+                    graphicsObject.Clear(backgroundColor);
+
+                // Set up the built-in transformation matrix to do the rotation and maybe scaling
+                Matrix matrix = new Matrix();
+
+                // Rotate about image center point
+                matrix.RotateAt(20, new PointF(newWidth / 2f, newHeight / 2f));
+                var transformX = oldWidth / 2;
+                var transformY = oldHeight / 2;
+                matrix.Translate(transformX, transformY);
+                // Move the transform point back to the top left
+                //graphicsObject.TranslateTransform(-1*(newWidth - oldWidth), -1*(newHeight - oldHeight));
+
+                graphicsObject.Transform = matrix;
+                graphicsObject.DrawImage(newBitmap, new Point());
+                //graphicsObject.TranslateTransform(newWidth / 2f, newHeight / 2f);
+                if (scaleFactor != 1f)
+                    graphicsObject.ScaleTransform(scaleFactor, scaleFactor);
+
+                //graphicsObject.RotateTransform(angleRadians);
+                graphicsObject.TranslateTransform(-oldWidth / 2f, -oldHeight / 2f);
+
+                // Draw the result 
+                graphicsObject.DrawImage(inputImage, 0, 0);
+            }
+
+            return newBitmap;
+        }
+
+        private Image ClipToCircle(Image srcImage, PointF center, float radius, Color backGround)
+        {
+            Image dstImage = new Bitmap(srcImage.Width, srcImage.Height, srcImage.PixelFormat);
+
+            using (Graphics g = Graphics.FromImage(dstImage))
+            {
+                RectangleF r = new RectangleF(center.X - radius, center.Y - radius,
+                                                         radius * 2, radius * 2);
+
+                // enables smoothing of the edge of the circle (less pixelated)
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // fills background color
+                using (Brush br = new SolidBrush(backGround))
+                {
+                    g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
+                }
+
+                // adds the new ellipse & draws the image again 
+                GraphicsPath path = new GraphicsPath();
+                path.AddEllipse(r);
+                g.SetClip(path);
+                g.DrawImage(srcImage, 0, 0);
+
+                return dstImage;
             }
         }
 
@@ -301,6 +535,10 @@ namespace InstrumentPlugins
                     previousResults = null;
                     currentResults?.Clear();
                     currentResults = null;
+                    animateTimers?.Clear();
+                    animateTimers = null;
+                    animationSpeed?.Clear();
+                    animationSpeed = null;
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer

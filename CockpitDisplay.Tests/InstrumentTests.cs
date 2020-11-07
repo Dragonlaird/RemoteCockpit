@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using RemoteCockpitClasses.Animations;
 using System.Drawing;
 using System.IO;
+using Newtonsoft.Json;
+using System.Threading;
 
 namespace CockpitDisplay.Tests
 {
@@ -27,7 +29,7 @@ namespace CockpitDisplay.Tests
                 Aircraft = new string[] { "Cessna 152 ASOBO" },
                 Type = InstrumentType.Airspeed_Indicator,
                 BackgroundImagePath = ".\\Backgrounds\\Airspeed_Indicator.png",
-                Animations = new IAnimationItem[]
+                Animations = new AnimationDrawing[]
                 {
                     new AnimationDrawing
                     {
@@ -46,7 +48,7 @@ namespace CockpitDisplay.Tests
                             FillColor = Color.CornflowerBlue,
                             FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
                             ScaleMethod = AnimationScaleMethodEnum.Percent,
-                            Triggers = new List<IAnimationTrigger>{
+                            Triggers = new List<AnimationTriggerClientRequest>{
                                 new AnimationTriggerClientRequest
                                 {
                                     Type = AnimationTriggerTypeEnum.ClientRequest,
@@ -56,7 +58,12 @@ namespace CockpitDisplay.Tests
                                     },
                                     Actions = new List<IAnimationAction>
                                     {
-
+                                        new AnimationActionRotate
+                                        {
+                                            CentrePoint = new AnimationPoint(50,50),
+                                            MaximumValueExpected = 200,
+                                            RotateClockwise = true
+                                        }
                                     }
                                 }
                             }
@@ -102,13 +109,24 @@ namespace CockpitDisplay.Tests
             Form testForm = new Form();
             var scaleFactor = testForm.Width < testForm.Height ? testForm.Width / testForm.Height : testForm.Height / testForm.Width;
             instrument = new Generic_Instrument(GetConfiguration());
+            var instrumentJson = JsonConvert.SerializeObject(GetConfiguration());
             instrument.SetLayout(50, 50, 200, 200);
-            var clientRequest = instrument.RequiredValues;
+            var clientRequests = instrument.RequiredValues;
             testForm.BackgroundImage = LoadImage(".\\CockpitBackgrounds\\Cockpit_Background.jpg", scaleFactor);
             testForm.Controls.Add(instrument.Control);
             testForm.Invalidate();
             testForm.Show();
-            
+            double lastValue = 0;
+            for (var i = 0; i < 10; i++)
+            {
+                Thread.Sleep(1000);
+                lastValue += 10;
+                instrument.ValueUpdate(new ClientRequestResult
+                {
+                    Request = clientRequests.First(),
+                    Result = lastValue
+                });
+            }
         }
     }
 }

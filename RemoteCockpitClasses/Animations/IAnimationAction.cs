@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,7 @@ namespace RemoteCockpitClasses.Animations
 {
     public interface IAnimationAction
     {
-        AnimationTriggerTypeEnum Type { get; set; }
+        [JsonConverter(typeof(ConcreteConverter<AnimationActionRotate>))]
+        AnimationActionTypeEnum Type { get; }
     }
 }

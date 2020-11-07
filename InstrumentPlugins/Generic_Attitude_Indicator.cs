@@ -77,7 +77,7 @@ namespace InstrumentPlugins
             // If we haven't already created the needle, do it now
             if (!control.Controls.ContainsKey("Needle"))
             {
-                var needle = new PictureBox();
+                var needle = new Panel();
                 needle.Name = "Needle";
                 needle.Height = control.Height;
                 needle.Width = control.Width;
@@ -89,7 +89,7 @@ namespace InstrumentPlugins
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
-            var needle = (PictureBox)control.Controls["Needle"];
+            var needle = control.Controls["Needle"];
             var gimbal = ImageLibrary.Attitude_Indicator_Gimbal;
             var resizedImage = new Bitmap(gimbal, new Size(needle.Width, needle.Height));
 
@@ -101,7 +101,7 @@ namespace InstrumentPlugins
             // Add the clipped image to our instrument
             var dstImage = ClipToCircle(rotatedImage, centre, 0.7f * (float)resizedImage.Width / 2.0f, Color.Transparent);
 
-            needle.Image = dstImage;
+            needle.BackgroundImage = dstImage;
 
         }
 
@@ -258,7 +258,7 @@ namespace InstrumentPlugins
         /// <summary>
         /// A simple array of FS Aircraft names that this instrument can be used with.
         /// </summary>
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {
