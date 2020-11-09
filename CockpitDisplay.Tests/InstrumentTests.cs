@@ -29,6 +29,7 @@ namespace CockpitDisplay.Tests
                 Aircraft = new string[] { "Cessna 152 ASOBO" },
                 Type = InstrumentType.Airspeed_Indicator,
                 BackgroundImagePath = ".\\Backgrounds\\Airspeed_Indicator.png",
+                CreateDate = DateTime.Now,
                 Animations = new AnimationDrawing[]
                 {
                     new AnimationDrawing
@@ -117,15 +118,16 @@ namespace CockpitDisplay.Tests
             testForm.Invalidate();
             testForm.Show();
             double lastValue = 0;
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 3; i++)
             {
-                Thread.Sleep(1000);
-                lastValue += 10;
+                Thread.Sleep(2900);
+                lastValue += new Random().NextDouble() * 70.0;
                 instrument.ValueUpdate(new ClientRequestResult
                 {
                     Request = clientRequests.First(),
                     Result = lastValue
                 });
+                testForm.Update();
             }
         }
     }

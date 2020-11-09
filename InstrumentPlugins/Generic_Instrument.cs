@@ -34,6 +34,8 @@ namespace InstrumentPlugins
         private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
         private List<double> animationSpeed = new List<double>();
         private delegate void SafeUpdateDelegate(Control ctrl);
+        private int animationTimeInMs = 3000;
+        private int animationStepCount = 10;
 
         public Generic_Instrument()
         {
@@ -86,104 +88,171 @@ namespace InstrumentPlugins
                 foreach (var clientRequest in config?.ClientRequests)
                 {
                     currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
-                    previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
+                    previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)-1 });
                     animateTimers.Add(null);
-                    animationSpeed.Add(0);
+                    animationSpeed.Add(1);
                 }
                 Control.Paint += PaintControl;
                 Control.Invalidate();
-                PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                Control.Update();
+                //PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
             }
         }
 
         private void PaintControl(object sender, PaintEventArgs e)
         {
-            //throw new NotImplementedException();
-            if(config?.Animations != null)
+            if (config?.Animations != null)
             {
-                //Image image = null;
                 // We have a foreground to update
-                foreach(var animation in config.Animations)
+                foreach (var animation in config.Animations)
                 {
-                    foreach (var trigger in animation.Triggers) {
-                        //if (animation.Type == AnimationItemTypeEnum.Drawing)
-                        //{
-                        //    image = DrawPoints((AnimationDrawing)animation);
-                        //}
-                        //if (animation.Type == AnimationItemTypeEnum.Image)
-                        //{
-                        //    image = LoadImage(((AnimationImage)animation).ImagePath);
-                        //}
-                        var imagePanel = new Panel();
-                        
-                        imagePanel.Width = Control.Width;
-                        imagePanel.Height = Control.Height;
-                        imagePanel.Name = animation.Name;
-                        //imagePanel.BackColor = Color.Transparent;
-                        //imagePanel.Opacity = 0;
-                        //imagePanel.BackgroundImage = image;
-                        imagePanel.Paint += PaintAnimation;
-                        if (!Control.Controls.ContainsKey(animation.Name))
-                        {
-                            //Control.Controls.RemoveByKey(animation.Name);
-                            Control.Controls.Add(imagePanel);
-                            PaintAnimation(imagePanel, new PaintEventArgs(imagePanel.CreateGraphics(), imagePanel.DisplayRectangle));
-                        }
-                        imagePanel.Invalidate();
-                        imagePanel.BringToFront();
-                    }
-                }
-                /*
-                var g = Control.CreateGraphics();
-                foreach (Control c in Control.Controls)
-                {
-                    if (c.Bounds.IntersectsWith(Control.Bounds) && c.Visible)
+                    if (!Control.Controls.ContainsKey(animation.Name))
                     {
-                        // Load appearance of underlying control and redraw it on this background
-                        Bitmap bmp = new Bitmap(c.Width, c.Height, g);
-                        c.DrawToBitmap(bmp, c.ClientRectangle);
-                        g.TranslateTransform(c.Left - Control.Left, c.Top - Control.Top);
-                        g.DrawImageUnscaled(bmp, Point.Empty);
-                        g.TranslateTransform(Control.Left - c.Left, Control.Top - c.Top);
-                        bmp.Dispose();
+                        foreach (var trigger in animation.Triggers)
+                        {
+                            var imagePanel = new PictureBox();
+                            imagePanel.BackColor = Color.Transparent;
+                            imagePanel.Width = Control.Width;
+                            imagePanel.Height = Control.Height;
+                            imagePanel.Name = animation.Name;
+                            imagePanel.Paint += PaintAnimation;
+                            Control.Controls.Add(imagePanel);
+                            imagePanel.Invalidate();
+                            imagePanel.BringToFront();
+                        }
                     }
                 }
-                */
             }
         }
 
         private void PaintAnimation(object sender, PaintEventArgs e)
         {
-            var animationName = ((Control)sender).Name;
-            // Repaint Animation Image here - if not already upto date
-            var animation = config.Animations.First(x => x.Name == animationName);
-            bool redrawImage = false;
-            foreach (var trigger in animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest))
+            var ctrl = (Control)sender;
+            var animation = config.Animations.First(x => x.Name == ctrl.Name);
+            var triggers = (AnimationTriggerClientRequest[])animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
+            foreach (var trigger in triggers)
             {
-                var clientRequest = ((AnimationTriggerClientRequest)trigger).Request;
-                var previousResult = previousResults.First(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit);
-                var currentResult = currentResults.First(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit);
+                var currentResult = currentResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit);
+                var resultIdx = currentResults.IndexOf(currentResult);
+                var animationTimer = animateTimers[resultIdx];
+
+                var previousResult = previousResults[resultIdx];
+                var nextValue = (double)(previousResult.Result ?? 0.0);
+                var currentValue = (double)currentResult.Result;
+                var stepSize = animationSpeed[resultIdx];
+                if (nextValue <= currentValue)
+                {
+                    nextValue += Math.Abs(stepSize);
+                    if (nextValue >= currentValue)
+                    {
+                        // Reached or exceeded our target - stop timer and set to actual target
+                        nextValue = currentValue;
+                        StopTimer(animationTimer);
+                    }
+                }
+                else
+                {
+                    nextValue -= Math.Abs(stepSize);
+                    if (nextValue <= currentValue)
+                    {
+                        // Reached or exceeded our target - stop timer and set to actual target
+                        nextValue = currentValue;
+                        StopTimer(animationTimer);
+                    }
+                }
+
                 if (previousResult.Result?.ToString() != currentResult.Result?.ToString())
                 {
-                    redrawImage = true;
-                    break;
+                    foreach (var action in trigger.Actions)
+                    {
+                        if (action is AnimationActionRotate)
+                        {
+                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                            var rotateAction = (AnimationActionRotate)action;
+                            var rotateAngle = (float)((Math.PI * 2 * nextValue) / rotateAction.MaximumValueExpected);
+                            Image initialImage = null;
+                            if (animation.Type == AnimationItemTypeEnum.Drawing)
+                                initialImage = DrawPoints((AnimationDrawing)animation, rotateAngle);
+                            if (initialImage != null)
+                            {
+                                ctrl.BackColor = Color.Transparent;
+                                ctrl.BackgroundImage = initialImage;
+                                ctrl.BringToFront();
+                                //Control.Update();
+                                /*
+                                var newImage = new PictureBox();
+                                newImage.Name = animation.Name;
+                                newImage.Width = Control.Width;
+                                newImage.Height = Control.Height;
+                                newImage.Image = initialImage;
+                                newImage.Paint += PaintAnimation;
+                                if (Control.Controls.ContainsKey(newImage.Name))
+                                    Control.Controls.RemoveByKey(newImage.Name);
+                                Control.Controls.Add(newImage);
+                                Control.Update();
+                                */
+                                /*
+                                ((PictureBox)ctrl).Image = initialImage;
+                                ctrl.Visible = true;
+                                ctrl.BringToFront();
+                                */
+                                //UpdateInstrument(ctrl);
+                            }
+                        }
+                    }
+                    previousResult.Result = nextValue;
                 }
             }
-            if (redrawImage)
+        }
+
+        private void StopTimer(System.Timers.Timer timer)
+        {
+            if(timer != null && timer.Enabled)
             {
-                // Attribute least 1 ClientRequest has been updated - redraw the image using new value
-                var panel = Control.Controls[animationName];
-                Image image = null;
-                if (animation.Type == AnimationItemTypeEnum.Drawing)
+                var timerIdx = animateTimers.IndexOf(timer);
+                timer.Stop();
+                timer = null;
+                if(timerIdx > -1 && animateTimers[timerIdx] != null && animateTimers[timerIdx].Enabled)
                 {
-                    image = DrawPoints((AnimationDrawing)animation);
+                    animateTimers[timerIdx].Stop();
+                    animateTimers[timerIdx] = null;
                 }
-                if (animation.Type == AnimationItemTypeEnum.Image)
+            }
+        }
+
+        private System.Timers.Timer StartTimer(System.Timers.Timer timer)
+        {
+            if (timer != null && timer.Enabled)
+                StopTimer(timer);
+            var timerIdx = animateTimers.IndexOf(timer);
+            timer = new System.Timers.Timer(animationTimeInMs / animationStepCount);
+            timer.Elapsed += ExecuteAnimation;
+            timer.AutoReset = true;
+            timer.Enabled = true;
+            timer.Start();
+            if (timerIdx > -1)
+                animateTimers[timerIdx] = timer;
+            return timer;
+        }
+
+        /// <summary>
+        /// Find any controls expected to animate for this timer and update them
+        /// </summary>
+        /// <param name="sender">Timer initiating the method</param>
+        /// <param name="e">Arguments associated with this timer event</param>
+        private void ExecuteAnimation(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            var animateTimer = (System.Timers.Timer)sender;
+            var animateTimerIdx = animateTimers.IndexOf(animateTimer);
+            if (animateTimerIdx > -1)
+            {
+                var request = currentResults[animateTimerIdx];
+                var animations = config.Animations.Where(x => x.Triggers.Any(y => y.Type == AnimationTriggerTypeEnum.ClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == request.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == request.Request.Unit)).Select(x => x).ToArray();
+                foreach (var name in animations.Select(x => x.Name))
                 {
-                    image = LoadImage(((AnimationImage)(IAnimationItem)animation).ImagePath);
+                    if (Control.Controls.ContainsKey(name))
+                        UpdateInstrument(Control.Controls[name]); // Force this control to repaint itself
                 }
-                ((Control)sender).BackgroundImage = image;
-                // Record the new value so we don't redraw again
             }
         }
 
@@ -197,19 +266,21 @@ namespace InstrumentPlugins
             return resizedImage;
         }
 
-        private Image DrawPoints(AnimationDrawing item)
+        private Image DrawPoints(AnimationDrawing item, float angleInRadians)
         {
             if (item.PointMap?.Count() > 0)
             {
+                /*
                 var imageHolder = new PictureBox();
                 //imageHolder.Top = 0;
                 //imageHolder.Left = 0;
                 imageHolder.Height = Control.Height;
                 imageHolder.Width = Control.Width;
                 imageHolder.Enabled = false;
+                */
                 var pen = new Pen(item.FillColor, 1);
                 //var g = e.Graphics;
-                Bitmap bitmap = new Bitmap(imageHolder.Width, imageHolder.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 bitmap.MakeTransparent();
                 Graphics graph = Graphics.FromImage(bitmap);
                 graph.SmoothingMode = SmoothingMode.AntiAlias;
@@ -222,14 +293,14 @@ namespace InstrumentPlugins
                 if (item.ScaleMethod == AnimationScaleMethodEnum.Percent)
                 {
                     // Resize image using the current scale 
-                    absoluteX = imageHolder.Width * item.RelativeX / (float)100;
-                    absoluteY = imageHolder.Height * item.RelativeY / (float)100;
-                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)imageHolder.Width < imageHolder.Height ? imageHolder.Width : imageHolder.Height);
+                    absoluteX = Control.Width * item.RelativeX / (float)100;
+                    absoluteY = Control.Height * item.RelativeY / (float)100;
+                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
                 }
                 if(item.ScaleMethod == AnimationScaleMethodEnum.None)
                 {
                     // Use unmodified dimensions (no scaling)
-                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)imageHolder.Width < imageHolder.Height ? imageHolder.Width : imageHolder.Height);
+                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
                 }
                 gp.AddLines(points);
                 graph.FillPath(pen.Brush, gp);
@@ -238,20 +309,38 @@ namespace InstrumentPlugins
             return null;
         }
 
-        public PointF[] RemapPoints(AnimationPoint[] points, float absoluteX, float absoluteY, float imageSize)
+        public PointF[] RemapPoints(AnimationPoint[] points, float absoluteX, float absoluteY, float imageSize, float angleInRadians)
         {
             List<PointF> remappedPoints = new List<PointF>();
             var onePercentInPixelsX = imageSize / 100;
             var onePercentInPixelsY = imageSize / 100;
             foreach (var point in points)
             {
-                remappedPoints.Add(new PointF
-                {
-                    X = point.Point.X * onePercentInPixelsX + absoluteX, //(point.X * scaleX) + absoluteX,
-                    Y = point.Point.Y * onePercentInPixelsY + absoluteY //(point.Y * scaleY) + absoluteY
-                });
+                //remappedPoints.Add(new PointF
+                //{
+                //    X = point.Point.X * onePercentInPixelsX + absoluteX, //(point.X * scaleX) + absoluteX,
+                //    Y = point.Point.Y * onePercentInPixelsY + absoluteY //(point.Y * scaleY) + absoluteY
+                //});
+                //remappedPoints.Add(GetPoint(
+                //    new AnimationPoint
+                //    {
+                //        X = point.Point.X * onePercentInPixelsX,
+                //        Y = point.Point.Y * onePercentInPixelsY
+                //    },
+                //    absoluteX,
+                //    absoluteY,
+                //    angleInRadians)); 
+                remappedPoints.Add(new PointF { X = point.Point.X * onePercentInPixelsX, Y = point.Point.Y * onePercentInPixelsY});
             }
             return remappedPoints.ToArray();
+        }
+
+        private PointF GetPoint(AnimationPoint point, float absoluteX, float absoluteY, float angleInRadians)
+        {
+            var x2 = point.Point.X * point.Point.X;
+            var y2 = point.Point.Y * point.Point.Y;
+            var length = Math.Sqrt(x2 + y2);
+            return new PointF((float)(absoluteX + length * Math.Sin(angleInRadians)), (float)(absoluteY - length * Math.Cos(angleInRadians)));
         }
 
         public void LoadConfigFile(string filePath)
@@ -291,91 +380,16 @@ namespace InstrumentPlugins
 
         public void ValueUpdate(ClientRequestResult value)
         {
-            var lastResult = previousResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
-            if (lastResult != null)
+            var clientRequestResult = currentResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
+            if (clientRequestResult != null)
             {
-                var resultIdx = previousResults.IndexOf(lastResult);
-                var currentResult = currentResults[resultIdx];
-                var animateTimer = animateTimers[resultIdx];
-                currentResult.Result = value.Result;
-                // Set timer to perform update, if not already running
-                if (animateTimer == null || !animateTimer.Enabled)
-                {
-                    var currentValue = (double)(currentResult.Result == null ? (double)0 : (double)currentResult.Result);
-                    var previousValue = (double)(lastResult.Result == null ? (double)0 : (double)lastResult.Result);
-                    var animSpeed = Math.Abs(currentValue - previousValue);
-                    if (animSpeed != 0)
-                    {
-                        animationSpeed[resultIdx] = animSpeed;
-                        animateTimer = new System.Timers.Timer(1000 / animSpeed);
-                        animateTimer.Elapsed += ExecuteAnimation;
-                        animateTimer.AutoReset = true;
-                        animateTimer.Enabled = true;
-                        animateTimer.Start();
-                        animateTimers[resultIdx] = animateTimer;
-                    }
-                }
-            }
-        }
-
-        private void ExecuteAnimation(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            var animateTimer = (System.Timers.Timer)sender;
-            var animateTimerIdx = animateTimers.IndexOf(animateTimer);
-            if (animateTimerIdx > -1)
-            {
-                var currentResult = currentResults[animateTimerIdx];
-                var previousResult = previousResults[animateTimerIdx];
-                var increaseValue = animationSpeed[animateTimerIdx];
-                if(increaseValue > 0 && (double)previousResult.Result + increaseValue > (double)currentResult.Result)
-                {
-                    increaseValue = (double)currentResult.Result - (double)previousResult.Result;
-                    animateTimer.Stop();
-                    animateTimers[animateTimerIdx].Stop();
-                    animateTimers[animateTimerIdx] = null;
-                }
-                if (increaseValue < 0 && (double)previousResult.Result + increaseValue < (double)currentResult.Result)
-                {
-                    increaseValue = (double)currentResult.Result - (double)previousResult.Result;
-                    animateTimer.Stop();
-                    animateTimers[animateTimerIdx].Stop();
-                    animateTimers[animateTimerIdx] = null;
-                }
-                var newValue = new ClientRequestResult
-                {
-                    Request = currentResult.Request,
-                    Result = (double)currentResult.Result + increaseValue
-                };
-                var animations = config.Animations.Where(x => x.Triggers?.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == currentResult.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == currentResult.Request.Unit) == true);
-                foreach (var animation in animations)
-                {
-                    if (Control.Controls.ContainsKey(animation.Name))
-                    {
-                        var ctrl = Control.Controls[animation.Name];
-                        var triggers = animation.Triggers.Where(x => ((AnimationTriggerClientRequest)x).Request.Name == currentResult.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == currentResult.Request.Unit);
-                        foreach (var trigger in triggers)
-                        {
-                            foreach (var action in trigger.Actions)
-                            {
-                                if(action is AnimationActionRotate)
-                                {
-                                    // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
-                                    var rotateAction = (AnimationActionRotate)action;
-                                    var rotateAngle = (float)((Math.PI * 2 * (double)newValue.Result) / rotateAction.MaximumValueExpected);
-                                    Image initialImage = null;
-                                    if(animation.Type == AnimationItemTypeEnum.Drawing)
-                                        initialImage = DrawPoints((AnimationDrawing)animation);
-                                    if (initialImage != null)
-                                    {
-                                        ctrl.BackgroundImage = RotateImage(initialImage, rotateAngle, true, false, Color.Transparent);
-                                        UpdateInstrument(ctrl);
-                                    }
-                                }
-                            }
-                        }
-                        previousResults[animateTimerIdx] = newValue;
-                    }
-                }
+                var resultIdx = currentResults.IndexOf(clientRequestResult);
+                var lastResult = previousResults[resultIdx];
+                currentResults[resultIdx] = value;
+                // Modify the step speed for our control
+                animationSpeed[resultIdx] = Math.Abs(((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount);
+                // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
+                animateTimers[resultIdx] = StartTimer(animateTimers[resultIdx]);
             }
         }
 
@@ -383,6 +397,12 @@ namespace InstrumentPlugins
         {
             if (obj.InvokeRequired)
             {
+                try
+                {
+                    obj.Invalidate();
+                    //PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
+                }
+                catch { }
                 try
                 {
                     var d = new SafeUpdateDelegate(UpdateInstrument);
@@ -393,7 +413,7 @@ namespace InstrumentPlugins
             }
             try
             {
-                obj.Update();
+                //obj.Update();
                 PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
             }
             catch { }

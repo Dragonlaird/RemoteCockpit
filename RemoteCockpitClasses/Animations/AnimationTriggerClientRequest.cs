@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace RemoteCockpitClasses.Animations
     {
         public AnimationTriggerTypeEnum Type { get; set; }
         public ClientRequest Request { get; set; }
-        //[JsonConverter(typeof(ConcreteConverter<IAnimationAction>))]
+        [JsonConverter(typeof(ConcreteConverter<List<AnimationActionRotate>>))]
         public IEnumerable<IAnimationAction> Actions { get; set; }
     }
 }

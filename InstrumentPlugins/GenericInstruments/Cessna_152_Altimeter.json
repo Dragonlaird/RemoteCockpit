@@ -2,7 +2,7 @@
   "Name": "Test Instrument for all aircraft",
   "Author": "Dragonlaird",
   "Type": 1,
-  "CreateDate": "2020-11-07T13:49:00",
+  "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentBackgrounds\\Cessna_152_Airspeed_Indicator.png",
   "Aircraft": [ "Cessna 152 ASOBO" ],
   "Animations": [
@@ -12,57 +12,27 @@
       "PointMap": [
         {
           "X": 0.0,
-          "Y": 0.0,
-          "Point": {
-            "IsEmpty": true,
-            "X": 0.0,
-            "Y": 0.0
-          }
+          "Y": 0.0
         },
         {
           "X": -1.25,
-          "Y": -1.25,
-          "Point": {
-            "IsEmpty": false,
-            "X": -1.25,
-            "Y": 1.25
-          }
+          "Y": -1.25
         },
         {
           "X": -2.5,
-          "Y": 20.0,
-          "Point": {
-            "IsEmpty": false,
-            "X": -2.5,
-            "Y": -20.0
-          }
+          "Y": 20.0
         },
         {
           "X": 0.0,
-          "Y": 27.0,
-          "Point": {
-            "IsEmpty": false,
-            "X": 0.0,
-            "Y": -27.0
-          }
+          "Y": 27.0
         },
         {
           "X": 2.5,
-          "Y": 20.0,
-          "Point": {
-            "IsEmpty": false,
-            "X": 2.5,
-            "Y": -20.0
-          }
+          "Y": 20.0
         },
         {
           "X": 1.25,
-          "Y": -1.25,
-          "Point": {
-            "IsEmpty": false,
-            "X": 1.25,
-            "Y": 1.25
-          }
+          "Y": -1.25
         }
       ],
       "FillMethod": 0,
@@ -77,15 +47,19 @@
             "Name": "INDICATED AIRSPEED",
             "Unit": "knots"
           },
-          "Actions": []
+          "Actions": [
+            {
+              "Type": 0,
+              "CentrePoint": {
+                "X": 50.0,
+                "Y": 50.0
+              },
+              "RotateClockwise": true,
+              "MaximumValueExpected": 200.0
+            }
+          ]
         }
       ]
-    }
-  ],
-  "ClientRequests": [
-    {
-      "Name": "INDICATED AIRSPEED",
-      "Unit": "knots"
     }
   ]
 }

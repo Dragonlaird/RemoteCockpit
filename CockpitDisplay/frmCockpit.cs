@@ -128,10 +128,7 @@ namespace CockpitDisplay
 
         public void LoadLayout(string text)
         {
-            //this.SetStyle(ControlStyles.UserPaint, true);
-            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            // Here we would clear the current cockpit layout and load all the plugins for the new layout
+            // Here we clear the current cockpit layout and load all the plugins for the new layout
             foreach (Control control in this.Controls)
             {
                 RemoveControl(control);
@@ -158,13 +155,6 @@ namespace CockpitDisplay
                         ScreenDimensions.Y = (int)(image.Height * imageScaleFactor);
                     }
                     this.BackgroundImage = backgroundImage;
-                    /*
-                    var pictureBox = new PictureBox();
-                    pictureBox.Height = this.Height;
-                    pictureBox.Width = this.Width;
-                    pictureBox.Image = backgroundImage;
-                    this.Controls.Add(pictureBox);
-                    */
                 }
                 catch (Exception ex)
                 {
@@ -195,14 +185,23 @@ namespace CockpitDisplay
                         Max = ages.Max()
                     })
                 .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
+            foreach (var filePath in Directory.GetFiles(".\\GenericInstruments").Where(x => x.ToLower().EndsWith(".json")))
+            {
+                try
+                {
+                    var genericInstrumnt = new Generic_Instrument(filePath);
+                    layoutInstruments.Add(genericInstrumnt);
+                }
+                catch { }
+            }
             // Variable layoutInstruments contains all the plugins we can use for this layout
-            // Now we simply add them to the relevant location on the form, suitably resized based on the current fom size
+            // Now we simply add them to the relevant location on the form, suitably resized based on the current form size
             var variables = new List<ClientRequest>();
             try
             {
                 foreach (var instrumentPosition in layoutDefinition.Postions)
                 {
-                    var plugin = layoutInstruments.FirstOrDefault(x => x.Type == instrumentPosition.Type);
+                    var plugin = layoutInstruments.OrderByDescending(x=> x.PluginDate).FirstOrDefault(x => x.Type == instrumentPosition.Type);
                     try
                     {
                         if (plugin != null)
@@ -218,8 +217,7 @@ namespace CockpitDisplay
                             AddControl(plugin.Control);
                             usedInstrumentPlugins.Add(plugin);
                             UpdateCockpitItem(plugin.Control);
-                            plugin.Control.Enabled = false; // Prevent the control being selectable - ensuring no boundary lines are drawn
-                            //plugin.Control.BringToFront(); // Ensure control is displayed on top of the background image
+                            plugin.Control.Enabled = false;
                         }
                     }
                     catch (Exception ex)

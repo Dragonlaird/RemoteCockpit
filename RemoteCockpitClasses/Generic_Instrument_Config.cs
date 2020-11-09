@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -34,8 +35,9 @@ namespace RemoteCockpitClasses.Animations
         public DateTime CreateDate { get; set; }
         public string BackgroundImagePath { get; set; }
         public string [] Aircraft { get; set; }
-        public AnimationDrawing[] Animations { get; set; }
-        public ClientRequest[] ClientRequests
+        [JsonConverter(typeof(ConcreteConverter<List<AnimationDrawing>>))]
+        public IEnumerable<IAnimationItem> Animations { get; set; }
+        public IEnumerable<ClientRequest> ClientRequests
         {
             get
             {
