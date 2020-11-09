@@ -314,23 +314,16 @@ namespace InstrumentPlugins
             List<PointF> remappedPoints = new List<PointF>();
             var onePercentInPixelsX = imageSize / 100;
             var onePercentInPixelsY = imageSize / 100;
-            foreach (var point in points)
+            for (var i = 0; i < points.Length; i++)
             {
-                //remappedPoints.Add(new PointF
-                //{
-                //    X = point.Point.X * onePercentInPixelsX + absoluteX, //(point.X * scaleX) + absoluteX,
-                //    Y = point.Point.Y * onePercentInPixelsY + absoluteY //(point.Y * scaleY) + absoluteY
-                //});
-                //remappedPoints.Add(GetPoint(
-                //    new AnimationPoint
-                //    {
-                //        X = point.Point.X * onePercentInPixelsX,
-                //        Y = point.Point.Y * onePercentInPixelsY
-                //    },
-                //    absoluteX,
-                //    absoluteY,
-                //    angleInRadians)); 
-                remappedPoints.Add(new PointF { X = point.Point.X * onePercentInPixelsX, Y = point.Point.Y * onePercentInPixelsY});
+                var nextPoint = points[i];
+                // Need to recalculate the angle from the last point to the next, then increment the angle by angleInRadians
+                var lastPoint = i == 0 ? new AnimationPoint(0, 0) : points[i - 1];
+                var deltaY = nextPoint.Y - lastPoint.Y;
+                var deltaX = nextPoint.X - lastPoint.X;
+                var pointAngle = (float)Math.Atan2(deltaY, deltaX) + angleInRadians;
+                nextPoint = new AnimationPoint(nextPoint.X * onePercentInPixelsX, nextPoint.Y * onePercentInPixelsY);
+                remappedPoints.Add(GetPoint(nextPoint, absoluteX, absoluteY, pointAngle));
             }
             return remappedPoints.ToArray();
         }
