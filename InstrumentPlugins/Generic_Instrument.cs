@@ -16,6 +16,7 @@ using System.Drawing.Drawing2D;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Drawing.Imaging;
+using System.Numerics;
 
 namespace InstrumentPlugins
 {
@@ -312,8 +313,6 @@ namespace InstrumentPlugins
         public PointF[] RemapPoints(AnimationPoint[] points, float absoluteX, float absoluteY, float imageSize, float angleInRadians)
         {
             List<PointF> remappedPoints = new List<PointF>();
-            var onePercentInPixelsX = imageSize / 100;
-            var onePercentInPixelsY = imageSize / 100;
             for (var i = 0; i < points.Length; i++)
             {
                 var nextPoint = points[i];
@@ -322,18 +321,47 @@ namespace InstrumentPlugins
                 var deltaY = nextPoint.Y - lastPoint.Y;
                 var deltaX = nextPoint.X - lastPoint.X;
                 var pointAngle = (float)Math.Atan2(deltaY, deltaX) + angleInRadians;
-                nextPoint = new AnimationPoint(nextPoint.X * onePercentInPixelsX, nextPoint.Y * onePercentInPixelsY);
-                remappedPoints.Add(GetPoint(nextPoint, absoluteX, absoluteY, pointAngle));
+                nextPoint = new AnimationPoint(nextPoint.X * imageSize / 100, nextPoint.Y * imageSize / 100);
+                //remappedPoints.Add(GetPoint(nextPoint, absoluteX, absoluteY, pointAngle));
+                var newPoint = CartesianWithAngularOffset(nextPoint.Point, pointAngle);
+                newPoint.X += absoluteX;
+                newPoint.Y += absoluteY;
+                remappedPoints.Add(newPoint);
             }
             return remappedPoints.ToArray();
         }
 
+        private PointF CartesianWithAngularOffset(PointF point, float angleInRadians)
+        {
+            var x2 = point.X * point.X;
+            var y2 = point.Y * point.Y;
+            var radius = Math.Sqrt(x2 + y2);
+            var angle = Math.Atan2((double)point.Y, (double)point.X);
+            var newAngle = angle + angleInRadians;
+            return PolarToCartesian(newAngle, radius);
+        }
+
+        private PointF PolarToCartesian(double angle, double radius)
+        {
+            double angleRad = (Math.PI / 180.0) * (angle - 90);
+            double x = radius * Math.Cos(angleRad);
+            double y = radius * Math.Sin(angleRad);
+            return new PointF((float)x, (float)y);
+        }
+
         private PointF GetPoint(AnimationPoint point, float absoluteX, float absoluteY, float angleInRadians)
         {
+            /*
+            var x1 = point.X * Math.Sin(angleInRadians) + absoluteX;
+            var y1 = point.Y * Math.Cos(angleInRadians) + absoluteY;
+            return new PointF((float)x1, (float)y1);
+            */
             var x2 = point.Point.X * point.Point.X;
             var y2 = point.Point.Y * point.Point.Y;
             var length = Math.Sqrt(x2 + y2);
-            return new PointF((float)(absoluteX + length * Math.Sin(angleInRadians)), (float)(absoluteY - length * Math.Cos(angleInRadians)));
+            var x1 = length * Math.Sin(angleInRadians);
+            var y1 = length * Math.Cos(angleInRadians);
+            return new PointF((float)(absoluteX + x1), (float)(absoluteY - y1));
         }
 
         public void LoadConfigFile(string filePath)
