@@ -1,13 +1,13 @@
 {
   "Name": "Test Instrument for all aircraft",
   "Author": "Dragonlaird",
-  "Type": 1,
+  "Type": "Airspeed_Indicator",
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentBackgrounds\\Cessna_152_Airspeed_Indicator.png",
   "Aircraft": [ "Cessna 152 ASOBO" ],
   "Animations": [
     {
-      "Type": 1,
+      "Type": "Solid",
       "Name": "Needle",
       "PointMap": [
         {
@@ -33,19 +33,19 @@
       ],
       "FillMethod": 0,
       "FillColor": "CornflowerBlue",
-      "ScaleMethod": 1,
+      "ScaleMethod": "Percent",
       "RelativeX": 50.0,
       "RelativeY": 50.0,
       "Triggers": [
         {
-          "Type": 1,
+          "Type": "ClientRequest",
           "Request": {
             "Name": "INDICATED AIRSPEED",
             "Unit": "knots"
           },
           "Actions": [
             {
-              "Type": 0,
+              "Type": "Rotate",
               "CentrePoint": {
                 "X": 50.0,
                 "Y": 50.0

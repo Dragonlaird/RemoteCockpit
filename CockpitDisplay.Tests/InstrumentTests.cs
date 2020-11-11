@@ -37,7 +37,6 @@ namespace CockpitDisplay.Tests
                             Name = "Needle",
                             PointMap = new AnimationPoint[]
                             {
-                                new AnimationPoint(0, 0),
                                 new AnimationPoint(-1.25f, -1.25f),
                                 new AnimationPoint(-2.5f, 20.0f),
                                 new AnimationPoint(0, 27.0f),
@@ -117,7 +116,7 @@ namespace CockpitDisplay.Tests
             testForm.Controls.Add(instrument.Control);
             testForm.Invalidate();
             testForm.Show();
-            double lastValue = 0;
+            double lastValue = 40;
             for (var i = 0; i < 3; i++)
             {
                 Thread.Sleep(2900);

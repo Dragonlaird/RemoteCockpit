@@ -208,14 +208,17 @@ namespace InstrumentPlugins
 
         private void StopTimer(System.Timers.Timer timer)
         {
-            if(timer != null && timer.Enabled)
+            if (timer != null && timer.Enabled)
             {
                 var timerIdx = animateTimers.IndexOf(timer);
                 timer.Stop();
+                timer.Dispose();
                 timer = null;
-                if(timerIdx > -1 && animateTimers[timerIdx] != null && animateTimers[timerIdx].Enabled)
+                if (timerIdx > -1 && animateTimers[timerIdx] != null)
                 {
-                    animateTimers[timerIdx].Stop();
+                    if (animateTimers[timerIdx]?.Enabled == true)
+                        animateTimers[timerIdx]?.Stop();
+                    animateTimers[timerIdx]?.Dispose();
                     animateTimers[timerIdx] = null;
                 }
             }
@@ -237,17 +240,17 @@ namespace InstrumentPlugins
         }
 
         /// <summary>
-        /// Find any controls expected to animate for this timer and update them
+        /// Find any controls expected to animate for this timer and update their values, then initiate the Paint event for that control
         /// </summary>
         /// <param name="sender">Timer initiating the method</param>
         /// <param name="e">Arguments associated with this timer event</param>
         private void ExecuteAnimation(object sender, System.Timers.ElapsedEventArgs e)
         {
             var animateTimer = (System.Timers.Timer)sender;
-            var animateTimerIdx = animateTimers.IndexOf(animateTimer);
-            if (animateTimerIdx > -1)
+            var timerIdx = animateTimers.IndexOf(animateTimer);
+            if (timerIdx > -1)
             {
-                var request = currentResults[animateTimerIdx];
+                var request = currentResults[timerIdx];
                 var animations = config.Animations.Where(x => x.Triggers.Any(y => y.Type == AnimationTriggerTypeEnum.ClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == request.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == request.Request.Unit)).Select(x => x).ToArray();
                 foreach (var name in animations.Select(x => x.Name))
                 {
@@ -316,14 +319,15 @@ namespace InstrumentPlugins
             for (var i = 0; i < points.Length; i++)
             {
                 var nextPoint = points[i];
-                // Need to recalculate the angle from the last point to the next, then increment the angle by angleInRadians
-                var lastPoint = i == 0 ? new AnimationPoint(0, 0) : points[i - 1];
-                var deltaY = nextPoint.Y - lastPoint.Y;
-                var deltaX = nextPoint.X - lastPoint.X;
-                var pointAngle = (float)Math.Atan2(deltaY, deltaX) + angleInRadians;
-                nextPoint = new AnimationPoint(nextPoint.X * imageSize / 100, nextPoint.Y * imageSize / 100);
+                var pixelsPerPercent = imageSize / 100;
+                // Need to calculate the angle from origin for this point, then increment the angle by angleInRadians
+                //var lastPoint = i == 0 ? new AnimationPoint(0, 0) : points[i - 1];
+                //var deltaY = nextPoint.Y - lastPoint.Y;
+                //var deltaX = nextPoint.X - lastPoint.X;
+                //var pointAngle = (float)Math.Atan2(deltaY, deltaX) + angleInRadians;
+                nextPoint = new AnimationPoint(nextPoint.X * pixelsPerPercent, nextPoint.Y * pixelsPerPercent);
                 //remappedPoints.Add(GetPoint(nextPoint, absoluteX, absoluteY, pointAngle));
-                var newPoint = CartesianWithAngularOffset(nextPoint.Point, pointAngle);
+                var newPoint = CartesianWithAngularOffset(nextPoint.Point, angleInRadians);
                 newPoint.X += absoluteX;
                 newPoint.Y += absoluteY;
                 remappedPoints.Add(newPoint);
@@ -331,13 +335,24 @@ namespace InstrumentPlugins
             return remappedPoints.ToArray();
         }
 
+        private float GetPointAngle(PointF startPoint, PointF destPoint)
+        {
+            var deltaY = startPoint.Y - destPoint.Y;
+            var deltaX = startPoint.X - destPoint.X;
+            return (float)Math.Atan2(deltaY, deltaX);
+        }
+
+        private float GetPointRadius(PointF point)
+        {
+            var radius = Math.Sqrt(point.X * point.X + point.Y * point.Y);
+            return (float)radius;
+        }
+
         private PointF CartesianWithAngularOffset(PointF point, float angleInRadians)
         {
-            var x2 = point.X * point.X;
-            var y2 = point.Y * point.Y;
-            var radius = Math.Sqrt(x2 + y2);
-            var angle = Math.Atan2((double)point.Y, (double)point.X);
-            var newAngle = angle + angleInRadians;
+            var pointAngle = GetPointAngle(new PointF { X = 0, Y = 0 }, point);
+            var radius = GetPointRadius(point);
+            var newAngle = pointAngle + angleInRadians;
             return PolarToCartesian(newAngle, radius);
         }
 
@@ -571,19 +586,27 @@ namespace InstrumentPlugins
             {
                 if (disposing)
                 {
+                    // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                    // TODO: set large fields to null
                     config = null;
-                    previousResults?.Clear();
-                    previousResults = null;
-                    currentResults?.Clear();
-                    currentResults = null;
+                    if (animateTimers != null) // Stop ant dispose of any running timers
+                        foreach (var timer in animateTimers)
+                        {
+                            StopTimer(timer);
+                        }
                     animateTimers?.Clear();
                     animateTimers = null;
+                    // Clear last result cache
+                    previousResults?.Clear();
+                    previousResults = null;
+                    // Clear current result cache
+                    currentResults?.Clear();
+                    currentResults = null;
+                    // Clear animation speed cache
                     animationSpeed?.Clear();
                     animationSpeed = null;
                 }
 
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 disposedValue = true;
             }
         }
