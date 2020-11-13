@@ -33,7 +33,7 @@ namespace InstrumentPlugins
         private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
         private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
-        private List<double> animationSpeed = new List<double>();
+        private List<double> animationSteps = new List<double>();
         private delegate void SafeUpdateDelegate(Control ctrl);
         private SafeUpdateDelegate delgte;
         private int animationTimeInMs = 3000;
@@ -84,7 +84,7 @@ namespace InstrumentPlugins
             previousResults = new List<ClientRequestResult>();
             currentResults = new List<ClientRequestResult>();
             animateTimers = new List<System.Timers.Timer>();
-            animationSpeed = new List<double>();
+            animationSteps = new List<double>();
             if (config?.Animations != null)
             {
                 foreach (var clientRequest in config?.ClientRequests)
@@ -92,7 +92,7 @@ namespace InstrumentPlugins
                     currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
                     previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)-1 });
                     animateTimers.Add(null);
-                    animationSpeed.Add(1);
+                    animationSteps.Add(1);
                 }
                 Control.Paint += PaintControl;
                 Control.Invalidate(true);
@@ -124,7 +124,12 @@ namespace InstrumentPlugins
                     }
                     else
                     {
-                        Control.Controls[animation.Name].Update();
+                        try
+                        {
+                            Control.Controls[animation.Name].Invalidate(true);
+                            PaintAnimation(Control.Controls[animation.Name], new PaintEventArgs(Control.Controls[animation.Name].CreateGraphics(), Control.Controls[animation.Name].DisplayRectangle));
+                        }
+                        catch { }
                     }
                 }
             }
@@ -237,7 +242,7 @@ namespace InstrumentPlugins
                 {
                     var lastValue = previousResults[timerIdx];
                     var currentValue = currentResults[timerIdx];
-                    var stepSize = animationSpeed[timerIdx];
+                    var stepSize = animationSteps[timerIdx];
                     lastValue.Result = (double)lastValue.Result + stepSize;
                     if (stepSize < 0)
                         if ((double)lastValue.Result < (double)currentValue.Result)
@@ -456,13 +461,17 @@ namespace InstrumentPlugins
                 // Check if any animations use this variable as a trigger
                 if (config.Animations.Any(x => x.Triggers.Any(y=> y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                 {
-                    // Modify the step speed for our control
-                    lock (animationSpeed)
-                        animationSpeed[resultIdx] = Math.Abs(((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount);
+                    // Modify the step size for our control
+                    lock (animationSteps)
+                        animationSteps[resultIdx] = Math.Abs(((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount);
                     // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
+                    var animationTime = animationTimeInMs / animationStepCount; // Expected Update Time divided by number of animation steps we want within that time
                     // This will cause ExecuteAnimation to run, which should update the Last Value by Step Size & trigger Paint Event for any controls relying on this variable to update
                     lock (animateTimers)
+                    {
+                        animateTimers[resultIdx] = new System.Timers.Timer(animationTime);
                         animateTimers[resultIdx] = StartTimer(animateTimers[resultIdx]);
+                    }
                 }
             }
         }
@@ -618,8 +627,8 @@ namespace InstrumentPlugins
                     currentResults?.Clear();
                     currentResults = null;
                     // Clear animation speed cache
-                    animationSpeed?.Clear();
-                    animationSpeed = null;
+                    animationSteps?.Clear();
+                    animationSteps = null;
                     // Clear cuurent config
                     config = null;
                 }
