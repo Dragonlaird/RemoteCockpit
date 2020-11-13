@@ -14,5 +14,7 @@ namespace RemoteCockpitClasses.Animations
         public string ImagePath { get; set; }
         public AnimationScaleMethodEnum ScaleMethod { get; set; }
         public IEnumerable<IAnimationTrigger> Triggers { get; set; }
+        public object LastAppliedValue { get; set; }
+
     }
 }

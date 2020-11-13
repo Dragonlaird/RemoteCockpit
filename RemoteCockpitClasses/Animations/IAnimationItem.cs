@@ -11,5 +11,6 @@ namespace RemoteCockpitClasses.Animations
         string Name { get; set; }
         [JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest>))]
         IEnumerable<IAnimationTrigger> Triggers { get; set; }
+        object LastAppliedValue { get; set; }
     }
 }
