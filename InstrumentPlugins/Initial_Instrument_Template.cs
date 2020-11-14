@@ -17,6 +17,7 @@ namespace InstrumentPlugins
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
+        private int animationTimeInMs = 3000;
         private List<ClientRequestResult> values = new List<ClientRequestResult>();
 
         /// <summary>
@@ -109,6 +110,24 @@ namespace InstrumentPlugins
         /// Name of the organisation or person who created this instrument plugin
         /// </summary>
         public string Author { get; set; }
+
+        /// <summary>
+        /// How often we expect to receive updates from the server (in seconds)
+        /// Useful for producing smooth animations from last to current value.
+        /// Can be used to determine how often the animation should be updated
+        /// and by how much to update it before the next update is expected
+        /// </summary>
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         /// <summary>
         /// Notify the cockpit form if the instrument is disposed.

@@ -26,6 +26,8 @@ namespace InstrumentPlugins
         private double CurrentAirspeed = 0;
         private double LastAirspeed = -1;
         private double needleMoveSpeed = 0;
+        private int animationTimeInMs = 3000;
+
         System.Timers.Timer animateTimer;
 
         public Generic_Airspeed_Indicator()
@@ -253,6 +255,18 @@ namespace InstrumentPlugins
         public string Name => "Genereic Airspeed Indicator";
 
         public string Author => "Dragonlaird";
+
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         public event EventHandler Disposed;
 

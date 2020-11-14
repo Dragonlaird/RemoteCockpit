@@ -35,6 +35,7 @@ namespace RemoteCockpitClasses.Animations
         public DateTime CreateDate { get; set; }
         public string BackgroundImagePath { get; set; }
         public string [] Aircraft { get; set; }
+        public int AnimationUpdateInMs { get; set; }
         [JsonConverter(typeof(ConcreteConverter<List<AnimationDrawing>>))]
         public IEnumerable<IAnimationItem> Animations { get; set; }
         public IEnumerable<ClientRequest> ClientRequests

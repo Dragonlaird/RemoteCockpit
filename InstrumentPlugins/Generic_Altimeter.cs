@@ -28,6 +28,7 @@ namespace InstrumentPlugins
         private Point centre = new Point(0, 0);
         private double lastAltitude = -1;
         private double needleMoveSpeed = 0;
+        private int animationTimeInMs = 3000;
         System.Timers.Timer animateTimer;
 
 
@@ -302,6 +303,18 @@ namespace InstrumentPlugins
         public string Name => "Generic Altimeter";
 
         public string Author => "Dragonlaird";
+
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         protected virtual void Dispose(bool disposing)
         {

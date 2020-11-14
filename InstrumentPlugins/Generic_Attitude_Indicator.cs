@@ -28,6 +28,8 @@ namespace InstrumentPlugins
         private double CurrentPitch = 0;
         private double LastPitch = -1;
         private double needleMoveSpeed = 0;
+        private int animationTimeInMs = 3000;
+
         System.Timers.Timer animateTimer;
 
         /// <summary>
@@ -310,6 +312,18 @@ namespace InstrumentPlugins
         public string Name => "Generic Attitude Indicator";
 
         public string Author => "Dragonlaird";
+
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         /// <summary>
         /// Notify the cockpit form if the instrument is disposed.

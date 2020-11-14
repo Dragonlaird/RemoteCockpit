@@ -91,6 +91,15 @@ namespace CockpitDisplay
                     lock (usedInstrumentPlugins)
                         foreach (var instrument in usedInstrumentPlugins)
                         {
+                            if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
+                            {
+                                try
+                                {
+                                    instrument.UpdateFrequency = int.Parse(requestResult.Result.ToString());
+                                }
+                                catch { }
+                            }
+                            else
                             if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
                                 try
                                 {
@@ -224,6 +233,10 @@ namespace CockpitDisplay
                     {
                         Console.WriteLine(string.Format("Unable to add plugin: {0}\rError: {1}", plugin.Name, ex.Message));
                     }
+                }
+                if (!variables.Any(x => x.Name == "UPDATE FREQUENCY" && x.Unit == "second"))
+                {
+                    variables.Add(new ClientRequest { Name = "UPDATE FREQUENCY", Unit = "second" });
                 }
             }
             catch (Exception ex)

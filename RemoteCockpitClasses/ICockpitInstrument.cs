@@ -36,6 +36,10 @@ namespace RemoteCockpitClasses
         /// Newest date is used in preference over generic Cockpit Instruments, for specified Cockpit Layouts
         /// </summary>
         DateTime PluginDate { get; }
+        /// <summary>
+        /// Expected frequence of updates from FS, useful for controlling animations in a timely manner
+        /// </summary>
+        int UpdateFrequency { get; set; }
 
         InstrumentType Type { get; }
 

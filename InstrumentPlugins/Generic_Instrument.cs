@@ -38,6 +38,7 @@ namespace InstrumentPlugins
         private SafeUpdateDelegate delgte;
         private int animationTimeInMs = 3000;
         private int animationStepCount = 10;
+        private int animationUpdateInMs = 300;
 
         public Generic_Instrument()
         {
@@ -85,6 +86,10 @@ namespace InstrumentPlugins
             currentResults = new List<ClientRequestResult>();
             animateTimers = new List<System.Timers.Timer>();
             animationSteps = new List<double>();
+            if(config?.AnimationUpdateInMs > 0)
+            {
+                animationUpdateInMs = config.AnimationUpdateInMs; 
+            }
             if (config?.Animations != null)
             {
                 foreach (var clientRequest in config?.ClientRequests)
@@ -164,11 +169,12 @@ namespace InstrumentPlugins
                                 var rotateAction = (AnimationActionRotate)action;
                                 var rotateAngle = (float)((Math.PI * 2 * nextValue) / rotateAction.MaximumValueExpected);
                                 Image initialImage = null;
-                                initialImage = DrawPoints((AnimationDrawing)animation, rotateAngle);
+                                //initialImage = DrawPoints((AnimationDrawing)animation, rotateAngle);
+                                initialImage = DrawPoints((AnimationDrawing)animation, 0);
                                 if (initialImage != null)
                                 {
                                     ctrl.BackColor = Color.Transparent;
-                                    ctrl.BackgroundImage = initialImage;
+                                    ((PictureBox)ctrl).Image = initialImage;
                                     ctrl.BringToFront();
                                     //ctrl.Invalidate();
                                 }
@@ -306,44 +312,37 @@ namespace InstrumentPlugins
             return resizedImage;
         }
 
-        private Image DrawPoints(AnimationDrawing item, float angleInRadians)
+        private Image DrawPoints(AnimationDrawing animation, float angleInRadians)
         {
-            if (item.PointMap?.Count() > 0)
+            if (animation.PointMap?.Count() > 0)
             {
-                /*
-                var imageHolder = new PictureBox();
-                //imageHolder.Top = 0;
-                //imageHolder.Left = 0;
-                imageHolder.Height = Control.Height;
-                imageHolder.Width = Control.Width;
-                imageHolder.Enabled = false;
-                */
-                var pen = new Pen(item.FillColor, 1);
-                //var g = e.Graphics;
-                Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                bitmap.MakeTransparent();
-                Graphics graph = Graphics.FromImage(bitmap);
-                graph.SmoothingMode = SmoothingMode.AntiAlias;
-                graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                GraphicsPath gp = new GraphicsPath();
-                double absoluteX = item.RelativeX;
-                double absoluteY = item.RelativeY;
+                double absoluteX = animation.RelativeX;
+                double absoluteY = animation.RelativeY;
                 PointF[] points = null;
-                if (item.ScaleMethod == AnimationScaleMethodEnum.Percent)
+                if (animation.ScaleMethod == AnimationScaleMethodEnum.Percent)
                 {
                     // Resize image using the current scale 
-                    absoluteX = Control.Width * item.RelativeX / (float)100;
-                    absoluteY = Control.Height * item.RelativeY / (float)100;
-                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
+                    absoluteX = Control.Width * animation.RelativeX / (float)100;
+                    absoluteY = Control.Height * animation.RelativeY / (float)100;
+                    points = RemapPoints(animation.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
                 }
-                if(item.ScaleMethod == AnimationScaleMethodEnum.None)
+                if(animation.ScaleMethod == AnimationScaleMethodEnum.None)
                 {
                     // Use unmodified dimensions (no scaling)
-                    points = RemapPoints(item.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
+                    points = RemapPoints(animation.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
                 }
-                gp.AddLines(points);
-                graph.FillPath(pen.Brush, gp);
+                Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                bitmap.MakeTransparent();
+                using (Graphics graph = Graphics.FromImage(bitmap))
+                {
+                    graph.SmoothingMode = SmoothingMode.AntiAlias;
+                    graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    using (SolidBrush fill = new SolidBrush(animation.FillColor))
+                    {
+                        graph.FillPolygon(fill, points);
+                    }
+                }
                 return bitmap;
             }
             return null;
@@ -352,10 +351,10 @@ namespace InstrumentPlugins
         public PointF[] RemapPoints(AnimationPoint[] points, float absoluteX, float absoluteY, float imageSize, float angleInRadians)
         {
             List<PointF> remappedPoints = new List<PointF>();
+            var pixelsPerPercent = imageSize / 100;
             for (var i = 0; i < points.Length; i++)
             {
                 var nextPoint = points[i];
-                var pixelsPerPercent = imageSize / 100;
                 // Need to calculate the angle from origin for this point, then increment the angle by angleInRadians
                 //var lastPoint = i == 0 ? new AnimationPoint(0, 0) : points[i - 1];
                 //var deltaY = nextPoint.Y - lastPoint.Y;
@@ -439,6 +438,17 @@ namespace InstrumentPlugins
 
         public string Author => config?.Author;
 
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
         public event EventHandler Disposed;
 
         public void SetLayout(int top, int left, int height, int width)
@@ -462,6 +472,8 @@ namespace InstrumentPlugins
                 // Check if any animations use this variable as a trigger
                 if (config.Animations.Any(x => x.Triggers.Any(y=> y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                 {
+                    // We want to update the animation every 0.3 seconds - determine how much we should move it
+                    animationStepCount = (animationTimeInMs / animationUpdateInMs);
                     // Modify the step size for our control
                     lock (animationSteps)
                         animationSteps[resultIdx] = Math.Abs(((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount);
@@ -621,7 +633,11 @@ namespace InstrumentPlugins
                     // Stop any callback to update Control
                     if (delgte != null)
                     {
-                        Delegate.RemoveAll(delgte, delgte);
+                        try
+                        {
+                            Delegate.RemoveAll(delgte, delgte);
+                        }
+                        catch { }
                         delgte = null;
                     }
                     // Clear last result cache

@@ -30,6 +30,7 @@ namespace CockpitDisplay.Tests
                 Type = InstrumentType.Airspeed_Indicator,
                 BackgroundImagePath = ".\\Backgrounds\\Airspeed_Indicator.png",
                 CreateDate = DateTime.Now,
+                AnimationUpdateInMs = 250,
                 Animations = new AnimationDrawing[]
                 {
                     new AnimationDrawing
@@ -37,11 +38,11 @@ namespace CockpitDisplay.Tests
                             Name = "Needle",
                             PointMap = new AnimationPoint[]
                             {
-                                new AnimationPoint(-1.25f, -1.25f),
-                                new AnimationPoint(-2.5f, 20.0f),
+                                new AnimationPoint(-1.5f, -1.5f),
+                                new AnimationPoint(-3.0f, 20.0f),
                                 new AnimationPoint(0, 27.0f),
-                                new AnimationPoint(2.5f, 20.0f),
-                                new AnimationPoint(1.25f, -1.25f)
+                                new AnimationPoint(3.0f, 20.0f),
+                                new AnimationPoint(1.5f, -1.5f)
                             },
                             RelativeX = 50,
                             RelativeY = 50,

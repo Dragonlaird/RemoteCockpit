@@ -29,18 +29,23 @@ namespace CockpitDisplay
 
             // Only variable needed for this is "TITLE", to be notified whenever the aircraft type changes
             Thread.Sleep(3000);
-            // Always ask to be notified when Connection to FlightSim is made or dropped
-            RequestVariable(new ClientRequest
-            {
-                Name = "FS CONNECTION",
-                Unit = "bool"
-            });
-            // Also, ask to be notified whenever user starts flying a different aircraft
-            RequestVariable(new ClientRequest
-            {
-                Name = "TITLE"
-            });
+            //// Always ask to be notified when Connection to FlightSim is made or dropped
+            //RequestVariable(new ClientRequest
+            //{
+            //    Name = "FS CONNECTION",
+            //    Unit = "bool"
+            //});
+            //// Also, ask to be notified whenever user starts flying a different aircraft
+            //RequestVariable(new ClientRequest
+            //{
+            //    Name = "TITLE"
+            //});
 
+            //RequestVariable(new ClientRequest
+            //{
+            //    Name = "UPDATE FREQUENCY",
+            //    Unit = "second"
+            //});
             //TestAltimeter();
         }
 
