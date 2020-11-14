@@ -34,6 +34,7 @@ namespace InstrumentPlugins
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
         private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
         private List<double> animationSteps = new List<double>();
+        private List<Bitmap> animationImages = new List<Bitmap>();
         private delegate void SafeUpdateDelegate(Control ctrl);
         private SafeUpdateDelegate delgte;
         private int animationTimeInMs = 3000;
@@ -92,6 +93,17 @@ namespace InstrumentPlugins
             }
             if (config?.Animations != null)
             {
+                animationImages = new List<Bitmap>();
+                foreach(var animation in config.Animations)
+                {
+                    // If this is an Image Animation - pre-fetch the image into the cache
+                    if (animation is AnimationImage)
+                    {
+                        animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
+                    }
+                    else
+                        animationImages.Add(DrawPoints((AnimationDrawing)animation));
+                }
                 foreach (var clientRequest in config?.ClientRequests)
                 {
                     currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
@@ -142,42 +154,42 @@ namespace InstrumentPlugins
 
         private void PaintAnimation(object sender, PaintEventArgs e)
         {
-                var ctrl = (Control)sender;
-                var animation = config.Animations.First(x => x.Name == ctrl.Name);
-                var triggers = (AnimationTriggerClientRequest[])animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
+            var ctrl = (Control)sender;
+            var animation = config.Animations.First(x => x.Name == ctrl.Name);
+            var triggers = (AnimationTriggerClientRequest[])animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
+            Bitmap initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
             foreach (var trigger in triggers)
             {
-                var nextResult = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit);
-                var valuesIdx = previousResults.IndexOf(nextResult);
-                var nextValue = nextResult.Result;
-#if DEBUG
-                var targetValue = currentResults[valuesIdx].Result;
-#endif
-                if (animation.LastAppliedValue != nextValue)
+                var nextValue = animation.LastAppliedValue;
+                if (trigger is AnimationTriggerClientRequest)
                 {
-                    animation.LastAppliedValue = nextValue;
-                    foreach (var action in trigger.Actions)
+                    nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
+                }
+
+                animation.LastAppliedValue = nextValue;
+                /*
+                if (animation is AnimationDrawing)
+                    initialImage = DrawPoints((AnimationDrawing)animation);
+                if (animation is AnimationImage)
+                    initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
+                */
+                foreach (var action in trigger.Actions)
+                {
+                    if (action is AnimationActionRotate)
                     {
-                        if (action is AnimationActionRotate)
-                        {
-                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
-
-                            var rotateAction = (AnimationActionRotate)action;
-                            var rotateAngle = (float)((360 * (double)nextValue) / rotateAction.MaximumValueExpected);
-                            Bitmap initialImage = null;
-                            initialImage = DrawPoints((AnimationDrawing)animation);
-                            initialImage = RotateImage(initialImage, rotateAngle);
-
-                            if (initialImage != null)
-                            {
-                                ctrl.BackColor = Color.Transparent;
-                                ((PictureBox)ctrl).Image = initialImage;
-                                ctrl.BringToFront();
-                                ctrl.Invalidate();
-                            }
-                        }
+                        // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                        var rotateAction = (AnimationActionRotate)action;
+                        var rotateAngle = (float)((360 * (double)nextValue) / rotateAction.MaximumValueExpected);
+                        initialImage = RotateImage(initialImage, rotateAngle);
                     }
                 }
+            }
+            if (initialImage != null)
+            {
+                ctrl.BackColor = Color.Transparent;
+                ((PictureBox)ctrl).Image = initialImage;
+                ctrl.BringToFront();
+                ctrl.Invalidate();
             }
         }
 
@@ -325,7 +337,6 @@ namespace InstrumentPlugins
             {
             }
         }
-
 
         private Image LoadImage(string imagePath)
         {

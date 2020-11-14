@@ -5,7 +5,7 @@
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentBackgrounds\\Cessna_152_Airspeed_Indicator.png",
   "Aircraft": [ "Cessna 152 ASOBO" ],
-  "AnimationUpdateInMs": 250,
+  "AnimationUpdateInMs": 100,
   "Animations": [
     {
       "Type": "Solid",
@@ -33,7 +33,7 @@
         }
       ],
       "FillMethod": 0,
-      "FillColor": "CornflowerBlue",
+      "FillColor": "White",
       "ScaleMethod": "Percent",
       "RelativeX": 50.0,
       "RelativeY": 50.0,

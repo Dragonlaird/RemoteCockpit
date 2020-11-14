@@ -62,6 +62,7 @@ namespace CockpitDisplay
                 return;
             }
             this.Controls.Remove(ctrl);
+            ctrl.Dispose();
         }
 
         private void UpdateProperty(object obj, string propertyName, object value)
@@ -88,35 +89,34 @@ namespace CockpitDisplay
             {
                 if (usedInstrumentPlugins != null)
                 {
-                    lock (usedInstrumentPlugins)
-                        try
+                    try
+                    {
+                        foreach (var instrument in usedInstrumentPlugins)
                         {
-                            foreach (var instrument in usedInstrumentPlugins)
+                            if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
                             {
-                                if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
+                                try
                                 {
-                                    try
-                                    {
-                                        instrument.UpdateFrequency = int.Parse(requestResult.Result.ToString());
-                                    }
-                                    catch { }
+                                    instrument.UpdateFrequency = int.Parse(requestResult.Result.ToString());
                                 }
-                                else
-                                if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
-                                    try
-                                    {
-                                        instrument.ValueUpdate(requestResult);
-                                        UpdateCockpitItem(instrument.Control);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                    }
+                                catch { }
                             }
+                            else
+                            if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
+                                try
+                                {
+                                    instrument.ValueUpdate(requestResult);
+                                    UpdateCockpitItem(instrument.Control);
+                                }
+                                catch (Exception ex)
+                                {
+                                }
                         }
-                        catch(Exception ex)
-                        {
+                    }
+                    catch (Exception ex)
+                    {
 
-                        }
+                    }
                     UpdateCockpitItem(this);
                 }
             }
@@ -177,39 +177,6 @@ namespace CockpitDisplay
 
                 }
             }
-            var layoutInstruments = new List<ICockpitInstrument>();
-            layoutInstruments.AddRange(instrumentPlugins
-                .Where(x => !string.IsNullOrEmpty(text) && x.Aircraft != null && x.Aircraft.Contains(layoutDefinition.Name) && layoutDefinition.InstrumentTypes.Contains(x.Type)).GroupBy(
-                x => x.Type,
-                x => x.PluginDate,
-                    (baseType, ages) => new
-                    {
-                        Key = baseType,
-                        Count = ages.Count(),
-                        Min = ages.Min(),
-                        Max = ages.Max()
-                    })
-                .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
-            layoutInstruments.AddRange(instrumentPlugins.Where(x => x.Aircraft != null && x.Aircraft.Contains("") && layoutDefinition.InstrumentTypes.Contains(x.Type) && !layoutInstruments.Any(y => y.Type == x.Type)).GroupBy(
-                x => x.Type,
-                x => x.PluginDate,
-                    (baseType, ages) => new
-                    {
-                        Key = baseType,
-                        Count = ages.Count(),
-                        Min = ages.Min(),
-                        Max = ages.Max()
-                    })
-                .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
-            foreach (var filePath in Directory.GetFiles(".\\GenericInstruments").Where(x => x.ToLower().EndsWith(".json")))
-            {
-                try
-                {
-                    var genericInstrumnt = new Generic_Instrument(filePath);
-                    layoutInstruments.Add(genericInstrumnt);
-                }
-                catch { }
-            }
             // Variable layoutInstruments contains all the plugins we can use for this layout
             // Now we simply add them to the relevant location on the form, suitably resized based on the current form size
             var variables = new List<ClientRequest>();
@@ -217,7 +184,7 @@ namespace CockpitDisplay
             {
                 foreach (var instrumentPosition in layoutDefinition.Postions)
                 {
-                    var plugin = layoutInstruments.OrderByDescending(x=> x.PluginDate).FirstOrDefault(x => x.Type == instrumentPosition.Type);
+                    var plugin = instrumentPlugins.OrderByDescending(x=> x.PluginDate).FirstOrDefault(x => x.Type == instrumentPosition.Type);
                     try
                     {
                         if (plugin != null)
