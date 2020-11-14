@@ -167,10 +167,11 @@ namespace InstrumentPlugins
                                 // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
 
                                 var rotateAction = (AnimationActionRotate)action;
-                                var rotateAngle = (float)((Math.PI * 2 * nextValue) / rotateAction.MaximumValueExpected);
-                                Image initialImage = null;
-                                //initialImage = DrawPoints((AnimationDrawing)animation, rotateAngle);
-                                initialImage = DrawPoints((AnimationDrawing)animation, 0);
+                                var rotateAngle = (float)((360 * nextValue) / rotateAction.MaximumValueExpected);
+                                Bitmap initialImage = null;
+                                initialImage = DrawPoints((AnimationDrawing)animation);
+                                initialImage = RotateImage(initialImage, rotateAngle);
+
                                 if (initialImage != null)
                                 {
                                     ctrl.BackColor = Color.Transparent;
@@ -185,6 +186,27 @@ namespace InstrumentPlugins
             }
             catch { } // Animation failed - will be refreshed again soon if this isn't the last animation
         }
+
+        private Bitmap RotateImage(Bitmap bmp, float angle)
+        {
+            Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
+            rotatedImage.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
+
+            using (Graphics g = Graphics.FromImage(rotatedImage))
+            {
+                // Set the rotation point to the center in the matrix
+                g.TranslateTransform(bmp.Width / 2, bmp.Height / 2);
+                // Rotate
+                g.RotateTransform(angle);
+                // Restore rotation point in the matrix
+                g.TranslateTransform(-bmp.Width / 2, -bmp.Height / 2);
+                // Draw the image on the bitmap
+                g.DrawImage(bmp, new Point(0, 0));
+            }
+
+            return rotatedImage;
+        }
+
 
         private void RemoveTimer(int timerIdx)
         {
@@ -312,24 +334,19 @@ namespace InstrumentPlugins
             return resizedImage;
         }
 
-        private Image DrawPoints(AnimationDrawing animation, float angleInRadians)
+        private Bitmap DrawPoints(AnimationDrawing animation)
         {
             if (animation.PointMap?.Count() > 0)
             {
-                double absoluteX = animation.RelativeX;
-                double absoluteY = animation.RelativeY;
+                float absoluteX = 0;
+                float absoluteY = 0;
                 PointF[] points = null;
                 if (animation.ScaleMethod == AnimationScaleMethodEnum.Percent)
                 {
                     // Resize image using the current scale 
-                    absoluteX = Control.Width * animation.RelativeX / (float)100;
-                    absoluteY = Control.Height * animation.RelativeY / (float)100;
-                    points = RemapPoints(animation.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
-                }
-                if(animation.ScaleMethod == AnimationScaleMethodEnum.None)
-                {
-                    // Use unmodified dimensions (no scaling)
-                    points = RemapPoints(animation.PointMap, (float)absoluteX, (float)absoluteY, (float)Control.Width < Control.Height ? Control.Width : Control.Height, angleInRadians);
+                    absoluteX = (float)(Control.Width * animation.RelativeX / 100.0f);
+                    absoluteY = (float)(Control.Height * animation.RelativeY / 100.0f);
+                    points = animation.PointMap.Select(x => new PointF(x.Point.X + absoluteX, x.Point.Y + absoluteY)).ToArray();
                 }
                 Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 bitmap.MakeTransparent();
@@ -372,9 +389,11 @@ namespace InstrumentPlugins
 
         private float GetPointAngle(PointF startPoint, PointF destPoint)
         {
-            var deltaY = startPoint.Y - destPoint.Y;
-            var deltaX = startPoint.X - destPoint.X;
-            return (float)Math.Atan2(deltaY, deltaX);
+            float xDiff = destPoint.X - startPoint.X;
+            float yDiff = destPoint.Y - startPoint.Y;
+            //return Math.Atan2(yDiff, xDiff) * 180.0 / Math.PI;
+            var pointAngle = Math.Atan2(yDiff, xDiff);
+            return (float)pointAngle;
         }
 
         private float GetPointRadius(PointF point)
@@ -397,21 +416,6 @@ namespace InstrumentPlugins
             double x = radius * Math.Cos(angleRad);
             double y = radius * Math.Sin(angleRad);
             return new PointF((float)x, (float)y);
-        }
-
-        private PointF GetPoint(AnimationPoint point, float absoluteX, float absoluteY, float angleInRadians)
-        {
-            /*
-            var x1 = point.X * Math.Sin(angleInRadians) + absoluteX;
-            var y1 = point.Y * Math.Cos(angleInRadians) + absoluteY;
-            return new PointF((float)x1, (float)y1);
-            */
-            var x2 = point.Point.X * point.Point.X;
-            var y2 = point.Point.Y * point.Point.Y;
-            var length = Math.Sqrt(x2 + y2);
-            var x1 = length * Math.Sin(angleInRadians);
-            var y1 = length * Math.Cos(angleInRadians);
-            return new PointF((float)(absoluteX + x1), (float)(absoluteY - y1));
         }
 
         public void LoadConfigFile(string filePath)
