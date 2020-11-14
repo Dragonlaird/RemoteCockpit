@@ -288,6 +288,7 @@ namespace InstrumentPlugins
                 }
                 else
                 {
+                    PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
                     obj.Invalidate(true);
                 }
             }
@@ -619,7 +620,10 @@ namespace InstrumentPlugins
                     animateTimers = null;
                     // Stop any callback to update Control
                     if (delgte != null)
+                    {
+                        Delegate.RemoveAll(delgte, delgte);
                         delgte = null;
+                    }
                     // Clear last result cache
                     previousResults?.Clear();
                     previousResults = null;
