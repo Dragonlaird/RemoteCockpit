@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
@@ -16,11 +17,11 @@ namespace CockpitDisplay
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
 
 
-        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
+        //private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
 
         private frmCockpit cockpit;
 
-        private System.Timers.Timer altimeterUpdateTimer;
+        private System.Timers.Timer testTimer;
 
         public frmMain()
         {
@@ -46,36 +47,65 @@ namespace CockpitDisplay
             //    Name = "UPDATE FREQUENCY",
             //    Unit = "second"
             //});
-            //TestAltimeter();
+            TestInstruments();
         }
 
-        private void TestAltimeter()
+        private void TestInstruments()
         {
-            if(altimeterUpdateTimer != null)
+            if(testTimer != null)
             {
-                altimeterUpdateTimer.Stop();
-                altimeterUpdateTimer.Dispose();
-                altimeterUpdateTimer = null;
+                testTimer.Stop();
+                testTimer.Dispose();
+                testTimer = null;
             }
             // Set it to go off every ten seconds
-            altimeterUpdateTimer = new System.Timers.Timer(1000);
+            testTimer = new System.Timers.Timer(1000);
             // Tell the timer what to do when it elapses
-            altimeterUpdateTimer.Elapsed += new ElapsedEventHandler(updateAlitmeter);
+            testTimer.Elapsed += new ElapsedEventHandler(updateInstrumentsForTest);
             // And start it        
-            altimeterUpdateTimer.Start();
+            testTimer.Start();
 
         }
 
-        private void updateAlitmeter(object source, ElapsedEventArgs e)
+        private void updateInstrumentsForTest(object source, ElapsedEventArgs e)
         {
             if (cockpit != null)
             {
                 var rnd = new Random();
                 var changeAmount = rnd.Next(100);
                 if (rnd.NextDouble() > 0.5)
-                    changeAmount = -1 * changeAmount;
-                altitude.Result = double.Parse(altitude.Result?.ToString()) + changeAmount;
-                cockpit.ResultUpdate(altitude);
+                    changeAmount = -changeAmount;
+                var testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED ALTITUDE" && x.Request.Unit == "feet");
+                if (testResult == null)
+                {
+                    testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = (double)-1 };
+                    requestResults.Add(testResult);
+                    testResult.Result = (double)3000;
+                }
+                else
+                {
+                    testResult.Result = (double)testResult.Result + changeAmount;
+                }
+                ReceiveResultFromServer(null, testResult);
+
+                testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED AIRSPEED" && x.Request.Unit == "knots");
+                if (testResult == null)
+                {
+                    testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED AIRSPEED", Unit = "knots" }, Result = (double)-1 };
+                    requestResults.Add(testResult);
+                    testResult.Result = (double)100;
+                }
+                else
+                {
+                    changeAmount = rnd.Next(50);
+                    if(rnd.NextDouble() > 0.5)
+                    {
+                        changeAmount = -changeAmount;
+                    }
+                    testResult.Result = (double)testResult.Result + changeAmount;
+                }
+                ReceiveResultFromServer(null, testResult);
+
             }
         }
 
