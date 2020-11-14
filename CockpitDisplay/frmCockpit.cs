@@ -89,26 +89,33 @@ namespace CockpitDisplay
                 if (usedInstrumentPlugins != null)
                 {
                     lock (usedInstrumentPlugins)
-                        foreach (var instrument in usedInstrumentPlugins)
+                        try
                         {
-                            if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
+                            foreach (var instrument in usedInstrumentPlugins)
                             {
-                                try
+                                if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
                                 {
-                                    instrument.UpdateFrequency = int.Parse(requestResult.Result.ToString());
+                                    try
+                                    {
+                                        instrument.UpdateFrequency = int.Parse(requestResult.Result.ToString());
+                                    }
+                                    catch { }
                                 }
-                                catch { }
+                                else
+                                if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
+                                    try
+                                    {
+                                        instrument.ValueUpdate(requestResult);
+                                        UpdateCockpitItem(instrument.Control);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
                             }
-                            else
-                            if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
-                                try
-                                {
-                                    instrument.ValueUpdate(requestResult);
-                                    UpdateCockpitItem(instrument.Control);
-                                }
-                                catch (Exception ex)
-                                {
-                                }
+                        }
+                        catch(Exception ex)
+                        {
+
                         }
                     UpdateCockpitItem(this);
                 }

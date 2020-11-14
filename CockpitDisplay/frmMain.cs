@@ -59,7 +59,7 @@ namespace CockpitDisplay
                 testTimer = null;
             }
             // Set it to go off every ten seconds
-            testTimer = new System.Timers.Timer(1000);
+            testTimer = new System.Timers.Timer(2500);
             // Tell the timer what to do when it elapses
             testTimer.Elapsed += new ElapsedEventHandler(updateInstrumentsForTest);
             // And start it        
@@ -71,41 +71,44 @@ namespace CockpitDisplay
         {
             if (cockpit != null)
             {
-                var rnd = new Random();
-                var changeAmount = rnd.Next(100);
-                if (rnd.NextDouble() > 0.5)
-                    changeAmount = -changeAmount;
-                var testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED ALTITUDE" && x.Request.Unit == "feet");
-                if (testResult == null)
+                try
                 {
-                    testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = (double)-1 };
-                    requestResults.Add(testResult);
-                    testResult.Result = (double)3000;
-                }
-                else
-                {
-                    testResult.Result = (double)testResult.Result + changeAmount;
-                }
-                ReceiveResultFromServer(null, testResult);
-
-                testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED AIRSPEED" && x.Request.Unit == "knots");
-                if (testResult == null)
-                {
-                    testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED AIRSPEED", Unit = "knots" }, Result = (double)-1 };
-                    requestResults.Add(testResult);
-                    testResult.Result = (double)100;
-                }
-                else
-                {
-                    changeAmount = rnd.Next(50);
-                    if(rnd.NextDouble() > 0.5)
-                    {
+                    var rnd = new Random();
+                    var changeAmount = rnd.Next(100);
+                    if (rnd.NextDouble() > 0.5)
                         changeAmount = -changeAmount;
+                    var testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED ALTITUDE" && x.Request.Unit == "feet");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)3000;
                     }
-                    testResult.Result = (double)testResult.Result + changeAmount;
-                }
-                ReceiveResultFromServer(null, testResult);
+                    else
+                    {
+                        testResult.Result = (double)testResult.Result + changeAmount;
+                    }
+                    ReceiveResultFromServer(null, testResult);
 
+                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED AIRSPEED" && x.Request.Unit == "knots");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED AIRSPEED", Unit = "knots" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)100;
+                    }
+                    else
+                    {
+                        changeAmount = ((int)(double)testResult.Result) / 10;
+                        if (rnd.NextDouble() > 0.5)
+                        {
+                            changeAmount = -changeAmount;
+                        }
+                        testResult.Result = (double)testResult.Result + changeAmount;
+                    }
+                    ReceiveResultFromServer(null, testResult);
+                }
+                catch(Exception ex) { }
             }
         }
 

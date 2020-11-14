@@ -142,49 +142,43 @@ namespace InstrumentPlugins
 
         private void PaintAnimation(object sender, PaintEventArgs e)
         {
-            try
-            {
                 var ctrl = (Control)sender;
                 var animation = config.Animations.First(x => x.Name == ctrl.Name);
                 var triggers = (AnimationTriggerClientRequest[])animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
-                foreach (var trigger in triggers)
+            foreach (var trigger in triggers)
+            {
+                var nextResult = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit);
+                var valuesIdx = previousResults.IndexOf(nextResult);
+                var nextValue = nextResult.Result;
+#if DEBUG
+                var targetValue = currentResults[valuesIdx].Result;
+#endif
+                if (animation.LastAppliedValue != nextValue)
                 {
-                    var currentResult = currentResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit);
-                    var resultIdx = currentResults.IndexOf(currentResult);
-                    var animationTimer = animateTimers[resultIdx];
-
-                    var previousResult = previousResults[resultIdx];
-                    var nextValue = (double)(previousResult.Result ?? 0.0);
-                    var currentValue = (double)currentResult.Result;
-
-                    if (nextValue != currentValue && nextValue != (double)(animation?.LastAppliedValue ?? (object)0.0))
+                    animation.LastAppliedValue = nextValue;
+                    foreach (var action in trigger.Actions)
                     {
-                        animation.LastAppliedValue = nextValue;
-                        foreach (var action in trigger.Actions)
+                        if (action is AnimationActionRotate)
                         {
-                            if (action is AnimationActionRotate)
+                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+
+                            var rotateAction = (AnimationActionRotate)action;
+                            var rotateAngle = (float)((360 * (double)nextValue) / rotateAction.MaximumValueExpected);
+                            Bitmap initialImage = null;
+                            initialImage = DrawPoints((AnimationDrawing)animation);
+                            initialImage = RotateImage(initialImage, rotateAngle);
+
+                            if (initialImage != null)
                             {
-                                // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
-
-                                var rotateAction = (AnimationActionRotate)action;
-                                var rotateAngle = (float)((360 * nextValue) / rotateAction.MaximumValueExpected);
-                                Bitmap initialImage = null;
-                                initialImage = DrawPoints((AnimationDrawing)animation);
-                                initialImage = RotateImage(initialImage, rotateAngle);
-
-                                if (initialImage != null)
-                                {
-                                    ctrl.BackColor = Color.Transparent;
-                                    ((PictureBox)ctrl).Image = initialImage;
-                                    ctrl.BringToFront();
-                                    //ctrl.Invalidate();
-                                }
+                                ctrl.BackColor = Color.Transparent;
+                                ((PictureBox)ctrl).Image = initialImage;
+                                ctrl.BringToFront();
+                                ctrl.Invalidate();
                             }
                         }
                     }
                 }
             }
-            catch { } // Animation failed - will be refreshed again soon if this isn't the last animation
         }
 
         private Bitmap RotateImage(Bitmap bmp, float angle)
@@ -275,27 +269,29 @@ namespace InstrumentPlugins
                     lastValue.Result = (double)lastValue.Result + stepSize;
                     lastExecution = DateTime.Now;
                     if (stepSize < 0)
+                    {
                         if ((double)lastValue.Result < (double)currentValue.Result)
                         {
                             // Reached our limit
                             lastValue.Result = currentValue.Result;
                             RemoveTimer(timerIdx);
                         }
-                        else
+                    }
+                    else
+                    {
+                        if ((double)lastValue.Result > (double)currentValue.Result)
                         {
-                            if ((double)lastValue.Result > (double)currentValue.Result)
-                            {
-                                // Reached our limit
-                                lastValue.Result = currentValue.Result;
-                                RemoveTimer(timerIdx);
-                            }
+                            // Reached our limit
+                            lastValue.Result = currentValue.Result;
+                            RemoveTimer(timerIdx);
                         }
+                    }
                     // Trigger paint event of any controls that rely on this value
                     var animations = config.Animations.Where(x => x.Triggers.Any(y => y.Type == AnimationTriggerTypeEnum.ClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == lastValue.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == lastValue.Request.Unit)).Select(x => x).ToArray();
                     foreach (var name in animations.Select(x => x.Name))
                     {
                         if (Control.Controls.ContainsKey(name))
-                            UpdateInstrument(Control); // Force this control to repaint itself and any children
+                            UpdateInstrument(Control.Controls[name]); // Force this control to repaint itself and any children
                     }
                     if (timerIdx > -1)
                         lock (animateTimers)
@@ -310,21 +306,24 @@ namespace InstrumentPlugins
 
         private void UpdateInstrument(Control obj)
         {
+            if (obj.InvokeRequired)
+            {
+                try
+                {
+                    var d = new SafeUpdateDelegate(UpdateInstrument);
+                    obj.Invoke(d, new object[] { obj });
+                }
+                catch { }
+                return;
+            }
             try
             {
-                if (obj.InvokeRequired)
-                {
-                    delgte = new SafeUpdateDelegate(UpdateInstrument);
-                    obj.Invoke(delgte, new object[] { obj });
-                    return;
-                }
-                else
-                {
-                    //PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
-                    obj.Invalidate(true);
-                }
+                obj.Update();
+                //PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
             }
-            catch { }
+            catch(Exception ex)
+            {
+            }
         }
 
 
@@ -348,9 +347,13 @@ namespace InstrumentPlugins
                 if (animation.ScaleMethod == AnimationScaleMethodEnum.Percent)
                 {
                     // Resize image using the current scale 
-                    absoluteX = (float)(Control.Width * animation.RelativeX / 100.0f);
-                    absoluteY = (float)(Control.Height * animation.RelativeY / 100.0f);
-                    points = animation.PointMap.Select(x => new PointF(x.Point.X + absoluteX, x.Point.Y + absoluteY)).ToArray();
+                    var scaleX = animation.RelativeX / 100.0f;
+                    var scaleY = animation.RelativeY / 100.0f;
+                    var pixelsPerPercentX = Control.Width / 100.0f;
+                    var pixelsPerPercentY = Control.Height / 100.0f;
+                    absoluteX = (float)(Control.Width * scaleX);
+                    absoluteY = (float)(Control.Height * scaleY);
+                    points = animation.PointMap.Select(x => new PointF(x.Point.X * pixelsPerPercentX + absoluteX, x.Point.Y * pixelsPerPercentY + absoluteY)).ToArray();
                 }
                 Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 bitmap.MakeTransparent();
@@ -431,7 +434,7 @@ namespace InstrumentPlugins
                     animationStepCount = (animationTimeInMs / animationUpdateInMs);
                     // Modify the step size for our control
                     lock (animationSteps)
-                        animationSteps[resultIdx] = Math.Abs(((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount);
+                        animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
                     // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
                     var animationTime = animationTimeInMs / animationStepCount; // Expected Update Time divided by number of animation steps we want within that time
                     // This will cause ExecuteAnimation to run, which should update the Last Value by Step Size & trigger Paint Event for any controls relying on this variable to update
