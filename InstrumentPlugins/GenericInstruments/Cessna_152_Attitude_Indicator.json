@@ -1,39 +1,16 @@
 {
   "Name": "Test Instrument for all aircraft",
   "Author": "Dragonlaird",
-  "Type": "Airspeed_Indicator",
+  "Type": "Attitude_Indicator",
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentBackgrounds\\Cessna_152_Airspeed_Indicator.png",
   "Aircraft": [ "Cessna 152 ASOBO" ],
   "AnimationUpdateInMs": 100,
   "Animations": [
     {
-      "Type": "Drawing",
-      "Name": "Needle",
-      "PointMap": [
-        {
-          "X": -1.25,
-          "Y": -1.25
-        },
-        {
-          "X": -2.5,
-          "Y": 20.0
-        },
-        {
-          "X": 0.0,
-          "Y": 27.0
-        },
-        {
-          "X": 2.5,
-          "Y": 20.0
-        },
-        {
-          "X": 1.25,
-          "Y": -1.25
-        }
-      ],
-      "FillMethod": 0,
-      "FillColor": "White",
+      "Type": "Image",
+      "Name": "Attitude",
+      "ImagePath": "InstrumentBackgrounds\\Attitude Indicator Gimbal.png,",
       "ScaleMethod": "Percent",
       "RelativeX": 50.0,
       "RelativeY": 50.0,
@@ -41,8 +18,8 @@
         {
           "Type": "ClientRequest",
           "Request": {
-            "Name": "INDICATED AIRSPEED",
-            "Unit": "knots"
+            "Name": "ATTITUDE INDICATOR BANK DEGREES",
+            "Unit": "radians"
           },
           "Actions": [
             {

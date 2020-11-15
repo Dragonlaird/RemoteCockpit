@@ -36,7 +36,7 @@ namespace RemoteCockpitClasses.Animations
         public string BackgroundImagePath { get; set; }
         public string [] Aircraft { get; set; }
         public int AnimationUpdateInMs { get; set; }
-        [JsonConverter(typeof(ConcreteConverter<List<AnimationDrawing>>))]
+        [JsonConverter(typeof(ConcreteConverter<List<IAnimationItem>>))]
         public IEnumerable<IAnimationItem> Animations { get; set; }
         public IEnumerable<ClientRequest> ClientRequests
         {

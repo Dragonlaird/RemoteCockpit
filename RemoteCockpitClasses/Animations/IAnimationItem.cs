@@ -7,7 +7,7 @@ namespace RemoteCockpitClasses.Animations
 {
     public interface IAnimationItem
     {
-        AnimationItemTypeEnum Type { get; }
+        AnimationItemTypeEnum Type { get; set; }
         string Name { get; set; }
         [JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest>))]
         IEnumerable<IAnimationTrigger> Triggers { get; set; }

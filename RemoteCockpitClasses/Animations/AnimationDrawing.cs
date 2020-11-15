@@ -10,7 +10,7 @@ namespace RemoteCockpitClasses.Animations
 {
     public class AnimationDrawing : IAnimationItem
     {
-        public AnimationItemTypeEnum Type => AnimationItemTypeEnum.Drawing;
+        public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.Drawing; } set { } }
         public string Name { get; set; }
         public AnimationPoint[] PointMap { get; set; }
         public FillType FillMethod { get; set; }

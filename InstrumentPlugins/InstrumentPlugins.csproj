@@ -78,6 +78,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GenericInstruments\Cessna_152_Attitude_Indicator.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GenericInstruments\Cessna_152_Altimeter.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -104,6 +107,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="engine_speed.xml" />
+    <None Include="InstrumentBackgrounds\Attitude Indicator Gimbal.png" />
     <Content Include="InstrumentBackgrounds\Cessna_152_Airspeed_Indicator.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
