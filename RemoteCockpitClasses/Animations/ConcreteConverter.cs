@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace RemoteCockpitClasses.Animations
 {
@@ -16,25 +17,59 @@ namespace RemoteCockpitClasses.Animations
          Type objectType, object existingValue, JsonSerializer serializer)
         {
             List<IAnimationItem> result = new List<IAnimationItem>();
-            var obj = serializer.Deserialize(reader);
-            foreach (var elem in (Newtonsoft.Json.Linq.JArray)obj)
+            var obj = serializer.Deserialize<JArray>(reader);
+            foreach (var elem in obj)
             {
-                foreach (JProperty prop in elem)
+                var child = ConvertTo(typeof(IAnimationItem), (JToken)elem);
+                if (child != null)
+                    result.Add((IAnimationItem)child);
+            }
+            return result;
+        }
+
+        private ST ConvertTo<ST>(ST type, JToken obj) where ST: class
+        {
+            ST result = null;
+            Type checkType = Type.GetType(type.ToString());
+            var isInterface = checkType.IsInterface;
+            if (isInterface)
+            {
+                var allAssemblies = AppDomain
+                    .CurrentDomain
+                    .GetAssemblies();
+
+                List<Type> allClasses = new List<Type>();
+                foreach(var classCollection in allAssemblies)
                 {
-                    if (prop.Name == "Type")
+                    try
                     {
-                        var value = prop.Value;
-                        switch(value.ToString())
+                        var classes = classCollection.GetTypes();
+                        try
                         {
-                            case "Drawing":
-                                result.Add(prop.ToObject<AnimationDrawing>());
-                                break;
-                            case "Image":
-                                result.Add(prop.ToObject<AnimationImage>());
-                                break;
+                            foreach (var cls in classes)
+                            {
+                                if (!cls.IsAbstract && !cls.IsInterface && checkType.IsAssignableFrom(cls))
+                                    allClasses.Add(cls);
+                            }
                         }
+                        catch { }
                     }
+                    catch { }
                 }
+
+
+
+                foreach (var cls in allClasses)
+                {
+                    try
+                    {
+                        var possibleClass = Activator.CreateInstance(cls);
+                        var possibleResult = ConvertTo(possibleClass.GetType(), obj);
+                        //return (ST)possibleResult;
+                    }
+                    catch { }
+                }
+
             }
             return result;
         }
@@ -44,5 +79,14 @@ namespace RemoteCockpitClasses.Animations
         {
             serializer.Serialize(writer, value);
         }
+    }
+
+    public static class GenericType
+    {
+        public static Type GetEnumeratedType<T>(this T _)
+        {
+            return typeof(T);
+        }
+
     }
 }
