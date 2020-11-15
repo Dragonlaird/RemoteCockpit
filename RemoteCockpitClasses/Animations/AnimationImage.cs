@@ -15,6 +15,5 @@ namespace RemoteCockpitClasses.Animations
         public AnimationScaleMethodEnum ScaleMethod { get; set; }
         public IAnimationTrigger[] Triggers { get; set; }
         public object LastAppliedValue { get; set; }
-
     }
 }

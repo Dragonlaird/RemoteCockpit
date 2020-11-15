@@ -3,7 +3,7 @@
   "Author": "Dragonlaird",
   "Type": "Airspeed_Indicator",
   "CreateDate": "2020-11-08T12:00:00",
-  "BackgroundImagePath": ".\\InstrumentBackgrounds\\Cessna_152_Airspeed_Indicator.png",
+  "BackgroundImagePath": ".\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png",
   "Aircraft": [ "Cessna 152 ASOBO" ],
   "AnimationUpdateInMs": 100,
   "Animations": [

@@ -103,12 +103,14 @@
     <Content Include="CockpitBackgrounds\Cockpit_Background.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="InstrumentBackgrounds\Airspeed_Background.png">
+    <Content Include="InstrumentImages\Airspeed_Background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="engine_speed.xml" />
-    <None Include="InstrumentBackgrounds\Attitude Indicator Gimbal.png" />
-    <Content Include="InstrumentBackgrounds\Cessna_152_Airspeed_Indicator.png">
+    <Content Include="InstrumentImages\Attitude_Indicator_Gimbal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="InstrumentImages\Cessna_152_Airspeed_Indicator.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

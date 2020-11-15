@@ -7,7 +7,7 @@ namespace RemoteCockpitClasses.Animations
 {
     public interface IAnimationAction
     {
-        [JsonConverter(typeof(ConcreteConverter<List<AnimationActionRotate>>))]
+        [JsonConverter(typeof(ConcreteConverter<AnimationActionRotate[]>))]
         AnimationActionTypeEnum Type { get; }
     }
 }
