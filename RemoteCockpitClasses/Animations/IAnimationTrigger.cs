@@ -9,6 +9,6 @@ namespace RemoteCockpitClasses.Animations
     {
         AnimationTriggerTypeEnum Type { get; set; }
         [JsonConverter(typeof(ConcreteConverter<List<AnimationActionRotate>>))]
-        IEnumerable<IAnimationAction> Actions { get; set; }
+        IAnimationAction[] Actions { get; set; }
     }
 }

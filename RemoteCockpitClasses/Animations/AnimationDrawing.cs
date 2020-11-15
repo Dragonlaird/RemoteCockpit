@@ -19,8 +19,8 @@ namespace RemoteCockpitClasses.Animations
         public AnimationScaleMethodEnum ScaleMethod { get; set; }
         public double RelativeX { get; set; }
         public double RelativeY { get; set; }
-        [JsonConverter(typeof(ConcreteConverter<List<AnimationTriggerClientRequest>>))]
-        public IEnumerable<IAnimationTrigger> Triggers { get; set; }
+        [JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest[]>))]
+        public IAnimationTrigger[] Triggers { get; set; }
 
         public object LastAppliedValue { get; set; }
     }

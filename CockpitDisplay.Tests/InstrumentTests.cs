@@ -49,7 +49,7 @@ namespace CockpitDisplay.Tests
                             FillColor = Color.CornflowerBlue,
                             FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
                             ScaleMethod = AnimationScaleMethodEnum.Percent,
-                            Triggers = new List<AnimationTriggerClientRequest>{
+                            Triggers = new AnimationTriggerClientRequest[]{
                                 new AnimationTriggerClientRequest
                                 {
                                     Type = AnimationTriggerTypeEnum.ClientRequest,
@@ -57,7 +57,7 @@ namespace CockpitDisplay.Tests
                                     {
                                         Name = "INDICATED AIRSPEED", Unit = "knots"
                                     },
-                                    Actions = new List<IAnimationAction>
+                                    Actions = new IAnimationAction[]
                                     {
                                         new AnimationActionRotate
                                         {
