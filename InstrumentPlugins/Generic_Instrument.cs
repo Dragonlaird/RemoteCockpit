@@ -182,6 +182,14 @@ namespace InstrumentPlugins
                         var rotateAngle = (float)((360 * (double)nextValue) / rotateAction.MaximumValueExpected);
                         initialImage = RotateImage(initialImage, rotateAngle);
                     }
+                    if(action is AnimateActionClip)
+                    {
+                        if(((AnimateActionClip)action).Style == AnimateActionClipEnum.Circle)
+                        {
+                            // Clip a circle using the 2 points to mark the outer edge
+                            initialImage = ClipImage(initialImage, ((AnimateActionClip)action).Style, ((AnimateActionClip)action).StartPoint, ((AnimateActionClip)action).EndPoint);
+                        }
+                    }
                 }
             }
             if (initialImage != null)
@@ -190,6 +198,40 @@ namespace InstrumentPlugins
                 ((PictureBox)ctrl).Image = initialImage;
                 ctrl.BringToFront();
                 ctrl.Invalidate();
+            }
+        }
+
+        private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
+        {
+                Bitmap dstImage = new Bitmap(image.Width, image.Height, image.PixelFormat);
+                var onePercentX = image.Width / 100.0f;
+                var onePercentY = image.Height / 100.0f;
+                var topLeft = new PointF(start.X * onePercentX, start.Y * onePercentY);
+                var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
+            using (Graphics g = Graphics.FromImage(dstImage))
+            {
+                // enables smoothing of the edge of the circle (less pixelated)
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // fills background color
+                using (Brush br = new SolidBrush(Color.Transparent))
+                {
+                    g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
+                }
+
+                // adds the new ellipse & draws the image again 
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    // Clipping a circular path
+                    if (style == AnimateActionClipEnum.Circle)
+                        path.AddEllipse(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y);
+                    // Clipping a square
+                    if (style == AnimateActionClipEnum.Square)
+                        path.AddRectangle(new RectangleF(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y));
+                    g.SetClip(path);
+                    g.DrawImage(image, 0, 0);
+                }
+                return dstImage;
             }
         }
 

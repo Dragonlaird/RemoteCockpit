@@ -107,8 +107,26 @@ namespace CockpitDisplay
                         testResult.Result = (double)testResult.Result + changeAmount;
                     }
                     ReceiveResultFromServer(null, testResult);
+
+                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED AIRSPEED" && x.Request.Unit == "knots");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "ATTITUDE INDICATOR BANK DEGREES", Unit = "radians" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)0;
+                    }
+                    else
+                    {
+                        changeAmount = ((int)(double)40);
+                        if (rnd.NextDouble() > 0.5)
+                        {
+                            changeAmount = -changeAmount;
+                        }
+                        testResult.Result = (double)testResult.Result + changeAmount;
+                    }
+                    ReceiveResultFromServer(null, testResult);
                 }
-                catch(Exception ex) { }
+                catch (Exception ex) { }
             }
         }
 
