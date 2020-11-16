@@ -33,12 +33,12 @@
               "Type": "Clip",
               "Style": "Circle",
               "StartPoint": {
-                "X": 20,
-                "Y": 20
+                "X": 45,
+                "Y": 45
               },
               "EndPoint": {
-                "X": 80,
-                "Y": 80
+                "X": 55,
+                "Y": 55
               }
             }
           ]

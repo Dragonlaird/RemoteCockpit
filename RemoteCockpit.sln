@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentPlugins", "Instru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitDisplay.Tests", "CockpitDisplay.Tests\CockpitDisplay.Tests.csproj", "{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentDesigner", "InstrumentDesigner\InstrumentDesigner.csproj", "{2302D97E-8E57-4C4C-A653-878629D5F1C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

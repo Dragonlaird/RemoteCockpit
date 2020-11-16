@@ -184,11 +184,8 @@ namespace InstrumentPlugins
                     }
                     if(action is AnimateActionClip)
                     {
-                        if(((AnimateActionClip)action).Style == AnimateActionClipEnum.Circle)
-                        {
-                            // Clip a circle using the 2 points to mark the outer edge
-                            initialImage = ClipImage(initialImage, ((AnimateActionClip)action).Style, ((AnimateActionClip)action).StartPoint, ((AnimateActionClip)action).EndPoint);
-                        }
+                        // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
+                        initialImage = ClipImage(initialImage, ((AnimateActionClip)action).Style, ((AnimateActionClip)action).StartPoint, ((AnimateActionClip)action).EndPoint);
                     }
                 }
             }
@@ -203,11 +200,11 @@ namespace InstrumentPlugins
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
         {
-                Bitmap dstImage = new Bitmap(image.Width, image.Height, image.PixelFormat);
-                var onePercentX = image.Width / 100.0f;
-                var onePercentY = image.Height / 100.0f;
-                var topLeft = new PointF(start.X * onePercentX, start.Y * onePercentY);
-                var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
+            Bitmap dstImage = new Bitmap(image.Width, image.Height, image.PixelFormat);
+            var onePercentX = image.Width / 100.0f;
+            var onePercentY = image.Height / 100.0f;
+            var topLeft = new PointF(start.X * onePercentX/2, start.Y * onePercentY/2);
+            var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
             using (Graphics g = Graphics.FromImage(dstImage))
             {
                 // enables smoothing of the edge of the circle (less pixelated)
