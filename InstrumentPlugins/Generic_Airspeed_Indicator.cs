@@ -222,7 +222,7 @@ namespace InstrumentPlugins
         {
             get
             {
-                return new string[] { "" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Blank can be used on all layouts
             }
         }
 

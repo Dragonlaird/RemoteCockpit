@@ -97,7 +97,7 @@ namespace CockpitDisplay
                             {
                                 try
                                 {
-                                    instrument.UpdateFrequency = int.Parse(requestResult.Result.ToString());
+                                    instrument.UpdateFrequency = int.Parse(requestResult.Result?.ToString() ?? "3");
                                 }
                                 catch { }
                             }
@@ -184,7 +184,7 @@ namespace CockpitDisplay
             {
                 foreach (var instrumentPosition in layoutDefinition.Postions)
                 {
-                    var plugin = instrumentPlugins.OrderByDescending(x=> x.PluginDate).FirstOrDefault(x => x.Type == instrumentPosition.Type);
+                    var plugin = instrumentPlugins.Where(x => x.Aircraft != null && (x.Aircraft.Contains(layoutDefinition.Name) || x.Aircraft.Contains("Generic"))).OrderByDescending(x => x.PluginDate).FirstOrDefault(x => x.Type == instrumentPosition.Type);
                     try
                     {
                         if (plugin != null)

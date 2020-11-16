@@ -107,6 +107,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="engine_speed.xml" />
+    <Content Include="InstrumentImages\Attitude_Generic_Background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="InstrumentImages\Attitude_Indicator_Gimbal.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

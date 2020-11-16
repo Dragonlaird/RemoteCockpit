@@ -1,7 +1,34 @@
 {
   "Layouts": [
     {
-      "Name": "Cessna 152 ASOBO",
+      "Name": "Generic",
+      "Background": "Generic_Dashboard.png",
+      "Postions": [
+        {
+          "Type": 1, // 1 = Airspeed
+          "Top": 25,
+          "Left": 3,
+          "Height": 30,
+          "Width": 8.5
+        },
+        {
+          "Type": 4, // 4 = Attitude
+          "Top": 25,
+          "Left": 12,
+          "Height": 30,
+          "Width": 8.5
+        },
+        {
+          "Type": 0, // 0 = Altimeter
+          "Top": 25,
+          "Left": 24,
+          "Height": 30,
+          "Width": 8.5
+        }
+      ]
+    },
+    {
+      "Name": "Cessna 152 Asobo",
       "Background": "Cessna_152_Dashboard.png",
       "Postions": [
         {

@@ -108,6 +108,8 @@
             // 
             this.cmbCockpitLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbCockpitLayout.FormattingEnabled = true;
+            this.cmbCockpitLayout.Items.AddRange(new object[] {
+            "Generic"});
             this.cmbCockpitLayout.Location = new System.Drawing.Point(117, 102);
             this.cmbCockpitLayout.Name = "cmbCockpitLayout";
             this.cmbCockpitLayout.Size = new System.Drawing.Size(403, 28);

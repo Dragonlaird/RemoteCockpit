@@ -1,6 +1,9 @@
-﻿using RemoteCockpitClasses;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RemoteCockpitClasses;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -30,24 +33,8 @@ namespace CockpitDisplay
 
             // Only variable needed for this is "TITLE", to be notified whenever the aircraft type changes
             Thread.Sleep(3000);
-            //// Always ask to be notified when Connection to FlightSim is made or dropped
-            //RequestVariable(new ClientRequest
-            //{
-            //    Name = "FS CONNECTION",
-            //    Unit = "bool"
-            //});
-            //// Also, ask to be notified whenever user starts flying a different aircraft
-            //RequestVariable(new ClientRequest
-            //{
-            //    Name = "TITLE"
-            //});
 
-            //RequestVariable(new ClientRequest
-            //{
-            //    Name = "UPDATE FREQUENCY",
-            //    Unit = "second"
-            //});
-            TestInstruments();
+            //TestInstruments();
         }
 
         private void TestInstruments()
@@ -132,11 +119,23 @@ namespace CockpitDisplay
 
         private void RequestVariable(ClientRequest request)
         {
+            if(!requestResults.Any(x=> x.Request.Name == request.Name && x.Request.Unit == request.Unit))
+            {
+                requestResults.Add(new ClientRequestResult { Request = request, Result = null });
+            }
             cbConnected.Checked = connector?.Connected ?? false;
             if (connector?.Connected == true)
             {
                 connector.RequestVariable(request);
             }
+        }
+
+        private void RequestAllVariables()
+        {
+            // Assume FS Connection is not established - the re-request the Connection State
+            // If FS Connection returns true, it will automatially resubmit all variable requests
+            cbFSRunning.Checked = false;
+            RequestVariable(new ClientRequest { Name = "FS CONNECTION", Unit = "second" });
         }
 
         private void Initialize()
@@ -148,6 +147,34 @@ namespace CockpitDisplay
             connector.ReceiveData += ReceiveResultFromServer;
             connector.Connect();
             cbConnected.Checked = connector.Connected;
+
+            var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
+            var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
+            cmbCockpitLayout.Items.Clear();
+            foreach (var layoutJson in layouts["Layouts"])
+            {
+                var layout = layoutJson.ToObject<LayoutDefinition>();
+                cmbCockpitLayout.Items.Add(layout.Name);
+            }
+            cmbCockpitLayout.SelectedIndex = 0;
+            // Always ask to be notified when Connection to FlightSim is made or dropped
+            RequestVariable(new ClientRequest
+            {
+                Name = "FS CONNECTION",
+                Unit = "bool"
+            });
+            // Also, ask to be notified whenever user starts flying a different aircraft
+            RequestVariable(new ClientRequest
+            {
+                Name = "TITLE",
+                Unit = "string"
+            });
+
+            RequestVariable(new ClientRequest
+            {
+                Name = "UPDATE FREQUENCY",
+                Unit = "second"
+            });
         }
 
         private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)
@@ -160,22 +187,48 @@ namespace CockpitDisplay
             else
                 requestResults.Add(requestResult);
 
-                // Received a new value for a request - identify which plugins need this variable and send it
-                if (requestResult.Request.Name == "FS CONNECTION")
+            // Received a new value for a request - identify which plugins need this variable and send it
+            if (requestResult.Request.Name == "FS CONNECTION")
             {
                 // Just informing us the current connection state to the Flight Simulator = display it on screen
                 var existingConnectionState = this.Controls.Find("cbFSRunning", true);
                 foreach (Control connectionStateLabel in existingConnectionState)
                 {
                     if ((bool)requestResult.Result)
+                    {
+                        if (!((CheckBox)existingConnectionState.First()).Checked)
+                        {
+                            // Re-request all previous variables after reconnect
+                            foreach (var variableRequest in requestResults.Where(x => x.Request.Name != "FS CONNECTION"))
+                            {
+                                RequestVariable(variableRequest.Request);
+                            }
+                        }
                         UpdateObject(connectionStateLabel, "Checked", true);
+                    }
                     else
                         UpdateObject(connectionStateLabel, "Checked", false);
                 }
             }
-            if(cockpit != null)
+            if (requestResult.Request.Name == "TITLE")
             {
-                cockpit.ResultUpdate(requestResult);
+                // New aircraft selected
+                if (requestResult.Result != null && cmbCockpitLayout.Items.Contains(requestResult.Result?.ToString()) && cbAutoCockpitLayout.Checked)
+                {
+                    // User wants to auto-select the aircraft
+                    UpdateObject(cmbCockpitLayout, "SelectedIndex", cmbCockpitLayout.Items.IndexOf(requestResult.Result?.ToString()));
+                    //cmbCockpitLayout.SelectedIndex = cmbCockpitLayout.Items.IndexOf(requestResult.Result?.ToString());
+                    if (cockpit != null)
+                        // Cockpit already display - reload with the new layout
+                        ReloadCockpit(requestResult.Result.ToString());
+                }
+            }
+            else
+            {
+                if (cockpit != null)
+                {
+                    cockpit.ResultUpdate(requestResult);
+                }
             }
         }
 
@@ -203,7 +256,8 @@ namespace CockpitDisplay
             if (cb.Checked)
             {
                 cmbCockpitLayout.Enabled = false;
-                cmbCockpitLayout.Text = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Result?.ToString();
+                var layout = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Result?.ToString() ?? "Generic";
+                cmbCockpitLayout.Text = layout;
                 if (cockpit != null)
                     ReloadCockpit(cmbCockpitLayout.Text);
             }
@@ -217,11 +271,11 @@ namespace CockpitDisplay
         {
             if (string.IsNullOrEmpty(text))
             {
-                text = "Cessna 152 ASOBO";
+                text = "Generic";
             }
             if(cockpit != null)
             {
-                cockpit.Close();
+                //cockpit.Close();
                 cockpit.Dispose();
             }
             cockpit = new frmCockpit();
@@ -258,6 +312,7 @@ namespace CockpitDisplay
                 }
             }
             catch { }
+            RequestAllVariables(); // Resubmit all previous requests, in case server disconnected from FS
             //cockpit.Update();
             cockpit.Focus();
             this.Focus();
