@@ -6,14 +6,7 @@ namespace RemoteCockpitClasses.Animations
 {
     public class AnimateActionClip : IAnimationAction
     {
-        public AnimationActionTypeEnum Type
-        {
-            get
-            {
-                return AnimationActionTypeEnum.Clip;
-            }
-            set { }
-        }
+        public AnimationActionTypeEnum Type => AnimationActionTypeEnum.Clip;
         public AnimateActionClipEnum Style { get; set; }
         public AnimationPoint StartPoint { get; set; }
         public AnimationPoint EndPoint { get; set; }

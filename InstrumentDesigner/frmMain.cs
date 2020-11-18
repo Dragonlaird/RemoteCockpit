@@ -27,17 +27,16 @@ namespace InstrumentDesigner
 
         private void Initialize()
         {
-            config = new Configuration();
-            configFilePath = "";
-            openFileDialog.FileName = "";
-            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
             cmbInstrumentType.Items.Clear();
             foreach (var itemType in ((InstrumentType[])Enum.GetValues(typeof(InstrumentType))).OrderBy(x => x.ToString()))
             {
                 cmbInstrumentType.Items.Add(itemType.ToString());
             }
             cmbInstrumentType.SelectedIndex = 0;
-
+            configFilePath = "";
+            openFileDialog.FileName = "";
+            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            config = new Configuration();
         }
 
         private void PopulateConfigForm()
@@ -57,10 +56,13 @@ namespace InstrumentDesigner
 
             // Populate Background
             txtBackgroundPath.Text = config.BackgroundImagePath;
-            var image = LoadImage(Path.Combine(cockpitDirectory, config.BackgroundImagePath));
-            if (image != null)
-            {
-                ShowImage(image, pbBackgroundImage);
+            pbBackgroundImage.BackgroundImage = null;
+            if (!string.IsNullOrEmpty(config?.BackgroundImagePath)) {
+                var image = LoadImage(Path.Combine(cockpitDirectory, config.BackgroundImagePath));
+                if (image != null)
+                {
+                    ShowImage(image, pbBackgroundImage);
+                }
             }
         }
 
@@ -110,6 +112,7 @@ namespace InstrumentDesigner
                 {
                     var configJson = File.ReadAllText(fileName);
                     config = JsonConvert.DeserializeObject<Configuration>(configJson);
+                    config.HasChanged = false;
                     if (config == null || config.Name == null)
                     {
                         throw new Exception("Configuration Load Failed");
@@ -164,10 +167,43 @@ namespace InstrumentDesigner
                 if (dialogResult == DialogResult.OK)
                 {
                     var backgroundAbsolutePath = openFileDialog.FileName;
-
-                    
+                    txtBackgroundPath.Text = backgroundAbsolutePath;
+                    LoadImage(backgroundAbsolutePath);
                 }
             }
+        }
+        private void NewInstrument_Click(object sender, EventArgs e)
+        {
+            if(config == null || !config.HasChanged || MessageBox.Show("Are you sure you want to discard the current Instrument Configuraion and define a new Instrument?", "Discard existing Configuration?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                config = new Configuration();
+                PopulateConfigForm();
+            }
+        }
+
+        private void InstrumentName_Changed(object sender, EventArgs e)
+        {
+            config.Name = txtInstrumentName.Text;
+        }
+
+        private void InstrumentAuthor_Changed(object sender, EventArgs e)
+        {
+            config.Author = txtAuthor.Text;
+        }
+
+        private void InstrumentType_Changed(object sender, EventArgs e)
+        {
+            if (cmbInstrumentType.Items?.Count > 0)
+            {
+                var selectedType = cmbInstrumentType.Items[cmbInstrumentType.SelectedIndex].ToString();
+                if (config != null && !string.IsNullOrEmpty(selectedType))
+                    config.Type = (InstrumentType)Enum.Parse(typeof(InstrumentType), selectedType);
+            }
+        }
+
+        private void UpdateMS_Changed(object sender, EventArgs e)
+        {
+            config.AnimationUpdateInMs = int.Parse(txtUpdateMS.Text);
         }
     }
 }

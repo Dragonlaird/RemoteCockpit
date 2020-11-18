@@ -11,34 +11,29 @@ namespace RemoteCockpitClasses.Animations
     [DebuggerDisplay("\\{Configuration\\} {Name}")]
     public class Configuration
     {
+        private string _name;
+        private string _author;
+        private InstrumentType _type;
+        private DateTime _createDate;
+        private string _backgroundImagePath;
+        private string[] _aircraft;
+        private int _animationUpdateInMs;
+        private IAnimationItem[] _animations;
         public Configuration()
         {
 
         }
-        public Configuration(AnimationDrawing[] animationDrawings)
-        {
-            Animations = animationDrawings;
-        }
-        //public Configuration(AnimationImage[] animationImages)
-        //{
-        //    Animations = new List<IAnimationItem>(animationImages).ToArray();
-        //}
-        //public Configuration(AnimationDrawing[] animationDrawings, AnimationImage[] animationImages)
-        //{
-        //    List<IAnimationItem> items = new List<IAnimationItem>(animationDrawings);
-        //    items.AddRange(animationImages);
-        //    Animations = items.ToArray();
-        //}
-        public string Name { get; set; }
-        public string Author { get; set; }
-        public InstrumentType Type { get; set; }
-        public DateTime CreateDate { get; set; }
-        public string BackgroundImagePath { get; set; }
-        public string [] Aircraft { get; set; }
-        public int AnimationUpdateInMs { get; set; }
-        [JsonConverter(typeof(ConcreteConverter<List<IAnimationItem>>))]
-        public IEnumerable<IAnimationItem> Animations { get; set; }
-        public IEnumerable<ClientRequest> ClientRequests
+
+        public string Name { get { return _name; } set { if (_name != value) { _name = value; HasChanged = true; } } }
+        public string Author { get { return _author; } set { if (_author != value) { _author = value; HasChanged = true; } } }
+        public InstrumentType Type { get { return _type; } set { if (_type != value) { _type = value; HasChanged = true; } } }
+        public DateTime CreateDate { get { return _createDate; } set { if (_createDate != value) { _createDate = value; HasChanged = true; } } }
+        public string BackgroundImagePath { get { return _backgroundImagePath; } set { if (_backgroundImagePath != value) { _backgroundImagePath = value; HasChanged = true; } } }
+        public string [] Aircraft { get { return _aircraft; } set { if (_aircraft != value) { _aircraft = value; HasChanged = true; } } }
+        public int AnimationUpdateInMs { get { return _animationUpdateInMs; } set { if (_animationUpdateInMs != value) { _animationUpdateInMs = value; HasChanged = true; } } }
+        [JsonConverter(typeof(ConcreteConverter<IAnimationItem[]>))]
+        public IAnimationItem[] Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }
+        public ClientRequest[] ClientRequests
         {
             get
             {
@@ -50,6 +45,6 @@ namespace RemoteCockpitClasses.Animations
                     .ToArray();
             }
         }
-
+        public bool HasChanged { get; set; } = false;
     }
 }

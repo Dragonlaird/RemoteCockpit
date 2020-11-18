@@ -45,6 +45,9 @@ namespace InstrumentDesigner
             this.resizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.gpBasicInfo = new System.Windows.Forms.GroupBox();
+            this.lblAircraft = new System.Windows.Forms.Label();
+            this.dgAircraft = new System.Windows.Forms.DataGridView();
+            this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtCreateDate = new System.Windows.Forms.Label();
             this.lblCreateDate = new System.Windows.Forms.Label();
             this.txtUpdateMS = new System.Windows.Forms.TextBox();
@@ -61,14 +64,11 @@ namespace InstrumentDesigner
             this.txtBackgroundPath = new System.Windows.Forms.TextBox();
             this.lblBackgroundPath = new System.Windows.Forms.Label();
             this.pbBackgroundImage = new System.Windows.Forms.PictureBox();
-            this.dgAircraft = new System.Windows.Forms.DataGridView();
-            this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lblAircraft = new System.Windows.Forms.Label();
             this.mnuMain.SuspendLayout();
             this.gpBasicInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).BeginInit();
             this.gpBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuMain
@@ -195,6 +195,32 @@ namespace InstrumentDesigner
             this.gpBasicInfo.TabStop = false;
             this.gpBasicInfo.Text = "Instrument Details";
             // 
+            // lblAircraft
+            // 
+            this.lblAircraft.AutoSize = true;
+            this.lblAircraft.Location = new System.Drawing.Point(49, 165);
+            this.lblAircraft.Name = "lblAircraft";
+            this.lblAircraft.Size = new System.Drawing.Size(43, 13);
+            this.lblAircraft.TabIndex = 17;
+            this.lblAircraft.Text = "Aircraft:";
+            // 
+            // dgAircraft
+            // 
+            this.dgAircraft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgAircraft.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Aircraft});
+            this.dgAircraft.Location = new System.Drawing.Point(108, 160);
+            this.dgAircraft.Name = "dgAircraft";
+            this.dgAircraft.Size = new System.Drawing.Size(252, 230);
+            this.dgAircraft.TabIndex = 16;
+            // 
+            // Aircraft
+            // 
+            this.Aircraft.HeaderText = "Aircraft";
+            this.Aircraft.Name = "Aircraft";
+            this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Aircraft.Width = 200;
+            // 
             // txtCreateDate
             // 
             this.txtCreateDate.AutoSize = true;
@@ -218,6 +244,7 @@ namespace InstrumentDesigner
             this.txtUpdateMS.Name = "txtUpdateMS";
             this.txtUpdateMS.Size = new System.Drawing.Size(100, 20);
             this.txtUpdateMS.TabIndex = 13;
+            this.txtUpdateMS.TextChanged += new System.EventHandler(this.UpdateMS_Changed);
             // 
             // lblUpdateMS
             // 
@@ -236,6 +263,7 @@ namespace InstrumentDesigner
             this.cmbInstrumentType.Name = "cmbInstrumentType";
             this.cmbInstrumentType.Size = new System.Drawing.Size(143, 21);
             this.cmbInstrumentType.TabIndex = 11;
+            this.cmbInstrumentType.SelectedIndexChanged += new System.EventHandler(this.InstrumentType_Changed);
             // 
             // lblInstrumentType
             // 
@@ -252,6 +280,7 @@ namespace InstrumentDesigner
             this.txtAuthor.Name = "txtAuthor";
             this.txtAuthor.Size = new System.Drawing.Size(252, 20);
             this.txtAuthor.TabIndex = 9;
+            this.txtAuthor.TextChanged += new System.EventHandler(this.InstrumentAuthor_Changed);
             // 
             // lblAuthor
             // 
@@ -268,6 +297,7 @@ namespace InstrumentDesigner
             this.txtInstrumentName.Name = "txtInstrumentName";
             this.txtInstrumentName.Size = new System.Drawing.Size(252, 20);
             this.txtInstrumentName.TabIndex = 7;
+            this.txtInstrumentName.TextChanged += new System.EventHandler(this.InstrumentName_Changed);
             // 
             // lblInstrumentName
             // 
@@ -338,32 +368,6 @@ namespace InstrumentDesigner
             this.pbBackgroundImage.TabIndex = 5;
             this.pbBackgroundImage.TabStop = false;
             // 
-            // dgAircraft
-            // 
-            this.dgAircraft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgAircraft.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Aircraft});
-            this.dgAircraft.Location = new System.Drawing.Point(108, 160);
-            this.dgAircraft.Name = "dgAircraft";
-            this.dgAircraft.Size = new System.Drawing.Size(252, 230);
-            this.dgAircraft.TabIndex = 16;
-            // 
-            // Aircraft
-            // 
-            this.Aircraft.HeaderText = "Aircraft";
-            this.Aircraft.Name = "Aircraft";
-            this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Aircraft.Width = 200;
-            // 
-            // lblAircraft
-            // 
-            this.lblAircraft.AutoSize = true;
-            this.lblAircraft.Location = new System.Drawing.Point(49, 165);
-            this.lblAircraft.Name = "lblAircraft";
-            this.lblAircraft.Size = new System.Drawing.Size(43, 13);
-            this.lblAircraft.TabIndex = 17;
-            this.lblAircraft.Text = "Aircraft:";
-            // 
             // frmInstrumentDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -379,10 +383,10 @@ namespace InstrumentDesigner
             this.mnuMain.PerformLayout();
             this.gpBasicInfo.ResumeLayout(false);
             this.gpBasicInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).EndInit();
             this.gpBackground.ResumeLayout(false);
             this.gpBackground.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

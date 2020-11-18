@@ -25,7 +25,7 @@ namespace RemoteCockpitClasses.Animations
                 if (child != null)
                     result.Add((IAnimationItem)child);
             }
-            return result;
+            return result?.ToArray();
         }
 
         private object ConvertTo(Type type, JToken obj)
