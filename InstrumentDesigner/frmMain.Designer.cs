@@ -30,6 +30,10 @@ namespace InstrumentDesigner
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +93,7 @@ namespace InstrumentDesigner
             this.mnuBackground});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(993, 24);
+            this.mnuMain.Size = new System.Drawing.Size(981, 24);
             this.mnuMain.TabIndex = 0;
             this.mnuMain.Text = "menuStrip1";
             // 
@@ -187,6 +191,8 @@ namespace InstrumentDesigner
             // 
             // gpBasicInfo
             // 
+            this.gpBasicInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.gpBasicInfo.Controls.Add(this.lblAircraft);
             this.gpBasicInfo.Controls.Add(this.dgAircraft);
             this.gpBasicInfo.Controls.Add(this.txtCreateDate);
@@ -199,6 +205,7 @@ namespace InstrumentDesigner
             this.gpBasicInfo.Controls.Add(this.lblAuthor);
             this.gpBasicInfo.Controls.Add(this.txtInstrumentName);
             this.gpBasicInfo.Controls.Add(this.lblInstrumentName);
+            this.gpBasicInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gpBasicInfo.Location = new System.Drawing.Point(12, 28);
             this.gpBasicInfo.Name = "gpBasicInfo";
             this.gpBasicInfo.Size = new System.Drawing.Size(294, 396);
@@ -209,6 +216,7 @@ namespace InstrumentDesigner
             // lblAircraft
             // 
             this.lblAircraft.AutoSize = true;
+            this.lblAircraft.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAircraft.Location = new System.Drawing.Point(49, 165);
             this.lblAircraft.Name = "lblAircraft";
             this.lblAircraft.Size = new System.Drawing.Size(43, 13);
@@ -218,10 +226,28 @@ namespace InstrumentDesigner
             // dgAircraft
             // 
             this.dgAircraft.AllowUserToOrderColumns = true;
+            this.dgAircraft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgAircraft.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgAircraft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAircraft.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Aircraft,
             this.Options});
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgAircraft.DefaultCellStyle = dataGridViewCellStyle14;
             this.dgAircraft.Location = new System.Drawing.Point(98, 160);
             this.dgAircraft.Name = "dgAircraft";
             this.dgAircraft.Size = new System.Drawing.Size(188, 230);
@@ -232,6 +258,7 @@ namespace InstrumentDesigner
             // txtCreateDate
             // 
             this.txtCreateDate.AutoSize = true;
+            this.txtCreateDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCreateDate.Location = new System.Drawing.Point(103, 138);
             this.txtCreateDate.Name = "txtCreateDate";
             this.txtCreateDate.Size = new System.Drawing.Size(0, 13);
@@ -240,6 +267,7 @@ namespace InstrumentDesigner
             // lblCreateDate
             // 
             this.lblCreateDate.AutoSize = true;
+            this.lblCreateDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCreateDate.Location = new System.Drawing.Point(49, 138);
             this.lblCreateDate.Name = "lblCreateDate";
             this.lblCreateDate.Size = new System.Drawing.Size(47, 13);
@@ -248,6 +276,7 @@ namespace InstrumentDesigner
             // 
             // txtUpdateMS
             // 
+            this.txtUpdateMS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUpdateMS.Location = new System.Drawing.Point(103, 105);
             this.txtUpdateMS.Name = "txtUpdateMS";
             this.txtUpdateMS.Size = new System.Drawing.Size(100, 20);
@@ -257,6 +286,7 @@ namespace InstrumentDesigner
             // lblUpdateMS
             // 
             this.lblUpdateMS.AutoSize = true;
+            this.lblUpdateMS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUpdateMS.Location = new System.Drawing.Point(32, 109);
             this.lblUpdateMS.Name = "lblUpdateMS";
             this.lblUpdateMS.Size = new System.Drawing.Size(64, 13);
@@ -266,6 +296,7 @@ namespace InstrumentDesigner
             // cmbInstrumentType
             // 
             this.cmbInstrumentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbInstrumentType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbInstrumentType.FormattingEnabled = true;
             this.cmbInstrumentType.Location = new System.Drawing.Point(103, 76);
             this.cmbInstrumentType.Name = "cmbInstrumentType";
@@ -276,6 +307,7 @@ namespace InstrumentDesigner
             // lblInstrumentType
             // 
             this.lblInstrumentType.AutoSize = true;
+            this.lblInstrumentType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInstrumentType.Location = new System.Drawing.Point(62, 80);
             this.lblInstrumentType.Name = "lblInstrumentType";
             this.lblInstrumentType.Size = new System.Drawing.Size(34, 13);
@@ -284,6 +316,7 @@ namespace InstrumentDesigner
             // 
             // txtAuthor
             // 
+            this.txtAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtAuthor.Location = new System.Drawing.Point(103, 47);
             this.txtAuthor.Name = "txtAuthor";
             this.txtAuthor.Size = new System.Drawing.Size(183, 20);
@@ -293,6 +326,7 @@ namespace InstrumentDesigner
             // lblAuthor
             // 
             this.lblAuthor.AutoSize = true;
+            this.lblAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAuthor.Location = new System.Drawing.Point(55, 51);
             this.lblAuthor.Name = "lblAuthor";
             this.lblAuthor.Size = new System.Drawing.Size(41, 13);
@@ -301,6 +335,7 @@ namespace InstrumentDesigner
             // 
             // txtInstrumentName
             // 
+            this.txtInstrumentName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtInstrumentName.Location = new System.Drawing.Point(103, 18);
             this.txtInstrumentName.Name = "txtInstrumentName";
             this.txtInstrumentName.Size = new System.Drawing.Size(183, 20);
@@ -310,6 +345,7 @@ namespace InstrumentDesigner
             // lblInstrumentName
             // 
             this.lblInstrumentName.AutoSize = true;
+            this.lblInstrumentName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInstrumentName.Location = new System.Drawing.Point(6, 22);
             this.lblInstrumentName.Name = "lblInstrumentName";
             this.lblInstrumentName.Size = new System.Drawing.Size(90, 13);
@@ -318,20 +354,26 @@ namespace InstrumentDesigner
             // 
             // gpBackground
             // 
+            this.gpBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gpBackground.Controls.Add(this.cmdLoadBackground);
             this.gpBackground.Controls.Add(this.cmdClearBackground);
             this.gpBackground.Controls.Add(this.txtBackgroundPath);
             this.gpBackground.Controls.Add(this.lblBackgroundPath);
             this.gpBackground.Controls.Add(this.pbBackgroundImage);
+            this.gpBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gpBackground.Location = new System.Drawing.Point(312, 28);
+            this.gpBackground.MinimumSize = new System.Drawing.Size(230, 250);
             this.gpBackground.Name = "gpBackground";
-            this.gpBackground.Size = new System.Drawing.Size(232, 396);
+            this.gpBackground.Size = new System.Drawing.Size(230, 396);
             this.gpBackground.TabIndex = 7;
             this.gpBackground.TabStop = false;
             this.gpBackground.Text = "Background";
             // 
             // cmdLoadBackground
             // 
+            this.cmdLoadBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdLoadBackground.Location = new System.Drawing.Point(9, 81);
             this.cmdLoadBackground.Name = "cmdLoadBackground";
             this.cmdLoadBackground.Size = new System.Drawing.Size(75, 23);
@@ -342,6 +384,7 @@ namespace InstrumentDesigner
             // 
             // cmdClearBackground
             // 
+            this.cmdClearBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClearBackground.Location = new System.Drawing.Point(9, 51);
             this.cmdClearBackground.Name = "cmdClearBackground";
             this.cmdClearBackground.Size = new System.Drawing.Size(75, 23);
@@ -353,6 +396,7 @@ namespace InstrumentDesigner
             // txtBackgroundPath
             // 
             this.txtBackgroundPath.Enabled = false;
+            this.txtBackgroundPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBackgroundPath.Location = new System.Drawing.Point(86, 18);
             this.txtBackgroundPath.Name = "txtBackgroundPath";
             this.txtBackgroundPath.Size = new System.Drawing.Size(136, 20);
@@ -361,6 +405,7 @@ namespace InstrumentDesigner
             // lblBackgroundPath
             // 
             this.lblBackgroundPath.AutoSize = true;
+            this.lblBackgroundPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBackgroundPath.Location = new System.Drawing.Point(6, 22);
             this.lblBackgroundPath.Name = "lblBackgroundPath";
             this.lblBackgroundPath.Size = new System.Drawing.Size(74, 13);
@@ -369,17 +414,23 @@ namespace InstrumentDesigner
             // 
             // pbBackgroundImage
             // 
+            this.pbBackgroundImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pbBackgroundImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbBackgroundImage.Location = new System.Drawing.Point(6, 118);
             this.pbBackgroundImage.Name = "pbBackgroundImage";
-            this.pbBackgroundImage.Size = new System.Drawing.Size(216, 173);
+            this.pbBackgroundImage.Size = new System.Drawing.Size(216, 272);
             this.pbBackgroundImage.TabIndex = 5;
             this.pbBackgroundImage.TabStop = false;
             // 
             // gpAnimations
             // 
+            this.gpAnimations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gpAnimations.Controls.Add(this.dgAnimations);
             this.gpAnimations.Controls.Add(this.cmdAddAnimation);
+            this.gpAnimations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gpAnimations.Location = new System.Drawing.Point(550, 28);
             this.gpAnimations.Name = "gpAnimations";
             this.gpAnimations.Size = new System.Drawing.Size(420, 396);
@@ -389,6 +440,7 @@ namespace InstrumentDesigner
             // 
             // cmdAddAnimation
             // 
+            this.cmdAddAnimation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAddAnimation.Location = new System.Drawing.Point(6, 18);
             this.cmdAddAnimation.Name = "cmdAddAnimation";
             this.cmdAddAnimation.Size = new System.Drawing.Size(76, 27);
@@ -400,6 +452,16 @@ namespace InstrumentDesigner
             // 
             this.dgAnimations.AllowUserToAddRows = false;
             this.dgAnimations.AllowUserToDeleteRows = false;
+            this.dgAnimations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgAnimations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dgAnimations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAnimations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.What,
@@ -407,6 +469,14 @@ namespace InstrumentDesigner
             this.How,
             this.Edit,
             this.Delete});
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgAnimations.DefaultCellStyle = dataGridViewCellStyle16;
             this.dgAnimations.Location = new System.Drawing.Point(6, 53);
             this.dgAnimations.Name = "dgAnimations";
             this.dgAnimations.Size = new System.Drawing.Size(408, 337);
@@ -467,7 +537,8 @@ namespace InstrumentDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(993, 434);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(981, 434);
             this.Controls.Add(this.gpAnimations);
             this.Controls.Add(this.gpBackground);
             this.Controls.Add(this.gpBasicInfo);
@@ -475,6 +546,7 @@ namespace InstrumentDesigner
             this.MainMenuStrip = this.mnuMain;
             this.Name = "frmInstrumentDesigner";
             this.Text = "Instrument Designer";
+            this.Resize += new System.EventHandler(this.FormSize_Changed);
             this.mnuMain.ResumeLayout(false);
             this.mnuMain.PerformLayout();
             this.gpBasicInfo.ResumeLayout(false);

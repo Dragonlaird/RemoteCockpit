@@ -278,5 +278,10 @@ namespace InstrumentDesigner
                 config.Aircraft = allowedAircraft.ToArray();
             }
         }
+
+        private void FormSize_Changed(object sender, EventArgs e)
+        {
+            gpAnimations.Left = gpBackground.Right + 5;
+        }
     }
 }
