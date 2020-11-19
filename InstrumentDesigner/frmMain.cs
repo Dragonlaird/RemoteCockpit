@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,16 +28,32 @@ namespace InstrumentDesigner
 
         private void Initialize()
         {
+
+            configFilePath = "";
+            openFileDialog.FileName = "";
+            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            ResetForm();
+            config = new Configuration();
+        }
+
+        private void ResetForm()
+        {
+            txtInstrumentName.Text = "";
+            txtAuthor.Text = "";
             cmbInstrumentType.Items.Clear();
             foreach (var itemType in ((InstrumentType[])Enum.GetValues(typeof(InstrumentType))).OrderBy(x => x.ToString()))
             {
                 cmbInstrumentType.Items.Add(itemType.ToString());
             }
             cmbInstrumentType.SelectedIndex = 0;
-            configFilePath = "";
-            openFileDialog.FileName = "";
-            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-            config = new Configuration();
+            txtUpdateMS.Text = "";
+            txtCreateDate.Text = "";
+            dgAircraft.Rows.Clear();
+            txtBackgroundPath.Text = "";
+            pbBackgroundImage.Image = null;
+            pbBackgroundImage.BackgroundImage = null;
+            pbBackgroundImage.BackColor = Color.Transparent;
+            dgAnimations.Rows.Clear();
         }
 
         private void PopulateConfigForm()
@@ -46,6 +63,7 @@ namespace InstrumentDesigner
             {
                 config = new Configuration();
             }
+            ResetForm();
             txtInstrumentName.Text = config.Name;
             txtAuthor.Text = config.Author;
             if (!string.IsNullOrEmpty(config.Author))
@@ -57,12 +75,25 @@ namespace InstrumentDesigner
             // Populate Background
             txtBackgroundPath.Text = config.BackgroundImagePath;
             pbBackgroundImage.BackgroundImage = null;
-            if (!string.IsNullOrEmpty(config?.BackgroundImagePath)) {
+            if (!string.IsNullOrEmpty(config?.BackgroundImagePath))
+            {
                 var image = LoadImage(Path.Combine(cockpitDirectory, config.BackgroundImagePath));
                 if (image != null)
                 {
                     ShowImage(image, pbBackgroundImage);
                 }
+            }
+            foreach (var aircraft in config.Aircraft)
+            {
+                var idx = dgAircraft.Rows.Add();
+                dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
+            }
+            foreach(var anim in config.Animations)
+            {
+                var rowIdx = dgAnimations.Rows.Add();
+                dgAnimations.Rows[rowIdx].Cells["What"].Value = anim.Name?.ToString();
+                dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers.Select(x => x.Type.ToString()));
+                dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers.SelectMany(x => x.Actions.Select(y => y.Type.ToString())));
             }
         }
 
@@ -174,7 +205,7 @@ namespace InstrumentDesigner
         }
         private void NewInstrument_Click(object sender, EventArgs e)
         {
-            if(config == null || !config.HasChanged || MessageBox.Show("Are you sure you want to discard the current Instrument Configuraion and define a new Instrument?", "Discard existing Configuration?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            if (config == null || !config.HasChanged || MessageBox.Show("Are you sure you want to discard the current Instrument Configuraion and define a new Instrument?", "Discard existing Configuration?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
                 config = new Configuration();
                 PopulateConfigForm();
@@ -204,6 +235,48 @@ namespace InstrumentDesigner
         private void UpdateMS_Changed(object sender, EventArgs e)
         {
             config.AnimationUpdateInMs = int.Parse(txtUpdateMS.Text);
+        }
+
+        private void DeleteGridRow_Click(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                e.RowIndex >= 0)
+            {
+                var aircraft = senderGrid.Rows[e.RowIndex].Cells["Aircraft"].Value?.ToString();
+                //senderGrid.Rows.RemoveAt(e.RowIndex);
+                if (!string.IsNullOrEmpty(aircraft))
+                {
+                    var allowedAircraft = config.Aircraft.ToList();
+                    allowedAircraft.Remove(aircraft);
+                    config.Aircraft = allowedAircraft.OrderBy(x => x).ToArray();
+                    dgAircraft.Rows.Clear();
+                    foreach(var allowed in config.Aircraft)
+                    {
+                        var rowIdx = dgAircraft.Rows.Add();
+                        dgAircraft.Rows[rowIdx].Cells["Aircraft"].Value = allowed;
+                    }
+                }
+            }
+        }
+
+        private void EditGridRow_Change(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewTextBoxColumn &&
+                e.RowIndex >= 0)
+            {
+                var allowedAircraft = new List<string>();
+                foreach (DataGridViewRow row in senderGrid.Rows)
+                {
+                    var val = row.Cells[e.ColumnIndex].Value?.ToString();
+                    if (!string.IsNullOrEmpty(val))
+                        allowedAircraft.Add(val);
+                }
+                config.Aircraft = allowedAircraft.ToArray();
+            }
         }
     }
 }

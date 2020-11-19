@@ -47,7 +47,6 @@ namespace InstrumentDesigner
             this.gpBasicInfo = new System.Windows.Forms.GroupBox();
             this.lblAircraft = new System.Windows.Forms.Label();
             this.dgAircraft = new System.Windows.Forms.DataGridView();
-            this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.txtCreateDate = new System.Windows.Forms.Label();
             this.lblCreateDate = new System.Windows.Forms.Label();
             this.txtUpdateMS = new System.Windows.Forms.TextBox();
@@ -64,11 +63,23 @@ namespace InstrumentDesigner
             this.txtBackgroundPath = new System.Windows.Forms.TextBox();
             this.lblBackgroundPath = new System.Windows.Forms.Label();
             this.pbBackgroundImage = new System.Windows.Forms.PictureBox();
+            this.gpAnimations = new System.Windows.Forms.GroupBox();
+            this.cmdAddAnimation = new System.Windows.Forms.Button();
+            this.dgAnimations = new System.Windows.Forms.DataGridView();
+            this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Options = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.What = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.When = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.How = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.mnuMain.SuspendLayout();
             this.gpBasicInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).BeginInit();
             this.gpBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).BeginInit();
+            this.gpAnimations.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAnimations)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuMain
@@ -78,7 +89,7 @@ namespace InstrumentDesigner
             this.mnuBackground});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(974, 24);
+            this.mnuMain.Size = new System.Drawing.Size(993, 24);
             this.mnuMain.TabIndex = 0;
             this.mnuMain.Text = "menuStrip1";
             // 
@@ -190,7 +201,7 @@ namespace InstrumentDesigner
             this.gpBasicInfo.Controls.Add(this.lblInstrumentName);
             this.gpBasicInfo.Location = new System.Drawing.Point(12, 28);
             this.gpBasicInfo.Name = "gpBasicInfo";
-            this.gpBasicInfo.Size = new System.Drawing.Size(366, 396);
+            this.gpBasicInfo.Size = new System.Drawing.Size(294, 396);
             this.gpBasicInfo.TabIndex = 6;
             this.gpBasicInfo.TabStop = false;
             this.gpBasicInfo.Text = "Instrument Details";
@@ -206,20 +217,17 @@ namespace InstrumentDesigner
             // 
             // dgAircraft
             // 
+            this.dgAircraft.AllowUserToOrderColumns = true;
             this.dgAircraft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAircraft.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Aircraft});
-            this.dgAircraft.Location = new System.Drawing.Point(108, 160);
+            this.Aircraft,
+            this.Options});
+            this.dgAircraft.Location = new System.Drawing.Point(98, 160);
             this.dgAircraft.Name = "dgAircraft";
-            this.dgAircraft.Size = new System.Drawing.Size(252, 230);
+            this.dgAircraft.Size = new System.Drawing.Size(188, 230);
             this.dgAircraft.TabIndex = 16;
-            // 
-            // Aircraft
-            // 
-            this.Aircraft.HeaderText = "Aircraft";
-            this.Aircraft.Name = "Aircraft";
-            this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Aircraft.Width = 200;
+            this.dgAircraft.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DeleteGridRow_Click);
+            this.dgAircraft.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.EditGridRow_Change);
             // 
             // txtCreateDate
             // 
@@ -278,7 +286,7 @@ namespace InstrumentDesigner
             // 
             this.txtAuthor.Location = new System.Drawing.Point(103, 47);
             this.txtAuthor.Name = "txtAuthor";
-            this.txtAuthor.Size = new System.Drawing.Size(252, 20);
+            this.txtAuthor.Size = new System.Drawing.Size(183, 20);
             this.txtAuthor.TabIndex = 9;
             this.txtAuthor.TextChanged += new System.EventHandler(this.InstrumentAuthor_Changed);
             // 
@@ -295,7 +303,7 @@ namespace InstrumentDesigner
             // 
             this.txtInstrumentName.Location = new System.Drawing.Point(103, 18);
             this.txtInstrumentName.Name = "txtInstrumentName";
-            this.txtInstrumentName.Size = new System.Drawing.Size(252, 20);
+            this.txtInstrumentName.Size = new System.Drawing.Size(183, 20);
             this.txtInstrumentName.TabIndex = 7;
             this.txtInstrumentName.TextChanged += new System.EventHandler(this.InstrumentName_Changed);
             // 
@@ -315,9 +323,9 @@ namespace InstrumentDesigner
             this.gpBackground.Controls.Add(this.txtBackgroundPath);
             this.gpBackground.Controls.Add(this.lblBackgroundPath);
             this.gpBackground.Controls.Add(this.pbBackgroundImage);
-            this.gpBackground.Location = new System.Drawing.Point(395, 28);
+            this.gpBackground.Location = new System.Drawing.Point(312, 28);
             this.gpBackground.Name = "gpBackground";
-            this.gpBackground.Size = new System.Drawing.Size(297, 396);
+            this.gpBackground.Size = new System.Drawing.Size(232, 396);
             this.gpBackground.TabIndex = 7;
             this.gpBackground.TabStop = false;
             this.gpBackground.Text = "Background";
@@ -347,7 +355,7 @@ namespace InstrumentDesigner
             this.txtBackgroundPath.Enabled = false;
             this.txtBackgroundPath.Location = new System.Drawing.Point(86, 18);
             this.txtBackgroundPath.Name = "txtBackgroundPath";
-            this.txtBackgroundPath.Size = new System.Drawing.Size(205, 20);
+            this.txtBackgroundPath.Size = new System.Drawing.Size(136, 20);
             this.txtBackgroundPath.TabIndex = 7;
             // 
             // lblBackgroundPath
@@ -364,15 +372,103 @@ namespace InstrumentDesigner
             this.pbBackgroundImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbBackgroundImage.Location = new System.Drawing.Point(6, 118);
             this.pbBackgroundImage.Name = "pbBackgroundImage";
-            this.pbBackgroundImage.Size = new System.Drawing.Size(285, 272);
+            this.pbBackgroundImage.Size = new System.Drawing.Size(216, 173);
             this.pbBackgroundImage.TabIndex = 5;
             this.pbBackgroundImage.TabStop = false;
+            // 
+            // gpAnimations
+            // 
+            this.gpAnimations.Controls.Add(this.dgAnimations);
+            this.gpAnimations.Controls.Add(this.cmdAddAnimation);
+            this.gpAnimations.Location = new System.Drawing.Point(550, 28);
+            this.gpAnimations.Name = "gpAnimations";
+            this.gpAnimations.Size = new System.Drawing.Size(420, 396);
+            this.gpAnimations.TabIndex = 8;
+            this.gpAnimations.TabStop = false;
+            this.gpAnimations.Text = "Animations";
+            // 
+            // cmdAddAnimation
+            // 
+            this.cmdAddAnimation.Location = new System.Drawing.Point(6, 18);
+            this.cmdAddAnimation.Name = "cmdAddAnimation";
+            this.cmdAddAnimation.Size = new System.Drawing.Size(76, 27);
+            this.cmdAddAnimation.TabIndex = 0;
+            this.cmdAddAnimation.Text = "New...";
+            this.cmdAddAnimation.UseVisualStyleBackColor = true;
+            // 
+            // dgAnimations
+            // 
+            this.dgAnimations.AllowUserToAddRows = false;
+            this.dgAnimations.AllowUserToDeleteRows = false;
+            this.dgAnimations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgAnimations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.What,
+            this.When,
+            this.How,
+            this.Edit,
+            this.Delete});
+            this.dgAnimations.Location = new System.Drawing.Point(6, 53);
+            this.dgAnimations.Name = "dgAnimations";
+            this.dgAnimations.Size = new System.Drawing.Size(408, 337);
+            this.dgAnimations.TabIndex = 1;
+            // 
+            // Aircraft
+            // 
+            this.Aircraft.HeaderText = "Aircraft";
+            this.Aircraft.Name = "Aircraft";
+            this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Aircraft.Width = 120;
+            // 
+            // Options
+            // 
+            this.Options.HeaderText = "X";
+            this.Options.Name = "Options";
+            this.Options.ToolTipText = "Delete Aircraft";
+            this.Options.UseColumnTextForButtonValue = true;
+            this.Options.Width = 20;
+            // 
+            // What
+            // 
+            this.What.HeaderText = "What";
+            this.What.Name = "What";
+            this.What.ReadOnly = true;
+            // 
+            // When
+            // 
+            this.When.HeaderText = "When";
+            this.When.Name = "When";
+            this.When.ReadOnly = true;
+            // 
+            // How
+            // 
+            this.How.HeaderText = "How";
+            this.How.Name = "How";
+            this.How.ReadOnly = true;
+            // 
+            // Edit
+            // 
+            this.Edit.HeaderText = "E";
+            this.Edit.Name = "Edit";
+            this.Edit.Text = "Edit Animation";
+            this.Edit.ToolTipText = "Edit Animation";
+            this.Edit.UseColumnTextForButtonValue = true;
+            this.Edit.Width = 20;
+            // 
+            // Delete
+            // 
+            this.Delete.HeaderText = "X";
+            this.Delete.Name = "Delete";
+            this.Delete.Text = "Delete Animation";
+            this.Delete.ToolTipText = "Delete Animation";
+            this.Delete.UseColumnTextForButtonValue = true;
+            this.Delete.Width = 20;
             // 
             // frmInstrumentDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(974, 444);
+            this.ClientSize = new System.Drawing.Size(993, 434);
+            this.Controls.Add(this.gpAnimations);
             this.Controls.Add(this.gpBackground);
             this.Controls.Add(this.gpBasicInfo);
             this.Controls.Add(this.mnuMain);
@@ -387,6 +483,8 @@ namespace InstrumentDesigner
             this.gpBackground.ResumeLayout(false);
             this.gpBackground.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).EndInit();
+            this.gpAnimations.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgAnimations)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -425,8 +523,17 @@ namespace InstrumentDesigner
         private System.Windows.Forms.Button cmdLoadBackground;
         private System.Windows.Forms.Button cmdClearBackground;
         private System.Windows.Forms.DataGridView dgAircraft;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Aircraft;
         private System.Windows.Forms.Label lblAircraft;
+        private System.Windows.Forms.GroupBox gpAnimations;
+        private System.Windows.Forms.Button cmdAddAnimation;
+        private System.Windows.Forms.DataGridView dgAnimations;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Aircraft;
+        private System.Windows.Forms.DataGridViewButtonColumn Options;
+        private System.Windows.Forms.DataGridViewTextBoxColumn What;
+        private System.Windows.Forms.DataGridViewTextBoxColumn When;
+        private System.Windows.Forms.DataGridViewTextBoxColumn How;
+        private System.Windows.Forms.DataGridViewButtonColumn Edit;
+        private System.Windows.Forms.DataGridViewButtonColumn Delete;
     }
 }
 
