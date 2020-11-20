@@ -88,7 +88,7 @@ namespace InstrumentDesigner
                 var idx = dgAircraft.Rows.Add();
                 dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
             }
-            foreach(var anim in config.Animations)
+            foreach (var anim in config.Animations)
             {
                 var rowIdx = dgAnimations.Rows.Add();
                 dgAnimations.Rows[rowIdx].Cells["What"].Value = anim.Name?.ToString();
@@ -252,7 +252,7 @@ namespace InstrumentDesigner
                     allowedAircraft.Remove(aircraft);
                     config.Aircraft = allowedAircraft.OrderBy(x => x).ToArray();
                     dgAircraft.Rows.Clear();
-                    foreach(var allowed in config.Aircraft)
+                    foreach (var allowed in config.Aircraft)
                     {
                         var rowIdx = dgAircraft.Rows.Add();
                         dgAircraft.Rows[rowIdx].Cells["Aircraft"].Value = allowed;
@@ -282,6 +282,35 @@ namespace InstrumentDesigner
         private void FormSize_Changed(object sender, EventArgs e)
         {
             gpAnimations.Left = gpBackground.Right + 5;
+        }
+
+        private void EditDeleteAnimation_Click(object sender, DataGridViewCellEventArgs e)
+        {
+            var senderGrid = (DataGridView)sender;
+
+            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+                e.RowIndex >= 0)
+            {
+                var action = senderGrid.Rows[0].Cells[e.ColumnIndex].Value?.ToString();
+                var name = senderGrid.Rows[e.RowIndex].Cells["What"].Value?.ToString();
+                Form frm;
+                DialogResult result = DialogResult.Abort;
+                switch (action)
+                {
+                    case "Edit Animation":
+                        var animation = config.Animations.First(x => x.Name == name);
+                        frm = new frmAnimation(animation);
+                        result = frm.ShowDialog(this);
+                        break;
+                    case "Delete Animation":
+
+                        break;
+                }
+                if(result == DialogResult.OK)
+                {
+
+                }
+            }
         }
     }
 }

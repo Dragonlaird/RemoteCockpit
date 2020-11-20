@@ -30,10 +30,6 @@ namespace InstrumentDesigner
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +47,8 @@ namespace InstrumentDesigner
             this.gpBasicInfo = new System.Windows.Forms.GroupBox();
             this.lblAircraft = new System.Windows.Forms.Label();
             this.dgAircraft = new System.Windows.Forms.DataGridView();
+            this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Options = new System.Windows.Forms.DataGridViewButtonColumn();
             this.txtCreateDate = new System.Windows.Forms.Label();
             this.lblCreateDate = new System.Windows.Forms.Label();
             this.txtUpdateMS = new System.Windows.Forms.TextBox();
@@ -68,15 +66,13 @@ namespace InstrumentDesigner
             this.lblBackgroundPath = new System.Windows.Forms.Label();
             this.pbBackgroundImage = new System.Windows.Forms.PictureBox();
             this.gpAnimations = new System.Windows.Forms.GroupBox();
-            this.cmdAddAnimation = new System.Windows.Forms.Button();
             this.dgAnimations = new System.Windows.Forms.DataGridView();
-            this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Options = new System.Windows.Forms.DataGridViewButtonColumn();
             this.What = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.When = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.How = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.cmdAddAnimation = new System.Windows.Forms.Button();
             this.mnuMain.SuspendLayout();
             this.gpBasicInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).BeginInit();
@@ -228,32 +224,31 @@ namespace InstrumentDesigner
             this.dgAircraft.AllowUserToOrderColumns = true;
             this.dgAircraft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgAircraft.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgAircraft.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAircraft.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Aircraft,
             this.Options});
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgAircraft.DefaultCellStyle = dataGridViewCellStyle14;
             this.dgAircraft.Location = new System.Drawing.Point(98, 160);
             this.dgAircraft.Name = "dgAircraft";
             this.dgAircraft.Size = new System.Drawing.Size(188, 230);
             this.dgAircraft.TabIndex = 16;
             this.dgAircraft.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DeleteGridRow_Click);
             this.dgAircraft.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.EditGridRow_Change);
+            // 
+            // Aircraft
+            // 
+            this.Aircraft.HeaderText = "Aircraft";
+            this.Aircraft.Name = "Aircraft";
+            this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Aircraft.Width = 120;
+            // 
+            // Options
+            // 
+            this.Options.HeaderText = "X";
+            this.Options.Name = "Options";
+            this.Options.ToolTipText = "Delete Aircraft";
+            this.Options.UseColumnTextForButtonValue = true;
+            this.Options.Width = 20;
             // 
             // txtCreateDate
             // 
@@ -438,30 +433,12 @@ namespace InstrumentDesigner
             this.gpAnimations.TabStop = false;
             this.gpAnimations.Text = "Animations";
             // 
-            // cmdAddAnimation
-            // 
-            this.cmdAddAnimation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdAddAnimation.Location = new System.Drawing.Point(6, 18);
-            this.cmdAddAnimation.Name = "cmdAddAnimation";
-            this.cmdAddAnimation.Size = new System.Drawing.Size(76, 27);
-            this.cmdAddAnimation.TabIndex = 0;
-            this.cmdAddAnimation.Text = "New...";
-            this.cmdAddAnimation.UseVisualStyleBackColor = true;
-            // 
             // dgAnimations
             // 
             this.dgAnimations.AllowUserToAddRows = false;
             this.dgAnimations.AllowUserToDeleteRows = false;
             this.dgAnimations.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgAnimations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dgAnimations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAnimations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.What,
@@ -469,33 +446,11 @@ namespace InstrumentDesigner
             this.How,
             this.Edit,
             this.Delete});
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgAnimations.DefaultCellStyle = dataGridViewCellStyle16;
             this.dgAnimations.Location = new System.Drawing.Point(6, 53);
             this.dgAnimations.Name = "dgAnimations";
             this.dgAnimations.Size = new System.Drawing.Size(408, 337);
             this.dgAnimations.TabIndex = 1;
-            // 
-            // Aircraft
-            // 
-            this.Aircraft.HeaderText = "Aircraft";
-            this.Aircraft.Name = "Aircraft";
-            this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Aircraft.Width = 120;
-            // 
-            // Options
-            // 
-            this.Options.HeaderText = "X";
-            this.Options.Name = "Options";
-            this.Options.ToolTipText = "Delete Aircraft";
-            this.Options.UseColumnTextForButtonValue = true;
-            this.Options.Width = 20;
+            this.dgAnimations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EditDeleteAnimation_Click);
             // 
             // What
             // 
@@ -532,6 +487,16 @@ namespace InstrumentDesigner
             this.Delete.ToolTipText = "Delete Animation";
             this.Delete.UseColumnTextForButtonValue = true;
             this.Delete.Width = 20;
+            // 
+            // cmdAddAnimation
+            // 
+            this.cmdAddAnimation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdAddAnimation.Location = new System.Drawing.Point(6, 18);
+            this.cmdAddAnimation.Name = "cmdAddAnimation";
+            this.cmdAddAnimation.Size = new System.Drawing.Size(76, 27);
+            this.cmdAddAnimation.TabIndex = 0;
+            this.cmdAddAnimation.Text = "New...";
+            this.cmdAddAnimation.UseVisualStyleBackColor = true;
             // 
             // frmInstrumentDesigner
             // 
