@@ -299,7 +299,7 @@ namespace InstrumentDesigner
                 {
                     case "Edit Animation":
                         var animation = config.Animations.First(x => x.Name == name);
-                        frm = new frmAnimation(animation);
+                        frm = new frmAnimation(animation, cockpitDirectory);
                         result = frm.ShowDialog(this);
                         break;
                     case "Delete Animation":

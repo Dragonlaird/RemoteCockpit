@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,12 @@ namespace InstrumentDesigner
     public partial class frmAnimation : Form
     {
         private readonly IAnimationItem _animation;
-        public frmAnimation(IAnimationItem animation)
+        private readonly string baseFolder;
+        public frmAnimation(IAnimationItem animation, string cockpitBaseFolder)
         {
             InitializeComponent();
             _animation = animation;
+            baseFolder = cockpitBaseFolder;
             Initialize();
         }
 
@@ -70,12 +73,28 @@ namespace InstrumentDesigner
                         cmbAnimationScaleMethod.SelectedIndex = cmbAnimationScaleMethod.Items.IndexOf(((AnimationImage)_animation).ScaleMethod.ToString());
                         try
                         {
-                            pbAnimationImage.Image = Image.FromFile(txtAnimationImagePath.Text);
+                            var image = Image.FromFile(Path.Combine(baseFolder,txtAnimationImagePath.Text));
+                            ShowImage(image, pbAnimationImage);
                         }
                         catch { }
                     }
                     break;
             }
+        }
+
+        private void ShowImage(Image image, Control imageBox)
+        {
+            var imageScaleFactor = (double)imageBox.Width / image.Width;
+            var aspectRatio = (double)image.Height / image.Width;
+            if (image.Height * imageScaleFactor > imageBox.Height)
+                imageScaleFactor = (double)imageBox.Height / image.Height;
+            var backgroundImage = new Bitmap(imageBox.Width, imageBox.Height);
+            using (Graphics gr = Graphics.FromImage(backgroundImage))
+            {
+                gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+            }
+            imageBox.BackColor = Color.AliceBlue; // Use this to show where image doesn't fit the control
+            imageBox.BackgroundImage = backgroundImage;
         }
 
         private void ChangeAnimationType_Select(object sender, EventArgs e)
