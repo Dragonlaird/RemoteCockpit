@@ -51,7 +51,6 @@ namespace InstrumentDesigner
             this.Options = new System.Windows.Forms.DataGridViewButtonColumn();
             this.txtCreateDate = new System.Windows.Forms.Label();
             this.lblCreateDate = new System.Windows.Forms.Label();
-            this.txtUpdateMS = new System.Windows.Forms.TextBox();
             this.lblUpdateMS = new System.Windows.Forms.Label();
             this.cmbInstrumentType = new System.Windows.Forms.ComboBox();
             this.lblInstrumentType = new System.Windows.Forms.Label();
@@ -73,6 +72,7 @@ namespace InstrumentDesigner
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.cmdAddAnimation = new System.Windows.Forms.Button();
+            this.txtUpdateMS = new System.Windows.Forms.NumericUpDown();
             this.mnuMain.SuspendLayout();
             this.gpBasicInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).BeginInit();
@@ -80,6 +80,7 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).BeginInit();
             this.gpAnimations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuMain
@@ -189,11 +190,11 @@ namespace InstrumentDesigner
             // 
             this.gpBasicInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.gpBasicInfo.Controls.Add(this.txtUpdateMS);
             this.gpBasicInfo.Controls.Add(this.lblAircraft);
             this.gpBasicInfo.Controls.Add(this.dgAircraft);
             this.gpBasicInfo.Controls.Add(this.txtCreateDate);
             this.gpBasicInfo.Controls.Add(this.lblCreateDate);
-            this.gpBasicInfo.Controls.Add(this.txtUpdateMS);
             this.gpBasicInfo.Controls.Add(this.lblUpdateMS);
             this.gpBasicInfo.Controls.Add(this.cmbInstrumentType);
             this.gpBasicInfo.Controls.Add(this.lblInstrumentType);
@@ -268,15 +269,6 @@ namespace InstrumentDesigner
             this.lblCreateDate.Size = new System.Drawing.Size(47, 13);
             this.lblCreateDate.TabIndex = 14;
             this.lblCreateDate.Text = "Created:";
-            // 
-            // txtUpdateMS
-            // 
-            this.txtUpdateMS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUpdateMS.Location = new System.Drawing.Point(103, 105);
-            this.txtUpdateMS.Name = "txtUpdateMS";
-            this.txtUpdateMS.Size = new System.Drawing.Size(100, 20);
-            this.txtUpdateMS.TabIndex = 13;
-            this.txtUpdateMS.TextChanged += new System.EventHandler(this.UpdateMS_Changed);
             // 
             // lblUpdateMS
             // 
@@ -415,7 +407,7 @@ namespace InstrumentDesigner
             this.pbBackgroundImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbBackgroundImage.Location = new System.Drawing.Point(6, 118);
             this.pbBackgroundImage.Name = "pbBackgroundImage";
-            this.pbBackgroundImage.Size = new System.Drawing.Size(216, 272);
+            this.pbBackgroundImage.Size = new System.Drawing.Size(216, 216);
             this.pbBackgroundImage.TabIndex = 5;
             this.pbBackgroundImage.TabStop = false;
             // 
@@ -498,6 +490,28 @@ namespace InstrumentDesigner
             this.cmdAddAnimation.Text = "New...";
             this.cmdAddAnimation.UseVisualStyleBackColor = true;
             // 
+            // txtUpdateMS
+            // 
+            this.txtUpdateMS.Location = new System.Drawing.Point(103, 107);
+            this.txtUpdateMS.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.txtUpdateMS.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.txtUpdateMS.Name = "txtUpdateMS";
+            this.txtUpdateMS.Size = new System.Drawing.Size(120, 20);
+            this.txtUpdateMS.TabIndex = 18;
+            this.txtUpdateMS.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
             // frmInstrumentDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -522,6 +536,7 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).EndInit();
             this.gpAnimations.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -552,7 +567,6 @@ namespace InstrumentDesigner
         private System.Windows.Forms.Label lblUpdateMS;
         private System.Windows.Forms.Label txtCreateDate;
         private System.Windows.Forms.Label lblCreateDate;
-        private System.Windows.Forms.TextBox txtUpdateMS;
         private System.Windows.Forms.GroupBox gpBackground;
         private System.Windows.Forms.PictureBox pbBackgroundImage;
         private System.Windows.Forms.TextBox txtBackgroundPath;
@@ -571,6 +585,7 @@ namespace InstrumentDesigner
         private System.Windows.Forms.DataGridViewTextBoxColumn How;
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
+        private System.Windows.Forms.NumericUpDown txtUpdateMS;
     }
 }
 

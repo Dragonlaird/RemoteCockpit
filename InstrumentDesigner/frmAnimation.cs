@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace InstrumentDesigner
     public partial class frmAnimation : Form
     {
         private readonly IAnimationItem _animation;
+        public IAnimationItem DialogValue { get { return _animation; } }
         private readonly string baseFolder;
         public frmAnimation(IAnimationItem animation, string cockpitBaseFolder)
         {
@@ -35,6 +37,16 @@ namespace InstrumentDesigner
             foreach (var scaleType in ((AnimationScaleMethodEnum[])Enum.GetValues(typeof(AnimationScaleMethodEnum))).OrderBy(x => x.ToString()))
             {
                 cmbAnimationScaleMethod.Items.Add(scaleType.ToString());
+            }
+            cmbAnimationFillColor.Items.Clear();
+            foreach(var color in ((KnownColor[])Enum.GetValues(typeof(KnownColor))).OrderBy(x => x.ToString()))
+            {
+                cmbAnimationFillColor.Items.Add(color.ToString());
+            }
+            cmbAnimationFillMethod.Items.Clear();
+            foreach(var fillMethod in ((FillMode[])Enum.GetValues(typeof(FillMode))).OrderBy(x => x.ToString()))
+            {
+                cmbAnimationFillMethod.Items.Add(fillMethod.ToString());
             }
             for (var tabId = 0; tabId < tabCollection.TabCount; tabId++)
             {
@@ -63,14 +75,17 @@ namespace InstrumentDesigner
             switch (tabId)
             {
                 case 0:
+                    gpAnimationImage.Visible = false;
+                    gpAnimationDrawing.Visible = false;
                     txtAnimationName.Text = _animation.Name;
                     cmbAnimationType.SelectedIndex = cmbAnimationType.Items.IndexOf(_animation.Type.ToString());
                     if (_animation.Type == AnimationItemTypeEnum.Image)
                     {
                         gpAnimationImage.Visible = true;
-                        gpAnimationDrawing.Visible = false;
                         txtAnimationImagePath.Text = ((AnimationImage)_animation).ImagePath;
                         cmbAnimationScaleMethod.SelectedIndex = cmbAnimationScaleMethod.Items.IndexOf(((AnimationImage)_animation).ScaleMethod.ToString());
+                        //txtAnimationRelativeX.Text = _animation.RelativeX.ToString();
+                        //txtAnimationRelativeY.Text = _animation.RelativeY.ToString();
                         try
                         {
                             var image = Image.FromFile(Path.Combine(baseFolder,txtAnimationImagePath.Text));
@@ -78,6 +93,15 @@ namespace InstrumentDesigner
                         }
                         catch { }
                     }
+                    if(_animation.Type == AnimationItemTypeEnum.Drawing)
+                    {
+                        gpAnimationDrawing.Visible = true;
+                        cmbAnimationFillColor.SelectedIndex = cmbAnimationFillColor.Items.IndexOf(((AnimationDrawing)_animation).FillColor.ToKnownColor().ToString());
+                        cmbAnimationFillMethod.SelectedIndex = cmbAnimationFillMethod.Items.IndexOf(((AnimationDrawing)_animation).FillMethod.ToString());
+
+                    }
+                    break;
+                case 1:
                     break;
             }
         }

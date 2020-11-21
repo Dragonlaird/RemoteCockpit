@@ -20,6 +20,7 @@ namespace InstrumentDesigner
         private Configuration config;
         private string configFilePath;
         private string cockpitDirectory;
+        private bool populatingForm = false;
         public frmInstrumentDesigner()
         {
             InitializeComponent();
@@ -50,7 +51,9 @@ namespace InstrumentDesigner
             txtCreateDate.Text = "";
             dgAircraft.Rows.Clear();
             txtBackgroundPath.Text = "";
+            pbBackgroundImage.Image?.Dispose();
             pbBackgroundImage.Image = null;
+            pbBackgroundImage.BackgroundImage?.Dispose();
             pbBackgroundImage.BackgroundImage = null;
             pbBackgroundImage.BackColor = Color.Transparent;
             dgAnimations.Rows.Clear();
@@ -59,6 +62,7 @@ namespace InstrumentDesigner
         private void PopulateConfigForm()
         {
             // Populate Instrument Details Group
+            populatingForm = true;
             if (config == null)
             {
                 config = new Configuration();
@@ -95,6 +99,7 @@ namespace InstrumentDesigner
                 dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers.Select(x => x.Type.ToString()));
                 dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers.SelectMany(x => x.Actions.Select(y => y.Type.ToString())));
             }
+            populatingForm = false;
         }
 
         private void ShowImage(Image image, Control imageBox)
@@ -103,13 +108,16 @@ namespace InstrumentDesigner
             var aspectRatio = (double)image.Height / image.Width;
             if (image.Height * imageScaleFactor > imageBox.Height)
                 imageScaleFactor = (double)imageBox.Height / image.Height;
-            var backgroundImage = new Bitmap(imageBox.Width, imageBox.Height);
-            using (Graphics gr = Graphics.FromImage(backgroundImage))
+            using (var backgroundImage = new Bitmap(imageBox.Width, imageBox.Height))
             {
-                gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+                using (Graphics gr = Graphics.FromImage(backgroundImage))
+                {
+                    gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+                }
+                imageBox.BackColor = Color.AliceBlue; // Use this to show where image doesn't fit the control
+                imageBox.BackgroundImage?.Dispose();
+                imageBox.BackgroundImage = (Image)backgroundImage.Clone();
             }
-            imageBox.BackColor = Color.AliceBlue; // Use this to show where image doesn't fit the control
-            imageBox.BackgroundImage = backgroundImage;
         }
 
         private Image LoadImage(string imagePath)
@@ -167,11 +175,6 @@ namespace InstrumentDesigner
 
         }
 
-        private void focusInstrumentName(object sender, EventArgs e)
-        {
-            txtInstrumentName.Focus();
-        }
-
         private void CloseForm(object sender, EventArgs e)
         {
             this.FindForm().Close();
@@ -184,7 +187,8 @@ namespace InstrumentDesigner
             {
                 pbBackgroundImage.Image?.Dispose();
                 txtBackgroundPath.Text = "";
-                config.BackgroundImagePath = "";
+                if (!populatingForm)
+                    config.BackgroundImagePath = "";
             }
         }
 
@@ -214,12 +218,14 @@ namespace InstrumentDesigner
 
         private void InstrumentName_Changed(object sender, EventArgs e)
         {
-            config.Name = txtInstrumentName.Text;
+            if (!populatingForm)
+                config.Name = txtInstrumentName.Text;
         }
 
         private void InstrumentAuthor_Changed(object sender, EventArgs e)
         {
-            config.Author = txtAuthor.Text;
+            if (!populatingForm)
+                config.Author = txtAuthor.Text;
         }
 
         private void InstrumentType_Changed(object sender, EventArgs e)
@@ -227,14 +233,15 @@ namespace InstrumentDesigner
             if (cmbInstrumentType.Items?.Count > 0)
             {
                 var selectedType = cmbInstrumentType.Items[cmbInstrumentType.SelectedIndex].ToString();
-                if (config != null && !string.IsNullOrEmpty(selectedType))
-                    config.Type = (InstrumentType)Enum.Parse(typeof(InstrumentType), selectedType);
+                if (config != null && !string.IsNullOrEmpty(selectedType) && !populatingForm)
+                        config.Type = (InstrumentType)Enum.Parse(typeof(InstrumentType), selectedType);
             }
         }
 
         private void UpdateMS_Changed(object sender, EventArgs e)
         {
-            config.AnimationUpdateInMs = int.Parse(txtUpdateMS.Text);
+            if (!populatingForm)
+                config.AnimationUpdateInMs = int.Parse(txtUpdateMS.Text);
         }
 
         private void DeleteGridRow_Click(object sender, DataGridViewCellEventArgs e)
@@ -250,7 +257,8 @@ namespace InstrumentDesigner
                 {
                     var allowedAircraft = config.Aircraft.ToList();
                     allowedAircraft.Remove(aircraft);
-                    config.Aircraft = allowedAircraft.OrderBy(x => x).ToArray();
+                    if (!populatingForm)
+                        config.Aircraft = allowedAircraft.OrderBy(x => x).ToArray();
                     dgAircraft.Rows.Clear();
                     foreach (var allowed in config.Aircraft)
                     {
@@ -275,7 +283,8 @@ namespace InstrumentDesigner
                     if (!string.IsNullOrEmpty(val))
                         allowedAircraft.Add(val);
                 }
-                config.Aircraft = allowedAircraft.ToArray();
+                if (!populatingForm)
+                    config.Aircraft = allowedAircraft.ToArray();
             }
         }
 
@@ -299,8 +308,16 @@ namespace InstrumentDesigner
                 {
                     case "Edit Animation":
                         var animation = config.Animations.First(x => x.Name == name);
-                        frm = new frmAnimation(animation, cockpitDirectory);
-                        result = frm.ShowDialog(this);
+                        using (frm = new frmAnimation(animation, cockpitDirectory))
+                        {
+                            result = frm.ShowDialog(this);
+                            if (result == DialogResult.OK)
+                            {
+                                animation = ((frmAnimation)frm).DialogValue;
+                                var animations = config.Animations.Where(x => x.Name != animation.Name).ToList();
+                                animations.Add(animation);
+                            }
+                        }
                         break;
                     case "Delete Animation":
 
@@ -308,7 +325,7 @@ namespace InstrumentDesigner
                 }
                 if(result == DialogResult.OK)
                 {
-
+                    PopulateConfigForm();
                 }
             }
         }
