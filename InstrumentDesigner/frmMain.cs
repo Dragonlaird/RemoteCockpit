@@ -52,9 +52,9 @@ namespace InstrumentDesigner
             dgAircraft.Rows.Clear();
             txtBackgroundPath.Text = "";
             pbBackgroundImage.Image?.Dispose();
-            pbBackgroundImage.Image = null;
+            pbBackgroundImage.Image = new Bitmap(1,1);
             pbBackgroundImage.BackgroundImage?.Dispose();
-            pbBackgroundImage.BackgroundImage = null;
+            pbBackgroundImage.BackgroundImage = new Bitmap(1,1);
             pbBackgroundImage.BackColor = Color.Transparent;
             dgAnimations.Rows.Clear();
         }
@@ -104,19 +104,27 @@ namespace InstrumentDesigner
 
         private void ShowImage(Image image, Control imageBox)
         {
-            var imageScaleFactor = (double)imageBox.Width / image.Width;
-            var aspectRatio = (double)image.Height / image.Width;
-            if (image.Height * imageScaleFactor > imageBox.Height)
-                imageScaleFactor = (double)imageBox.Height / image.Height;
-            using (var backgroundImage = new Bitmap(imageBox.Width, imageBox.Height))
+            imageBox.BackgroundImage?.Dispose();
+            imageBox.BackgroundImage = new Bitmap(1, 1);
+            if (image != null)
             {
-                using (Graphics gr = Graphics.FromImage(backgroundImage))
+                var imageScaleFactor = (double)imageBox.Width / image.Width;
+                var aspectRatio = (double)image.Height / image.Width;
+                if (image.Height * imageScaleFactor > imageBox.Height)
+                    imageScaleFactor = (double)imageBox.Height / image.Height;
+                try
                 {
-                    gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+                    using (var backgroundImage = new Bitmap(imageBox.Width, imageBox.Height))
+                    {
+                        using (Graphics gr = Graphics.FromImage(backgroundImage))
+                        {
+                            gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+                        }
+                        imageBox.BackColor = Color.AliceBlue; // Use this to show where image doesn't fit the control
+                        imageBox.BackgroundImage = (Image)backgroundImage.Clone();
+                    }
                 }
-                imageBox.BackColor = Color.AliceBlue; // Use this to show where image doesn't fit the control
-                imageBox.BackgroundImage?.Dispose();
-                imageBox.BackgroundImage = (Image)backgroundImage.Clone();
+                catch { }
             }
         }
 
@@ -186,6 +194,7 @@ namespace InstrumentDesigner
             if (string.IsNullOrEmpty(config.BackgroundImagePath) || MessageBox.Show("Clear the current background image.\r\rAre you sure?", "Clear Background Image", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
                 pbBackgroundImage.Image?.Dispose();
+                pbBackgroundImage.Image = new Bitmap(1, 1);
                 txtBackgroundPath.Text = "";
                 if (!populatingForm)
                     config.BackgroundImagePath = "";

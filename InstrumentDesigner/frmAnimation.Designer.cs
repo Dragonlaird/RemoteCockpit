@@ -30,6 +30,7 @@
         {
             this.tabCollection = new System.Windows.Forms.TabControl();
             this.tabWhat = new System.Windows.Forms.TabPage();
+            this.lblAnimationTypeWarning = new System.Windows.Forms.Label();
             this.lblAnimationScaleMethod = new System.Windows.Forms.Label();
             this.cmbAnimationScaleMethod = new System.Windows.Forms.ComboBox();
             this.gpAnimationDrawing = new System.Windows.Forms.GroupBox();
@@ -38,6 +39,8 @@
             this.cmbAnimationFillColor = new System.Windows.Forms.ComboBox();
             this.lblAnimationFillColor = new System.Windows.Forms.Label();
             this.gpAnimationImage = new System.Windows.Forms.GroupBox();
+            this.txtAnimationRelativeY = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationRelativeX = new System.Windows.Forms.NumericUpDown();
             this.lblAnimationRelativeY = new System.Windows.Forms.Label();
             this.lblAnimationRelativeX = new System.Windows.Forms.Label();
             this.pbAnimationImage = new System.Windows.Forms.PictureBox();
@@ -50,15 +53,15 @@
             this.tabWhen = new System.Windows.Forms.TabPage();
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
-            this.txtAnimationRelativeX = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationRelativeY = new System.Windows.Forms.NumericUpDown();
+            this.cmdLoadAnimationImage = new System.Windows.Forms.Button();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
             this.gpAnimationImage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCollection
@@ -76,9 +79,11 @@
             // 
             // tabWhat
             // 
+            this.tabWhat.Controls.Add(this.lblAnimationTypeWarning);
             this.tabWhat.Controls.Add(this.lblAnimationScaleMethod);
             this.tabWhat.Controls.Add(this.cmbAnimationScaleMethod);
             this.tabWhat.Controls.Add(this.gpAnimationDrawing);
+            this.tabWhat.Controls.Add(this.gpAnimationImage);
             this.tabWhat.Controls.Add(this.cmbAnimationType);
             this.tabWhat.Controls.Add(this.lblAnimationType);
             this.tabWhat.Controls.Add(this.txtAnimationName);
@@ -91,10 +96,20 @@
             this.tabWhat.Text = "What";
             this.tabWhat.UseVisualStyleBackColor = true;
             // 
+            // lblAnimationTypeWarning
+            // 
+            this.lblAnimationTypeWarning.AutoSize = true;
+            this.lblAnimationTypeWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblAnimationTypeWarning.Location = new System.Drawing.Point(256, 36);
+            this.lblAnimationTypeWarning.Name = "lblAnimationTypeWarning";
+            this.lblAnimationTypeWarning.Size = new System.Drawing.Size(207, 13);
+            this.lblAnimationTypeWarning.TabIndex = 14;
+            this.lblAnimationTypeWarning.Text = "Warning: Changing this removes all values";
+            // 
             // lblAnimationScaleMethod
             // 
             this.lblAnimationScaleMethod.AutoSize = true;
-            this.lblAnimationScaleMethod.Location = new System.Drawing.Point(25, 66);
+            this.lblAnimationScaleMethod.Location = new System.Drawing.Point(25, 62);
             this.lblAnimationScaleMethod.Name = "lblAnimationScaleMethod";
             this.lblAnimationScaleMethod.Size = new System.Drawing.Size(37, 13);
             this.lblAnimationScaleMethod.TabIndex = 13;
@@ -104,7 +119,7 @@
             // 
             this.cmbAnimationScaleMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationScaleMethod.FormattingEnabled = true;
-            this.cmbAnimationScaleMethod.Location = new System.Drawing.Point(69, 63);
+            this.cmbAnimationScaleMethod.Location = new System.Drawing.Point(69, 59);
             this.cmbAnimationScaleMethod.Name = "cmbAnimationScaleMethod";
             this.cmbAnimationScaleMethod.Size = new System.Drawing.Size(186, 21);
             this.cmbAnimationScaleMethod.TabIndex = 12;
@@ -115,7 +130,6 @@
             this.gpAnimationDrawing.Controls.Add(this.lblAnimationFillMethod);
             this.gpAnimationDrawing.Controls.Add(this.cmbAnimationFillColor);
             this.gpAnimationDrawing.Controls.Add(this.lblAnimationFillColor);
-            this.gpAnimationDrawing.Controls.Add(this.gpAnimationImage);
             this.gpAnimationDrawing.Location = new System.Drawing.Point(14, 90);
             this.gpAnimationDrawing.Name = "gpAnimationDrawing";
             this.gpAnimationDrawing.Size = new System.Drawing.Size(442, 236);
@@ -162,6 +176,7 @@
             // 
             // gpAnimationImage
             // 
+            this.gpAnimationImage.Controls.Add(this.cmdLoadAnimationImage);
             this.gpAnimationImage.Controls.Add(this.txtAnimationRelativeY);
             this.gpAnimationImage.Controls.Add(this.txtAnimationRelativeX);
             this.gpAnimationImage.Controls.Add(this.lblAnimationRelativeY);
@@ -169,12 +184,26 @@
             this.gpAnimationImage.Controls.Add(this.pbAnimationImage);
             this.gpAnimationImage.Controls.Add(this.txtAnimationImagePath);
             this.gpAnimationImage.Controls.Add(this.lblAnimationImagePath);
-            this.gpAnimationImage.Location = new System.Drawing.Point(144, 107);
+            this.gpAnimationImage.Location = new System.Drawing.Point(14, 92);
             this.gpAnimationImage.Name = "gpAnimationImage";
             this.gpAnimationImage.Size = new System.Drawing.Size(442, 234);
             this.gpAnimationImage.TabIndex = 6;
             this.gpAnimationImage.TabStop = false;
             this.gpAnimationImage.Text = "Image";
+            // 
+            // txtAnimationRelativeY
+            // 
+            this.txtAnimationRelativeY.Location = new System.Drawing.Point(56, 43);
+            this.txtAnimationRelativeY.Name = "txtAnimationRelativeY";
+            this.txtAnimationRelativeY.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationRelativeY.TabIndex = 23;
+            // 
+            // txtAnimationRelativeX
+            // 
+            this.txtAnimationRelativeX.Location = new System.Drawing.Point(56, 20);
+            this.txtAnimationRelativeX.Name = "txtAnimationRelativeX";
+            this.txtAnimationRelativeX.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationRelativeX.TabIndex = 22;
             // 
             // lblAnimationRelativeY
             // 
@@ -223,7 +252,7 @@
             // 
             this.cmbAnimationType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationType.FormattingEnabled = true;
-            this.cmbAnimationType.Location = new System.Drawing.Point(69, 36);
+            this.cmbAnimationType.Location = new System.Drawing.Point(69, 32);
             this.cmbAnimationType.Name = "cmbAnimationType";
             this.cmbAnimationType.Size = new System.Drawing.Size(185, 21);
             this.cmbAnimationType.TabIndex = 3;
@@ -232,7 +261,7 @@
             // lblAnimationType
             // 
             this.lblAnimationType.AutoSize = true;
-            this.lblAnimationType.Location = new System.Drawing.Point(28, 39);
+            this.lblAnimationType.Location = new System.Drawing.Point(28, 36);
             this.lblAnimationType.Name = "lblAnimationType";
             this.lblAnimationType.Size = new System.Drawing.Size(34, 13);
             this.lblAnimationType.TabIndex = 2;
@@ -244,6 +273,7 @@
             this.txtAnimationName.Name = "txtAnimationName";
             this.txtAnimationName.Size = new System.Drawing.Size(185, 20);
             this.txtAnimationName.TabIndex = 1;
+            this.txtAnimationName.TextChanged += new System.EventHandler(this.UpdateName_Changed);
             // 
             // lblAnimationName
             // 
@@ -284,19 +314,15 @@
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
-            // txtAnimationRelativeX
+            // cmdLoadAnimationImage
             // 
-            this.txtAnimationRelativeX.Location = new System.Drawing.Point(56, 20);
-            this.txtAnimationRelativeX.Name = "txtAnimationRelativeX";
-            this.txtAnimationRelativeX.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationRelativeX.TabIndex = 22;
-            // 
-            // txtAnimationRelativeY
-            // 
-            this.txtAnimationRelativeY.Location = new System.Drawing.Point(56, 43);
-            this.txtAnimationRelativeY.Name = "txtAnimationRelativeY";
-            this.txtAnimationRelativeY.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationRelativeY.TabIndex = 23;
+            this.cmdLoadAnimationImage.Location = new System.Drawing.Point(248, 71);
+            this.cmdLoadAnimationImage.Name = "cmdLoadAnimationImage";
+            this.cmdLoadAnimationImage.Size = new System.Drawing.Size(75, 23);
+            this.cmdLoadAnimationImage.TabIndex = 24;
+            this.cmdLoadAnimationImage.Text = "...";
+            this.cmdLoadAnimationImage.UseVisualStyleBackColor = true;
+            this.cmdLoadAnimationImage.Click += new System.EventHandler(this.LoadAnimationImage_Click);
             // 
             // frmAnimation
             // 
@@ -315,9 +341,9 @@
             this.gpAnimationDrawing.PerformLayout();
             this.gpAnimationImage.ResumeLayout(false);
             this.gpAnimationImage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -348,5 +374,8 @@
         private System.Windows.Forms.Button cmdAnimationCancel;
         private System.Windows.Forms.NumericUpDown txtAnimationRelativeY;
         private System.Windows.Forms.NumericUpDown txtAnimationRelativeX;
+        private System.Windows.Forms.Label lblAnimationTypeWarning;
+        private System.Windows.Forms.Button cmdLoadAnimationImage;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
