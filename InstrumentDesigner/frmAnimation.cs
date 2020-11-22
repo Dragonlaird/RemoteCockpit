@@ -112,7 +112,11 @@ namespace InstrumentDesigner
                         gpAnimationDrawing.Visible = true;
                         cmbAnimationFillColor.SelectedIndex = cmbAnimationFillColor.Items.IndexOf(((AnimationDrawing)_animation).FillColor.ToKnownColor().ToString());
                         cmbAnimationFillMethod.SelectedIndex = cmbAnimationFillMethod.Items.IndexOf(((AnimationDrawing)_animation).FillMethod.ToString());
-
+                        dgAnimationPlotPoints.Rows.Clear();
+                        foreach(var plotPoint in ((AnimationDrawing)_animation).PointMap)
+                        {
+                            dgAnimationPlotPoints.Rows.Add(new object[] { plotPoint.X, plotPoint.Y });
+                        }
                     }
                     break;
                 case 1:
@@ -207,8 +211,8 @@ namespace InstrumentDesigner
         {
             // Allow user to open a new image file for animating
             openFileDialog.Title = "Load Background Image";
-            openFileDialog.Filter = "BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff|All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff";
-            openFileDialog.FileName = Path.Combine(baseFolder, ((AnimationImage)_animation).ImagePath);
+            openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff|BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff";
+            openFileDialog.InitialDirectory = Path.GetDirectoryName(Path.Combine(baseFolder, ((AnimationImage)_animation).ImagePath));
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -220,11 +224,45 @@ namespace InstrumentDesigner
                     ShowImage(Image.FromFile(relativePath), pbAnimationImage);
                     txtAnimationImagePath.Text = relativePath;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    MessageBox.Show(string.Format("Unable to use selected file:\r{0}", openFileDialog.FileName), "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Unable to use selected file:\r{0}\rError: ", openFileDialog.FileName, ex.Message), "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void PlotPoint_Change(object sender, DataGridViewCellEventArgs e)
+        {
+            // Modify Config to contain all populated X/Y values
+            if (_animation != null && !populatingForm)
+            {
+                var newPoints = new List<AnimationPoint>();
+                foreach (DataGridViewRow row in dgAnimationPlotPoints.Rows)
+                {
+                    if (!string.IsNullOrWhiteSpace(row.Cells["pointX"].Value?.ToString()) && !string.IsNullOrWhiteSpace(row.Cells["pointY"].Value?.ToString()))
+                    {
+                        var xString = row.Cells["pointX"].Value.ToString();
+                        var yString = row.Cells["pointY"].Value.ToString();
+                        float x;
+                        float y;
+                        if (float.TryParse(xString, out x) && float.TryParse(yString, out y))
+                        {
+                            newPoints.Add(new AnimationPoint(x, y));
+                        }
+                    }
+                }
+                ((AnimationDrawing)_animation).PointMap = newPoints.ToArray();
+            }
+        }
+
+        private void PlotPointAdd_Change(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            PlotPoint_Change(sender, new DataGridViewCellEventArgs(0, e.RowIndex));
+        }
+
+        private void PlotPointRemove_Change(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            PlotPoint_Change(sender, new DataGridViewCellEventArgs(0, e.RowIndex));
         }
     }
 }

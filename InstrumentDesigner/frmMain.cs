@@ -148,8 +148,9 @@ namespace InstrumentDesigner
 
         private void LoadConfig(object sender, EventArgs e)
         {
-            openFileDialog.Title = "Load Instrument Configuraion";
+            openFileDialog.Title = "Load Instrument Configuration";
             openFileDialog.Filter = "Instrument Configurations|*.json";
+            openFileDialog.FileName = "";
 
             var dialogResult = openFileDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
@@ -177,7 +178,7 @@ namespace InstrumentDesigner
                 catch (Exception ex)
                 {
                     config = new Configuration();
-                    MessageBox.Show(string.Format("Error reading Configuration file:\r\r{0}", fileName), "Invalid File Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Error reading Configuration file:\r\r{0}\r\rError: {1}", fileName, ex.Message), "Invalid File Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -195,6 +196,8 @@ namespace InstrumentDesigner
             {
                 pbBackgroundImage.Image?.Dispose();
                 pbBackgroundImage.Image = new Bitmap(1, 1);
+                pbBackgroundImage.BackgroundImage?.Dispose();
+                pbBackgroundImage.BackgroundImage = new Bitmap(1, 1);
                 txtBackgroundPath.Text = "";
                 if (!populatingForm)
                     config.BackgroundImagePath = "";
@@ -206,13 +209,22 @@ namespace InstrumentDesigner
             if (string.IsNullOrEmpty(config.BackgroundImagePath) || MessageBox.Show("This action will clear the existing background image and import a new image into the Configuration Instrument Images folder.\r\rAre you sure?", "Clear and Load Background Image", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
                 openFileDialog.Title = "Load Background Image";
-                openFileDialog.Filter = "BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff|All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff";
+                openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff|BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff";
+                openFileDialog.FileName = "";
+
                 var dialogResult = openFileDialog.ShowDialog();
                 if (dialogResult == DialogResult.OK)
                 {
                     var backgroundAbsolutePath = openFileDialog.FileName;
-                    txtBackgroundPath.Text = backgroundAbsolutePath;
-                    LoadImage(backgroundAbsolutePath);
+                     var backgroundImage = LoadImage(backgroundAbsolutePath);
+                    if (backgroundImage != null)
+                    {
+                        ShowImage(backgroundImage, pbBackgroundImage);
+                        var relativePath = Path.Combine(".\\InstrumentImages", Path.GetFileName(backgroundAbsolutePath));
+                        if (Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), relativePath)) != Path.GetFullPath(backgroundAbsolutePath))
+                            File.Copy(backgroundAbsolutePath, Path.Combine(Directory.GetCurrentDirectory(), relativePath));
+                        txtBackgroundPath.Text = relativePath;
+                    }
                 }
             }
         }
@@ -309,13 +321,13 @@ namespace InstrumentDesigner
             if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
                 e.RowIndex >= 0)
             {
-                var action = senderGrid.Rows[0].Cells[e.ColumnIndex].Value?.ToString();
+                var action = senderGrid.Columns[e.ColumnIndex].HeaderText?.ToString();
                 var name = senderGrid.Rows[e.RowIndex].Cells["What"].Value?.ToString();
                 Form frm;
                 DialogResult result = DialogResult.Abort;
                 switch (action)
                 {
-                    case "Edit Animation":
+                    case "E":
                         var animation = config.Animations.First(x => x.Name == name);
                         using (frm = new frmAnimation(animation, cockpitDirectory))
                         {
@@ -328,8 +340,14 @@ namespace InstrumentDesigner
                             }
                         }
                         break;
-                    case "Delete Animation":
-
+                    case "X":
+                        result = MessageBox.Show("Are you sure you want to delete this animation?", "Delete Animation", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        if(result == DialogResult.OK)
+                        {
+                            var newAnimations = config.Animations.ToList();
+                            newAnimations.RemoveAt(newAnimations.IndexOf(newAnimations.First(x => x.Name == name)));
+                            config.Animations = newAnimations.ToArray();
+                        }
                         break;
                 }
                 if(result == DialogResult.OK)
@@ -337,6 +355,54 @@ namespace InstrumentDesigner
                     PopulateConfigForm();
                 }
             }
+        }
+
+        private void NewAnimation_Click(object sender, EventArgs e)
+        {
+            var rowIdx = dgAnimations.Rows.Add();
+            var colIdx = dgAnimations.Columns.IndexOf(dgAnimations.Columns["Edit Animation"]);
+            EditDeleteAnimation_Click(dgAnimations, new DataGridViewCellEventArgs(colIdx, rowIdx));
+        }
+
+        private void SaveConfig(object sender, EventArgs e)
+        {
+            var configJson = JsonConvert.SerializeObject(config);
+            if(sender == saveAsToolStripMenuItem)
+            {
+                openFileDialog.InitialDirectory = Path.GetDirectoryName(configFilePath);
+                openFileDialog.Title = "Save Instrument Configuraion";
+                openFileDialog.Filter = "Instrument Configurations|*.json";
+                openFileDialog.FileName = "";
+
+                var result = openFileDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                    configFilePath = openFileDialog.FileName;
+                else
+                    return;
+                if (File.Exists(configFilePath) && MessageBox.Show("File already exists.\rContinuing will overwrite this file.\r\rAre you sure?", "Replace File?", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+                    return;
+            }
+            if (File.Exists(configFilePath))
+                File.Delete(configFilePath);
+            var file = File.OpenWrite(configFilePath);
+            file.Write(Encoding.ASCII.GetBytes(configJson), 0, configJson.Length);
+            file.Close();
+            config.HasChanged = false;
+            MessageBox.Show("Configuration Saved.\r\rTo use this configuration, use the Publish menu.", "Config Saved");
+        }
+
+        private void Close_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(config?.Name) && config.HasChanged)
+            {
+                if(MessageBox.Show("This will lose all Configuration changes.\r\rAre you sure?", "Config has changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+            ResetForm();
+            config = new Configuration();
+            configFilePath = "";
         }
     }
 }

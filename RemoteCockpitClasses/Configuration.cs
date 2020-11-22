@@ -29,7 +29,7 @@ namespace RemoteCockpitClasses.Animations
         public InstrumentType Type { get { return _type; } set { if (_type != value) { _type = value; HasChanged = true; } } }
         public DateTime CreateDate { get { return _createDate; } set { if (_createDate != value) { _createDate = value; HasChanged = true; } } }
         public string BackgroundImagePath { get { return _backgroundImagePath; } set { if (_backgroundImagePath != value) { _backgroundImagePath = value; HasChanged = true; } } }
-        public string [] Aircraft { get { return _aircraft; } set { if (_aircraft != value) { _aircraft = value; HasChanged = true; } } }
+        public string [] Aircraft { get { return _aircraft ?? new string[0]; } set { if (_aircraft != value) { _aircraft = value; HasChanged = true; } } }
         public int AnimationUpdateInMs { get { return _animationUpdateInMs; } set { if (_animationUpdateInMs != value) { _animationUpdateInMs = value; HasChanged = true; } } }
         [JsonConverter(typeof(ConcreteConverter<IAnimationItem[]>))]
         public IAnimationItem[] Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }

@@ -36,7 +36,6 @@ namespace InstrumentDesigner
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItemSep = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuBackground = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +44,7 @@ namespace InstrumentDesigner
             this.resizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.gpBasicInfo = new System.Windows.Forms.GroupBox();
+            this.txtUpdateMS = new System.Windows.Forms.NumericUpDown();
             this.lblAircraft = new System.Windows.Forms.Label();
             this.dgAircraft = new System.Windows.Forms.DataGridView();
             this.Aircraft = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,15 +72,14 @@ namespace InstrumentDesigner
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.cmdAddAnimation = new System.Windows.Forms.Button();
-            this.txtUpdateMS = new System.Windows.Forms.NumericUpDown();
             this.mnuMain.SuspendLayout();
             this.gpBasicInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).BeginInit();
             this.gpBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).BeginInit();
             this.gpAnimations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimations)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).BeginInit();
             this.SuspendLayout();
             // 
             // mnuMain
@@ -101,7 +100,6 @@ namespace InstrumentDesigner
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
-            this.closeToolStripMenuItem,
             this.fileToolStripMenuItemSep,
             this.exitToolStripMenuItem});
             this.mnuFile.Name = "mnuFile";
@@ -111,43 +109,40 @@ namespace InstrumentDesigner
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newToolStripMenuItem.Text = "&New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.Close_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.LoadConfig);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveConfig);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
-            // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-            this.closeToolStripMenuItem.Text = "&Close";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveConfig);
             // 
             // fileToolStripMenuItemSep
             // 
             this.fileToolStripMenuItemSep.Name = "fileToolStripMenuItemSep";
-            this.fileToolStripMenuItemSep.Size = new System.Drawing.Size(111, 6);
+            this.fileToolStripMenuItemSep.Size = new System.Drawing.Size(177, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.CloseForm);
             // 
@@ -209,6 +204,28 @@ namespace InstrumentDesigner
             this.gpBasicInfo.TabIndex = 6;
             this.gpBasicInfo.TabStop = false;
             this.gpBasicInfo.Text = "Instrument Details";
+            // 
+            // txtUpdateMS
+            // 
+            this.txtUpdateMS.Location = new System.Drawing.Point(103, 107);
+            this.txtUpdateMS.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.txtUpdateMS.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.txtUpdateMS.Name = "txtUpdateMS";
+            this.txtUpdateMS.Size = new System.Drawing.Size(120, 20);
+            this.txtUpdateMS.TabIndex = 18;
+            this.txtUpdateMS.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
             // 
             // lblAircraft
             // 
@@ -466,7 +483,7 @@ namespace InstrumentDesigner
             // 
             this.Edit.HeaderText = "E";
             this.Edit.Name = "Edit";
-            this.Edit.Text = "Edit Animation";
+            this.Edit.Text = "E";
             this.Edit.ToolTipText = "Edit Animation";
             this.Edit.UseColumnTextForButtonValue = true;
             this.Edit.Width = 20;
@@ -475,7 +492,7 @@ namespace InstrumentDesigner
             // 
             this.Delete.HeaderText = "X";
             this.Delete.Name = "Delete";
-            this.Delete.Text = "Delete Animation";
+            this.Delete.Text = "X";
             this.Delete.ToolTipText = "Delete Animation";
             this.Delete.UseColumnTextForButtonValue = true;
             this.Delete.Width = 20;
@@ -489,28 +506,7 @@ namespace InstrumentDesigner
             this.cmdAddAnimation.TabIndex = 0;
             this.cmdAddAnimation.Text = "New...";
             this.cmdAddAnimation.UseVisualStyleBackColor = true;
-            // 
-            // txtUpdateMS
-            // 
-            this.txtUpdateMS.Location = new System.Drawing.Point(103, 107);
-            this.txtUpdateMS.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.txtUpdateMS.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.txtUpdateMS.Name = "txtUpdateMS";
-            this.txtUpdateMS.Size = new System.Drawing.Size(120, 20);
-            this.txtUpdateMS.TabIndex = 18;
-            this.txtUpdateMS.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
+            this.cmdAddAnimation.Click += new System.EventHandler(this.NewAnimation_Click);
             // 
             // frmInstrumentDesigner
             // 
@@ -530,13 +526,13 @@ namespace InstrumentDesigner
             this.mnuMain.PerformLayout();
             this.gpBasicInfo.ResumeLayout(false);
             this.gpBasicInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAircraft)).EndInit();
             this.gpBackground.ResumeLayout(false);
             this.gpBackground.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackgroundImage)).EndInit();
             this.gpAnimations.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimations)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -549,7 +545,6 @@ namespace InstrumentDesigner
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator fileToolStripMenuItemSep;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuBackground;
@@ -580,12 +575,12 @@ namespace InstrumentDesigner
         private System.Windows.Forms.DataGridView dgAnimations;
         private System.Windows.Forms.DataGridViewTextBoxColumn Aircraft;
         private System.Windows.Forms.DataGridViewButtonColumn Options;
+        private System.Windows.Forms.NumericUpDown txtUpdateMS;
         private System.Windows.Forms.DataGridViewTextBoxColumn What;
         private System.Windows.Forms.DataGridViewTextBoxColumn When;
         private System.Windows.Forms.DataGridViewTextBoxColumn How;
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
-        private System.Windows.Forms.NumericUpDown txtUpdateMS;
     }
 }
 

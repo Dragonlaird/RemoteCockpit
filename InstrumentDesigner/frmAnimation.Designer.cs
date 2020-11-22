@@ -34,11 +34,16 @@
             this.lblAnimationScaleMethod = new System.Windows.Forms.Label();
             this.cmbAnimationScaleMethod = new System.Windows.Forms.ComboBox();
             this.gpAnimationDrawing = new System.Windows.Forms.GroupBox();
+            this.lblAnimationPointMap = new System.Windows.Forms.Label();
+            this.dgAnimationPlotPoints = new System.Windows.Forms.DataGridView();
+            this.pointX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pointY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmbAnimationFillMethod = new System.Windows.Forms.ComboBox();
             this.lblAnimationFillMethod = new System.Windows.Forms.Label();
             this.cmbAnimationFillColor = new System.Windows.Forms.ComboBox();
             this.lblAnimationFillColor = new System.Windows.Forms.Label();
             this.gpAnimationImage = new System.Windows.Forms.GroupBox();
+            this.cmdLoadAnimationImage = new System.Windows.Forms.Button();
             this.txtAnimationRelativeY = new System.Windows.Forms.NumericUpDown();
             this.txtAnimationRelativeX = new System.Windows.Forms.NumericUpDown();
             this.lblAnimationRelativeY = new System.Windows.Forms.Label();
@@ -53,11 +58,11 @@
             this.tabWhen = new System.Windows.Forms.TabPage();
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
-            this.cmdLoadAnimationImage = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAnimationPlotPoints)).BeginInit();
             this.gpAnimationImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).BeginInit();
@@ -126,23 +131,60 @@
             // 
             // gpAnimationDrawing
             // 
+            this.gpAnimationDrawing.Controls.Add(this.lblAnimationPointMap);
+            this.gpAnimationDrawing.Controls.Add(this.dgAnimationPlotPoints);
             this.gpAnimationDrawing.Controls.Add(this.cmbAnimationFillMethod);
             this.gpAnimationDrawing.Controls.Add(this.lblAnimationFillMethod);
             this.gpAnimationDrawing.Controls.Add(this.cmbAnimationFillColor);
             this.gpAnimationDrawing.Controls.Add(this.lblAnimationFillColor);
-            this.gpAnimationDrawing.Location = new System.Drawing.Point(14, 90);
+            this.gpAnimationDrawing.Location = new System.Drawing.Point(6, 98);
             this.gpAnimationDrawing.Name = "gpAnimationDrawing";
-            this.gpAnimationDrawing.Size = new System.Drawing.Size(442, 236);
+            this.gpAnimationDrawing.Size = new System.Drawing.Size(442, 234);
             this.gpAnimationDrawing.TabIndex = 7;
             this.gpAnimationDrawing.TabStop = false;
             this.gpAnimationDrawing.Text = "Drawing";
             this.gpAnimationDrawing.Visible = false;
             // 
+            // lblAnimationPointMap
+            // 
+            this.lblAnimationPointMap.AutoSize = true;
+            this.lblAnimationPointMap.Location = new System.Drawing.Point(258, 17);
+            this.lblAnimationPointMap.Name = "lblAnimationPointMap";
+            this.lblAnimationPointMap.Size = new System.Drawing.Size(107, 13);
+            this.lblAnimationPointMap.TabIndex = 12;
+            this.lblAnimationPointMap.Text = "Cartesian Plot Points:";
+            // 
+            // dgAnimationPlotPoints
+            // 
+            this.dgAnimationPlotPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgAnimationPlotPoints.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.pointX,
+            this.pointY});
+            this.dgAnimationPlotPoints.Location = new System.Drawing.Point(258, 33);
+            this.dgAnimationPlotPoints.Name = "dgAnimationPlotPoints";
+            this.dgAnimationPlotPoints.Size = new System.Drawing.Size(178, 195);
+            this.dgAnimationPlotPoints.TabIndex = 11;
+            this.dgAnimationPlotPoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.PlotPoint_Change);
+            this.dgAnimationPlotPoints.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.PlotPointAdd_Change);
+            this.dgAnimationPlotPoints.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.PlotPointRemove_Change);
+            // 
+            // pointX
+            // 
+            this.pointX.HeaderText = "X";
+            this.pointX.Name = "pointX";
+            this.pointX.Width = 50;
+            // 
+            // pointY
+            // 
+            this.pointY.HeaderText = "Y";
+            this.pointY.Name = "pointY";
+            this.pointY.Width = 50;
+            // 
             // cmbAnimationFillMethod
             // 
             this.cmbAnimationFillMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationFillMethod.FormattingEnabled = true;
-            this.cmbAnimationFillMethod.Location = new System.Drawing.Point(68, 49);
+            this.cmbAnimationFillMethod.Location = new System.Drawing.Point(69, 65);
             this.cmbAnimationFillMethod.Name = "cmbAnimationFillMethod";
             this.cmbAnimationFillMethod.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationFillMethod.TabIndex = 10;
@@ -150,7 +192,7 @@
             // lblAnimationFillMethod
             // 
             this.lblAnimationFillMethod.AutoSize = true;
-            this.lblAnimationFillMethod.Location = new System.Drawing.Point(1, 52);
+            this.lblAnimationFillMethod.Location = new System.Drawing.Point(2, 68);
             this.lblAnimationFillMethod.Name = "lblAnimationFillMethod";
             this.lblAnimationFillMethod.Size = new System.Drawing.Size(61, 13);
             this.lblAnimationFillMethod.TabIndex = 9;
@@ -160,7 +202,7 @@
             // 
             this.cmbAnimationFillColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationFillColor.FormattingEnabled = true;
-            this.cmbAnimationFillColor.Location = new System.Drawing.Point(68, 17);
+            this.cmbAnimationFillColor.Location = new System.Drawing.Point(69, 33);
             this.cmbAnimationFillColor.Name = "cmbAnimationFillColor";
             this.cmbAnimationFillColor.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationFillColor.TabIndex = 8;
@@ -168,7 +210,7 @@
             // lblAnimationFillColor
             // 
             this.lblAnimationFillColor.AutoSize = true;
-            this.lblAnimationFillColor.Location = new System.Drawing.Point(13, 20);
+            this.lblAnimationFillColor.Location = new System.Drawing.Point(14, 36);
             this.lblAnimationFillColor.Name = "lblAnimationFillColor";
             this.lblAnimationFillColor.Size = new System.Drawing.Size(49, 13);
             this.lblAnimationFillColor.TabIndex = 7;
@@ -184,12 +226,22 @@
             this.gpAnimationImage.Controls.Add(this.pbAnimationImage);
             this.gpAnimationImage.Controls.Add(this.txtAnimationImagePath);
             this.gpAnimationImage.Controls.Add(this.lblAnimationImagePath);
-            this.gpAnimationImage.Location = new System.Drawing.Point(14, 92);
+            this.gpAnimationImage.Location = new System.Drawing.Point(6, 98);
             this.gpAnimationImage.Name = "gpAnimationImage";
             this.gpAnimationImage.Size = new System.Drawing.Size(442, 234);
             this.gpAnimationImage.TabIndex = 6;
             this.gpAnimationImage.TabStop = false;
             this.gpAnimationImage.Text = "Image";
+            // 
+            // cmdLoadAnimationImage
+            // 
+            this.cmdLoadAnimationImage.Location = new System.Drawing.Point(248, 71);
+            this.cmdLoadAnimationImage.Name = "cmdLoadAnimationImage";
+            this.cmdLoadAnimationImage.Size = new System.Drawing.Size(75, 23);
+            this.cmdLoadAnimationImage.TabIndex = 24;
+            this.cmdLoadAnimationImage.Text = "...";
+            this.cmdLoadAnimationImage.UseVisualStyleBackColor = true;
+            this.cmdLoadAnimationImage.Click += new System.EventHandler(this.LoadAnimationImage_Click);
             // 
             // txtAnimationRelativeY
             // 
@@ -210,18 +262,18 @@
             this.lblAnimationRelativeY.AutoSize = true;
             this.lblAnimationRelativeY.Location = new System.Drawing.Point(1, 45);
             this.lblAnimationRelativeY.Name = "lblAnimationRelativeY";
-            this.lblAnimationRelativeY.Size = new System.Drawing.Size(47, 13);
+            this.lblAnimationRelativeY.Size = new System.Drawing.Size(48, 13);
             this.lblAnimationRelativeY.TabIndex = 20;
-            this.lblAnimationRelativeY.Text = "Scale Y:";
+            this.lblAnimationRelativeY.Text = "Offset Y:";
             // 
             // lblAnimationRelativeX
             // 
             this.lblAnimationRelativeX.AutoSize = true;
             this.lblAnimationRelativeX.Location = new System.Drawing.Point(1, 22);
             this.lblAnimationRelativeX.Name = "lblAnimationRelativeX";
-            this.lblAnimationRelativeX.Size = new System.Drawing.Size(47, 13);
+            this.lblAnimationRelativeX.Size = new System.Drawing.Size(48, 13);
             this.lblAnimationRelativeX.TabIndex = 18;
-            this.lblAnimationRelativeX.Text = "Scale X:";
+            this.lblAnimationRelativeX.Text = "Offset X:";
             // 
             // pbAnimationImage
             // 
@@ -314,16 +366,6 @@
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
-            // cmdLoadAnimationImage
-            // 
-            this.cmdLoadAnimationImage.Location = new System.Drawing.Point(248, 71);
-            this.cmdLoadAnimationImage.Name = "cmdLoadAnimationImage";
-            this.cmdLoadAnimationImage.Size = new System.Drawing.Size(75, 23);
-            this.cmdLoadAnimationImage.TabIndex = 24;
-            this.cmdLoadAnimationImage.Text = "...";
-            this.cmdLoadAnimationImage.UseVisualStyleBackColor = true;
-            this.cmdLoadAnimationImage.Click += new System.EventHandler(this.LoadAnimationImage_Click);
-            // 
             // frmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -339,6 +381,7 @@
             this.tabWhat.PerformLayout();
             this.gpAnimationDrawing.ResumeLayout(false);
             this.gpAnimationDrawing.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAnimationPlotPoints)).EndInit();
             this.gpAnimationImage.ResumeLayout(false);
             this.gpAnimationImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeY)).EndInit();
@@ -377,5 +420,9 @@
         private System.Windows.Forms.Label lblAnimationTypeWarning;
         private System.Windows.Forms.Button cmdLoadAnimationImage;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.Label lblAnimationPointMap;
+        private System.Windows.Forms.DataGridView dgAnimationPlotPoints;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pointX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pointY;
     }
 }

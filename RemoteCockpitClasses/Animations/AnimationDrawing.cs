@@ -21,7 +21,7 @@ namespace RemoteCockpitClasses.Animations
         public double RelativeY { get; set; }
         [JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest[]>))]
         public IAnimationTrigger[] Triggers { get; set; }
-
+        [JsonIgnore]
         public object LastAppliedValue { get; set; }
     }
 }

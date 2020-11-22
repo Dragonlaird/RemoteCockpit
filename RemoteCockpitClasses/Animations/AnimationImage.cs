@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -14,6 +15,7 @@ namespace RemoteCockpitClasses.Animations
         public string ImagePath { get; set; }
         public AnimationScaleMethodEnum ScaleMethod { get; set; }
         public IAnimationTrigger[] Triggers { get; set; }
+        [JsonIgnore]
         public object LastAppliedValue { get; set; }
     }
 }
