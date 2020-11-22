@@ -96,8 +96,11 @@ namespace InstrumentDesigner
             {
                 var rowIdx = dgAnimations.Rows.Add();
                 dgAnimations.Rows[rowIdx].Cells["What"].Value = anim.Name?.ToString();
-                dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers.Select(x => x.Type.ToString()));
-                dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers.SelectMany(x => x.Actions.Select(y => y.Type.ToString())));
+                if (anim.Triggers != null)
+                {
+                    dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => x.Type.ToString()));
+                    dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => x.Actions.Select(y => y.Type.ToString())));
+                }
             }
             populatingForm = false;
         }
@@ -151,7 +154,7 @@ namespace InstrumentDesigner
             openFileDialog.Title = "Load Instrument Configuration";
             openFileDialog.Filter = "Instrument Configurations|*.json";
             openFileDialog.FileName = "";
-
+            openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".\\GenericInstruments"));
             var dialogResult = openFileDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
@@ -211,6 +214,7 @@ namespace InstrumentDesigner
                 openFileDialog.Title = "Load Background Image";
                 openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff|BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff";
                 openFileDialog.FileName = "";
+                openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".\\InstrumentImages"));
 
                 var dialogResult = openFileDialog.ShowDialog();
                 if (dialogResult == DialogResult.OK)
