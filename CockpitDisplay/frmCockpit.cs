@@ -24,6 +24,7 @@ namespace CockpitDisplay
         private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
+        public EventHandler<string> Messages;
         private Point ScreenDimensions;
         public frmCockpit()
         {
@@ -205,7 +206,7 @@ namespace CockpitDisplay
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(string.Format("Unable to add plugin: {0}\rError: {1}", plugin.Name, ex.Message));
+                        ConsoleLog(string.Format("Unable to add plugin: {0}\rError: {1}", plugin.Name, ex.Message));
                     }
                 }
                 if (!variables.Any(x => x.Name == "UPDATE FREQUENCY" && x.Unit == "second"))
@@ -215,7 +216,7 @@ namespace CockpitDisplay
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unable to add Instruments.\rError: {0}", ex.Message);
+                ConsoleLog(string.Format("Unable to add Instruments.\rError: {0}", ex.Message));
             }
             // Request all variables used by any plugin - even if they've been requested before - duplicate requests are ignored
             if (RequestValue != null)
@@ -289,8 +290,6 @@ namespace CockpitDisplay
                 }
                 catch { }
 
-            // get a list of objects that implement the ICalculator interface AND 
-            // have the CalculationPlugInAttribute
             List<Type> instrumentsList = availableTypes.FindAll(delegate (Type t)
             {
                 List<Type> interfaceTypes = new List<Type>(t.GetInterfaces());
@@ -311,6 +310,12 @@ namespace CockpitDisplay
             }
             // convert the list of Objects to an instantiated list of ICalculators
             return customInstruments;
+        }
+
+        private void ConsoleLog(string message)
+        {
+            if (Messages != null)
+                Messages.DynamicInvoke(message);
         }
     }
 }

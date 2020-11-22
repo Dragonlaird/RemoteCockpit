@@ -55,7 +55,7 @@ namespace CockpitDisplay.Tests
                                     Type = AnimationTriggerTypeEnum.ClientRequest,
                                     Request = new ClientRequest
                                     {
-                                        Name = "INDICATED AIRSPEED", Unit = "knots"
+                                        Name = "AIRSPEED INDICATED", Unit = "knots"
                                     },
                                     Actions = new IAnimationAction[]
                                     {

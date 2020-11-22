@@ -69,7 +69,7 @@
           "Name": "Airspeed",
           "Type": 1,
           "Request": {
-            "Name": "INDICATED AIRSPEED",
+            "Name": "AIRSPEED INDICATED",
             "Unit": "knots"
           },
           "Actions": [
@@ -94,7 +94,7 @@
   ],
   "ClientRequests": [
     {
-      "Name": "INDICATED AIRSPEED",
+      "Name": "AIRSPEED INDICATED",
       "Unit": "knots"
     }
   ],

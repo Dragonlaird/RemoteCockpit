@@ -339,9 +339,9 @@ namespace InstrumentDesigner
                             if (result == DialogResult.OK)
                             {
                                 var newAnimation = ((frmAnimation)frm).DialogValue;
-                                if(config.Animations.Any(x=>x.Name == animation.Name))
+                                if(config.Animations.Any(x=>x.Name == name))
                                 {
-                                    var cleanAnimations = config.Animations.Where(x => x.Name != animation.Name).ToList();
+                                    var cleanAnimations = config.Animations.Where(x => x.Name != name).ToList();
                                     config.Animations = cleanAnimations.ToArray();
                                 }
                                 var currentAnimations = config.Animations.ToList();
@@ -369,8 +369,21 @@ namespace InstrumentDesigner
 
         private void NewAnimation_Click(object sender, EventArgs e)
         {
-            var rowIdx = dgAnimations.Rows.Add();
-            dgAnimations.Rows[rowIdx].Cells["What"].Value = "New...";
+            int rowIdx = -1;
+            bool newRowExists = false;
+            foreach(DataGridViewRow row in dgAnimations.Rows)
+            {
+                if(row.Cells["What"].Value?.ToString() == "New...")
+                {
+                    rowIdx = dgAnimations.Rows.IndexOf(row);
+                    break;
+                }
+            }
+            if (!newRowExists)
+            {
+                rowIdx = dgAnimations.Rows.Add();
+                dgAnimations.Rows[rowIdx].Cells["What"].Value = "New...";
+            }
             var colIdx = dgAnimations.Columns.IndexOf(dgAnimations.Columns["Edit"]);
             EditDeleteAnimation_Click(dgAnimations, new DataGridViewCellEventArgs(colIdx, rowIdx));
         }

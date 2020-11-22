@@ -1,10 +1,10 @@
 {
-  "Name": "Test Instrument for all aircraft",
+  "Name": "Test Altimeter for all aircraft",
   "Author": "Dragonlaird",
   "Type": "Airspeed_Indicator",
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png",
-  "Aircraft": [ "Cessna 152 ASOBO" ],
+  "Aircraft": [ "Generic" ],
   "AnimationUpdateInMs": 100,
   "Animations": [
     {
@@ -41,7 +41,7 @@
         {
           "Type": "ClientRequest",
           "Request": {
-            "Name": "INDICATED AIRSPEED",
+            "Name": "AIRSPEED INDICATED",
             "Unit": "knots"
           },
           "Actions": [

@@ -428,10 +428,11 @@ namespace RemoteCockpit
                     Connected = true;
                     WriteLog("Connected");
                     // New connection to FS - resubmit all previous SimVariable requests
-                    foreach (var request in simVarRequests)
-                    {
-                        AddSimVarRequest(request);
-                    }
+                    lock (simVarRequests)
+                        foreach (var request in simVarRequests)
+                        {
+                            AddSimVarRequest(request);
+                        }
                 }
             }
             else

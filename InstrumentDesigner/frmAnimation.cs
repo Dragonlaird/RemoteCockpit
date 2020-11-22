@@ -106,6 +106,7 @@ namespace InstrumentDesigner
             switch (tabId)
             {
                 case 0:
+                    //What tab
                     gpAnimationImage.Visible = false;
                     gpAnimationDrawing.Visible = false;
                     txtAnimationName.Text = _animation.Name;
@@ -142,6 +143,7 @@ namespace InstrumentDesigner
                     }
                     break;
                 case 1:
+                    // When tab
                     gdAnimationTriggers.Rows.Clear();
                     if (_animation.Triggers != null)
                     {
@@ -150,6 +152,9 @@ namespace InstrumentDesigner
                             gdAnimationTriggers.Rows.Add(new object[] { trigger.Name, trigger.Type });
                         }
                     }
+                    break;
+                case 2:
+                    // How tab
                     break;
             }
             populatingForm = false;
@@ -299,15 +304,15 @@ namespace InstrumentDesigner
             PlotPoint_Change(sender, new DataGridViewCellEventArgs(0, e.RowIndex));
         }
 
-        private void TabSelection_Change(object sender, EventArgs e)
-        {
-            // If this is the How tab - hide all controls except the warning label
-            // If a Tigger is selected, dispay the correct container and hide the waring label
-            lblAnimationHowNoTrigger.Visible = true;
-            gpAnimationClientRequest.Visible = false;
+        //private void TabSelection_Change(object sender, EventArgs e)
+        //{
+        //    // If this is the How tab - hide all controls except the warning label
+        //    // If a Tigger is selected, dispay the correct container and hide the waring label
+        //    lblAnimationHowNoTrigger.Visible = true;
+        //    gpAnimationClientRequest.Visible = false;
 
 
-        }
+        //}
 
         private void RowSelection_Change(object sender, EventArgs e)
         {
@@ -322,14 +327,10 @@ namespace InstrumentDesigner
                     {
                         case "ClientRequest":
                             gpAnimationClientRequest.Visible = true;
-                            if (trigger != null)
+                            if (trigger != null && ((AnimationTriggerClientRequest)trigger).Request?.Name != null)
                             {
                                 var selectedIdx = cmbAnimationVariableNames.Items.IndexOf(((AnimationTriggerClientRequest)trigger).Request?.Name);
                                 cmbAnimationVariableNames.SelectedIndex = selectedIdx;
-                                //if (!string.IsNullOrEmpty(cmbAnimationVariableNames.Items[selectedIdx]?.ToString()))
-                                //{
-
-                                //}
                             }
                             break;
                         case "Timer":
@@ -337,6 +338,8 @@ namespace InstrumentDesigner
                             break;
                     }
                 }
+                // Now update the How tab
+                PopulateTab(2);
             }
         }
 
@@ -345,17 +348,52 @@ namespace InstrumentDesigner
             // Just used to override an error that can be ignored
         }
 
+        private void TriggerRow_Added(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            if (!populatingForm)
+            {
+                // New row being added - need to also add to Animation config
+                var newAnimations = _animation.Triggers.ToList();
+                newAnimations.Add(new AnimationTriggerClientRequest { Name = "", Actions = new IAnimationAction[0], Request = new ClientRequest() });
+                _animation.Triggers = newAnimations.ToArray();
+            }
+        }
+
         private void VariableName_Change(object sender, EventArgs e)
         {
             // Display associated units
             var selectedVariableName = ((ComboBox)sender).Items[((ComboBox)sender).SelectedIndex]?.ToString();
             var selectedVariable = SimVarUnits.DefaultUnits.FirstOrDefault(x => x.Key == selectedVariableName);
             txtAnimationClientRequestUnits.Text = selectedVariable.Value?.DefaultUnit ?? "";
+            if (!populatingForm)
+            {
+                var trigger = (AnimationTriggerClientRequest)_animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+                var triggerId = _animation.Triggers.ToList().IndexOf(trigger);
+                trigger.Request = new ClientRequest { Name = selectedVariableName, Unit = selectedVariable.Value.DefaultUnit };
+                _animation.Triggers[triggerId] = trigger;
+            }
         }
 
         private void OverrideUnits_Change(object sender, EventArgs e)
         {
             txtAnimationClientRequestUnits.Enabled = ((CheckBox)sender).Checked;
+        }
+
+        private void gdAnimationTriggers_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Find out which cell has changed - if it's the Name, change the animation trigger name, otherwise the Type Change handler will catch it
+            if (_animation != null && !populatingForm)
+            {
+                var senderGrid = (DataGridView)sender;
+                var colIdx = e.ColumnIndex;
+                var colName = senderGrid.Columns[colIdx].Name?.ToString();
+                if (colName == "Trigger")
+                {
+                    var trigger = _animation.Triggers[e.RowIndex];
+                    trigger.Name = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
+                    _animation.Triggers[e.RowIndex] = trigger;
+                }
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ namespace CockpitDisplay
         private List<ClientRequestResult> requestResults;
         private RemoteConnector connector;
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
-
+        private delegate void SafeUpdateDelegate(object sender, string e);
 
         //private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
 
@@ -77,10 +77,10 @@ namespace CockpitDisplay
                     }
                     ReceiveResultFromServer(null, testResult);
 
-                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED AIRSPEED" && x.Request.Unit == "knots");
+                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "AIRSPEED INDICATED" && x.Request.Unit == "knots");
                     if (testResult == null)
                     {
-                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED AIRSPEED", Unit = "knots" }, Result = (double)-1 };
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "AIRSPEED INDICATED", Unit = "knots" }, Result = (double)-1 };
                         requestResults.Add(testResult);
                         testResult.Result = (double)100;
                     }
@@ -280,7 +280,7 @@ namespace CockpitDisplay
             }
             cockpit = new frmCockpit();
             cockpit.RequestValue += RequestVariable;
-
+            cockpit.Messages += DebugMessage;
             if (cbFullScreen.Checked)
             {
                 cockpit.WindowState = FormWindowState.Maximized;
@@ -316,6 +316,22 @@ namespace CockpitDisplay
             //cockpit.Update();
             cockpit.Focus();
             this.Focus();
+        }
+
+        private void DebugMessage(object sender, string e)
+        {
+            if (!string.IsNullOrEmpty(e))
+            {
+                if (txtDebugMessages.InvokeRequired)
+                {
+                    var d = new SafeUpdateDelegate(DebugMessage);
+                    ((Control)txtDebugMessages).Invoke(d, new object[] { sender, e });
+                    return;
+                }
+                txtDebugMessages.Text += string.Format("{0:HH:mm:ss} {1}\r", DateTime.Now, e);
+                txtDebugMessages.SelectionStart = txtDebugMessages.Text.Length;
+                txtDebugMessages.ScrollToCaret();
+            }
         }
 
         private void RequestVariable(object sender, ClientRequest request)
@@ -417,5 +433,7 @@ namespace CockpitDisplay
             if (cockpit != null)
                 cockpit.Close();
         }
+
+        
     }
 }
