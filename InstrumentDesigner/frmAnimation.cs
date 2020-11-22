@@ -109,12 +109,12 @@ namespace InstrumentDesigner
                     gpAnimationImage.Visible = false;
                     gpAnimationDrawing.Visible = false;
                     txtAnimationName.Text = _animation.Name;
-                    cmbAnimationType.SelectedIndex = cmbAnimationType.Items.IndexOf(_animation.Type.ToString());
+                    cmbAnimationType.SelectedIndex = cmbAnimationType.Items.IndexOf(_animation.Type);
                     if (_animation.Type == AnimationItemTypeEnum.Image)
                     {
                         gpAnimationImage.Visible = true;
                         txtAnimationImagePath.Text = ((AnimationImage)_animation).ImagePath ?? "";
-                        cmbAnimationScaleMethod.SelectedIndex = cmbAnimationScaleMethod.Items.IndexOf(((AnimationImage)_animation).ScaleMethod.ToString());
+                        cmbAnimationScaleMethod.SelectedIndex = cmbAnimationScaleMethod.Items.IndexOf(((AnimationImage)_animation).ScaleMethod);
                         //txtAnimationRelativeX.Text = _animation.RelativeX.ToString();
                         //txtAnimationRelativeY.Text = _animation.RelativeY.ToString();
                         try
@@ -132,8 +132,8 @@ namespace InstrumentDesigner
                         {
                             ((AnimationDrawing)_animation).PointMap = new AnimationPoint[0];
                         }
-                        cmbAnimationFillColor.SelectedIndex = cmbAnimationFillColor.Items.IndexOf(((AnimationDrawing)_animation).FillColor.ToKnownColor().ToString());
-                        cmbAnimationFillMethod.SelectedIndex = cmbAnimationFillMethod.Items.IndexOf(((AnimationDrawing)_animation).FillMethod.ToString());
+                        cmbAnimationFillColor.SelectedIndex = cmbAnimationFillColor.Items.IndexOf(((AnimationDrawing)_animation).FillColor.ToKnownColor());
+                        cmbAnimationFillMethod.SelectedIndex = cmbAnimationFillMethod.Items.IndexOf(((AnimationDrawing)_animation).FillMethod);
                         dgAnimationPlotPoints.Rows.Clear();
                         foreach (var plotPoint in ((AnimationDrawing)_animation).PointMap)
                         {
@@ -242,9 +242,11 @@ namespace InstrumentDesigner
             // Allow user to open a new image file for animating
             openFileDialog.Title = "Load Background Image";
             openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff|BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff";
-            openFileDialog.InitialDirectory = Path.GetDirectoryName(Path.Combine(baseFolder, ((AnimationImage)_animation).ImagePath));
+            var initialFolder = Path.GetDirectoryName(string.IsNullOrEmpty(((AnimationImage)_animation).ImagePath)?Path.Combine(Directory.GetCurrentDirectory(), ".\\InstrumentImages"):Path.Combine(Directory.GetCurrentDirectory(), ((AnimationImage)_animation).ImagePath));
+            openFileDialog.InitialDirectory = initialFolder;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                populatingForm = true;
                 try
                 {
                     var relativePath = Path.Combine(".\\InstrumentImages", Path.GetFileName(openFileDialog.FileName));
@@ -253,11 +255,13 @@ namespace InstrumentDesigner
                     ((AnimationImage)_animation).ImagePath = relativePath;
                     ShowImage(Image.FromFile(relativePath), pbAnimationImage);
                     txtAnimationImagePath.Text = relativePath;
+                    populatingForm = false;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(string.Format("Unable to use selected file:\r{0}\rError: ", openFileDialog.FileName, ex.Message), "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                populatingForm = false;
             }
         }
 
@@ -313,7 +317,7 @@ namespace InstrumentDesigner
                 var senderGrid = (DataGridView)sender;
                 if (senderGrid.SelectedRows.Count == 1)
                 {
-                    var trigger = _animation.Triggers?.FirstOrDefault(x => x.Name == senderGrid.SelectedRows[0].Cells["Name"].Value?.ToString());
+                    var trigger = _animation.Triggers?.FirstOrDefault(x => x.Name == senderGrid.SelectedRows[0].Cells["Trigger"].Value?.ToString());
                     switch (senderGrid.SelectedRows[0].Cells["Type"].EditedFormattedValue?.ToString())
                     {
                         case "ClientRequest":

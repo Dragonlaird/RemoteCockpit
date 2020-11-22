@@ -396,6 +396,7 @@
             this.gdAnimationTriggers.Size = new System.Drawing.Size(454, 150);
             this.gdAnimationTriggers.TabIndex = 1;
             this.gdAnimationTriggers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.TriggerMisconfigured);
+            this.gdAnimationTriggers.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.TriggerAdded_Change);
             this.gdAnimationTriggers.SelectionChanged += new System.EventHandler(this.RowSelection_Change);
             // 
             // tabHow
