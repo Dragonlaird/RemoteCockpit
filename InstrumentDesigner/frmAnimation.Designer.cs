@@ -59,6 +59,17 @@
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.gdAnimationTriggers = new System.Windows.Forms.DataGridView();
+            this.tabHow = new System.Windows.Forms.TabPage();
+            this.lblAnimationHowNoTrigger = new System.Windows.Forms.Label();
+            this.Trigger = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.gpAnimationClientRequest = new System.Windows.Forms.GroupBox();
+            this.lblAnimationClientRequestName = new System.Windows.Forms.Label();
+            this.cmbAnimationVariableNames = new System.Windows.Forms.ComboBox();
+            this.lblAnimationClientRequestUnits = new System.Windows.Forms.Label();
+            this.txtAnimationClientRequestUnits = new System.Windows.Forms.TextBox();
+            this.cbAnimationClientRequestUnitsOverride = new System.Windows.Forms.CheckBox();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -67,6 +78,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).BeginInit();
+            this.tabWhen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).BeginInit();
+            this.tabHow.SuspendLayout();
+            this.gpAnimationClientRequest.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabCollection
@@ -76,11 +91,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCollection.Controls.Add(this.tabWhat);
             this.tabCollection.Controls.Add(this.tabWhen);
+            this.tabCollection.Controls.Add(this.tabHow);
             this.tabCollection.Location = new System.Drawing.Point(12, 12);
             this.tabCollection.Name = "tabCollection";
             this.tabCollection.SelectedIndex = 0;
             this.tabCollection.Size = new System.Drawing.Size(474, 364);
             this.tabCollection.TabIndex = 0;
+            this.tabCollection.TabIndexChanged += new System.EventHandler(this.TabSelection_Change);
             // 
             // tabWhat
             // 
@@ -338,6 +355,8 @@
             // 
             // tabWhen
             // 
+            this.tabWhen.Controls.Add(this.gpAnimationClientRequest);
+            this.tabWhen.Controls.Add(this.gdAnimationTriggers);
             this.tabWhen.Location = new System.Drawing.Point(4, 22);
             this.tabWhen.Name = "tabWhen";
             this.tabWhen.Padding = new System.Windows.Forms.Padding(3);
@@ -366,6 +385,115 @@
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
+            // gdAnimationTriggers
+            // 
+            this.gdAnimationTriggers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gdAnimationTriggers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Trigger,
+            this.Type});
+            this.gdAnimationTriggers.Location = new System.Drawing.Point(6, 3);
+            this.gdAnimationTriggers.Name = "gdAnimationTriggers";
+            this.gdAnimationTriggers.Size = new System.Drawing.Size(454, 150);
+            this.gdAnimationTriggers.TabIndex = 1;
+            this.gdAnimationTriggers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.TriggerMisconfigured);
+            this.gdAnimationTriggers.SelectionChanged += new System.EventHandler(this.RowSelection_Change);
+            // 
+            // tabHow
+            // 
+            this.tabHow.Controls.Add(this.lblAnimationHowNoTrigger);
+            this.tabHow.Location = new System.Drawing.Point(4, 22);
+            this.tabHow.Name = "tabHow";
+            this.tabHow.Padding = new System.Windows.Forms.Padding(3);
+            this.tabHow.Size = new System.Drawing.Size(466, 338);
+            this.tabHow.TabIndex = 2;
+            this.tabHow.Text = "How";
+            this.tabHow.UseVisualStyleBackColor = true;
+            // 
+            // lblAnimationHowNoTrigger
+            // 
+            this.lblAnimationHowNoTrigger.AutoSize = true;
+            this.lblAnimationHowNoTrigger.ForeColor = System.Drawing.Color.Red;
+            this.lblAnimationHowNoTrigger.Location = new System.Drawing.Point(102, 20);
+            this.lblAnimationHowNoTrigger.Name = "lblAnimationHowNoTrigger";
+            this.lblAnimationHowNoTrigger.Size = new System.Drawing.Size(232, 13);
+            this.lblAnimationHowNoTrigger.TabIndex = 0;
+            this.lblAnimationHowNoTrigger.Text = "You must select a Trigger on the When tab first.";
+            // 
+            // Trigger
+            // 
+            this.Trigger.HeaderText = "Trigger";
+            this.Trigger.Name = "Trigger";
+            this.Trigger.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // gpAnimationClientRequest
+            // 
+            this.gpAnimationClientRequest.Controls.Add(this.cbAnimationClientRequestUnitsOverride);
+            this.gpAnimationClientRequest.Controls.Add(this.txtAnimationClientRequestUnits);
+            this.gpAnimationClientRequest.Controls.Add(this.lblAnimationClientRequestUnits);
+            this.gpAnimationClientRequest.Controls.Add(this.cmbAnimationVariableNames);
+            this.gpAnimationClientRequest.Controls.Add(this.lblAnimationClientRequestName);
+            this.gpAnimationClientRequest.Location = new System.Drawing.Point(7, 160);
+            this.gpAnimationClientRequest.Name = "gpAnimationClientRequest";
+            this.gpAnimationClientRequest.Size = new System.Drawing.Size(453, 172);
+            this.gpAnimationClientRequest.TabIndex = 2;
+            this.gpAnimationClientRequest.TabStop = false;
+            this.gpAnimationClientRequest.Text = "Client Request";
+            this.gpAnimationClientRequest.Visible = false;
+            // 
+            // lblAnimationClientRequestName
+            // 
+            this.lblAnimationClientRequestName.AutoSize = true;
+            this.lblAnimationClientRequestName.Location = new System.Drawing.Point(7, 20);
+            this.lblAnimationClientRequestName.Name = "lblAnimationClientRequestName";
+            this.lblAnimationClientRequestName.Size = new System.Drawing.Size(79, 13);
+            this.lblAnimationClientRequestName.TabIndex = 0;
+            this.lblAnimationClientRequestName.Text = "Variable Name:";
+            // 
+            // cmbAnimationVariableNames
+            // 
+            this.cmbAnimationVariableNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAnimationVariableNames.FormattingEnabled = true;
+            this.cmbAnimationVariableNames.Location = new System.Drawing.Point(92, 17);
+            this.cmbAnimationVariableNames.Name = "cmbAnimationVariableNames";
+            this.cmbAnimationVariableNames.Size = new System.Drawing.Size(261, 21);
+            this.cmbAnimationVariableNames.TabIndex = 1;
+            this.cmbAnimationVariableNames.SelectedIndexChanged += new System.EventHandler(this.VariableName_Change);
+            // 
+            // lblAnimationClientRequestUnits
+            // 
+            this.lblAnimationClientRequestUnits.AutoSize = true;
+            this.lblAnimationClientRequestUnits.Location = new System.Drawing.Point(52, 48);
+            this.lblAnimationClientRequestUnits.Name = "lblAnimationClientRequestUnits";
+            this.lblAnimationClientRequestUnits.Size = new System.Drawing.Size(34, 13);
+            this.lblAnimationClientRequestUnits.TabIndex = 2;
+            this.lblAnimationClientRequestUnits.Text = "Units:";
+            // 
+            // txtAnimationClientRequestUnits
+            // 
+            this.txtAnimationClientRequestUnits.Enabled = false;
+            this.txtAnimationClientRequestUnits.Location = new System.Drawing.Point(92, 45);
+            this.txtAnimationClientRequestUnits.Name = "txtAnimationClientRequestUnits";
+            this.txtAnimationClientRequestUnits.Size = new System.Drawing.Size(151, 20);
+            this.txtAnimationClientRequestUnits.TabIndex = 3;
+            // 
+            // cbAnimationClientRequestUnitsOverride
+            // 
+            this.cbAnimationClientRequestUnitsOverride.AutoSize = true;
+            this.cbAnimationClientRequestUnitsOverride.Location = new System.Drawing.Point(250, 48);
+            this.cbAnimationClientRequestUnitsOverride.Name = "cbAnimationClientRequestUnitsOverride";
+            this.cbAnimationClientRequestUnitsOverride.Size = new System.Drawing.Size(72, 17);
+            this.cbAnimationClientRequestUnitsOverride.TabIndex = 4;
+            this.cbAnimationClientRequestUnitsOverride.Text = "Override?";
+            this.cbAnimationClientRequestUnitsOverride.UseVisualStyleBackColor = true;
+            this.cbAnimationClientRequestUnitsOverride.CheckedChanged += new System.EventHandler(this.OverrideUnits_Change);
+            // 
             // frmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -387,6 +515,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationRelativeX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).EndInit();
+            this.tabWhen.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).EndInit();
+            this.tabHow.ResumeLayout(false);
+            this.tabHow.PerformLayout();
+            this.gpAnimationClientRequest.ResumeLayout(false);
+            this.gpAnimationClientRequest.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -424,5 +558,16 @@
         private System.Windows.Forms.DataGridView dgAnimationPlotPoints;
         private System.Windows.Forms.DataGridViewTextBoxColumn pointX;
         private System.Windows.Forms.DataGridViewTextBoxColumn pointY;
+        private System.Windows.Forms.DataGridView gdAnimationTriggers;
+        private System.Windows.Forms.TabPage tabHow;
+        private System.Windows.Forms.Label lblAnimationHowNoTrigger;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Trigger;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Type;
+        private System.Windows.Forms.GroupBox gpAnimationClientRequest;
+        private System.Windows.Forms.ComboBox cmbAnimationVariableNames;
+        private System.Windows.Forms.Label lblAnimationClientRequestName;
+        private System.Windows.Forms.Label lblAnimationClientRequestUnits;
+        private System.Windows.Forms.TextBox txtAnimationClientRequestUnits;
+        private System.Windows.Forms.CheckBox cbAnimationClientRequestUnitsOverride;
     }
 }

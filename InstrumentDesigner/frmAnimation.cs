@@ -1,4 +1,5 @@
-﻿using RemoteCockpitClasses.Animations;
+﻿using RemoteCockpitClasses;
+using RemoteCockpitClasses.Animations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,25 +45,42 @@ namespace InstrumentDesigner
         private void ResetForm()
         {
             cmbAnimationType.Items.Clear();
-            foreach (var itemType in ((AnimationItemTypeEnum[])Enum.GetValues(typeof(AnimationItemTypeEnum))).OrderBy(x => x.ToString()))
-            {
-                cmbAnimationType.Items.Add(itemType.ToString());
-            }
+            cmbAnimationType.DataSource = ((AnimationItemTypeEnum[])Enum.GetValues(typeof(AnimationItemTypeEnum))).OrderBy(x => x.ToString()).ToList();
+            //foreach (var itemType in ((AnimationItemTypeEnum[])Enum.GetValues(typeof(AnimationItemTypeEnum))).OrderBy(x => x.ToString()))
+            //{
+            //    cmbAnimationType.Items.Add(itemType.ToString());
+            //}
             cmbAnimationScaleMethod.Items.Clear();
-            foreach (var scaleType in ((AnimationScaleMethodEnum[])Enum.GetValues(typeof(AnimationScaleMethodEnum))).OrderBy(x => x.ToString()))
-            {
-                cmbAnimationScaleMethod.Items.Add(scaleType.ToString());
-            }
+            cmbAnimationScaleMethod.DataSource = ((AnimationScaleMethodEnum[])Enum.GetValues(typeof(AnimationScaleMethodEnum))).OrderBy(x => x.ToString()).ToList();
+            //foreach (var scaleType in ((AnimationScaleMethodEnum[])Enum.GetValues(typeof(AnimationScaleMethodEnum))).OrderBy(x => x.ToString()))
+            //{
+            //    cmbAnimationScaleMethod.Items.Add(scaleType.ToString());
+            //}
             cmbAnimationFillColor.Items.Clear();
-            foreach (var color in ((KnownColor[])Enum.GetValues(typeof(KnownColor))).OrderBy(x => x.ToString()))
-            {
-                cmbAnimationFillColor.Items.Add(color.ToString());
-            }
+            cmbAnimationFillColor.DataSource = ((KnownColor[])Enum.GetValues(typeof(KnownColor))).OrderBy(x => x.ToString()).ToList();
+            //foreach (var color in ((KnownColor[])Enum.GetValues(typeof(KnownColor))).OrderBy(x => x.ToString()))
+            //{
+            //    cmbAnimationFillColor.Items.Add(color.ToString());
+            //}
             cmbAnimationFillMethod.Items.Clear();
-            foreach (var fillMethod in ((FillType[])Enum.GetValues(typeof(FillType))).OrderBy(x => x.ToString()))
-            {
-                cmbAnimationFillMethod.Items.Add(fillMethod.ToString());
-            }
+            cmbAnimationFillMethod.DataSource = ((FillType[])Enum.GetValues(typeof(FillType))).OrderBy(x => x.ToString()).ToList();
+            //foreach (var fillMethod in ((FillType[])Enum.GetValues(typeof(FillType))).OrderBy(x => x.ToString()))
+            //{
+            //    cmbAnimationFillMethod.Items.Add(fillMethod.ToString());
+            //}
+            var triggerTypeCol = (DataGridViewComboBoxColumn)gdAnimationTriggers.Columns["Type"];
+            triggerTypeCol.Items.Clear();
+            triggerTypeCol.DataSource = ((AnimationTriggerTypeEnum[])Enum.GetValues(typeof(AnimationTriggerTypeEnum))).OrderBy(x => x.ToString()).ToList();
+            //foreach (var triggerType in ((AnimationTriggerTypeEnum[])Enum.GetValues(typeof(AnimationTriggerTypeEnum))).OrderBy(x=> x.ToString())){
+            //    triggerTypeCol.Items.Add(triggerType);
+            //}
+            var variables = SimVarUnits.DefaultUnits;
+            cmbAnimationVariableNames.Items.Clear();
+            cmbAnimationVariableNames.DataSource = variables.Keys.OrderBy(x => x).ToList();
+            //foreach (string variableName in variables.Keys.OrderBy(x => x))
+            //{
+            //    cmbAnimationVariableNames.Items.Add(variableName);
+            //}
         }
 
         private void ClearTab(int tabId)
@@ -101,29 +119,37 @@ namespace InstrumentDesigner
                         //txtAnimationRelativeY.Text = _animation.RelativeY.ToString();
                         try
                         {
-                            var image = Image.FromFile(Path.Combine(baseFolder,txtAnimationImagePath.Text));
+                            var image = Image.FromFile(Path.Combine(baseFolder, txtAnimationImagePath.Text));
                             if (image != null)
                                 ShowImage(image, pbAnimationImage);
                         }
                         catch { }
                     }
-                    if(_animation.Type == AnimationItemTypeEnum.Drawing)
+                    if (_animation.Type == AnimationItemTypeEnum.Drawing)
                     {
                         gpAnimationDrawing.Visible = true;
-                        if(((AnimationDrawing)_animation).PointMap == null)
+                        if (((AnimationDrawing)_animation).PointMap == null)
                         {
                             ((AnimationDrawing)_animation).PointMap = new AnimationPoint[0];
                         }
                         cmbAnimationFillColor.SelectedIndex = cmbAnimationFillColor.Items.IndexOf(((AnimationDrawing)_animation).FillColor.ToKnownColor().ToString());
                         cmbAnimationFillMethod.SelectedIndex = cmbAnimationFillMethod.Items.IndexOf(((AnimationDrawing)_animation).FillMethod.ToString());
                         dgAnimationPlotPoints.Rows.Clear();
-                        foreach(var plotPoint in ((AnimationDrawing)_animation).PointMap)
+                        foreach (var plotPoint in ((AnimationDrawing)_animation).PointMap)
                         {
                             dgAnimationPlotPoints.Rows.Add(new object[] { plotPoint.X, plotPoint.Y });
                         }
                     }
                     break;
                 case 1:
+                    gdAnimationTriggers.Rows.Clear();
+                    if (_animation.Triggers != null)
+                    {
+                        foreach (var trigger in _animation.Triggers)
+                        {
+                            gdAnimationTriggers.Rows.Add(new object[] { trigger.Name, trigger.Type });
+                        }
+                    }
                     break;
             }
             populatingForm = false;
@@ -217,7 +243,7 @@ namespace InstrumentDesigner
             openFileDialog.Title = "Load Background Image";
             openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff|BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff";
             openFileDialog.InitialDirectory = Path.GetDirectoryName(Path.Combine(baseFolder, ((AnimationImage)_animation).ImagePath));
-            if(openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -228,7 +254,7 @@ namespace InstrumentDesigner
                     ShowImage(Image.FromFile(relativePath), pbAnimationImage);
                     txtAnimationImagePath.Text = relativePath;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(string.Format("Unable to use selected file:\r{0}\rError: ", openFileDialog.FileName, ex.Message), "Invalid file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -267,6 +293,65 @@ namespace InstrumentDesigner
         private void PlotPointRemove_Change(object sender, DataGridViewRowsRemovedEventArgs e)
         {
             PlotPoint_Change(sender, new DataGridViewCellEventArgs(0, e.RowIndex));
+        }
+
+        private void TabSelection_Change(object sender, EventArgs e)
+        {
+            // If this is the How tab - hide all controls except the warning label
+            // If a Tigger is selected, dispay the correct container and hide the waring label
+            lblAnimationHowNoTrigger.Visible = true;
+            gpAnimationClientRequest.Visible = false;
+
+
+        }
+
+        private void RowSelection_Change(object sender, EventArgs e)
+        {
+            if (!populatingForm)
+            {
+                gpAnimationClientRequest.Visible = false;
+                var senderGrid = (DataGridView)sender;
+                if (senderGrid.SelectedRows.Count == 1)
+                {
+                    var trigger = _animation.Triggers?.FirstOrDefault(x => x.Name == senderGrid.SelectedRows[0].Cells["Name"].Value?.ToString());
+                    switch (senderGrid.SelectedRows[0].Cells["Type"].EditedFormattedValue?.ToString())
+                    {
+                        case "ClientRequest":
+                            gpAnimationClientRequest.Visible = true;
+                            if (trigger != null)
+                            {
+                                var selectedIdx = cmbAnimationVariableNames.Items.IndexOf(((AnimationTriggerClientRequest)trigger).Request?.Name);
+                                cmbAnimationVariableNames.SelectedIndex = selectedIdx;
+                                //if (!string.IsNullOrEmpty(cmbAnimationVariableNames.Items[selectedIdx]?.ToString()))
+                                //{
+
+                                //}
+                            }
+                            break;
+                        case "Timer":
+                        case "MouseClick":
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void TriggerMisconfigured(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            // Just used to override an error that can be ignored
+        }
+
+        private void VariableName_Change(object sender, EventArgs e)
+        {
+            // Display associated units
+            var selectedVariableName = ((ComboBox)sender).Items[((ComboBox)sender).SelectedIndex]?.ToString();
+            var selectedVariable = SimVarUnits.DefaultUnits.FirstOrDefault(x => x.Key == selectedVariableName);
+            txtAnimationClientRequestUnits.Text = selectedVariable.Value?.DefaultUnit ?? "";
+        }
+
+        private void OverrideUnits_Change(object sender, EventArgs e)
+        {
+            txtAnimationClientRequestUnits.Enabled = ((CheckBox)sender).Checked;
         }
     }
 }
