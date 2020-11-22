@@ -110,6 +110,10 @@ namespace InstrumentDesigner
                     if(_animation.Type == AnimationItemTypeEnum.Drawing)
                     {
                         gpAnimationDrawing.Visible = true;
+                        if(((AnimationDrawing)_animation).PointMap == null)
+                        {
+                            ((AnimationDrawing)_animation).PointMap = new AnimationPoint[0];
+                        }
                         cmbAnimationFillColor.SelectedIndex = cmbAnimationFillColor.Items.IndexOf(((AnimationDrawing)_animation).FillColor.ToKnownColor().ToString());
                         cmbAnimationFillMethod.SelectedIndex = cmbAnimationFillMethod.Items.IndexOf(((AnimationDrawing)_animation).FillMethod.ToString());
                         dgAnimationPlotPoints.Rows.Clear();

@@ -318,7 +318,7 @@ namespace InstrumentDesigner
         {
             var senderGrid = (DataGridView)sender;
 
-            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
+            if (e.ColumnIndex >= 0 && senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn &&
                 e.RowIndex >= 0)
             {
                 var action = senderGrid.Columns[e.ColumnIndex].HeaderText?.ToString();
@@ -328,15 +328,21 @@ namespace InstrumentDesigner
                 switch (action)
                 {
                     case "E":
-                        var animation = config.Animations.First(x => x.Name == name);
+                        var animation = config.Animations?.FirstOrDefault(x => x.Name == name) ?? new AnimationDrawing();
                         using (frm = new frmAnimation(animation, cockpitDirectory))
                         {
                             result = frm.ShowDialog(this);
                             if (result == DialogResult.OK)
                             {
-                                animation = ((frmAnimation)frm).DialogValue;
-                                var animations = config.Animations.Where(x => x.Name != animation.Name).ToList();
-                                animations.Add(animation);
+                                var newAnimation = ((frmAnimation)frm).DialogValue;
+                                if(config.Animations.Any(x=>x.Name == animation.Name))
+                                {
+                                    var cleanAnimations = config.Animations.Where(x => x.Name != animation.Name).ToList();
+                                    config.Animations = cleanAnimations.ToArray();
+                                }
+                                var currentAnimations = config.Animations.ToList();
+                                currentAnimations.Add(newAnimation);
+                                config.Animations = currentAnimations.ToArray();
                             }
                         }
                         break;
@@ -360,7 +366,8 @@ namespace InstrumentDesigner
         private void NewAnimation_Click(object sender, EventArgs e)
         {
             var rowIdx = dgAnimations.Rows.Add();
-            var colIdx = dgAnimations.Columns.IndexOf(dgAnimations.Columns["Edit Animation"]);
+            dgAnimations.Rows[rowIdx].Cells["What"].Value = "New...";
+            var colIdx = dgAnimations.Columns.IndexOf(dgAnimations.Columns["Edit"]);
             EditDeleteAnimation_Click(dgAnimations, new DataGridViewCellEventArgs(colIdx, rowIdx));
         }
 
