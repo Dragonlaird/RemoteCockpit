@@ -193,6 +193,10 @@ namespace InstrumentDesigner
             this.dgAnimationPlotPoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.PlotPoint_Change);
             this.dgAnimationPlotPoints.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.PlotPointAdd_Change);
             this.dgAnimationPlotPoints.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.PlotPointRemove_Change);
+            this.dgAnimationPlotPoints.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
+            this.dgAnimationPlotPoints.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
+            this.dgAnimationPlotPoints.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
+            this.dgAnimationPlotPoints.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseMove);
             // 
             // pointX
             // 
@@ -454,6 +458,10 @@ namespace InstrumentDesigner
             this.gdAnimationTriggers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.TriggerMisconfigured);
             this.gdAnimationTriggers.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.TriggerRow_Added);
             this.gdAnimationTriggers.SelectionChanged += new System.EventHandler(this.RowSelection_Change);
+            this.gdAnimationTriggers.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
+            this.gdAnimationTriggers.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
+            this.gdAnimationTriggers.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
+            this.gdAnimationTriggers.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseMove);
             // 
             // Trigger
             // 
@@ -527,6 +535,10 @@ namespace InstrumentDesigner
             this.dgAnimationActions.Size = new System.Drawing.Size(167, 134);
             this.dgAnimationActions.TabIndex = 1;
             this.dgAnimationActions.SelectionChanged += new System.EventHandler(this.ActionSelect_Change);
+            this.dgAnimationActions.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
+            this.dgAnimationActions.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
+            this.dgAnimationActions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
+            this.dgAnimationActions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseMove);
             // 
             // lblAnimationActions
             // 
