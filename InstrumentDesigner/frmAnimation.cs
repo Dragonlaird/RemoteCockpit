@@ -168,16 +168,20 @@ namespace InstrumentDesigner
                     if (gdAnimationTriggers.SelectedRows.Count == 1 && _animation.Triggers != null)
                     {
                         trigger = _animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"]?.Value?.ToString());
-                        lblAnimationActions.Visible = true;
-                        dgAnimationActions.Visible = true;
-                        lblAnimationHowNoTrigger.Visible = false;
-                        if (trigger.Actions != null)
-                            foreach (var action in trigger.Actions)
-                            {
-                                var rowIdx = dgAnimationActions.Rows.Add();
-                                var itemToSet = ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items[((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items.IndexOf(action.Type)];
-                                ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Value = itemToSet;
-                            }
+                        if (trigger != null)
+                        {
+                            lblAnimationActions.Visible = true;
+                            dgAnimationActions.Visible = true;
+                            lblAnimationHowNoTrigger.Visible = false;
+                            dgAnimationActions.Rows.Clear();
+                            if (trigger.Actions != null)
+                                foreach (var action in trigger.Actions)
+                                {
+                                    var rowIdx = dgAnimationActions.Rows.Add();
+                                    var itemToSet = ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items[((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items.IndexOf(action.Type)];
+                                    ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Value = itemToSet;
+                                }
+                        }
                     }
                     break;
             }
