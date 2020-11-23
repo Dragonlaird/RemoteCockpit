@@ -81,6 +81,9 @@ namespace InstrumentDesigner
             //{
             //    cmbAnimationVariableNames.Items.Add(variableName);
             //}
+            var actionTypeCol = (DataGridViewComboBoxColumn)dgAnimationActions.Columns["ActionType"];
+            actionTypeCol.Items.Clear();
+            actionTypeCol.DataSource = ((AnimationActionTypeEnum[])Enum.GetValues(typeof(AnimationActionTypeEnum))).OrderBy(x => x.ToString()).ToList();
         }
 
         private void ClearTab(int tabId)
@@ -103,6 +106,7 @@ namespace InstrumentDesigner
         private void PopulateTab(int tabId)
         {
             populatingForm = true;
+            IAnimationTrigger trigger = null;
             switch (tabId)
             {
                 case 0:
@@ -147,14 +151,34 @@ namespace InstrumentDesigner
                     gdAnimationTriggers.Rows.Clear();
                     if (_animation.Triggers != null)
                     {
-                        foreach (var trigger in _animation.Triggers)
+                        foreach (var t in _animation.Triggers)
                         {
+                            trigger = t;
                             gdAnimationTriggers.Rows.Add(new object[] { trigger.Name, trigger.Type });
                         }
                     }
                     break;
                 case 2:
                     // How tab
+                    lblAnimationHowNoTrigger.Visible = true;
+                    lblAnimationActions.Visible = false;
+                    dgAnimationActions.Visible = false;
+                    gpAnimationActionClip.Visible = false;
+                    gpAnimationActionRotate.Visible = false;
+                    if (gdAnimationTriggers.SelectedRows.Count == 1 && _animation.Triggers != null)
+                    {
+                        trigger = _animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"]?.Value?.ToString());
+                        lblAnimationActions.Visible = true;
+                        dgAnimationActions.Visible = true;
+                        lblAnimationHowNoTrigger.Visible = false;
+                        if (trigger.Actions != null)
+                            foreach (var action in trigger.Actions)
+                            {
+                                var rowIdx = dgAnimationActions.Rows.Add();
+                                var itemToSet = ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items[((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items.IndexOf(action.Type)];
+                                ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Value = itemToSet;
+                            }
+                    }
                     break;
             }
             populatingForm = false;
@@ -314,6 +338,11 @@ namespace InstrumentDesigner
 
         //}
 
+        private void TriggerAdded_Change(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
         private void RowSelection_Change(object sender, EventArgs e)
         {
             if (!populatingForm)
@@ -392,6 +421,26 @@ namespace InstrumentDesigner
                     var trigger = _animation.Triggers[e.RowIndex];
                     trigger.Name = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
                     _animation.Triggers[e.RowIndex] = trigger;
+                }
+            }
+        }
+
+        private void ActionSelect_Change(object sender, EventArgs e)
+        {
+            gpAnimationActionClip.Visible = false;
+            gpAnimationActionRotate.Visible = false;
+            var senderGrid = (DataGridView)sender;
+            if(senderGrid.SelectedRows.Count == 1)
+            {
+                var actionType = senderGrid.SelectedRows[0].Cells["ActionType"].Value?.ToString();
+                switch (actionType)
+                {
+                    case "Clip":
+                        gpAnimationActionClip.Visible = true;
+                        break;
+                    case "Rotate":
+                        gpAnimationActionRotate.Visible = true;
+                        break;
                 }
             }
         }
