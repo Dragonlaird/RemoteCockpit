@@ -70,7 +70,28 @@ namespace InstrumentDesigner
             this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabHow = new System.Windows.Forms.TabPage();
             this.gpAnimationActionClip = new System.Windows.Forms.GroupBox();
+            this.txtAnimationActionEndY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionEndY = new System.Windows.Forms.Label();
+            this.txtAnimationActionEndX = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionEndX = new System.Windows.Forms.Label();
+            this.lblAnimationActionEndPoint = new System.Windows.Forms.Label();
+            this.txtAnimationActionStartY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionStartY = new System.Windows.Forms.Label();
+            this.txtAnimationActionStartX = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionStartX = new System.Windows.Forms.Label();
+            this.lblAnimationActionStartPoint = new System.Windows.Forms.Label();
+            this.cmbAnimationActionStyle = new System.Windows.Forms.ComboBox();
+            this.lblAnimationActionStyle = new System.Windows.Forms.Label();
             this.gpAnimationActionRotate = new System.Windows.Forms.GroupBox();
+            this.txtAnimationActionCentrePointY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionCentrePointY = new System.Windows.Forms.Label();
+            this.txtAnimationActionCentrePointX = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionCentrePointX = new System.Windows.Forms.Label();
+            this.lblAnimationActionCentrePoint = new System.Windows.Forms.Label();
+            this.txtAnimationActionRotateMaxVal = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionRotateMaxVal = new System.Windows.Forms.Label();
+            this.cbAnimationActionRotateClockwise = new System.Windows.Forms.CheckBox();
+            this.txtAnimationActionRotateClockwise = new System.Windows.Forms.Label();
             this.lblAnimationActions = new System.Windows.Forms.Label();
             this.dgAnimationActions = new System.Windows.Forms.DataGridView();
             this.ActionType = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -78,27 +99,6 @@ namespace InstrumentDesigner
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.lblAnimationActionStyle = new System.Windows.Forms.Label();
-            this.cmbAnimationActionStyle = new System.Windows.Forms.ComboBox();
-            this.lblAnimationActionStartPoint = new System.Windows.Forms.Label();
-            this.lblAnimationActionStartX = new System.Windows.Forms.Label();
-            this.txtAnimationActionStartX = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationActionStartY = new System.Windows.Forms.NumericUpDown();
-            this.lblAnimationActionStartY = new System.Windows.Forms.Label();
-            this.txtAnimationActionEndY = new System.Windows.Forms.NumericUpDown();
-            this.lblAnimationActionEndY = new System.Windows.Forms.Label();
-            this.txtAnimationActionEndX = new System.Windows.Forms.NumericUpDown();
-            this.lblAnimationActionEndX = new System.Windows.Forms.Label();
-            this.lblAnimationActionEndPoint = new System.Windows.Forms.Label();
-            this.txtAnimationActionRotateClockwise = new System.Windows.Forms.Label();
-            this.cbAnimationActionRotateClockwise = new System.Windows.Forms.CheckBox();
-            this.lblAnimationActionRotateMaxVal = new System.Windows.Forms.Label();
-            this.txtAnimationActionRotateMaxVal = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationActionCentrePointY = new System.Windows.Forms.NumericUpDown();
-            this.lblAnimationActionCentrePointY = new System.Windows.Forms.Label();
-            this.txtAnimationActionCentrePointX = new System.Windows.Forms.NumericUpDown();
-            this.lblAnimationActionCentrePointX = new System.Windows.Forms.Label();
-            this.lblAnimationActionCentrePoint = new System.Windows.Forms.Label();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -112,15 +112,15 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).BeginInit();
             this.tabHow.SuspendLayout();
             this.gpAnimationActionClip.SuspendLayout();
-            this.gpAnimationActionRotate.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartX)).BeginInit();
+            this.gpAnimationActionRotate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCollection
@@ -547,6 +547,130 @@ namespace InstrumentDesigner
             this.gpAnimationActionClip.Text = "Clip";
             this.gpAnimationActionClip.Visible = false;
             // 
+            // txtAnimationActionEndY
+            // 
+            this.txtAnimationActionEndY.Location = new System.Drawing.Point(250, 91);
+            this.txtAnimationActionEndY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionEndY.Name = "txtAnimationActionEndY";
+            this.txtAnimationActionEndY.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionEndY.TabIndex = 11;
+            this.txtAnimationActionEndY.ValueChanged += new System.EventHandler(this.AnimationActionClipEndY_Changed);
+            // 
+            // lblAnimationActionEndY
+            // 
+            this.lblAnimationActionEndY.AutoSize = true;
+            this.lblAnimationActionEndY.Location = new System.Drawing.Point(227, 93);
+            this.lblAnimationActionEndY.Name = "lblAnimationActionEndY";
+            this.lblAnimationActionEndY.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionEndY.TabIndex = 10;
+            this.lblAnimationActionEndY.Text = "Y:";
+            // 
+            // txtAnimationActionEndX
+            // 
+            this.txtAnimationActionEndX.Location = new System.Drawing.Point(250, 65);
+            this.txtAnimationActionEndX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionEndX.Name = "txtAnimationActionEndX";
+            this.txtAnimationActionEndX.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionEndX.TabIndex = 9;
+            this.txtAnimationActionEndX.ValueChanged += new System.EventHandler(this.AnimationActionClipEndX_Changed);
+            // 
+            // lblAnimationActionEndX
+            // 
+            this.lblAnimationActionEndX.AutoSize = true;
+            this.lblAnimationActionEndX.Location = new System.Drawing.Point(227, 67);
+            this.lblAnimationActionEndX.Name = "lblAnimationActionEndX";
+            this.lblAnimationActionEndX.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionEndX.TabIndex = 8;
+            this.lblAnimationActionEndX.Text = "X:";
+            // 
+            // lblAnimationActionEndPoint
+            // 
+            this.lblAnimationActionEndPoint.AutoSize = true;
+            this.lblAnimationActionEndPoint.Location = new System.Drawing.Point(190, 47);
+            this.lblAnimationActionEndPoint.Name = "lblAnimationActionEndPoint";
+            this.lblAnimationActionEndPoint.Size = new System.Drawing.Size(56, 13);
+            this.lblAnimationActionEndPoint.TabIndex = 7;
+            this.lblAnimationActionEndPoint.Text = "End Point:";
+            // 
+            // txtAnimationActionStartY
+            // 
+            this.txtAnimationActionStartY.Location = new System.Drawing.Point(73, 91);
+            this.txtAnimationActionStartY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionStartY.Name = "txtAnimationActionStartY";
+            this.txtAnimationActionStartY.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionStartY.TabIndex = 6;
+            this.txtAnimationActionStartY.ValueChanged += new System.EventHandler(this.AnimationActionClipStartY_Changed);
+            // 
+            // lblAnimationActionStartY
+            // 
+            this.lblAnimationActionStartY.AutoSize = true;
+            this.lblAnimationActionStartY.Location = new System.Drawing.Point(50, 93);
+            this.lblAnimationActionStartY.Name = "lblAnimationActionStartY";
+            this.lblAnimationActionStartY.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionStartY.TabIndex = 5;
+            this.lblAnimationActionStartY.Text = "Y:";
+            // 
+            // txtAnimationActionStartX
+            // 
+            this.txtAnimationActionStartX.Location = new System.Drawing.Point(73, 65);
+            this.txtAnimationActionStartX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionStartX.Name = "txtAnimationActionStartX";
+            this.txtAnimationActionStartX.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionStartX.TabIndex = 4;
+            this.txtAnimationActionStartX.ValueChanged += new System.EventHandler(this.AnimationActionClipStartX_Changed);
+            // 
+            // lblAnimationActionStartX
+            // 
+            this.lblAnimationActionStartX.AutoSize = true;
+            this.lblAnimationActionStartX.Location = new System.Drawing.Point(50, 67);
+            this.lblAnimationActionStartX.Name = "lblAnimationActionStartX";
+            this.lblAnimationActionStartX.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionStartX.TabIndex = 3;
+            this.lblAnimationActionStartX.Text = "X:";
+            // 
+            // lblAnimationActionStartPoint
+            // 
+            this.lblAnimationActionStartPoint.AutoSize = true;
+            this.lblAnimationActionStartPoint.Location = new System.Drawing.Point(13, 47);
+            this.lblAnimationActionStartPoint.Name = "lblAnimationActionStartPoint";
+            this.lblAnimationActionStartPoint.Size = new System.Drawing.Size(59, 13);
+            this.lblAnimationActionStartPoint.TabIndex = 2;
+            this.lblAnimationActionStartPoint.Text = "Start Point:";
+            // 
+            // cmbAnimationActionStyle
+            // 
+            this.cmbAnimationActionStyle.FormattingEnabled = true;
+            this.cmbAnimationActionStyle.Location = new System.Drawing.Point(55, 17);
+            this.cmbAnimationActionStyle.Name = "cmbAnimationActionStyle";
+            this.cmbAnimationActionStyle.Size = new System.Drawing.Size(121, 21);
+            this.cmbAnimationActionStyle.TabIndex = 1;
+            this.cmbAnimationActionStyle.SelectedIndexChanged += new System.EventHandler(this.AnimationClipStyle_Changed);
+            // 
+            // lblAnimationActionStyle
+            // 
+            this.lblAnimationActionStyle.AutoSize = true;
+            this.lblAnimationActionStyle.Location = new System.Drawing.Point(16, 20);
+            this.lblAnimationActionStyle.Name = "lblAnimationActionStyle";
+            this.lblAnimationActionStyle.Size = new System.Drawing.Size(33, 13);
+            this.lblAnimationActionStyle.TabIndex = 0;
+            this.lblAnimationActionStyle.Text = "Style:";
+            // 
             // gpAnimationActionRotate
             // 
             this.gpAnimationActionRotate.Controls.Add(this.txtAnimationActionCentrePointY);
@@ -565,6 +689,105 @@ namespace InstrumentDesigner
             this.gpAnimationActionRotate.TabStop = false;
             this.gpAnimationActionRotate.Text = "Rotate";
             this.gpAnimationActionRotate.Visible = false;
+            // 
+            // txtAnimationActionCentrePointY
+            // 
+            this.txtAnimationActionCentrePointY.Location = new System.Drawing.Point(73, 60);
+            this.txtAnimationActionCentrePointY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionCentrePointY.Name = "txtAnimationActionCentrePointY";
+            this.txtAnimationActionCentrePointY.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionCentrePointY.TabIndex = 11;
+            this.txtAnimationActionCentrePointY.ValueChanged += new System.EventHandler(this.AnimationActionRotateCentreY_Changed);
+            // 
+            // lblAnimationActionCentrePointY
+            // 
+            this.lblAnimationActionCentrePointY.AutoSize = true;
+            this.lblAnimationActionCentrePointY.Location = new System.Drawing.Point(50, 62);
+            this.lblAnimationActionCentrePointY.Name = "lblAnimationActionCentrePointY";
+            this.lblAnimationActionCentrePointY.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionCentrePointY.TabIndex = 10;
+            this.lblAnimationActionCentrePointY.Text = "Y:";
+            // 
+            // txtAnimationActionCentrePointX
+            // 
+            this.txtAnimationActionCentrePointX.Location = new System.Drawing.Point(73, 34);
+            this.txtAnimationActionCentrePointX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionCentrePointX.Name = "txtAnimationActionCentrePointX";
+            this.txtAnimationActionCentrePointX.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionCentrePointX.TabIndex = 9;
+            this.txtAnimationActionCentrePointX.ValueChanged += new System.EventHandler(this.AnimationActionRotateCentreX_Changed);
+            // 
+            // lblAnimationActionCentrePointX
+            // 
+            this.lblAnimationActionCentrePointX.AutoSize = true;
+            this.lblAnimationActionCentrePointX.Location = new System.Drawing.Point(50, 36);
+            this.lblAnimationActionCentrePointX.Name = "lblAnimationActionCentrePointX";
+            this.lblAnimationActionCentrePointX.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionCentrePointX.TabIndex = 8;
+            this.lblAnimationActionCentrePointX.Text = "X:";
+            // 
+            // lblAnimationActionCentrePoint
+            // 
+            this.lblAnimationActionCentrePoint.AutoSize = true;
+            this.lblAnimationActionCentrePoint.Location = new System.Drawing.Point(13, 16);
+            this.lblAnimationActionCentrePoint.Name = "lblAnimationActionCentrePoint";
+            this.lblAnimationActionCentrePoint.Size = new System.Drawing.Size(68, 13);
+            this.lblAnimationActionCentrePoint.TabIndex = 7;
+            this.lblAnimationActionCentrePoint.Text = "Centre Point:";
+            // 
+            // txtAnimationActionRotateMaxVal
+            // 
+            this.txtAnimationActionRotateMaxVal.Location = new System.Drawing.Point(69, 125);
+            this.txtAnimationActionRotateMaxVal.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionRotateMaxVal.Minimum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            -2147483648});
+            this.txtAnimationActionRotateMaxVal.Name = "txtAnimationActionRotateMaxVal";
+            this.txtAnimationActionRotateMaxVal.Size = new System.Drawing.Size(69, 20);
+            this.txtAnimationActionRotateMaxVal.TabIndex = 3;
+            this.txtAnimationActionRotateMaxVal.ValueChanged += new System.EventHandler(this.AnimationActionRotateMaxVal_Changed);
+            // 
+            // lblAnimationActionRotateMaxVal
+            // 
+            this.lblAnimationActionRotateMaxVal.AutoSize = true;
+            this.lblAnimationActionRotateMaxVal.Location = new System.Drawing.Point(3, 127);
+            this.lblAnimationActionRotateMaxVal.Name = "lblAnimationActionRotateMaxVal";
+            this.lblAnimationActionRotateMaxVal.Size = new System.Drawing.Size(60, 13);
+            this.lblAnimationActionRotateMaxVal.TabIndex = 2;
+            this.lblAnimationActionRotateMaxVal.Text = "Max Value:";
+            // 
+            // cbAnimationActionRotateClockwise
+            // 
+            this.cbAnimationActionRotateClockwise.AutoSize = true;
+            this.cbAnimationActionRotateClockwise.Location = new System.Drawing.Point(70, 102);
+            this.cbAnimationActionRotateClockwise.Name = "cbAnimationActionRotateClockwise";
+            this.cbAnimationActionRotateClockwise.Size = new System.Drawing.Size(15, 14);
+            this.cbAnimationActionRotateClockwise.TabIndex = 1;
+            this.cbAnimationActionRotateClockwise.UseVisualStyleBackColor = true;
+            this.cbAnimationActionRotateClockwise.CheckedChanged += new System.EventHandler(this.AnimationActionRotateClockwise_Changed);
+            // 
+            // txtAnimationActionRotateClockwise
+            // 
+            this.txtAnimationActionRotateClockwise.AutoSize = true;
+            this.txtAnimationActionRotateClockwise.Location = new System.Drawing.Point(3, 101);
+            this.txtAnimationActionRotateClockwise.Name = "txtAnimationActionRotateClockwise";
+            this.txtAnimationActionRotateClockwise.Size = new System.Drawing.Size(64, 13);
+            this.txtAnimationActionRotateClockwise.TabIndex = 0;
+            this.txtAnimationActionRotateClockwise.Text = "Clockwise?:";
             // 
             // lblAnimationActions
             // 
@@ -627,225 +850,6 @@ namespace InstrumentDesigner
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
-            // lblAnimationActionStyle
-            // 
-            this.lblAnimationActionStyle.AutoSize = true;
-            this.lblAnimationActionStyle.Location = new System.Drawing.Point(16, 20);
-            this.lblAnimationActionStyle.Name = "lblAnimationActionStyle";
-            this.lblAnimationActionStyle.Size = new System.Drawing.Size(33, 13);
-            this.lblAnimationActionStyle.TabIndex = 0;
-            this.lblAnimationActionStyle.Text = "Style:";
-            // 
-            // cmbAnimationActionStyle
-            // 
-            this.cmbAnimationActionStyle.FormattingEnabled = true;
-            this.cmbAnimationActionStyle.Location = new System.Drawing.Point(55, 17);
-            this.cmbAnimationActionStyle.Name = "cmbAnimationActionStyle";
-            this.cmbAnimationActionStyle.Size = new System.Drawing.Size(121, 21);
-            this.cmbAnimationActionStyle.TabIndex = 1;
-            this.cmbAnimationActionStyle.SelectedIndexChanged += new System.EventHandler(this.AnimationClipStyle_Changed);
-            // 
-            // lblAnimationActionStartPoint
-            // 
-            this.lblAnimationActionStartPoint.AutoSize = true;
-            this.lblAnimationActionStartPoint.Location = new System.Drawing.Point(13, 47);
-            this.lblAnimationActionStartPoint.Name = "lblAnimationActionStartPoint";
-            this.lblAnimationActionStartPoint.Size = new System.Drawing.Size(59, 13);
-            this.lblAnimationActionStartPoint.TabIndex = 2;
-            this.lblAnimationActionStartPoint.Text = "Start Point:";
-            // 
-            // lblAnimationActionStartX
-            // 
-            this.lblAnimationActionStartX.AutoSize = true;
-            this.lblAnimationActionStartX.Location = new System.Drawing.Point(50, 67);
-            this.lblAnimationActionStartX.Name = "lblAnimationActionStartX";
-            this.lblAnimationActionStartX.Size = new System.Drawing.Size(17, 13);
-            this.lblAnimationActionStartX.TabIndex = 3;
-            this.lblAnimationActionStartX.Text = "X:";
-            // 
-            // txtAnimationActionStartX
-            // 
-            this.txtAnimationActionStartX.Location = new System.Drawing.Point(73, 65);
-            this.txtAnimationActionStartX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionStartX.Name = "txtAnimationActionStartX";
-            this.txtAnimationActionStartX.Size = new System.Drawing.Size(68, 20);
-            this.txtAnimationActionStartX.TabIndex = 4;
-            this.txtAnimationActionStartX.ValueChanged += new System.EventHandler(this.AnimationActionClipStartX_Changed);
-            // 
-            // txtAnimationActionStartY
-            // 
-            this.txtAnimationActionStartY.Location = new System.Drawing.Point(73, 91);
-            this.txtAnimationActionStartY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionStartY.Name = "txtAnimationActionStartY";
-            this.txtAnimationActionStartY.Size = new System.Drawing.Size(68, 20);
-            this.txtAnimationActionStartY.TabIndex = 6;
-            this.txtAnimationActionStartY.ValueChanged += new System.EventHandler(this.AnimationActionClipStartY_Changed);
-            // 
-            // lblAnimationActionStartY
-            // 
-            this.lblAnimationActionStartY.AutoSize = true;
-            this.lblAnimationActionStartY.Location = new System.Drawing.Point(50, 93);
-            this.lblAnimationActionStartY.Name = "lblAnimationActionStartY";
-            this.lblAnimationActionStartY.Size = new System.Drawing.Size(17, 13);
-            this.lblAnimationActionStartY.TabIndex = 5;
-            this.lblAnimationActionStartY.Text = "Y:";
-            // 
-            // txtAnimationActionEndY
-            // 
-            this.txtAnimationActionEndY.Location = new System.Drawing.Point(250, 91);
-            this.txtAnimationActionEndY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionEndY.Name = "txtAnimationActionEndY";
-            this.txtAnimationActionEndY.Size = new System.Drawing.Size(68, 20);
-            this.txtAnimationActionEndY.TabIndex = 11;
-            this.txtAnimationActionEndY.ValueChanged += new System.EventHandler(this.AnimationActionClipEndY_Changed);
-            // 
-            // lblAnimationActionEndY
-            // 
-            this.lblAnimationActionEndY.AutoSize = true;
-            this.lblAnimationActionEndY.Location = new System.Drawing.Point(227, 93);
-            this.lblAnimationActionEndY.Name = "lblAnimationActionEndY";
-            this.lblAnimationActionEndY.Size = new System.Drawing.Size(17, 13);
-            this.lblAnimationActionEndY.TabIndex = 10;
-            this.lblAnimationActionEndY.Text = "Y:";
-            // 
-            // txtAnimationActionEndX
-            // 
-            this.txtAnimationActionEndX.Location = new System.Drawing.Point(250, 65);
-            this.txtAnimationActionEndX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionEndX.Name = "txtAnimationActionEndX";
-            this.txtAnimationActionEndX.Size = new System.Drawing.Size(68, 20);
-            this.txtAnimationActionEndX.TabIndex = 9;
-            this.txtAnimationActionEndX.ValueChanged += new System.EventHandler(this.AnimationActionClipEndX_Changed);
-            // 
-            // lblAnimationActionEndX
-            // 
-            this.lblAnimationActionEndX.AutoSize = true;
-            this.lblAnimationActionEndX.Location = new System.Drawing.Point(227, 67);
-            this.lblAnimationActionEndX.Name = "lblAnimationActionEndX";
-            this.lblAnimationActionEndX.Size = new System.Drawing.Size(17, 13);
-            this.lblAnimationActionEndX.TabIndex = 8;
-            this.lblAnimationActionEndX.Text = "X:";
-            // 
-            // lblAnimationActionEndPoint
-            // 
-            this.lblAnimationActionEndPoint.AutoSize = true;
-            this.lblAnimationActionEndPoint.Location = new System.Drawing.Point(190, 47);
-            this.lblAnimationActionEndPoint.Name = "lblAnimationActionEndPoint";
-            this.lblAnimationActionEndPoint.Size = new System.Drawing.Size(56, 13);
-            this.lblAnimationActionEndPoint.TabIndex = 7;
-            this.lblAnimationActionEndPoint.Text = "End Point:";
-            // 
-            // txtAnimationActionRotateClockwise
-            // 
-            this.txtAnimationActionRotateClockwise.AutoSize = true;
-            this.txtAnimationActionRotateClockwise.Location = new System.Drawing.Point(3, 101);
-            this.txtAnimationActionRotateClockwise.Name = "txtAnimationActionRotateClockwise";
-            this.txtAnimationActionRotateClockwise.Size = new System.Drawing.Size(64, 13);
-            this.txtAnimationActionRotateClockwise.TabIndex = 0;
-            this.txtAnimationActionRotateClockwise.Text = "Clockwise?:";
-            // 
-            // cbAnimationActionRotateClockwise
-            // 
-            this.cbAnimationActionRotateClockwise.AutoSize = true;
-            this.cbAnimationActionRotateClockwise.Location = new System.Drawing.Point(70, 102);
-            this.cbAnimationActionRotateClockwise.Name = "cbAnimationActionRotateClockwise";
-            this.cbAnimationActionRotateClockwise.Size = new System.Drawing.Size(15, 14);
-            this.cbAnimationActionRotateClockwise.TabIndex = 1;
-            this.cbAnimationActionRotateClockwise.UseVisualStyleBackColor = true;
-            // 
-            // lblAnimationActionRotateMaxVal
-            // 
-            this.lblAnimationActionRotateMaxVal.AutoSize = true;
-            this.lblAnimationActionRotateMaxVal.Location = new System.Drawing.Point(3, 127);
-            this.lblAnimationActionRotateMaxVal.Name = "lblAnimationActionRotateMaxVal";
-            this.lblAnimationActionRotateMaxVal.Size = new System.Drawing.Size(60, 13);
-            this.lblAnimationActionRotateMaxVal.TabIndex = 2;
-            this.lblAnimationActionRotateMaxVal.Text = "Max Value:";
-            // 
-            // txtAnimationActionRotateMaxVal
-            // 
-            this.txtAnimationActionRotateMaxVal.Location = new System.Drawing.Point(69, 125);
-            this.txtAnimationActionRotateMaxVal.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionRotateMaxVal.Minimum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            -2147483648});
-            this.txtAnimationActionRotateMaxVal.Name = "txtAnimationActionRotateMaxVal";
-            this.txtAnimationActionRotateMaxVal.Size = new System.Drawing.Size(69, 20);
-            this.txtAnimationActionRotateMaxVal.TabIndex = 3;
-            // 
-            // txtAnimationActionCentrePointY
-            // 
-            this.txtAnimationActionCentrePointY.Location = new System.Drawing.Point(73, 60);
-            this.txtAnimationActionCentrePointY.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionCentrePointY.Name = "txtAnimationActionCentrePointY";
-            this.txtAnimationActionCentrePointY.Size = new System.Drawing.Size(68, 20);
-            this.txtAnimationActionCentrePointY.TabIndex = 11;
-            // 
-            // lblAnimationActionCentrePointY
-            // 
-            this.lblAnimationActionCentrePointY.AutoSize = true;
-            this.lblAnimationActionCentrePointY.Location = new System.Drawing.Point(50, 62);
-            this.lblAnimationActionCentrePointY.Name = "lblAnimationActionCentrePointY";
-            this.lblAnimationActionCentrePointY.Size = new System.Drawing.Size(17, 13);
-            this.lblAnimationActionCentrePointY.TabIndex = 10;
-            this.lblAnimationActionCentrePointY.Text = "Y:";
-            // 
-            // txtAnimationActionCentrePointX
-            // 
-            this.txtAnimationActionCentrePointX.Location = new System.Drawing.Point(73, 34);
-            this.txtAnimationActionCentrePointX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.txtAnimationActionCentrePointX.Name = "txtAnimationActionCentrePointX";
-            this.txtAnimationActionCentrePointX.Size = new System.Drawing.Size(68, 20);
-            this.txtAnimationActionCentrePointX.TabIndex = 9;
-            // 
-            // lblAnimationActionCentrePointX
-            // 
-            this.lblAnimationActionCentrePointX.AutoSize = true;
-            this.lblAnimationActionCentrePointX.Location = new System.Drawing.Point(50, 36);
-            this.lblAnimationActionCentrePointX.Name = "lblAnimationActionCentrePointX";
-            this.lblAnimationActionCentrePointX.Size = new System.Drawing.Size(17, 13);
-            this.lblAnimationActionCentrePointX.TabIndex = 8;
-            this.lblAnimationActionCentrePointX.Text = "X:";
-            // 
-            // lblAnimationActionCentrePoint
-            // 
-            this.lblAnimationActionCentrePoint.AutoSize = true;
-            this.lblAnimationActionCentrePoint.Location = new System.Drawing.Point(13, 16);
-            this.lblAnimationActionCentrePoint.Name = "lblAnimationActionCentrePoint";
-            this.lblAnimationActionCentrePoint.Size = new System.Drawing.Size(68, 13);
-            this.lblAnimationActionCentrePoint.TabIndex = 7;
-            this.lblAnimationActionCentrePoint.Text = "Centre Point:";
-            // 
             // frmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -875,16 +879,16 @@ namespace InstrumentDesigner
             this.tabHow.PerformLayout();
             this.gpAnimationActionClip.ResumeLayout(false);
             this.gpAnimationActionClip.PerformLayout();
-            this.gpAnimationActionRotate.ResumeLayout(false);
-            this.gpAnimationActionRotate.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartX)).EndInit();
+            this.gpAnimationActionRotate.ResumeLayout(false);
+            this.gpAnimationActionRotate.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).EndInit();
             this.ResumeLayout(false);
 
         }

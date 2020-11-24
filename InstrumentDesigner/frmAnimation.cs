@@ -604,5 +604,41 @@ namespace InstrumentDesigner
                 ((AnimateActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.Y = (float)((NumericUpDown)sender).Value;
             }
         }
+
+        private void AnimationActionRotateCentreX_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimationActionRotate)GetSelectedAction();
+                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).CentrePoint.X = (float)((NumericUpDown)sender).Value;
+            }
+        }
+
+        private void AnimationActionRotateCentreY_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimationActionRotate)GetSelectedAction();
+                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).CentrePoint.Y = (float)((NumericUpDown)sender).Value;
+            }
+        }
+
+        private void AnimationActionRotateMaxVal_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimationActionRotate)GetSelectedAction();
+                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).MaximumValueExpected = (float)((NumericUpDown)sender).Value;
+            }
+        }
+
+        private void AnimationActionRotateClockwise_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimationActionRotate)GetSelectedAction();
+                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).RotateClockwise = ((CheckBox)sender).Checked;
+            }
+        }
     }
 }
