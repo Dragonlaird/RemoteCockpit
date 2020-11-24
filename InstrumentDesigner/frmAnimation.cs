@@ -68,6 +68,8 @@ namespace InstrumentDesigner
             //{
             //    cmbAnimationFillMethod.Items.Add(fillMethod.ToString());
             //}
+            cmbAnimationActionStyle.Items.Clear();
+            cmbAnimationActionStyle.DataSource = ((AnimateActionClipEnum[])Enum.GetValues(typeof(AnimateActionClipEnum))).OrderBy(x => x.ToString()).ToList();
             var triggerTypeCol = (DataGridViewComboBoxColumn)gdAnimationTriggers.Columns["Type"];
             triggerTypeCol.Items.Clear();
             triggerTypeCol.DataSource = ((AnimationTriggerTypeEnum[])Enum.GetValues(typeof(AnimationTriggerTypeEnum))).OrderBy(x => x.ToString()).ToList();
@@ -84,6 +86,7 @@ namespace InstrumentDesigner
             var actionTypeCol = (DataGridViewComboBoxColumn)dgAnimationActions.Columns["ActionType"];
             actionTypeCol.Items.Clear();
             actionTypeCol.DataSource = ((AnimationActionTypeEnum[])Enum.GetValues(typeof(AnimationActionTypeEnum))).OrderBy(x => x.ToString()).ToList();
+
         }
 
         private void ClearTab(int tabId)
@@ -436,17 +439,37 @@ namespace InstrumentDesigner
             var senderGrid = (DataGridView)sender;
             if(senderGrid.SelectedRows.Count == 1)
             {
-                var actionType = senderGrid.SelectedRows[0].Cells["ActionType"].Value?.ToString();
+                var actionType = (AnimationActionTypeEnum)senderGrid.SelectedRows[0].Cells["ActionType"].Value;
+                var action = GetSelectedAction();
                 switch (actionType)
                 {
-                    case "Clip":
+                    case AnimationActionTypeEnum.Clip:
+                        var actionClip = (AnimateActionClip)action;
                         gpAnimationActionClip.Visible = true;
+                        cmbAnimationActionStyle.SelectedIndex = cmbAnimationActionStyle.Items.IndexOf(actionClip.Style);
+                        txtAnimationActionStartX.Value = (decimal)actionClip.StartPoint.X;
+                        txtAnimationActionStartY.Value = (decimal)actionClip.StartPoint.Y;
+                        txtAnimationActionEndX.Value = (decimal)actionClip.EndPoint.X;
+                        txtAnimationActionEndY.Value = (decimal)actionClip.EndPoint.Y;
+
                         break;
-                    case "Rotate":
+                    case AnimationActionTypeEnum.Rotate:
+                        var actionRotate = (AnimationActionRotate)action;
                         gpAnimationActionRotate.Visible = true;
+                        txtAnimationActionCentrePointX.Value = (decimal)actionRotate.CentrePoint.X;
+                        txtAnimationActionCentrePointY.Value = (decimal)actionRotate.CentrePoint.Y;
+                        cbAnimationActionRotateClockwise.Checked = actionRotate.RotateClockwise;
+                        txtAnimationActionRotateMaxVal.Value = (decimal)actionRotate.MaximumValueExpected;
                         break;
                 }
             }
+        }
+
+        private IAnimationAction GetSelectedAction()
+        {
+            var actionType = (AnimationActionTypeEnum)dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value;
+            var trigger = _animation.Triggers.First(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+            return trigger.Actions.First(x => x.Type == actionType);
         }
 
         private Rectangle dragBoxFromMouseDown;

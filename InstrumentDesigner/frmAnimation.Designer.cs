@@ -69,15 +69,36 @@ namespace InstrumentDesigner
             this.Trigger = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabHow = new System.Windows.Forms.TabPage();
+            this.gpAnimationActionClip = new System.Windows.Forms.GroupBox();
+            this.gpAnimationActionRotate = new System.Windows.Forms.GroupBox();
+            this.lblAnimationActions = new System.Windows.Forms.Label();
+            this.dgAnimationActions = new System.Windows.Forms.DataGridView();
+            this.ActionType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.lblAnimationHowNoTrigger = new System.Windows.Forms.Label();
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.dgAnimationActions = new System.Windows.Forms.DataGridView();
-            this.lblAnimationActions = new System.Windows.Forms.Label();
-            this.ActionType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.gpAnimationActionRotate = new System.Windows.Forms.GroupBox();
-            this.gpAnimationActionClip = new System.Windows.Forms.GroupBox();
+            this.lblAnimationActionStyle = new System.Windows.Forms.Label();
+            this.cmbAnimationActionStyle = new System.Windows.Forms.ComboBox();
+            this.lblAnimationActionStartPoint = new System.Windows.Forms.Label();
+            this.lblAnimationActionStartX = new System.Windows.Forms.Label();
+            this.txtAnimationActionStartX = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationActionStartY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionStartY = new System.Windows.Forms.Label();
+            this.txtAnimationActionEndY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionEndY = new System.Windows.Forms.Label();
+            this.txtAnimationActionEndX = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionEndX = new System.Windows.Forms.Label();
+            this.lblAnimationActionEndPoint = new System.Windows.Forms.Label();
+            this.txtAnimationActionRotateClockwise = new System.Windows.Forms.Label();
+            this.cbAnimationActionRotateClockwise = new System.Windows.Forms.CheckBox();
+            this.lblAnimationActionRotateMaxVal = new System.Windows.Forms.Label();
+            this.txtAnimationActionRotateMaxVal = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationActionCentrePointY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionCentrePointY = new System.Windows.Forms.Label();
+            this.txtAnimationActionCentrePointX = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionCentrePointX = new System.Windows.Forms.Label();
+            this.lblAnimationActionCentrePoint = new System.Windows.Forms.Label();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -90,7 +111,16 @@ namespace InstrumentDesigner
             this.gpAnimationClientRequest.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).BeginInit();
             this.tabHow.SuspendLayout();
+            this.gpAnimationActionClip.SuspendLayout();
+            this.gpAnimationActionRotate.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCollection
@@ -120,7 +150,7 @@ namespace InstrumentDesigner
             this.tabWhat.Controls.Add(this.lblAnimationName);
             this.tabWhat.Location = new System.Drawing.Point(4, 22);
             this.tabWhat.Name = "tabWhat";
-            this.tabWhat.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabWhat.Padding = new System.Windows.Forms.Padding(3);
             this.tabWhat.Size = new System.Drawing.Size(466, 338);
             this.tabWhat.TabIndex = 0;
             this.tabWhat.Text = "What";
@@ -374,7 +404,7 @@ namespace InstrumentDesigner
             this.tabWhen.Controls.Add(this.gdAnimationTriggers);
             this.tabWhen.Location = new System.Drawing.Point(4, 22);
             this.tabWhen.Name = "tabWhen";
-            this.tabWhen.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabWhen.Padding = new System.Windows.Forms.Padding(3);
             this.tabWhen.Size = new System.Drawing.Size(466, 338);
             this.tabWhen.TabIndex = 1;
             this.tabWhen.Text = "When";
@@ -489,11 +519,83 @@ namespace InstrumentDesigner
             this.tabHow.Controls.Add(this.lblAnimationHowNoTrigger);
             this.tabHow.Location = new System.Drawing.Point(4, 22);
             this.tabHow.Name = "tabHow";
-            this.tabHow.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabHow.Padding = new System.Windows.Forms.Padding(3);
             this.tabHow.Size = new System.Drawing.Size(466, 338);
             this.tabHow.TabIndex = 2;
             this.tabHow.Text = "How";
             this.tabHow.UseVisualStyleBackColor = true;
+            // 
+            // gpAnimationActionClip
+            // 
+            this.gpAnimationActionClip.Controls.Add(this.txtAnimationActionEndY);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionEndY);
+            this.gpAnimationActionClip.Controls.Add(this.txtAnimationActionEndX);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionEndX);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionEndPoint);
+            this.gpAnimationActionClip.Controls.Add(this.txtAnimationActionStartY);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionStartY);
+            this.gpAnimationActionClip.Controls.Add(this.txtAnimationActionStartX);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionStartX);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionStartPoint);
+            this.gpAnimationActionClip.Controls.Add(this.cmbAnimationActionStyle);
+            this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionStyle);
+            this.gpAnimationActionClip.Location = new System.Drawing.Point(6, 176);
+            this.gpAnimationActionClip.Name = "gpAnimationActionClip";
+            this.gpAnimationActionClip.Size = new System.Drawing.Size(454, 155);
+            this.gpAnimationActionClip.TabIndex = 4;
+            this.gpAnimationActionClip.TabStop = false;
+            this.gpAnimationActionClip.Text = "Clip";
+            this.gpAnimationActionClip.Visible = false;
+            // 
+            // gpAnimationActionRotate
+            // 
+            this.gpAnimationActionRotate.Controls.Add(this.txtAnimationActionCentrePointY);
+            this.gpAnimationActionRotate.Controls.Add(this.lblAnimationActionCentrePointY);
+            this.gpAnimationActionRotate.Controls.Add(this.txtAnimationActionCentrePointX);
+            this.gpAnimationActionRotate.Controls.Add(this.lblAnimationActionCentrePointX);
+            this.gpAnimationActionRotate.Controls.Add(this.lblAnimationActionCentrePoint);
+            this.gpAnimationActionRotate.Controls.Add(this.txtAnimationActionRotateMaxVal);
+            this.gpAnimationActionRotate.Controls.Add(this.lblAnimationActionRotateMaxVal);
+            this.gpAnimationActionRotate.Controls.Add(this.cbAnimationActionRotateClockwise);
+            this.gpAnimationActionRotate.Controls.Add(this.txtAnimationActionRotateClockwise);
+            this.gpAnimationActionRotate.Location = new System.Drawing.Point(6, 177);
+            this.gpAnimationActionRotate.Name = "gpAnimationActionRotate";
+            this.gpAnimationActionRotate.Size = new System.Drawing.Size(454, 155);
+            this.gpAnimationActionRotate.TabIndex = 3;
+            this.gpAnimationActionRotate.TabStop = false;
+            this.gpAnimationActionRotate.Text = "Rotate";
+            this.gpAnimationActionRotate.Visible = false;
+            // 
+            // lblAnimationActions
+            // 
+            this.lblAnimationActions.AutoSize = true;
+            this.lblAnimationActions.Location = new System.Drawing.Point(19, 17);
+            this.lblAnimationActions.Name = "lblAnimationActions";
+            this.lblAnimationActions.Size = new System.Drawing.Size(45, 13);
+            this.lblAnimationActions.TabIndex = 2;
+            this.lblAnimationActions.Text = "Actions:";
+            // 
+            // dgAnimationActions
+            // 
+            this.dgAnimationActions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgAnimationActions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ActionType});
+            this.dgAnimationActions.Location = new System.Drawing.Point(6, 36);
+            this.dgAnimationActions.Name = "dgAnimationActions";
+            this.dgAnimationActions.Size = new System.Drawing.Size(167, 134);
+            this.dgAnimationActions.TabIndex = 1;
+            this.dgAnimationActions.SelectionChanged += new System.EventHandler(this.ActionSelect_Change);
+            this.dgAnimationActions.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
+            this.dgAnimationActions.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
+            this.dgAnimationActions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
+            this.dgAnimationActions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseMove);
+            // 
+            // ActionType
+            // 
+            this.ActionType.HeaderText = "Type";
+            this.ActionType.Name = "ActionType";
+            this.ActionType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ActionType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // lblAnimationHowNoTrigger
             // 
@@ -525,56 +627,219 @@ namespace InstrumentDesigner
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
-            // dgAnimationActions
+            // lblAnimationActionStyle
             // 
-            this.dgAnimationActions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgAnimationActions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ActionType});
-            this.dgAnimationActions.Location = new System.Drawing.Point(6, 36);
-            this.dgAnimationActions.Name = "dgAnimationActions";
-            this.dgAnimationActions.Size = new System.Drawing.Size(167, 134);
-            this.dgAnimationActions.TabIndex = 1;
-            this.dgAnimationActions.SelectionChanged += new System.EventHandler(this.ActionSelect_Change);
-            this.dgAnimationActions.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
-            this.dgAnimationActions.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
-            this.dgAnimationActions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
-            this.dgAnimationActions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseMove);
+            this.lblAnimationActionStyle.AutoSize = true;
+            this.lblAnimationActionStyle.Location = new System.Drawing.Point(16, 20);
+            this.lblAnimationActionStyle.Name = "lblAnimationActionStyle";
+            this.lblAnimationActionStyle.Size = new System.Drawing.Size(33, 13);
+            this.lblAnimationActionStyle.TabIndex = 0;
+            this.lblAnimationActionStyle.Text = "Style:";
             // 
-            // lblAnimationActions
+            // cmbAnimationActionStyle
             // 
-            this.lblAnimationActions.AutoSize = true;
-            this.lblAnimationActions.Location = new System.Drawing.Point(19, 17);
-            this.lblAnimationActions.Name = "lblAnimationActions";
-            this.lblAnimationActions.Size = new System.Drawing.Size(45, 13);
-            this.lblAnimationActions.TabIndex = 2;
-            this.lblAnimationActions.Text = "Actions:";
+            this.cmbAnimationActionStyle.FormattingEnabled = true;
+            this.cmbAnimationActionStyle.Location = new System.Drawing.Point(55, 17);
+            this.cmbAnimationActionStyle.Name = "cmbAnimationActionStyle";
+            this.cmbAnimationActionStyle.Size = new System.Drawing.Size(121, 21);
+            this.cmbAnimationActionStyle.TabIndex = 1;
             // 
-            // ActionType
+            // lblAnimationActionStartPoint
             // 
-            this.ActionType.HeaderText = "Type";
-            this.ActionType.Name = "ActionType";
-            this.ActionType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.ActionType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.lblAnimationActionStartPoint.AutoSize = true;
+            this.lblAnimationActionStartPoint.Location = new System.Drawing.Point(13, 47);
+            this.lblAnimationActionStartPoint.Name = "lblAnimationActionStartPoint";
+            this.lblAnimationActionStartPoint.Size = new System.Drawing.Size(59, 13);
+            this.lblAnimationActionStartPoint.TabIndex = 2;
+            this.lblAnimationActionStartPoint.Text = "Start Point:";
             // 
-            // gpAnimationActionRotate
+            // lblAnimationActionStartX
             // 
-            this.gpAnimationActionRotate.Location = new System.Drawing.Point(6, 177);
-            this.gpAnimationActionRotate.Name = "gpAnimationActionRotate";
-            this.gpAnimationActionRotate.Size = new System.Drawing.Size(454, 155);
-            this.gpAnimationActionRotate.TabIndex = 3;
-            this.gpAnimationActionRotate.TabStop = false;
-            this.gpAnimationActionRotate.Text = "Rotate";
-            this.gpAnimationActionRotate.Visible = false;
+            this.lblAnimationActionStartX.AutoSize = true;
+            this.lblAnimationActionStartX.Location = new System.Drawing.Point(50, 67);
+            this.lblAnimationActionStartX.Name = "lblAnimationActionStartX";
+            this.lblAnimationActionStartX.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionStartX.TabIndex = 3;
+            this.lblAnimationActionStartX.Text = "X:";
             // 
-            // gpAnimationActionClip
+            // txtAnimationActionStartX
             // 
-            this.gpAnimationActionClip.Location = new System.Drawing.Point(6, 177);
-            this.gpAnimationActionClip.Name = "gpAnimationActionClip";
-            this.gpAnimationActionClip.Size = new System.Drawing.Size(454, 155);
-            this.gpAnimationActionClip.TabIndex = 4;
-            this.gpAnimationActionClip.TabStop = false;
-            this.gpAnimationActionClip.Text = "Clip";
-            this.gpAnimationActionClip.Visible = false;
+            this.txtAnimationActionStartX.Location = new System.Drawing.Point(73, 65);
+            this.txtAnimationActionStartX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionStartX.Name = "txtAnimationActionStartX";
+            this.txtAnimationActionStartX.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionStartX.TabIndex = 4;
+            // 
+            // txtAnimationActionStartY
+            // 
+            this.txtAnimationActionStartY.Location = new System.Drawing.Point(73, 91);
+            this.txtAnimationActionStartY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionStartY.Name = "txtAnimationActionStartY";
+            this.txtAnimationActionStartY.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionStartY.TabIndex = 6;
+            // 
+            // lblAnimationActionStartY
+            // 
+            this.lblAnimationActionStartY.AutoSize = true;
+            this.lblAnimationActionStartY.Location = new System.Drawing.Point(50, 93);
+            this.lblAnimationActionStartY.Name = "lblAnimationActionStartY";
+            this.lblAnimationActionStartY.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionStartY.TabIndex = 5;
+            this.lblAnimationActionStartY.Text = "Y:";
+            // 
+            // txtAnimationActionEndY
+            // 
+            this.txtAnimationActionEndY.Location = new System.Drawing.Point(250, 91);
+            this.txtAnimationActionEndY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionEndY.Name = "txtAnimationActionEndY";
+            this.txtAnimationActionEndY.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionEndY.TabIndex = 11;
+            // 
+            // lblAnimationActionEndY
+            // 
+            this.lblAnimationActionEndY.AutoSize = true;
+            this.lblAnimationActionEndY.Location = new System.Drawing.Point(227, 93);
+            this.lblAnimationActionEndY.Name = "lblAnimationActionEndY";
+            this.lblAnimationActionEndY.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionEndY.TabIndex = 10;
+            this.lblAnimationActionEndY.Text = "Y:";
+            // 
+            // txtAnimationActionEndX
+            // 
+            this.txtAnimationActionEndX.Location = new System.Drawing.Point(250, 65);
+            this.txtAnimationActionEndX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionEndX.Name = "txtAnimationActionEndX";
+            this.txtAnimationActionEndX.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionEndX.TabIndex = 9;
+            // 
+            // lblAnimationActionEndX
+            // 
+            this.lblAnimationActionEndX.AutoSize = true;
+            this.lblAnimationActionEndX.Location = new System.Drawing.Point(227, 67);
+            this.lblAnimationActionEndX.Name = "lblAnimationActionEndX";
+            this.lblAnimationActionEndX.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionEndX.TabIndex = 8;
+            this.lblAnimationActionEndX.Text = "X:";
+            // 
+            // lblAnimationActionEndPoint
+            // 
+            this.lblAnimationActionEndPoint.AutoSize = true;
+            this.lblAnimationActionEndPoint.Location = new System.Drawing.Point(190, 47);
+            this.lblAnimationActionEndPoint.Name = "lblAnimationActionEndPoint";
+            this.lblAnimationActionEndPoint.Size = new System.Drawing.Size(56, 13);
+            this.lblAnimationActionEndPoint.TabIndex = 7;
+            this.lblAnimationActionEndPoint.Text = "End Point:";
+            // 
+            // txtAnimationActionRotateClockwise
+            // 
+            this.txtAnimationActionRotateClockwise.AutoSize = true;
+            this.txtAnimationActionRotateClockwise.Location = new System.Drawing.Point(3, 101);
+            this.txtAnimationActionRotateClockwise.Name = "txtAnimationActionRotateClockwise";
+            this.txtAnimationActionRotateClockwise.Size = new System.Drawing.Size(64, 13);
+            this.txtAnimationActionRotateClockwise.TabIndex = 0;
+            this.txtAnimationActionRotateClockwise.Text = "Clockwise?:";
+            // 
+            // cbAnimationActionRotateClockwise
+            // 
+            this.cbAnimationActionRotateClockwise.AutoSize = true;
+            this.cbAnimationActionRotateClockwise.Location = new System.Drawing.Point(70, 102);
+            this.cbAnimationActionRotateClockwise.Name = "cbAnimationActionRotateClockwise";
+            this.cbAnimationActionRotateClockwise.Size = new System.Drawing.Size(15, 14);
+            this.cbAnimationActionRotateClockwise.TabIndex = 1;
+            this.cbAnimationActionRotateClockwise.UseVisualStyleBackColor = true;
+            // 
+            // lblAnimationActionRotateMaxVal
+            // 
+            this.lblAnimationActionRotateMaxVal.AutoSize = true;
+            this.lblAnimationActionRotateMaxVal.Location = new System.Drawing.Point(3, 127);
+            this.lblAnimationActionRotateMaxVal.Name = "lblAnimationActionRotateMaxVal";
+            this.lblAnimationActionRotateMaxVal.Size = new System.Drawing.Size(60, 13);
+            this.lblAnimationActionRotateMaxVal.TabIndex = 2;
+            this.lblAnimationActionRotateMaxVal.Text = "Max Value:";
+            // 
+            // txtAnimationActionRotateMaxVal
+            // 
+            this.txtAnimationActionRotateMaxVal.Location = new System.Drawing.Point(69, 125);
+            this.txtAnimationActionRotateMaxVal.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionRotateMaxVal.Minimum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            -2147483648});
+            this.txtAnimationActionRotateMaxVal.Name = "txtAnimationActionRotateMaxVal";
+            this.txtAnimationActionRotateMaxVal.Size = new System.Drawing.Size(69, 20);
+            this.txtAnimationActionRotateMaxVal.TabIndex = 3;
+            // 
+            // txtAnimationActionCentrePointY
+            // 
+            this.txtAnimationActionCentrePointY.Location = new System.Drawing.Point(73, 60);
+            this.txtAnimationActionCentrePointY.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionCentrePointY.Name = "txtAnimationActionCentrePointY";
+            this.txtAnimationActionCentrePointY.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionCentrePointY.TabIndex = 11;
+            // 
+            // lblAnimationActionCentrePointY
+            // 
+            this.lblAnimationActionCentrePointY.AutoSize = true;
+            this.lblAnimationActionCentrePointY.Location = new System.Drawing.Point(50, 62);
+            this.lblAnimationActionCentrePointY.Name = "lblAnimationActionCentrePointY";
+            this.lblAnimationActionCentrePointY.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionCentrePointY.TabIndex = 10;
+            this.lblAnimationActionCentrePointY.Text = "Y:";
+            // 
+            // txtAnimationActionCentrePointX
+            // 
+            this.txtAnimationActionCentrePointX.Location = new System.Drawing.Point(73, 34);
+            this.txtAnimationActionCentrePointX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionCentrePointX.Name = "txtAnimationActionCentrePointX";
+            this.txtAnimationActionCentrePointX.Size = new System.Drawing.Size(68, 20);
+            this.txtAnimationActionCentrePointX.TabIndex = 9;
+            // 
+            // lblAnimationActionCentrePointX
+            // 
+            this.lblAnimationActionCentrePointX.AutoSize = true;
+            this.lblAnimationActionCentrePointX.Location = new System.Drawing.Point(50, 36);
+            this.lblAnimationActionCentrePointX.Name = "lblAnimationActionCentrePointX";
+            this.lblAnimationActionCentrePointX.Size = new System.Drawing.Size(17, 13);
+            this.lblAnimationActionCentrePointX.TabIndex = 8;
+            this.lblAnimationActionCentrePointX.Text = "X:";
+            // 
+            // lblAnimationActionCentrePoint
+            // 
+            this.lblAnimationActionCentrePoint.AutoSize = true;
+            this.lblAnimationActionCentrePoint.Location = new System.Drawing.Point(13, 16);
+            this.lblAnimationActionCentrePoint.Name = "lblAnimationActionCentrePoint";
+            this.lblAnimationActionCentrePoint.Size = new System.Drawing.Size(68, 13);
+            this.lblAnimationActionCentrePoint.TabIndex = 7;
+            this.lblAnimationActionCentrePoint.Text = "Centre Point:";
             // 
             // frmAnimation
             // 
@@ -603,7 +868,18 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).EndInit();
             this.tabHow.ResumeLayout(false);
             this.tabHow.PerformLayout();
+            this.gpAnimationActionClip.ResumeLayout(false);
+            this.gpAnimationActionClip.PerformLayout();
+            this.gpAnimationActionRotate.ResumeLayout(false);
+            this.gpAnimationActionRotate.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionStartY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionEndX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -656,5 +932,26 @@ namespace InstrumentDesigner
         private DataGridViewComboBoxColumn ActionType;
         private GroupBox gpAnimationActionClip;
         private GroupBox gpAnimationActionRotate;
+        private ComboBox cmbAnimationActionStyle;
+        private Label lblAnimationActionStyle;
+        private NumericUpDown txtAnimationActionEndY;
+        private Label lblAnimationActionEndY;
+        private NumericUpDown txtAnimationActionEndX;
+        private Label lblAnimationActionEndX;
+        private Label lblAnimationActionEndPoint;
+        private NumericUpDown txtAnimationActionStartY;
+        private Label lblAnimationActionStartY;
+        private NumericUpDown txtAnimationActionStartX;
+        private Label lblAnimationActionStartX;
+        private Label lblAnimationActionStartPoint;
+        private Label txtAnimationActionRotateClockwise;
+        private CheckBox cbAnimationActionRotateClockwise;
+        private NumericUpDown txtAnimationActionCentrePointY;
+        private Label lblAnimationActionCentrePointY;
+        private NumericUpDown txtAnimationActionCentrePointX;
+        private Label lblAnimationActionCentrePointX;
+        private Label lblAnimationActionCentrePoint;
+        private NumericUpDown txtAnimationActionRotateMaxVal;
+        private Label lblAnimationActionRotateMaxVal;
     }
 }
