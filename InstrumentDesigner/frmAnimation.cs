@@ -278,7 +278,7 @@ namespace InstrumentDesigner
             // Allow user to open a new image file for animating
             openFileDialog.Title = "Load Background Image";
             openFileDialog.Filter = "All Graphics Types|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff|BMP|*.bmp|GIF|*.gif|JPG|*.jpg;*.jpeg|PNG|*.png|TIFF|*.tif;*.tiff";
-            var initialFolder = Path.GetDirectoryName(string.IsNullOrEmpty(((AnimationImage)_animation).ImagePath)?Path.Combine(Directory.GetCurrentDirectory(), ".\\InstrumentImages"):Path.Combine(Directory.GetCurrentDirectory(), ((AnimationImage)_animation).ImagePath));
+            var initialFolder = Path.GetDirectoryName(string.IsNullOrEmpty(((AnimationImage)_animation).ImagePath) ? Path.Combine(Directory.GetCurrentDirectory(), ".\\InstrumentImages") : Path.Combine(Directory.GetCurrentDirectory(), ((AnimationImage)_animation).ImagePath));
             openFileDialog.InitialDirectory = initialFolder;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -437,7 +437,7 @@ namespace InstrumentDesigner
             gpAnimationActionClip.Visible = false;
             gpAnimationActionRotate.Visible = false;
             var senderGrid = (DataGridView)sender;
-            if(senderGrid.SelectedRows.Count == 1)
+            if (senderGrid.SelectedRows.Count == 1)
             {
                 var actionType = (AnimationActionTypeEnum)senderGrid.SelectedRows[0].Cells["ActionType"].Value;
                 var action = GetSelectedAction();
@@ -445,31 +445,48 @@ namespace InstrumentDesigner
                 {
                     case AnimationActionTypeEnum.Clip:
                         var actionClip = (AnimateActionClip)action;
+                        populatingForm = true;
                         gpAnimationActionClip.Visible = true;
                         cmbAnimationActionStyle.SelectedIndex = cmbAnimationActionStyle.Items.IndexOf(actionClip.Style);
                         txtAnimationActionStartX.Value = (decimal)actionClip.StartPoint.X;
                         txtAnimationActionStartY.Value = (decimal)actionClip.StartPoint.Y;
                         txtAnimationActionEndX.Value = (decimal)actionClip.EndPoint.X;
                         txtAnimationActionEndY.Value = (decimal)actionClip.EndPoint.Y;
-
+                        populatingForm = false;
                         break;
                     case AnimationActionTypeEnum.Rotate:
                         var actionRotate = (AnimationActionRotate)action;
+                        populatingForm = true;
                         gpAnimationActionRotate.Visible = true;
                         txtAnimationActionCentrePointX.Value = (decimal)actionRotate.CentrePoint.X;
                         txtAnimationActionCentrePointY.Value = (decimal)actionRotate.CentrePoint.Y;
                         cbAnimationActionRotateClockwise.Checked = actionRotate.RotateClockwise;
                         txtAnimationActionRotateMaxVal.Value = (decimal)actionRotate.MaximumValueExpected;
+                        populatingForm = false;
                         break;
                 }
             }
         }
 
+        private IAnimationTrigger GetSelectedTrigger()
+        {
+            if (_animation != null && !populatingForm && gdAnimationTriggers.SelectedRows.Count == 1)
+            {
+                return _animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+            }
+            return null;
+        }
+
         private IAnimationAction GetSelectedAction()
         {
-            var actionType = (AnimationActionTypeEnum)dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value;
-            var trigger = _animation.Triggers.First(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
-            return trigger.Actions.First(x => x.Type == actionType);
+            if (_animation != null && !populatingForm && dgAnimationActions.SelectedRows.Count == 1)
+            {
+                var actionType = (AnimationActionTypeEnum)dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value;
+                var trigger = GetSelectedTrigger();
+                if (trigger != null)
+                    return trigger.Actions.First(x => x.Type == actionType);
+            }
+            return null;
         }
 
         private Rectangle dragBoxFromMouseDown;
@@ -540,6 +557,51 @@ namespace InstrumentDesigner
                 DataGridViewRow rowToMove = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
                 senderGrid.Rows.RemoveAt(rowIndexFromMouseDown);
                 senderGrid.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowToMove);
+            }
+        }
+
+        private void AnimationClipStyle_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimateActionClip)GetSelectedAction();
+                ((AnimateActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).Style = ((AnimateActionClipEnum)cmbAnimationActionStyle.Items[cmbAnimationActionStyle.SelectedIndex]);
+            }
+        }
+
+        private void AnimationActionClipStartX_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimateActionClip)GetSelectedAction();
+                ((AnimateActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).StartPoint.X = (float)((NumericUpDown)sender).Value;
+            }
+        }
+
+        private void AnimationActionClipStartY_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimateActionClip)GetSelectedAction();
+                ((AnimateActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).StartPoint.Y = (float)((NumericUpDown)sender).Value;
+            }
+        }
+
+        private void AnimationActionClipEndX_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimateActionClip)GetSelectedAction();
+                ((AnimateActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.X = (float)((NumericUpDown)sender).Value;
+            }
+        }
+
+        private void AnimationActionClipEndY_Changed(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                var action = (AnimateActionClip)GetSelectedAction();
+                ((AnimateActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.Y = (float)((NumericUpDown)sender).Value;
             }
         }
     }

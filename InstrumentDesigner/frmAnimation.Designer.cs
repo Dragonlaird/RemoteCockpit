@@ -643,6 +643,7 @@ namespace InstrumentDesigner
             this.cmbAnimationActionStyle.Name = "cmbAnimationActionStyle";
             this.cmbAnimationActionStyle.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationActionStyle.TabIndex = 1;
+            this.cmbAnimationActionStyle.SelectedIndexChanged += new System.EventHandler(this.AnimationClipStyle_Changed);
             // 
             // lblAnimationActionStartPoint
             // 
@@ -673,6 +674,7 @@ namespace InstrumentDesigner
             this.txtAnimationActionStartX.Name = "txtAnimationActionStartX";
             this.txtAnimationActionStartX.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionStartX.TabIndex = 4;
+            this.txtAnimationActionStartX.ValueChanged += new System.EventHandler(this.AnimationActionClipStartX_Changed);
             // 
             // txtAnimationActionStartY
             // 
@@ -685,6 +687,7 @@ namespace InstrumentDesigner
             this.txtAnimationActionStartY.Name = "txtAnimationActionStartY";
             this.txtAnimationActionStartY.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionStartY.TabIndex = 6;
+            this.txtAnimationActionStartY.ValueChanged += new System.EventHandler(this.AnimationActionClipStartY_Changed);
             // 
             // lblAnimationActionStartY
             // 
@@ -706,6 +709,7 @@ namespace InstrumentDesigner
             this.txtAnimationActionEndY.Name = "txtAnimationActionEndY";
             this.txtAnimationActionEndY.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionEndY.TabIndex = 11;
+            this.txtAnimationActionEndY.ValueChanged += new System.EventHandler(this.AnimationActionClipEndY_Changed);
             // 
             // lblAnimationActionEndY
             // 
@@ -727,6 +731,7 @@ namespace InstrumentDesigner
             this.txtAnimationActionEndX.Name = "txtAnimationActionEndX";
             this.txtAnimationActionEndX.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionEndX.TabIndex = 9;
+            this.txtAnimationActionEndX.ValueChanged += new System.EventHandler(this.AnimationActionClipEndX_Changed);
             // 
             // lblAnimationActionEndX
             // 
