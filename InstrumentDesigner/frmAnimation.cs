@@ -439,7 +439,7 @@ namespace InstrumentDesigner
             var senderGrid = (DataGridView)sender;
             if (senderGrid.SelectedRows.Count == 1 && senderGrid.SelectedRows[0].Cells["ActionType"].Value != null)
             {
-                var actionType = (AnimationActionTypeEnum)senderGrid.SelectedRows[0].Cells["ActionType"].Value;
+                var actionType = (AnimationActionTypeEnum)Enum.Parse(typeof(AnimationActionTypeEnum),senderGrid.SelectedRows[0].Cells["ActionType"].Value.ToString());
                 var action = GetSelectedAction();
                 switch (actionType)
                 {
@@ -481,9 +481,9 @@ namespace InstrumentDesigner
         {
             if (_animation != null && !populatingForm && dgAnimationActions.SelectedRows.Count == 1)
             {
-                var actionType = (AnimationActionTypeEnum)dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value;
+                var actionType = (AnimationActionTypeEnum)Enum.Parse(typeof(AnimationActionTypeEnum),dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value.ToString());
                 var trigger = GetSelectedTrigger();
-                if (trigger != null)
+                if (trigger != null && trigger.Actions.Any(x=> x.Type == actionType))
                     return trigger.Actions.First(x => x.Type == actionType);
             }
             return null;
@@ -648,7 +648,7 @@ namespace InstrumentDesigner
             {
                 var trigger = GetSelectedTrigger();
                 var selectedAction = dgAnimationActions.Rows[e.RowIndex].Cells["ActionType"].Value;
-                if (trigger.Actions.Any(x => x.Type.ToString() == selectedAction.ToString()))
+                if (trigger.Actions.Any(x => x.Type.ToString() == selectedAction.ToString() && trigger.Actions.ToList().IndexOf(x) != e.RowIndex))
                 {
                     // Action alreay used - reject the change
                     populatingForm = true;
@@ -672,9 +672,14 @@ namespace InstrumentDesigner
                 {
                     // Action Type already in use - reject
                     e.Cancel = true;
-                    MessageBox.Show("Cannot select an Action Type that has already been used", "Cancel Action Type Change", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Cannot select an Action Type that is already used", "Cancel Action Type Change", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
+        }
+
+        private void DataError_Error(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            
         }
     }
 }

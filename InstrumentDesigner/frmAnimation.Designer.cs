@@ -809,6 +809,7 @@ namespace InstrumentDesigner
             this.dgAnimationActions.TabIndex = 1;
             this.dgAnimationActions.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ActionType_Validate);
             this.dgAnimationActions.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.ActionType_Changed);
+            this.dgAnimationActions.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError_Error);
             this.dgAnimationActions.SelectionChanged += new System.EventHandler(this.ActionSelect_Change);
             this.dgAnimationActions.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
             this.dgAnimationActions.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
