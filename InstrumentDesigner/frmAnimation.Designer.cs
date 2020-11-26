@@ -807,6 +807,8 @@ namespace InstrumentDesigner
             this.dgAnimationActions.Name = "dgAnimationActions";
             this.dgAnimationActions.Size = new System.Drawing.Size(167, 134);
             this.dgAnimationActions.TabIndex = 1;
+            this.dgAnimationActions.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ActionType_Validate);
+            this.dgAnimationActions.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.ActionType_Changed);
             this.dgAnimationActions.SelectionChanged += new System.EventHandler(this.ActionSelect_Change);
             this.dgAnimationActions.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
             this.dgAnimationActions.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);

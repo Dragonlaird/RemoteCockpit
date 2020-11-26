@@ -437,7 +437,7 @@ namespace InstrumentDesigner
             gpAnimationActionClip.Visible = false;
             gpAnimationActionRotate.Visible = false;
             var senderGrid = (DataGridView)sender;
-            if (senderGrid.SelectedRows.Count == 1)
+            if (senderGrid.SelectedRows.Count == 1 && senderGrid.SelectedRows[0].Cells["ActionType"].Value != null)
             {
                 var actionType = (AnimationActionTypeEnum)senderGrid.SelectedRows[0].Cells["ActionType"].Value;
                 var action = GetSelectedAction();
@@ -638,6 +638,42 @@ namespace InstrumentDesigner
             {
                 var action = (AnimationActionRotate)GetSelectedAction();
                 ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).RotateClockwise = ((CheckBox)sender).Checked;
+            }
+        }
+
+        private void ActionType_Changed(object sender, DataGridViewCellEventArgs e)
+        {
+            // An existing row has a new Action Type - ensure the selected value isn't already in use
+            if (_animation != null && !populatingForm && e.RowIndex >= 0)
+            {
+                var trigger = GetSelectedTrigger();
+                var selectedAction = dgAnimationActions.Rows[e.RowIndex].Cells["ActionType"].Value;
+                if (trigger.Actions.Any(x => x.Type.ToString() == selectedAction.ToString()))
+                {
+                    // Action alreay used - reject the change
+                    populatingForm = true;
+                    dgAnimationActions.Rows[e.RowIndex].Cells["ActionType"].Value = trigger.Actions[e.RowIndex].Type;
+                    populatingForm = false;
+                    MessageBox.Show("Cannot select an Action Type that has already been used", "Cancel Action Type Change", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void ActionType_Validate(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (_animation != null && !populatingForm && e.RowIndex >= 0)
+            {
+                // Check if the selection action type has already been used
+                var trigger = GetSelectedTrigger();
+                var usedActions = trigger.Actions.Select(x => x.Type).ToList();
+                var selectedAction = dgAnimationActions.Rows[e.RowIndex].Cells["ActionType"].Value;
+                var selectedValue = e.FormattedValue;
+                if (usedActions.Any(x => x.ToString() == selectedValue?.ToString() && usedActions.IndexOf(x) != e.RowIndex))
+                {
+                    // Action Type already in use - reject
+                    e.Cancel = true;
+                    MessageBox.Show("Cannot select an Action Type that has already been used", "Cancel Action Type Change", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
         }
     }
