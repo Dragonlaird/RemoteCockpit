@@ -182,10 +182,10 @@ namespace InstrumentPlugins
                         var rotateAngle = (float)((360 * (double)nextValue) / rotateAction.MaximumValueExpected);
                         initialImage = RotateImage(initialImage, rotateAngle);
                     }
-                    if(action is AnimateActionClip)
+                    if(action is AnimationActionClip)
                     {
                         // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
-                        initialImage = ClipImage(initialImage, ((AnimateActionClip)action).Style, ((AnimateActionClip)action).StartPoint, ((AnimateActionClip)action).EndPoint);
+                        initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
                     }
                 }
             }

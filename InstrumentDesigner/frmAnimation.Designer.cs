@@ -99,6 +99,11 @@ namespace InstrumentDesigner
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.gpAnimationActionMoveX = new System.Windows.Forms.GroupBox();
+            this.lblAnimationActionMoveXMax = new System.Windows.Forms.Label();
+            this.txtAnimationActionMoveXMax = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationActionMoveXPercent = new System.Windows.Forms.Label();
+            this.txtAnimationActionMoveXValue = new System.Windows.Forms.NumericUpDown();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -121,6 +126,9 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).BeginInit();
+            this.gpAnimationActionMoveX.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionMoveXMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionMoveXValue)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCollection
@@ -512,6 +520,7 @@ namespace InstrumentDesigner
             // 
             // tabHow
             // 
+            this.tabHow.Controls.Add(this.gpAnimationActionMoveX);
             this.tabHow.Controls.Add(this.gpAnimationActionClip);
             this.tabHow.Controls.Add(this.gpAnimationActionRotate);
             this.tabHow.Controls.Add(this.lblAnimationActions);
@@ -811,6 +820,7 @@ namespace InstrumentDesigner
             this.dgAnimationActions.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ActionType_Validate);
             this.dgAnimationActions.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.ActionType_Changed);
             this.dgAnimationActions.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataError_Error);
+            this.dgAnimationActions.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.AnimateAction_Delete);
             this.dgAnimationActions.SelectionChanged += new System.EventHandler(this.ActionSelect_Change);
             this.dgAnimationActions.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
             this.dgAnimationActions.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridView_DragOver);
@@ -854,6 +864,73 @@ namespace InstrumentDesigner
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
+            // gpAnimationActionMoveX
+            // 
+            this.gpAnimationActionMoveX.Controls.Add(this.txtAnimationActionMoveXValue);
+            this.gpAnimationActionMoveX.Controls.Add(this.lblAnimationActionMoveXPercent);
+            this.gpAnimationActionMoveX.Controls.Add(this.txtAnimationActionMoveXMax);
+            this.gpAnimationActionMoveX.Controls.Add(this.lblAnimationActionMoveXMax);
+            this.gpAnimationActionMoveX.Location = new System.Drawing.Point(6, 177);
+            this.gpAnimationActionMoveX.Name = "gpAnimationActionMoveX";
+            this.gpAnimationActionMoveX.Size = new System.Drawing.Size(454, 155);
+            this.gpAnimationActionMoveX.TabIndex = 5;
+            this.gpAnimationActionMoveX.TabStop = false;
+            this.gpAnimationActionMoveX.Text = "MoveX";
+            // 
+            // lblAnimationActionMoveXMax
+            // 
+            this.lblAnimationActionMoveXMax.AutoSize = true;
+            this.lblAnimationActionMoveXMax.Location = new System.Drawing.Point(7, 20);
+            this.lblAnimationActionMoveXMax.Name = "lblAnimationActionMoveXMax";
+            this.lblAnimationActionMoveXMax.Size = new System.Drawing.Size(60, 13);
+            this.lblAnimationActionMoveXMax.TabIndex = 0;
+            this.lblAnimationActionMoveXMax.Text = "Max Value:";
+            // 
+            // txtAnimationActionMoveXMax
+            // 
+            this.txtAnimationActionMoveXMax.Location = new System.Drawing.Point(73, 18);
+            this.txtAnimationActionMoveXMax.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.txtAnimationActionMoveXMax.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.txtAnimationActionMoveXMax.Name = "txtAnimationActionMoveXMax";
+            this.txtAnimationActionMoveXMax.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationActionMoveXMax.TabIndex = 1;
+            this.txtAnimationActionMoveXMax.ValueChanged += new System.EventHandler(this.AnimationActionMoveMax_Changed);
+            // 
+            // lblAnimationActionMoveXPercent
+            // 
+            this.lblAnimationActionMoveXPercent.AutoSize = true;
+            this.lblAnimationActionMoveXPercent.Location = new System.Drawing.Point(20, 42);
+            this.lblAnimationActionMoveXPercent.Name = "lblAnimationActionMoveXPercent";
+            this.lblAnimationActionMoveXPercent.Size = new System.Drawing.Size(47, 13);
+            this.lblAnimationActionMoveXPercent.TabIndex = 2;
+            this.lblAnimationActionMoveXPercent.Text = "Percent:";
+            // 
+            // txtAnimationActionMoveXValue
+            // 
+            this.txtAnimationActionMoveXValue.Location = new System.Drawing.Point(73, 40);
+            this.txtAnimationActionMoveXValue.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.txtAnimationActionMoveXValue.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            -2147483648});
+            this.txtAnimationActionMoveXValue.Name = "txtAnimationActionMoveXValue";
+            this.txtAnimationActionMoveXValue.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationActionMoveXValue.TabIndex = 3;
+            this.txtAnimationActionMoveXValue.ValueChanged += new System.EventHandler(this.AnimationActionMovePercent_Changed);
+            // 
             // frmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -893,6 +970,10 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).EndInit();
+            this.gpAnimationActionMoveX.ResumeLayout(false);
+            this.gpAnimationActionMoveX.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionMoveXMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionMoveXValue)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -966,5 +1047,10 @@ namespace InstrumentDesigner
         private Label lblAnimationActionCentrePoint;
         private NumericUpDown txtAnimationActionRotateMaxVal;
         private Label lblAnimationActionRotateMaxVal;
+        private GroupBox gpAnimationActionMoveX;
+        private NumericUpDown txtAnimationActionMoveXValue;
+        private Label lblAnimationActionMoveXPercent;
+        private NumericUpDown txtAnimationActionMoveXMax;
+        private Label lblAnimationActionMoveXMax;
     }
 }

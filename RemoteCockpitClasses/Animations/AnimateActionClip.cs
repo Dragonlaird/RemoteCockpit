@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RemoteCockpitClasses.Animations
 {
-    public class AnimateActionClip : IAnimationAction
+    public class AnimationActionClip : IAnimationAction
     {
         public AnimationActionTypeEnum Type => AnimationActionTypeEnum.Clip;
         public AnimateActionClipEnum Style { get; set; }
