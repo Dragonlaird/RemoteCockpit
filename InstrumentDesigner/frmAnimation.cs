@@ -391,6 +391,10 @@ namespace InstrumentDesigner
             if (!populatingForm)
             {
                 // New row being added - need to also add to Animation config
+                if(_animation.Triggers == null)
+                {
+                    _animation.Triggers = new IAnimationTrigger[0];
+                }
                 var newAnimations = _animation.Triggers.ToList();
                 newAnimations.Add(new AnimationTriggerClientRequest { Name = "", Actions = new IAnimationAction[0], Request = new ClientRequest() });
                 _animation.Triggers = newAnimations.ToArray();
