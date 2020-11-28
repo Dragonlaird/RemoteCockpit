@@ -429,12 +429,16 @@ namespace InstrumentDesigner
                 var senderGrid = (DataGridView)sender;
                 var colIdx = e.ColumnIndex;
                 var colName = senderGrid.Columns[colIdx].Name?.ToString();
+                var trigger = _animation.Triggers[e.RowIndex];
                 if (colName == "Trigger")
                 {
-                    var trigger = _animation.Triggers[e.RowIndex];
                     trigger.Name = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
-                    _animation.Triggers[e.RowIndex] = trigger;
                 }
+                if(colName == "Type")
+                {
+                    trigger.Type = (AnimationTriggerTypeEnum)Enum.Parse(typeof(AnimationTriggerTypeEnum), senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString());
+                }
+                _animation.Triggers[e.RowIndex] = trigger;
             }
         }
 

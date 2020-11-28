@@ -332,20 +332,20 @@ namespace InstrumentDesigner
                 switch (action)
                 {
                     case "E":
-                        var animation = config.Animations?.FirstOrDefault(x => x.Name == name) ?? new AnimationDrawing();
+                        if(config.Animations == null)
+                        {
+                            config.Animations = new IAnimationItem[1] { new AnimationDrawing { Name = name, Triggers = new IAnimationTrigger[0], Type = AnimationItemTypeEnum.Drawing } };
+                        }
+                        var animation = config.Animations?.First(x => x.Name == name);
                         using (frm = new frmAnimation(animation, cockpitDirectory))
                         {
                             result = frm.ShowDialog(this);
                             if (result == DialogResult.OK)
                             {
                                 var newAnimation = ((frmAnimation)frm).DialogValue;
-                                if(config.Animations.Any(x=>x.Name == name))
-                                {
-                                    var cleanAnimations = config.Animations.Where(x => x.Name != name).ToList();
-                                    config.Animations = cleanAnimations.ToArray();
-                                }
+                                // Replace existing animation with the modified version
                                 var currentAnimations = config.Animations.ToList();
-                                currentAnimations.Add(newAnimation);
+                                currentAnimations[currentAnimations.IndexOf(currentAnimations.First(x => x.Name == name))] = newAnimation;
                                 config.Animations = currentAnimations.ToArray();
                             }
                         }
