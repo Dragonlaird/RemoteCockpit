@@ -32,10 +32,11 @@ namespace InstrumentPlugins
         private double scaleFactor = 1;
         private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
-        private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
+        //private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
+        private System.Timers.Timer animateTimer;
         private List<double> animationSteps = new List<double>();
         private List<Bitmap> animationImages = new List<Bitmap>();
-        private delegate void SafeUpdateDelegate(Control ctrl);
+        private delegate void SafeUpdateDelegate(object sender, PaintEventArgs e);
         private SafeUpdateDelegate delgte;
         private int animationTimeInMs = 3000;
         private int animationStepCount = 10;
@@ -63,6 +64,7 @@ namespace InstrumentPlugins
 
         private void Initialize()
         {
+            UpdateStepCount(animationTimeInMs);
             Control = new Panel();
             try
             {
@@ -78,14 +80,17 @@ namespace InstrumentPlugins
                 Control.BackColor = Color.Transparent;
                 Control.BackgroundImage = backgroundImage;
             }
-            catch(Exception ex) { }
+            catch (Exception ex)
+            {
+
+            }
             Control.Top = controlTop;
             Control.Left = controlLeft;
             Control.Height = controlHeight;
             Control.Width = controlWidth;
             previousResults = new List<ClientRequestResult>();
             currentResults = new List<ClientRequestResult>();
-            animateTimers = new List<System.Timers.Timer>();
+            animateTimer = null; // new List<System.Timers.Timer>();
             animationSteps = new List<double>();
             if(config?.AnimationUpdateInMs > 0)
             {
@@ -106,10 +111,13 @@ namespace InstrumentPlugins
                 }
                 foreach (var clientRequest in config?.ClientRequests)
                 {
-                    currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
-                    previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)-1 });
-                    animateTimers.Add(null);
-                    animationSteps.Add(1);
+                    if (!currentResults.Any(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit))
+                    {
+                        currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
+                        previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)-1 });
+                        //animateTimers.Add(null);
+                        animationSteps.Add(1);
+                    }
                 }
                 Control.Paint += PaintControl;
                 Control.Invalidate(true);
@@ -119,6 +127,17 @@ namespace InstrumentPlugins
 
         private void PaintControl(object sender, PaintEventArgs e)
         {
+            if (((Control)sender).InvokeRequired)
+            {
+                try
+                {
+                    var ctrl = (Control)sender;
+                    var d = new SafeUpdateDelegate(PaintControl);
+                    ctrl.Invoke(d, new object[] { ctrl, e });
+                }
+                catch { }
+                return;
+            }
             if (config?.Animations != null)
             {
                 // We have a foreground to update
@@ -139,15 +158,13 @@ namespace InstrumentPlugins
                             imagePanel.BringToFront();
                         }
                     }
-                    else
+                    try
                     {
-                        try
-                        {
-                            Control.Controls[animation.Name].Invalidate(true);
-                            PaintAnimation(Control.Controls[animation.Name], new PaintEventArgs(Control.Controls[animation.Name].CreateGraphics(), Control.Controls[animation.Name].DisplayRectangle));
-                        }
-                        catch { }
+                        //UpdateInstrument(Control.Controls[animation.Name]);
+                        //Control.Controls[animation.Name].Invalidate(true);
+                        PaintAnimation(Control.Controls[animation.Name], new PaintEventArgs(Control.Controls[animation.Name].CreateGraphics(), Control.Controls[animation.Name].DisplayRectangle));
                     }
+                    catch { }
                 }
             }
         }
@@ -158,6 +175,7 @@ namespace InstrumentPlugins
             var animation = config.Animations.First(x => x.Name == ctrl.Name);
             var triggers = (AnimationTriggerClientRequest[])animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
             Bitmap initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
+            bool animationChanged = false;
             foreach (var trigger in triggers)
             {
                 var nextValue = animation.LastAppliedValue;
@@ -166,35 +184,40 @@ namespace InstrumentPlugins
                     nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
                 }
 
-                animation.LastAppliedValue = nextValue;
-                /*
-                if (animation is AnimationDrawing)
-                    initialImage = DrawPoints((AnimationDrawing)animation);
-                if (animation is AnimationImage)
-                    initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
-                */
-                foreach (var action in trigger.Actions)
+                if (animation.LastAppliedValue != nextValue)
                 {
-                    if (action is AnimationActionRotate)
+                    animationChanged = true;
+                    animation.LastAppliedValue = nextValue;
+                    /*
+                    if (animation is AnimationDrawing)
+                        initialImage = DrawPoints((AnimationDrawing)animation);
+                    if (animation is AnimationImage)
+                        initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
+                    */
+                    foreach (var action in trigger.Actions)
                     {
-                        // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
-                        var rotateAction = (AnimationActionRotate)action;
-                        var rotateAngle = (float)((360 * (double)nextValue) / rotateAction.MaximumValueExpected);
-                        initialImage = RotateImage(initialImage, rotateAngle);
-                    }
-                    if(action is AnimationActionClip)
-                    {
-                        // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
-                        initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
+                        if (action is AnimationActionRotate)
+                        {
+                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                            var rotateAction = (AnimationActionRotate)action;
+                            var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
+                            var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
+                            initialImage = RotateImage(initialImage, rotateAngle);
+                        }
+                        if (action is AnimationActionClip)
+                        {
+                            // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
+                            initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
+                        }
                     }
                 }
             }
-            if (initialImage != null)
+            if (initialImage != null && animationChanged)
             {
                 ctrl.BackColor = Color.Transparent;
                 ((PictureBox)ctrl).Image = initialImage;
                 ctrl.BringToFront();
-                ctrl.Invalidate();
+                //ctrl.Invalidate();
             }
         }
 
@@ -253,49 +276,38 @@ namespace InstrumentPlugins
         }
 
 
-        private void RemoveTimer(int timerIdx)
+        private void RemoveTimer()
         {
-            if(timerIdx > -1-1 && animateTimers[timerIdx] != null)
+            StopTimer();
+            if (animateTimer != null)
             {
-                if (animateTimers[timerIdx].Enabled)
-                    animateTimers[timerIdx].Stop();
-                animateTimers[timerIdx]?.Dispose();
-                animateTimers[timerIdx] = null;
+                animateTimer.Dispose();
+                animateTimer = null;
+            }
+            //if(timerIdx > -1-1 && animateTimers[timerIdx] != null)
+            //{
+            //    if (animateTimers[timerIdx].Enabled)
+            //        animateTimers[timerIdx].Stop();
+            //    animateTimers[timerIdx]?.Dispose();
+            //    animateTimers[timerIdx] = null;
+            //}
+        }
+
+        private void StopTimer()
+        {
+            if (animateTimer != null)
+            {
+                if (animateTimer.Enabled)
+                    animateTimer.Stop();
             }
         }
 
-        private void StopTimer(System.Timers.Timer timer)
+        private void StartTimer()
         {
-            if (timer != null)
-            {
-                var timerIdx = animateTimers.IndexOf(timer);
-                if (timerIdx > -1 && animateTimers[timerIdx] != null)
-                {
-                    RemoveTimer(timerIdx);
-                }
-                else
-                {
-                    if (timer.Enabled)
-                        timer.Stop();
-                    timer.Dispose();
-                    timer = null;
-                }
-            }
-        }
-
-        private System.Timers.Timer StartTimer(System.Timers.Timer timer)
-        {
-            var timerIdx = animateTimers.IndexOf(timer);
-            if (timer != null && timer.Enabled)
-                StopTimer(timer);
-            timer = new System.Timers.Timer(animationTimeInMs / animationStepCount);
-            timer.Elapsed += ExecuteAnimation;
-            //timer.AutoReset = true;
-            //timer.Enabled = true;
-            timer.Start();
-            if (timerIdx > -1)
-                animateTimers[timerIdx] = timer;
-            return timer;
+            StopTimer();
+            animateTimer = new System.Timers.Timer(animationUpdateInMs);
+            animateTimer.Elapsed += ExecuteAnimation;
+            animateTimer.Start();
         }
 
         /// <summary>
@@ -308,73 +320,41 @@ namespace InstrumentPlugins
         {
             try
             {
-                var timerIdx = animateTimers.IndexOf((System.Timers.Timer)sender);
-                lock (animateTimers)
-                    StopTimer(animateTimers[timerIdx]);
-                if (timerIdx > -1)
+                //RemoveTimer();
+                // Step our animation closer to the target value
+                lock (currentResults)
                 {
-                    var timeDiff = DateTime.Now.Subtract(lastExecution).TotalMilliseconds;
-                    var lastValue = previousResults[timerIdx];
-                    var currentValue = currentResults[timerIdx];
-                    var stepSize = animationSteps[timerIdx];
-                    lastValue.Result = (double)lastValue.Result + stepSize;
-                    lastExecution = DateTime.Now;
-                    if (stepSize < 0)
+                    foreach (var currentResult in currentResults)
                     {
-                        if ((double)lastValue.Result < (double)currentValue.Result)
+                        var triggerIdx = currentResults.IndexOf(currentResult);
+                        var previousResult = previousResults[triggerIdx];
+                        if (previousResult.Result != currentResult.Result)
                         {
-                            // Reached our limit
-                            lastValue.Result = currentValue.Result;
-                            RemoveTimer(timerIdx);
+                            var stepValue = Math.Abs(animationSteps[triggerIdx]);
+                            if ((double)previousResult.Result < (double)currentResult.Result)
+                            {
+                                previousResult.Result = (double)previousResult.Result + stepValue;
+                                if ((double)previousResult.Result > (double)currentResult.Result)
+                                {
+                                    previousResult.Result = currentResult.Result;
+                                }
+                            }
+                            if ((double)previousResult.Result > (double)currentResult.Result)
+                            {
+                                previousResult.Result = (double)previousResult.Result - stepValue;
+                                if ((double)previousResult.Result < (double)currentResult.Result)
+                                {
+                                    previousResult.Result = currentResult.Result;
+                                }
+                            }
                         }
                     }
-                    else
-                    {
-                        if ((double)lastValue.Result > (double)currentValue.Result)
-                        {
-                            // Reached our limit
-                            lastValue.Result = currentValue.Result;
-                            RemoveTimer(timerIdx);
-                        }
-                    }
-                    // Trigger paint event of any controls that rely on this value
-                    var animations = config.Animations.Where(x => x.Triggers.Any(y => y.Type == AnimationTriggerTypeEnum.ClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == lastValue.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == lastValue.Request.Unit)).Select(x => x).ToArray();
-                    foreach (var name in animations.Select(x => x.Name))
-                    {
-                        if (Control.Controls.ContainsKey(name))
-                            UpdateInstrument(Control.Controls[name]); // Force this control to repaint itself and any children
-                    }
-                    if (timerIdx > -1)
-                        lock (animateTimers)
-                        {
-                            animateTimers[timerIdx] = new System.Timers.Timer(animationTimeInMs);
-                            StartTimer(animateTimers[timerIdx]);
-                        }
                 }
+                // Trigger paint event of control
+                PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                //UpdateInstrument(Control); // Force this control to repaint itself and any children
             }
             catch { }
-        }
-
-        private void UpdateInstrument(Control obj)
-        {
-            if (obj.InvokeRequired)
-            {
-                try
-                {
-                    var d = new SafeUpdateDelegate(UpdateInstrument);
-                    obj.Invoke(d, new object[] { obj });
-                }
-                catch { }
-                return;
-            }
-            try
-            {
-                obj.Update();
-                //PaintAnimation(obj, new PaintEventArgs(obj.CreateGraphics(), obj.DisplayRectangle));
-            }
-            catch(Exception ex)
-            {
-            }
         }
 
         private Image LoadImage(string imagePath)
@@ -480,22 +460,35 @@ namespace InstrumentPlugins
                 // Check if any animations use this variable as a trigger
                 if (config.Animations.Any(x => x.Triggers.Any(y=> y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                 {
+                    if(value.Request.Name == "UPDATE FREQUENCY" && value.Request.Unit == "second")
+                    {
+                        // We now know how often we expect to receive updates - revise the timings accordingly
+                        UpdateStepCount((int)value.Result);
+                    }
                     // We want to update the animation every 0.3 seconds - determine how much we should move it
-                    animationStepCount = (animationTimeInMs / animationUpdateInMs);
+                    //animationStepCount = (animationTimeInMs / animationUpdateInMs);
                     // Modify the step size for our control
                     lock (animationSteps)
                         animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
                     // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
-                    var animationTime = animationTimeInMs / animationStepCount; // Expected Update Time divided by number of animation steps we want within that time
+                    //var animationTime = animationTimeInMs / animationStepCount; // Expected Update Time divided by number of animation steps we want within that time
                     // This will cause ExecuteAnimation to run, which should update the Last Value by Step Size & trigger Paint Event for any controls relying on this variable to update
-                    lock (animateTimers)
-                    {
-                        lastExecution = DateTime.Now;
-                        animateTimers[resultIdx] = new System.Timers.Timer(animationTime);
-                        StartTimer(animateTimers[resultIdx]);
-                    }
+                    //lock (animateTimers)
+                    //{
+                    //    lastExecution = DateTime.Now;
+                    //    animateTimers[resultIdx] = new System.Timers.Timer(animationTime);
+                    //    StartTimer(animateTimers[resultIdx]);
+                    //}
+                    StartTimer();
                 }
             }
+        }
+
+        private void UpdateStepCount(int serverUpdateTimeInMs)
+        {
+            animationTimeInMs = serverUpdateTimeInMs < 100 ? 100 : serverUpdateTimeInMs;
+            animationStepCount = animationTimeInMs / animationUpdateInMs > 50 ? 50 : animationTimeInMs / animationUpdateInMs;
+            animationStepCount = animationStepCount < 10 ? 10 : animationStepCount;
         }
 
         private Image ClipToCircle(Image srcImage, PointF center, float radius, Color backGround)
@@ -535,13 +528,7 @@ namespace InstrumentPlugins
                     // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                     // TODO: set large fields to null
                     config = null;
-                    if (animateTimers != null) // Stop and dispose of any running timers
-                        for (var i = 0; i < animateTimers.Count; i++)
-                        {
-                            RemoveTimer(i);
-                        }
-                    animateTimers?.Clear();
-                    animateTimers = null;
+                    RemoveTimer();
                     // Stop any callback to update Control
                     if (delgte != null)
                     {

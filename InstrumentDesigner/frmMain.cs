@@ -332,11 +332,12 @@ namespace InstrumentDesigner
                 switch (action)
                 {
                     case "E":
-                        if(config.Animations == null)
+                        if(config.Animations == null || !config.Animations.Any(x=>x.Name == name))
                         {
-                            config.Animations = new IAnimationItem[1] { new AnimationDrawing { Name = name, Triggers = new IAnimationTrigger[0], Type = AnimationItemTypeEnum.Drawing } };
+                            config.Animations = new IAnimationItem[1] { new AnimationDrawing { Name = name, Triggers = new IAnimationTrigger[] { new AnimationTriggerClientRequest { Type= AnimationTriggerTypeEnum.ClientRequest, Actions = new IAnimationAction[] { } } }, Type = AnimationItemTypeEnum.Drawing } };
                         }
-                        var animation = config.Animations?.First(x => x.Name == name);
+                        var animation = ObjectClone.Clone(config.Animations.First(x => x.Name == name));
+                            //ObjectClone.Clone(config.Animations?.First(x => x.Name == name));
                         using (frm = new frmAnimation(animation, cockpitDirectory))
                         {
                             result = frm.ShowDialog(this);
@@ -391,16 +392,17 @@ namespace InstrumentDesigner
         private void SaveConfig(object sender, EventArgs e)
         {
             var configJson = JsonConvert.SerializeObject(config);
-            if(sender == saveAsToolStripMenuItem)
+            if(sender == saveAsToolStripMenuItem || string.IsNullOrEmpty(configFilePath))
             {
-                openFileDialog.InitialDirectory = Path.GetDirectoryName(configFilePath);
-                openFileDialog.Title = "Save Instrument Configuraion";
-                openFileDialog.Filter = "Instrument Configurations|*.json";
-                openFileDialog.FileName = "";
+                
+                saveFileDialog.InitialDirectory = string.IsNullOrEmpty(configFilePath) ? Directory.GetCurrentDirectory() : Path.GetDirectoryName(configFilePath);
+                saveFileDialog.Title = "Save Instrument Configuraion";
+                saveFileDialog.Filter = "Instrument Configurations|*.json";
+                saveFileDialog.FileName = "";
 
-                var result = openFileDialog.ShowDialog();
+                var result = saveFileDialog.ShowDialog();
                 if (result == DialogResult.OK)
-                    configFilePath = openFileDialog.FileName;
+                    configFilePath = saveFileDialog.FileName;
                 else
                     return;
                 if (File.Exists(configFilePath) && MessageBox.Show("File already exists.\rContinuing will overwrite this file.\r\rAre you sure?", "Replace File?", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)

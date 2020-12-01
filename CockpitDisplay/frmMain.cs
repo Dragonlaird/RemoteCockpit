@@ -34,7 +34,7 @@ namespace CockpitDisplay
             // Only variable needed for this is "TITLE", to be notified whenever the aircraft type changes
             Thread.Sleep(3000);
 
-            //TestInstruments();
+            TestInstruments();
         }
 
         private void TestInstruments()
@@ -61,7 +61,7 @@ namespace CockpitDisplay
                 try
                 {
                     var rnd = new Random();
-                    var changeAmount = rnd.Next(100);
+                    var changeAmount = rnd.Next(50);
                     if (rnd.NextDouble() > 0.5)
                         changeAmount = -changeAmount;
                     var testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED ALTITUDE" && x.Request.Unit == "feet");

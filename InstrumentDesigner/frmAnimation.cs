@@ -783,5 +783,17 @@ namespace InstrumentDesigner
                 _animation.Triggers[_animation.Triggers.ToList().IndexOf(trigger)].Actions[rowIdx] = action;
             }
         }
+
+        private void FillColor_Change(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                try
+                {
+                    ((AnimationDrawing)_animation).FillColor = Color.FromKnownColor((KnownColor)((ComboBox)sender).SelectedValue);
+                }
+                catch (Exception ex) { }
+            }
+        }
     }
 }

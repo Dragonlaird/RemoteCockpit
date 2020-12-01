@@ -31,8 +31,9 @@ namespace RemoteCockpitClasses.Animations
         public string BackgroundImagePath { get { return _backgroundImagePath; } set { if (_backgroundImagePath != value) { _backgroundImagePath = value; HasChanged = true; } } }
         public string [] Aircraft { get { return _aircraft ?? new string[0]; } set { if (_aircraft != value) { _aircraft = value; HasChanged = true; } } }
         public int AnimationUpdateInMs { get { return _animationUpdateInMs; } set { if (_animationUpdateInMs != value) { _animationUpdateInMs = value; HasChanged = true; } } }
-        [JsonConverter(typeof(ConcreteConverter<IAnimationItem[]>))]
+        [JsonConverter(typeof(ConcreteConverter<AnimationDrawing[]>))]
         public IAnimationItem[] Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }
+        [JsonIgnore]
         public ClientRequest[] ClientRequests
         {
             get
@@ -45,6 +46,7 @@ namespace RemoteCockpitClasses.Animations
                     .ToArray();
             }
         }
+        [JsonIgnore]
         public bool HasChanged { get; set; } = false;
     }
 }

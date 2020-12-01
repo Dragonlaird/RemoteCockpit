@@ -116,7 +116,7 @@ namespace CockpitDisplay
                     }
                     catch (Exception ex)
                     {
-
+                        ConsoleLog(string.Format("ResultUpdate Error: {0}", ex.Message));
                     }
                     UpdateCockpitItem(this);
                 }
@@ -175,7 +175,7 @@ namespace CockpitDisplay
                 }
                 catch (Exception ex)
                 {
-
+                    ConsoleLog(string.Format("LoadLayout (Backgound Image) Error: {0}", ex.Message));
                 }
             }
             // Variable layoutInstruments contains all the plugins we can use for this layout
@@ -206,7 +206,7 @@ namespace CockpitDisplay
                     }
                     catch (Exception ex)
                     {
-                        ConsoleLog(string.Format("Unable to add plugin: {0}\rError: {1}", plugin.Name, ex.Message));
+                        ConsoleLog(string.Format("LoadLayout (Add Plugin) Error: {0}\rError: {1}", plugin.Name, ex.Message));
                     }
                 }
                 if (!variables.Any(x => x.Name == "UPDATE FREQUENCY" && x.Unit == "second"))
@@ -216,7 +216,7 @@ namespace CockpitDisplay
             }
             catch (Exception ex)
             {
-                ConsoleLog(string.Format("Unable to add Instruments.\rError: {0}", ex.Message));
+                ConsoleLog(string.Format("LoadLayout (Add Instruments) Error: {0}", ex.Message));
             }
             // Request all variables used by any plugin - even if they've been requested before - duplicate requests are ignored
             if (RequestValue != null)
@@ -227,7 +227,10 @@ namespace CockpitDisplay
                     {
                         RequestValue.DynamicInvoke(this, variable);
                     }
-                    catch(Exception ex) { }
+                    catch(Exception ex) {
+                        ConsoleLog(string.Format("LoadLayout (Submit Initial Variables) Error: {0}", ex.Message));
+
+                    }
                 }
             }
 
@@ -253,11 +256,12 @@ namespace CockpitDisplay
         }
 
         // Modified from code: https://www.c-sharpcorner.com/article/introduction-to-building-a-plug-in-architecture-using-C-Sharp/
-        private static List<Assembly> LoadAvailableAssemblies()
+        private List<Assembly> LoadAvailableAssemblies()
         {
             DirectoryInfo dInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Plugins"));
             if (!dInfo.Exists)
             {
+                ConsoleLog(string.Format("LoadAvailableAssemblies (Plugins Folder) Error: Folder missing - {0}", Path.Combine(Environment.CurrentDirectory, @"Plugins")));
                 MessageBox.Show("Plugins folder doesn't exist", "Folder Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return new List<Assembly>();
             }
@@ -272,14 +276,16 @@ namespace CockpitDisplay
                     {
                         plugInAssemblyList.Add(Assembly.LoadFile(file.FullName)); // May fail if not a .NET assembly
                     }
-                    catch(Exception ex) { }
+                    catch(Exception ex) {
+                        ConsoleLog(string.Format("LoadAvilableAssemblies (Add Custom Plugins) Error: {0}", ex.Message));
+                    }
                 }
             }
 
             return plugInAssemblyList;
         }
 
-        static List<ICockpitInstrument> GetPlugIns(List<Assembly> assemblies)
+        private List<ICockpitInstrument> GetPlugIns(List<Assembly> assemblies)
         {
             List<Type> availableTypes = new List<Type>();
 
@@ -288,7 +294,9 @@ namespace CockpitDisplay
                 {
                     availableTypes.AddRange(currentAssembly.GetTypes());
                 }
-                catch { }
+                catch(Exception ex) {
+                    ConsoleLog(string.Format("GetPlugIns (Assemblies) Error: {0}", ex.Message));
+                }
 
             List<Type> instrumentsList = availableTypes.FindAll(delegate (Type t)
             {
@@ -305,7 +313,7 @@ namespace CockpitDisplay
                 }
                 catch (Exception ex)
                 {
-
+                    ConsoleLog(string.Format("GetPlugIns (Generic Instrument).\rInstrument: {0}.\rError: {0}", instrumentDefinition, ex.Message));
                 }
             }
             // convert the list of Objects to an instantiated list of ICalculators
@@ -315,7 +323,14 @@ namespace CockpitDisplay
         private void ConsoleLog(string message)
         {
             if (Messages != null)
-                Messages.DynamicInvoke(message);
+                try
+                {
+                    Messages.DynamicInvoke(this, message);
+                }
+                catch(Exception ex)
+                {
+
+                }
         }
     }
 }

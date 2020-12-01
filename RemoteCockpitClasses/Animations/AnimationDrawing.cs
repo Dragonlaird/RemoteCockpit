@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace RemoteCockpitClasses.Animations
 {
+    //[JsonConverter(typeof(ConcreteConverter<AnimationDrawing[]>))]
     public class AnimationDrawing : IAnimationItem
     {
         public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.Drawing; } set { } }

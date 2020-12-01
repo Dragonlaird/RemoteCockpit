@@ -18,12 +18,19 @@ namespace RemoteCockpitClasses.Animations
          Type objectType, object existingValue, JsonSerializer serializer)
         {
             List<IAnimationItem> result = new List<IAnimationItem>();
-            var obj = serializer.Deserialize<JArray>(reader);
-            foreach (var elem in obj)
+            try
             {
-                var child = ConvertTo(typeof(IAnimationItem), (JToken)elem);
-                if (child != null)
-                    result.Add((IAnimationItem)child);
+                var obj = serializer.Deserialize<JArray>(reader);
+                foreach (var elem in obj)
+                {
+                    var child = ConvertTo(typeof(IAnimationItem), (JToken)elem);
+                    if (child != null)
+                        result.Add((IAnimationItem)child);
+                }
+            }
+            catch(Exception ex)
+            {
+                // Failed to deserialize
             }
             return result?.ToArray();
         }
