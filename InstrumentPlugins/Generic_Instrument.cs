@@ -217,8 +217,51 @@ namespace InstrumentPlugins
                 ctrl.BackColor = Color.Transparent;
                 ((PictureBox)ctrl).Image = initialImage;
                 ctrl.BringToFront();
-                //ctrl.Invalidate();
+                if (Control.Controls.Count > 1)
+                {
+                    if (Control.Controls["_CombinedImageOverlay"] != null)
+                        Control.Controls.Remove(Control.Controls["_CombinedImageOverlay"]);
+                    using (var pbInitialImage = (PictureBox)Control.Controls[0])
+                    {
+                        using (var initialAnimatedImage = (Image)pbInitialImage.Image.Clone())
+                        {
+                            pbInitialImage.Visible = true;
+                            var resultingImage = initialAnimatedImage;
+                            pbInitialImage.Visible = false;
+                            for (var i = 1; i < Control.Controls.Count; i++)
+                            {
+                                using (var pbOverlayImage = (PictureBox)Control.Controls[i])
+                                {
+                                    pbOverlayImage.Visible = true;
+                                    if (pbOverlayImage.Image != null)
+                                    {
+                                        using (var overlapImage = (Image)pbOverlayImage.Image.Clone())
+                                        {
+                                            resultingImage = Overlap(resultingImage, overlapImage);
+                                        }
+                                    }
+                                    pbOverlayImage.Visible = false;
+                                }
+                            }
+                            Control.Controls.Add(new PictureBox { Name = "_CombinedImageOverlay", Image = resultingImage });
+                        }
+                    }
+                }
             }
+        }
+
+        public Image Overlap(Image source1, Image source2)
+        {
+            var target = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
+            target.MakeTransparent();
+            using (var graphics = Graphics.FromImage(target))
+            {
+                graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+
+                graphics.DrawImage(source1, 0, 0);
+                graphics.DrawImage(source2, 0, 0);
+            }
+            return target;
         }
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
