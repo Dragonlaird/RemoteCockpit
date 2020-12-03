@@ -14,28 +14,28 @@
       "Name": "ShortNeedle",
       "PointMap": [
         {
-          "X": -2.5,
-          "Y": -2.5
+          "X": -1.0,
+          "Y": -1.0
         },
         {
-          "X": -3.5,
-          "Y": 20.0
+          "X": -2.0,
+          "Y": 17.0
         },
         {
           "X": 0.0,
-          "Y": 25.0
+          "Y": 22.0
         },
         {
-          "X": 3.5,
-          "Y": 20.0
+          "X": 2.0,
+          "Y": 17.0
         },
         {
-          "X": 2.5,
-          "Y": -2.5
+          "X": 1.0,
+          "Y": -1.0
         }
       ],
       "FillMethod": 0,
-      "FillColor": "Blue",
+      "FillColor": "Gainsboro",
       "ScaleMethod": 1,
       "RelativeX": 50.0,
       "RelativeY": 50.0,
@@ -60,7 +60,7 @@
                 }
               },
               "RotateClockwise": true,
-              "MaximumValueExpected": 1000.0
+              "MaximumValueExpected": 10000.0
             }
           ]
         }
@@ -117,7 +117,7 @@
                 }
               },
               "RotateClockwise": true,
-              "MaximumValueExpected": 100.0
+              "MaximumValueExpected": 1000.0
             }
           ]
         }

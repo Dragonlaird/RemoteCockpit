@@ -138,7 +138,7 @@ namespace CockpitDisplay
             }
             try
             {
-                obj.Update();
+                //obj.Update();
             }
             catch { }
         }

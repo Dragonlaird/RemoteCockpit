@@ -120,80 +120,63 @@ namespace InstrumentPlugins
                     }
                 }
                 Control.Paint += PaintControl;
-                Control.Invalidate(true);
-                //PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                Control.Invalidate();
+                Control.Update();
             }
         }
 
         private void PaintControl(object sender, PaintEventArgs e)
         {
-            if (((Control)sender).InvokeRequired)
-            {
-                try
-                {
-                    var ctrl = (Control)sender;
-                    var d = new SafeUpdateDelegate(PaintControl);
-                    ctrl.Invoke(d, new object[] { ctrl, e });
-                }
-                catch { }
-                return;
-            }
+            //if (((Control)sender).InvokeRequired)
+            //{
+            //    try
+            //    {
+            //        var ctrl = (Control)sender;
+            //        var d = new SafeUpdateDelegate(PaintControl);
+            //        ctrl.Invoke(d, new object[] { ctrl, e });
+            //    }
+            //    catch { }
+            //    return;
+            //}
             if (config?.Animations != null)
             {
                 // We have a foreground to update
-                foreach (var animation in config.Animations)
+                Bitmap animationImage = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
+                animationImage.MakeTransparent();
+                for (var animationId = 0; animationId < config.Animations.Length; animationId++)
                 {
-                    if (!Control.Controls.ContainsKey(animation.Name))
-                    {
-                        foreach (var trigger in animation.Triggers)
-                        {
-                            var imagePanel = new PictureBox();
-                            imagePanel.BackColor = Color.Transparent;
-                            imagePanel.Width = Control.Width;
-                            imagePanel.Height = Control.Height;
-                            imagePanel.Name = animation.Name;
-                            imagePanel.Paint += PaintAnimation;
-                            Control.Controls.Add(imagePanel);
-                            imagePanel.Invalidate();
-                            imagePanel.BringToFront();
-                        }
-                    }
                     try
                     {
-                        //UpdateInstrument(Control.Controls[animation.Name]);
-                        //Control.Controls[animation.Name].Invalidate(true);
-                        PaintAnimation(Control.Controls[animation.Name], new PaintEventArgs(Control.Controls[animation.Name].CreateGraphics(), Control.Controls[animation.Name].DisplayRectangle));
+                        var overlapImage = GenerateAnimationImage(animationId);
+                        animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
                     }
                     catch { }
+                }
+                if (Control.Controls["Animation"] == null)
+                {
+                    Control.Controls.Add(new PictureBox { Name = "Animation", Image = animationImage, Height = Control.Height, Width = Control.Width });
+                }
+                else
+                {
+                    ((PictureBox)Control.Controls["Animation"]).Image = animationImage;
                 }
             }
         }
 
-        private void PaintAnimation(object sender, PaintEventArgs e)
+        private Image GenerateAnimationImage(int animationId)
         {
-            var ctrl = (Control)sender;
-            var animation = config.Animations.First(x => x.Name == ctrl.Name);
-            var triggers = (AnimationTriggerClientRequest[])animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
-            Bitmap initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
-            bool animationChanged = false;
-            foreach (var trigger in triggers)
+            Bitmap initialImage = animationImages[animationId];
+            lock (config.Animations)
             {
-                var nextValue = animation.LastAppliedValue;
-                if (trigger is AnimationTriggerClientRequest)
+                var triggers = (AnimationTriggerClientRequest[])config.Animations[animationId].Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
+                foreach (var trigger in triggers)
                 {
-                    nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
-                }
-
-                if (animation.LastAppliedValue != nextValue)
-                {
-                    animationChanged = true;
-                    animation.LastAppliedValue = nextValue;
-                    /*
-                    if (animation is AnimationDrawing)
-                        initialImage = DrawPoints((AnimationDrawing)animation);
-                    if (animation is AnimationImage)
-                        initialImage = animationImages[config.Animations.ToList().IndexOf(animation)]; // Fetch the image from our Image Cache
-                    */
+                    var nextValue = config.Animations[animationId].LastAppliedValue ?? 0;
+                    if (trigger is AnimationTriggerClientRequest)
+                    {
+                        nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
+                    }
+                    config.Animations[animationId].LastAppliedValue = nextValue;
                     foreach (var action in trigger.Actions)
                     {
                         if (action is AnimationActionRotate)
@@ -212,56 +195,23 @@ namespace InstrumentPlugins
                     }
                 }
             }
-            if (initialImage != null && animationChanged)
-            {
-                ctrl.BackColor = Color.Transparent;
-                ((PictureBox)ctrl).Image = initialImage;
-                ctrl.BringToFront();
-                if (Control.Controls.Count > 1)
-                {
-                    if (Control.Controls["_CombinedImageOverlay"] != null)
-                        Control.Controls.Remove(Control.Controls["_CombinedImageOverlay"]);
-                    using (var pbInitialImage = (PictureBox)Control.Controls[0])
-                    {
-                        using (var initialAnimatedImage = (Image)pbInitialImage.Image.Clone())
-                        {
-                            pbInitialImage.Visible = true;
-                            var resultingImage = initialAnimatedImage;
-                            pbInitialImage.Visible = false;
-                            for (var i = 1; i < Control.Controls.Count; i++)
-                            {
-                                using (var pbOverlayImage = (PictureBox)Control.Controls[i])
-                                {
-                                    pbOverlayImage.Visible = true;
-                                    if (pbOverlayImage.Image != null)
-                                    {
-                                        using (var overlapImage = (Image)pbOverlayImage.Image.Clone())
-                                        {
-                                            resultingImage = Overlap(resultingImage, overlapImage);
-                                        }
-                                    }
-                                    pbOverlayImage.Visible = false;
-                                }
-                            }
-                            Control.Controls.Add(new PictureBox { Name = "_CombinedImageOverlay", Image = resultingImage });
-                        }
-                    }
-                }
-            }
+            return initialImage;
         }
 
         public Image Overlap(Image source1, Image source2)
         {
-            var target = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
-            target.MakeTransparent();
-            using (var graphics = Graphics.FromImage(target))
+            using (var target = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb))
             {
-                graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                target.MakeTransparent();
+                using (var graphics = Graphics.FromImage(target))
+                {
+                    graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
 
-                graphics.DrawImage(source1, 0, 0);
-                graphics.DrawImage(source2, 0, 0);
+                    graphics.DrawImage(source1, 0, 0);
+                    graphics.DrawImage(source2, 0, 0);
+                }
+                return target;
             }
-            return target;
         }
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
@@ -394,7 +344,9 @@ namespace InstrumentPlugins
                     }
                 }
                 // Trigger paint event of control
-                PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                Control.Invalidate();
+                Control.Update();
+                //PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
                 //UpdateInstrument(Control); // Force this control to repaint itself and any children
             }
             catch { }
@@ -500,28 +452,19 @@ namespace InstrumentPlugins
                 var lastResult = previousResults[resultIdx];
                 lock (currentResults)
                     currentResults[resultIdx] = value;
+                if (value.Request.Name == "UPDATE FREQUENCY" && value.Request.Unit == "second")
+                {
+                    // We now know how often we expect to receive updates - revise the timings accordingly
+                    UpdateStepCount((int)value.Result);
+                }
                 // Check if any animations use this variable as a trigger
                 if (config.Animations.Any(x => x.Triggers.Any(y=> y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                 {
-                    if(value.Request.Name == "UPDATE FREQUENCY" && value.Request.Unit == "second")
-                    {
-                        // We now know how often we expect to receive updates - revise the timings accordingly
-                        UpdateStepCount((int)value.Result);
-                    }
                     // We want to update the animation every 0.3 seconds - determine how much we should move it
-                    //animationStepCount = (animationTimeInMs / animationUpdateInMs);
                     // Modify the step size for our control
                     lock (animationSteps)
                         animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
                     // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
-                    //var animationTime = animationTimeInMs / animationStepCount; // Expected Update Time divided by number of animation steps we want within that time
-                    // This will cause ExecuteAnimation to run, which should update the Last Value by Step Size & trigger Paint Event for any controls relying on this variable to update
-                    //lock (animateTimers)
-                    //{
-                    //    lastExecution = DateTime.Now;
-                    //    animateTimers[resultIdx] = new System.Timers.Timer(animationTime);
-                    //    StartTimer(animateTimers[resultIdx]);
-                    //}
                     StartTimer();
                 }
             }
@@ -534,33 +477,33 @@ namespace InstrumentPlugins
             animationStepCount = animationStepCount < 10 ? 10 : animationStepCount;
         }
 
-        private Image ClipToCircle(Image srcImage, PointF center, float radius, Color backGround)
-        {
-            Image dstImage = new Bitmap(srcImage.Width, srcImage.Height, srcImage.PixelFormat);
+        //private Image ClipToCircle(Image srcImage, PointF center, float radius, Color backGround)
+        //{
+        //    Image dstImage = new Bitmap(srcImage.Width, srcImage.Height, srcImage.PixelFormat);
 
-            using (Graphics g = Graphics.FromImage(dstImage))
-            {
-                RectangleF r = new RectangleF(center.X - radius, center.Y - radius,
-                                                         radius * 2, radius * 2);
+        //    using (Graphics g = Graphics.FromImage(dstImage))
+        //    {
+        //        RectangleF r = new RectangleF(center.X - radius, center.Y - radius,
+        //                                                 radius * 2, radius * 2);
 
-                // enables smoothing of the edge of the circle (less pixelated)
-                g.SmoothingMode = SmoothingMode.AntiAlias;
+        //        // enables smoothing of the edge of the circle (less pixelated)
+        //        g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                // fills background color
-                using (Brush br = new SolidBrush(backGround))
-                {
-                    g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
-                }
+        //        // fills background color
+        //        using (Brush br = new SolidBrush(backGround))
+        //        {
+        //            g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
+        //        }
 
-                // adds the new ellipse & draws the image again 
-                GraphicsPath path = new GraphicsPath();
-                path.AddEllipse(r);
-                g.SetClip(path);
-                g.DrawImage(srcImage, 0, 0);
+        //        // adds the new ellipse & draws the image again 
+        //        GraphicsPath path = new GraphicsPath();
+        //        path.AddEllipse(r);
+        //        g.SetClip(path);
+        //        g.DrawImage(srcImage, 0, 0);
 
-                return dstImage;
-            }
-        }
+        //        return dstImage;
+        //    }
+        //}
 
         protected virtual void Dispose(bool disposing)
         {
