@@ -79,7 +79,7 @@ namespace InstrumentPlugins
                 controlWidth = backgroundImage.Width;
                 Control.BackColor = Color.Transparent;
                 Control.BackgroundImage = backgroundImage;
-                Control.Controls.Add(new PictureBox { Name = "Animation", Height = Control.Height, Width = Control.Width });
+                Control.Controls.Add(new PictureBox { Name = "Animation", Height = controlHeight, Width = controlWidth });
             }
             catch (Exception ex)
             {
