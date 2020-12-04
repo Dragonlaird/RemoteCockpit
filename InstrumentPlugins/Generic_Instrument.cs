@@ -79,6 +79,7 @@ namespace InstrumentPlugins
                 controlWidth = backgroundImage.Width;
                 Control.BackColor = Color.Transparent;
                 Control.BackgroundImage = backgroundImage;
+                Control.Controls.Add(new PictureBox { Name = "Animation", Height = Control.Height, Width = Control.Width });
             }
             catch (Exception ex)
             {
@@ -152,46 +153,42 @@ namespace InstrumentPlugins
                     }
                     catch { }
                 }
-                if (Control.Controls["Animation"] == null)
+                try
                 {
-                    Control.Controls.Add(new PictureBox { Name = "Animation", Image = animationImage, Height = Control.Height, Width = Control.Width });
+                    ((PictureBox)Control.Controls["Animation"]).Image = (Image)animationImage;
                 }
-                else
+                catch (Exception ex)
                 {
-                    ((PictureBox)Control.Controls["Animation"]).Image = animationImage;
                 }
             }
         }
 
         private Image GenerateAnimationImage(int animationId)
         {
+            var triggers = (AnimationTriggerClientRequest[])config.Animations[animationId].Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
             Bitmap initialImage = animationImages[animationId];
-            lock (config.Animations)
+            foreach (var trigger in triggers)
             {
-                var triggers = (AnimationTriggerClientRequest[])config.Animations[animationId].Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
-                foreach (var trigger in triggers)
+                var nextValue = config.Animations[animationId].LastAppliedValue ?? 0;
+                if (trigger is AnimationTriggerClientRequest)
                 {
-                    var nextValue = config.Animations[animationId].LastAppliedValue ?? 0;
-                    if (trigger is AnimationTriggerClientRequest)
+                    nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
+                }
+                config.Animations[animationId].LastAppliedValue = nextValue;
+                foreach (var action in trigger.Actions)
+                {
+                    if (action is AnimationActionRotate)
                     {
-                        nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
+                        // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                        var rotateAction = (AnimationActionRotate)action;
+                        var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
+                        var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
+                        initialImage = RotateImage(initialImage, rotateAngle);
                     }
-                    config.Animations[animationId].LastAppliedValue = nextValue;
-                    foreach (var action in trigger.Actions)
+                    if (action is AnimationActionClip)
                     {
-                        if (action is AnimationActionRotate)
-                        {
-                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
-                            var rotateAction = (AnimationActionRotate)action;
-                            var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
-                            var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
-                            initialImage = RotateImage(initialImage, rotateAngle);
-                        }
-                        if (action is AnimationActionClip)
-                        {
-                            // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
-                            initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
-                        }
+                        // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
+                        initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
                     }
                 }
             }
@@ -200,18 +197,16 @@ namespace InstrumentPlugins
 
         public Image Overlap(Image source1, Image source2)
         {
-            using (var target = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb))
+            var target = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
+            target.MakeTransparent();
+            using (var graphics = Graphics.FromImage(target))
             {
-                target.MakeTransparent();
-                using (var graphics = Graphics.FromImage(target))
-                {
-                    graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
 
-                    graphics.DrawImage(source1, 0, 0);
-                    graphics.DrawImage(source2, 0, 0);
-                }
-                return target;
+                graphics.DrawImage(source1, 0, 0);
+                graphics.DrawImage(source2, 0, 0);
             }
+            return target;
         }
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)

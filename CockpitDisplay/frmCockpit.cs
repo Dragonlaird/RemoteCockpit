@@ -201,7 +201,7 @@ namespace CockpitDisplay
                             AddControl(plugin.Control);
                             usedInstrumentPlugins.Add(plugin);
                             UpdateCockpitItem(plugin.Control);
-                            plugin.Control.Enabled = false;
+                            //plugin.Control.Enabled = false;
                         }
                     }
                     catch (Exception ex)
