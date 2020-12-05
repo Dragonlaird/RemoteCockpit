@@ -151,25 +151,28 @@ namespace InstrumentPlugins
                     // We have a foreground to update
                     Bitmap animationImage = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
                     animationImage.MakeTransparent();
-                    for (var animationId = 0; animationId < config.Animations.Length; animationId++)
+                    lock (config.Animations)
                     {
-                        try
+                        foreach (var animation in config.Animations)
                         {
-                            using (var overlapImage = GenerateAnimationImage(animationId))
+                            try
                             {
-                                try
+                                using (var overlapImage = GenerateAnimationImage(animation))
                                 {
-                                    animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
-                                }
-                                catch(Exception ex)
-                                {
-                                    WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
+                                    try
+                                    {
+                                        animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
+                                    }
                                 }
                             }
-                        }
-                        catch(Exception ex)
-                        {
-                            WriteLog(string.Format("PaintControl: Failed to Generate Animation Image.\rError: {0}", ex.Message));
+                            catch (Exception ex)
+                            {
+                                WriteLog(string.Format("PaintControl: Failed to Generate Animation Image.\rError: {0}", ex.Message));
+                            }
                         }
                     }
                     UpdateAnimationImage(animationImage);
@@ -190,20 +193,25 @@ namespace InstrumentPlugins
             ((PictureBox)Control.Controls["Animation"]).Image = (Image)animationImage;
         }
 
-        private Image GenerateAnimationImage(int animationId)
+        private Image GenerateAnimationImage(IAnimationItem animation)
         {
-            var triggers = (AnimationTriggerClientRequest[])config.Animations[animationId].Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray(); Bitmap initialImage;
+            var animationId = config.Animations.ToList().IndexOf(animation);
+            var triggers = animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray(); Bitmap initialImage;
             lock (animationImages)
             {
                 initialImage = animationImages[animationId];
                 foreach (var trigger in triggers)
                 {
-                    var nextValue = config.Animations[animationId].LastAppliedValue ?? 0;
+                    var nextValue = animation.LastAppliedValue ?? 0;
                     if (trigger is AnimationTriggerClientRequest)
                     {
                         nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
                     }
-                    config.Animations[animationId].LastAppliedValue = nextValue;
+                    animation.LastAppliedValue = nextValue;
+                    lock (config.Animations)
+                    {
+                        config.Animations[animationId] = animation;
+                    }
                     foreach (var action in trigger.Actions)
                     {
                         if (action is AnimationActionRotate)
@@ -387,6 +395,7 @@ namespace InstrumentPlugins
                     {
                         Control.Invalidate(true);
                         Control.Update();
+                        PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
                     }));
                 }
                 else

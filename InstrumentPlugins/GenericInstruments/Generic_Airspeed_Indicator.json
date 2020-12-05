@@ -5,7 +5,7 @@
   "CreateDate": "2020-12-04T07:52:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Airspeed_Background.png",
   "Aircraft": [ "Generic" ],
-  "AnimationUpdateInMs": 0,
+  "AnimationUpdateInMs": 40,
   "Animations": [
     {
       "Type": 1,

@@ -73,7 +73,7 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        testResult.Result = (double)testResult.Result + changeAmount;
+                        testResult = updateTestResult(testResult, changeAmount, 3000);
                     }
                     ReceiveResultFromServer(null, testResult);
 
@@ -86,12 +86,7 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        changeAmount = rnd.Next(40);
-                        if (rnd.NextDouble() > 0.5)
-                        {
-                            changeAmount = -changeAmount;
-                        }
-                        testResult.Result = (double)testResult.Result + changeAmount;
+                        testResult = updateTestResult(testResult, 20, 100);
                     }
                     ReceiveResultFromServer(null, testResult);
 
@@ -104,17 +99,32 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        changeAmount = ((int)(double)40);
-                        if (rnd.NextDouble() > 0.5)
-                        {
-                            changeAmount = -changeAmount;
-                        }
-                        testResult.Result = (double)testResult.Result + changeAmount;
+                        testResult = updateTestResult(testResult, 20, 0);
                     }
                     ReceiveResultFromServer(null, testResult);
                 }
                 catch (Exception ex) { }
             }
+        }
+
+        private ClientRequestResult updateTestResult(ClientRequestResult result, int variance, int baseLine)
+        {
+            var changeAmount = ((int)(double)variance);
+            var rnd = new Random();
+            if (rnd.NextDouble() > 0.5)
+            {
+                changeAmount = -changeAmount;
+            }
+            result.Result = (double)result.Result + changeAmount;
+            if ((double)result.Result < baseLine - variance)
+            {
+                result.Result = baseLine - variance;
+            }
+            if ((double)result.Result > baseLine + variance)
+            {
+                result.Result = baseLine + variance;
+            }
+            return result;
         }
 
         private void RequestVariable(ClientRequest request)
