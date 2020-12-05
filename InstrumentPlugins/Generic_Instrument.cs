@@ -30,6 +30,7 @@ namespace InstrumentPlugins
         private int controlHeight = 50;
         private int controlWidth = 50;
         private double scaleFactor = 1;
+        private bool disposedValue;
         private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
         //private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
@@ -37,7 +38,6 @@ namespace InstrumentPlugins
         private List<double> animationSteps = new List<double>();
         private List<Bitmap> animationImages = new List<Bitmap>();
         private delegate void SafeUpdateDelegate(object sender, PaintEventArgs e);
-        private SafeUpdateDelegate delgte;
         private int animationTimeInMs = 3000;
         private int animationStepCount = 10;
         private int animationUpdateInMs = 300;
@@ -129,68 +129,92 @@ namespace InstrumentPlugins
 
         private void PaintControl(object sender, PaintEventArgs e)
         {
-            //if (((Control)sender).InvokeRequired)
-            //{
-            //    try
-            //    {
-            //        var ctrl = (Control)sender;
-            //        var d = new SafeUpdateDelegate(PaintControl);
-            //        ctrl.Invoke(d, new object[] { ctrl, e });
-            //    }
-            //    catch { }
-            //    return;
-            //}
-            if (config?.Animations != null)
+            if (!disposedValue)
             {
-                // We have a foreground to update
-                Bitmap animationImage = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
-                animationImage.MakeTransparent();
-                for (var animationId = 0; animationId < config.Animations.Length; animationId++)
+                // sender should always be the Control but we will address/use the Control directly
+                //if (Control.InvokeRequired)
+                //{
+                //    try
+                //    {
+                //        //var d = new SafeUpdateDelegate(PaintControl);
+                //        Control.Invoke(new MethodInvoker(delegate { PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle)); }));
+                //    }
+                //    catch { }
+                //    return;
+                //}
+                if (config?.Animations != null)
                 {
-                    try
+                    // We have a foreground to update
+                    Bitmap animationImage = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
+                    animationImage.MakeTransparent();
+                    for (var animationId = 0; animationId < config.Animations.Length; animationId++)
                     {
-                        var overlapImage = GenerateAnimationImage(animationId);
-                        animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
+                        try
+                        {
+                            using (var overlapImage = GenerateAnimationImage(animationId))
+                            {
+                                try
+                                {
+                                    animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
+                                }
+                                catch(Exception ex)
+                                {
+
+                                }
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                        }
                     }
-                    catch { }
-                }
-                try
-                {
-                    ((PictureBox)Control.Controls["Animation"]).Image = (Image)animationImage;
-                }
-                catch (Exception ex)
-                {
+                    UpdateAnimationImage(animationImage);
                 }
             }
         }
 
+        private void UpdateAnimationImage(Image animationImage)
+        {
+            if (Control.InvokeRequired)
+            {
+                Control.Invoke(new MethodInvoker(delegate
+                {
+                    ((PictureBox)Control.Controls["Animation"]).Image = (Image)animationImage;
+                }));
+                return;
+            }
+            ((PictureBox)Control.Controls["Animation"]).Image = (Image)animationImage;
+        }
+
         private Image GenerateAnimationImage(int animationId)
         {
-            var triggers = (AnimationTriggerClientRequest[])config.Animations[animationId].Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray();
-            Bitmap initialImage = animationImages[animationId];
-            foreach (var trigger in triggers)
+            var triggers = (AnimationTriggerClientRequest[])config.Animations[animationId].Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray(); Bitmap initialImage;
+            lock (animationImages)
             {
-                var nextValue = config.Animations[animationId].LastAppliedValue ?? 0;
-                if (trigger is AnimationTriggerClientRequest)
+                initialImage = animationImages[animationId];
+                foreach (var trigger in triggers)
                 {
-                    nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
-                }
-                config.Animations[animationId].LastAppliedValue = nextValue;
-                foreach (var action in trigger.Actions)
-                {
-                    if (action is AnimationActionRotate)
+                    var nextValue = config.Animations[animationId].LastAppliedValue ?? 0;
+                    if (trigger is AnimationTriggerClientRequest)
                     {
-                        // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
-                        var rotateAction = (AnimationActionRotate)action;
-                        var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
-                        var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
-                        var centrePoint = new PointF { X = initialImage.Width * rotateAction.CentrePoint.X/100, Y = initialImage.Height * rotateAction.CentrePoint.Y/100 };
-                        initialImage = RotateImage(initialImage, centrePoint, rotateAngle);
+                        nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
                     }
-                    if (action is AnimationActionClip)
+                    config.Animations[animationId].LastAppliedValue = nextValue;
+                    foreach (var action in trigger.Actions)
                     {
-                        // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
-                        initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
+                        if (action is AnimationActionRotate)
+                        {
+                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                            var rotateAction = (AnimationActionRotate)action;
+                            var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
+                            var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
+                            var centrePoint = new PointF { X = initialImage.Width * rotateAction.CentrePoint.X / 100, Y = initialImage.Height * rotateAction.CentrePoint.Y / 100 };
+                            initialImage = RotateImage(initialImage, centrePoint, rotateAngle);
+                        }
+                        if (action is AnimationActionClip)
+                        {
+                            // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
+                            initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
+                        }
                     }
                 }
             }
@@ -341,12 +365,36 @@ namespace InstrumentPlugins
                     }
                 }
                 // Trigger paint event of control
-                Control.Invalidate();
-                Control.Update();
-                //PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                try
+                {
+                    if (Control.InvokeRequired)
+                    {
+                        Control.Invoke(new MethodInvoker(delegate
+                        {
+                            Control.Invalidate(true);
+                            Control.Update();
+                        }));
+                    }
+                    else
+                    {
+                        Control.Invalidate(true);
+                        Control.Update();
+                    }
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Force Paint event - it will resubmit if invoke is required
+                    PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                }
+                catch(Exception ex)
+                {
+                    // Something else cause a problem - cannot update this control
+                }
                 //UpdateInstrument(Control); // Force this control to repaint itself and any children
             }
-            catch { }
+            catch (Exception ex)
+            {
+            }
         }
 
         private Image LoadImage(string imagePath)
@@ -396,8 +444,6 @@ namespace InstrumentPlugins
             configPath = filePath;
             Initialize();
         }
-
-        private bool disposedValue;
 
         public IEnumerable<ClientRequest> RequiredValues => config?.ClientRequests;
 
@@ -505,20 +551,10 @@ namespace InstrumentPlugins
             {
                 if (disposing)
                 {
-                    // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                    // TODO: set large fields to null
-                    config = null;
+                    // Prevent any animation updates
                     RemoveTimer();
-                    // Stop any callback to update Control
-                    if (delgte != null)
-                    {
-                        try
-                        {
-                            Delegate.RemoveAll(delgte, delgte);
-                        }
-                        catch { }
-                        delgte = null;
-                    }
+                    // Clear cuurent config
+                    config = null;
                     // Clear last result cache
                     previousResults?.Clear();
                     previousResults = null;
@@ -528,8 +564,6 @@ namespace InstrumentPlugins
                     // Clear animation speed cache
                     animationSteps?.Clear();
                     animationSteps = null;
-                    // Clear cuurent config
-                    config = null;
                 }
 
                 disposedValue = true;
