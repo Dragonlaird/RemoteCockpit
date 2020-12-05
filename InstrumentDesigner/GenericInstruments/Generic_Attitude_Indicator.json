@@ -1,7 +1,7 @@
 {
-  "Name": "Test Attitude Indicator for all aircraft",
+  "Name": "Generic Attitude Indicator",
   "Author": "Dragonlaird",
-  "Type": "Attitude_Indicator",
+  "Type": 4,
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Attitude_Generic_Background.png",
   "Aircraft": [ "Generic" ],
@@ -11,7 +11,6 @@
       "Type": "Image",
       "Name": "Attitude",
       "ImagePath": ".\\InstrumentImages\\Attitude_Indicator_Gimbal.png",
-      "ScaleMethod": "Percent",
       "Triggers": [
         {
           "Type": "ClientRequest",

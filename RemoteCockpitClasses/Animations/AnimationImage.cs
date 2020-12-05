@@ -14,7 +14,6 @@ namespace RemoteCockpitClasses.Animations
         public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.Image; } set { } }
         public string Name { get; set; }
         public string ImagePath { get; set; }
-        public AnimationScaleMethodEnum ScaleMethod { get; set; }
         [JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest[]>))]
         public IAnimationTrigger[] Triggers { get; set; }
         [JsonIgnore]

@@ -1,10 +1,10 @@
 {
-  "Name": "Test Instrument for all aircraft",
+  "Name": "Generic Attitude Indicator",
   "Author": "Dragonlaird",
-  "Type": "Attitude_Indicator",
+  "Type": 4,
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Attitude_Generic_Background.png",
-  "Aircraft": [ "Cessna 152 ASOBO" ],
+  "Aircraft": [ "Generic" ],
   "AnimationUpdateInMs": 100,
   "Animations": [
     {
@@ -13,7 +13,6 @@
       "ImagePath": ".\\InstrumentImages\\Attitude_Indicator_Gimbal.png",
       "Triggers": [
         {
-		  "Name": "Roll",
           "Type": "ClientRequest",
           "Request": {
             "Name": "ATTITUDE INDICATOR BANK DEGREES",
@@ -33,12 +32,12 @@
               "Type": "Clip",
               "Style": "Circle",
               "StartPoint": {
-                "X": 40,
-                "Y": 40
+                "X": 38,
+                "Y": 38
               },
               "EndPoint": {
-                "X": 60,
-                "Y": 60
+                "X": 62,
+                "Y": 62
               }
             }
           ]

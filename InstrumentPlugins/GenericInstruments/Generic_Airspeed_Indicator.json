@@ -1,1 +1,62 @@
-{"Name":"Generic Airspeed Indicator","Author":"Dragonlaird","Type":0,"CreateDate":"0001-01-01T00:00:00","BackgroundImagePath":null,"Aircraft":["Generic"],"AnimationUpdateInMs":0,"Animations":[{"Type":1,"Name":"Needle","PointMap":[{"X":-2.5,"Y":-2.5,"Point":{"IsEmpty":false,"X":-2.5,"Y":2.5}},{"X":-2.5,"Y":20.0,"Point":{"IsEmpty":false,"X":-2.5,"Y":-20.0}},{"X":0.0,"Y":30.0,"Point":{"IsEmpty":false,"X":0.0,"Y":-30.0}},{"X":2.5,"Y":20.0,"Point":{"IsEmpty":false,"X":2.5,"Y":-20.0}},{"X":2.5,"Y":-2.5,"Point":{"IsEmpty":false,"X":2.5,"Y":2.5}}],"FillMethod":0,"FillColor":"","ScaleMethod":0,"RelativeX":0.0,"RelativeY":0.0,"Triggers":[{"Name":"Airspeed Changed","Type":1,"Request":{"Name":"AIRSPEED INDICATED","Unit":"knots"},"Actions":[{"Type":0,"CentrePoint":{"X":50.0,"Y":50.0,"Point":{"IsEmpty":false,"X":50.0,"Y":-50.0}},"RotateClockwise":true,"MaximumValueExpected":200.0}]}]}],"ClientRequests":[{"Name":"AIRSPEED INDICATED","Unit":"knots"}],"HasChanged":true}
+{
+  "Name": "Generic Airspeed Indicator",
+  "Author": "Dragonlaird",
+  "Type": 1,
+  "CreateDate": "2020-12-04T07:52:00",
+  "BackgroundImagePath": ".\\InstrumentImages\\Airspeed_Background.png",
+  "Aircraft": [ "Generic" ],
+  "AnimationUpdateInMs": 0,
+  "Animations": [
+    {
+      "Type": 1,
+      "Name": "Needle",
+      "PointMap": [
+        {
+          "X": -2.0,
+          "Y": -2.0
+        },
+        {
+          "X": -3.0,
+          "Y": 40.0
+        },
+        {
+          "X": 0.0,
+          "Y": 50.0
+        },
+        {
+          "X": 3.0,
+          "Y": 40.0
+        },
+        {
+          "X": 2.0,
+          "Y": -2.0
+        }
+      ],
+      "FillMethod": 0,
+      "FillColor": "Gainsboro",
+      "OffsetX": 50.0,
+      "OffsetY": 50.0,
+      "Triggers": [
+        {
+          "Name": "Airspeed",
+          "Type": 1,
+          "Request": {
+            "Name": "AIRSPEED INDICATED",
+            "Unit": "knots"
+          },
+          "Actions": [
+            {
+              "Type": 0,
+              "CentrePoint": {
+                "X": 50.0,
+                "Y": 50.0
+              },
+              "RotateClockwise": true,
+              "MaximumValueExpected": 200.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

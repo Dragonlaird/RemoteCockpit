@@ -15,11 +15,9 @@ namespace RemoteCockpitClasses.Animations
         public string Name { get; set; }
         public AnimationPoint[] PointMap { get; set; }
         public FillType FillMethod { get; set; }
-
         public Color FillColor { get; set; }
-        public AnimationScaleMethodEnum ScaleMethod { get; set; }
-        public double RelativeX { get; set; }
-        public double RelativeY { get; set; }
+        public double OffsetX { get; set; }
+        public double OffsetY { get; set; }
         [JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest[]>))]
         public IAnimationTrigger[] Triggers { get; set; }
         [JsonIgnore]

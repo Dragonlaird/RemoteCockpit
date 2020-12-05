@@ -4,44 +4,41 @@
   "Type": 0,
   "CreateDate": "2020-11-29T10:15:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Generic_Altitude_Background.png",
-  "Aircraft": [
-    "Generic"
-  ],
-  "AnimationUpdateInMs": 20,
+  "Aircraft": [ "Generic" ],
+  "AnimationUpdateInMs": 100,
   "Animations": [
     {
       "Type": 1,
       "Name": "ShortNeedle",
       "PointMap": [
         {
-          "X": -1.5,
-          "Y": -1.5
+          "X": -3.0,
+          "Y": -3.0
         },
         {
-          "X": -1.5,
-          "Y": 17.0
+          "X": -4.0,
+          "Y": 40.0
         },
         {
           "X": 0.0,
-          "Y": 22.0
+          "Y": 50.0
         },
         {
-          "X": 1.5,
-          "Y": 17.0
+          "X": 4.0,
+          "Y": 40.0
         },
         {
-          "X": 1.5,
-          "Y": -1.5
+          "X": 3.0,
+          "Y": -3.0
         }
       ],
       "FillMethod": 0,
       "FillColor": "Gainsboro",
-      "ScaleMethod": 1,
-      "RelativeX": 50.0,
-      "RelativeY": 50.0,
+      "OffsetX": 50.0,
+      "OffsetY": 50.0,
       "Triggers": [
         {
-          "Name": "AltitudeChange",
+          "Name": "Altitude",
           "Type": 1,
           "Request": {
             "Name": "INDICATED ALTITUDE",
@@ -52,12 +49,7 @@
               "Type": 0,
               "CentrePoint": {
                 "X": 50.0,
-                "Y": 50.0,
-                "Point": {
-                  "IsEmpty": false,
-                  "X": 50.0,
-                  "Y": -50.0
-                }
+                "Y": 50.0
               },
               "RotateClockwise": true,
               "MaximumValueExpected": 10000.0
@@ -71,34 +63,33 @@
       "Name": "LongNeedle",
       "PointMap": [
         {
-          "X": -1.5,
-          "Y": -1.5
+          "X": -3.0,
+          "Y": -3.0
         },
         {
-          "X": -2.0,
-          "Y": 25.0
+          "X": -4.0,
+          "Y": 60.0
         },
         {
           "X": 0.0,
-          "Y": 30.0
+          "Y": 70.0
         },
         {
-          "X": 2.0,
-          "Y": 25.0
+          "X": 4.0,
+          "Y": 60.0
         },
         {
-          "X": 1.5,
-          "Y": -1.5
+          "X": 3.0,
+          "Y": -3.0
         }
       ],
       "FillMethod": 0,
       "FillColor": "Gainsboro",
-      "ScaleMethod": 1,
-      "RelativeX": 50.0,
-      "RelativeY": 50.0,
+      "OffsetX": 50.0,
+      "OffsetY": 50.0,
       "Triggers": [
         {
-          "Name": "AltitudeChange",
+          "Name": "Altitude",
           "Type": 1,
           "Request": {
             "Name": "INDICATED ALTITUDE",
@@ -109,12 +100,7 @@
               "Type": 0,
               "CentrePoint": {
                 "X": 50.0,
-                "Y": 50.0,
-                "Point": {
-                  "IsEmpty": false,
-                  "X": 50.0,
-                  "Y": -50.0
-                }
+                "Y": 50.0
               },
               "RotateClockwise": true,
               "MaximumValueExpected": 1000.0
@@ -123,6 +109,5 @@
         }
       ]
     }
-
   ]
 }

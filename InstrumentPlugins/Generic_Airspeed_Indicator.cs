@@ -40,7 +40,7 @@ namespace InstrumentPlugins
             if (control == null)
             {
                 control = new Panel();
-                control.Name = "Generic_Airspeed_Indicator";
+                control.Name = "Custom_Airspeed_Indicator";
                 control.Top = controlTop;
                 control.Left = controlLeft;
                 control.BackColor = Color.Transparent;
@@ -222,7 +222,7 @@ namespace InstrumentPlugins
         {
             get
             {
-                return new string[] { "Generic" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Generic can be used on all layouts
             }
         }
 

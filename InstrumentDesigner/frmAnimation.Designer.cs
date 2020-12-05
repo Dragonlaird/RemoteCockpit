@@ -34,8 +34,6 @@ namespace InstrumentDesigner
             this.tabCollection = new System.Windows.Forms.TabControl();
             this.tabWhat = new System.Windows.Forms.TabPage();
             this.lblAnimationTypeWarning = new System.Windows.Forms.Label();
-            this.lblAnimationScaleMethod = new System.Windows.Forms.Label();
-            this.cmbAnimationScaleMethod = new System.Windows.Forms.ComboBox();
             this.gpAnimationDrawing = new System.Windows.Forms.GroupBox();
             this.lblAnimationPointMap = new System.Windows.Forms.Label();
             this.dgAnimationPlotPoints = new System.Windows.Forms.DataGridView();
@@ -148,8 +146,6 @@ namespace InstrumentDesigner
             // tabWhat
             // 
             this.tabWhat.Controls.Add(this.lblAnimationTypeWarning);
-            this.tabWhat.Controls.Add(this.lblAnimationScaleMethod);
-            this.tabWhat.Controls.Add(this.cmbAnimationScaleMethod);
             this.tabWhat.Controls.Add(this.gpAnimationDrawing);
             this.tabWhat.Controls.Add(this.gpAnimationImage);
             this.tabWhat.Controls.Add(this.cmbAnimationType);
@@ -173,24 +169,6 @@ namespace InstrumentDesigner
             this.lblAnimationTypeWarning.Size = new System.Drawing.Size(207, 13);
             this.lblAnimationTypeWarning.TabIndex = 14;
             this.lblAnimationTypeWarning.Text = "Warning: Changing this removes all values";
-            // 
-            // lblAnimationScaleMethod
-            // 
-            this.lblAnimationScaleMethod.AutoSize = true;
-            this.lblAnimationScaleMethod.Location = new System.Drawing.Point(25, 62);
-            this.lblAnimationScaleMethod.Name = "lblAnimationScaleMethod";
-            this.lblAnimationScaleMethod.Size = new System.Drawing.Size(37, 13);
-            this.lblAnimationScaleMethod.TabIndex = 13;
-            this.lblAnimationScaleMethod.Text = "Scale:";
-            // 
-            // cmbAnimationScaleMethod
-            // 
-            this.cmbAnimationScaleMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAnimationScaleMethod.FormattingEnabled = true;
-            this.cmbAnimationScaleMethod.Location = new System.Drawing.Point(69, 59);
-            this.cmbAnimationScaleMethod.Name = "cmbAnimationScaleMethod";
-            this.cmbAnimationScaleMethod.Size = new System.Drawing.Size(186, 21);
-            this.cmbAnimationScaleMethod.TabIndex = 12;
             // 
             // gpAnimationDrawing
             // 
@@ -992,8 +970,6 @@ namespace InstrumentDesigner
         private System.Windows.Forms.TextBox txtAnimationImagePath;
         private System.Windows.Forms.Label lblAnimationImagePath;
         private System.Windows.Forms.PictureBox pbAnimationImage;
-        private System.Windows.Forms.Label lblAnimationScaleMethod;
-        private System.Windows.Forms.ComboBox cmbAnimationScaleMethod;
         private System.Windows.Forms.Label lblAnimationRelativeY;
         private System.Windows.Forms.Label lblAnimationRelativeX;
         private System.Windows.Forms.ComboBox cmbAnimationFillColor;

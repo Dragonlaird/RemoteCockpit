@@ -1,10 +1,10 @@
 {
-  "Name": "Test Altimeter for all aircraft",
+  "Name": "Cessna 152 Altimeter",
   "Author": "Dragonlaird",
   "Type": "Airspeed_Indicator",
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png",
-  "Aircraft": [ "Generic" ],
+  "Aircraft": [ "Cessna 152 ASOBO" ],
   "AnimationUpdateInMs": 100,
   "Animations": [
     {
@@ -34,9 +34,8 @@
       ],
       "FillMethod": 0,
       "FillColor": "White",
-      "ScaleMethod": "Percent",
-      "RelativeX": 50.0,
-      "RelativeY": 50.0,
+      "OffsetX": 50.0,
+      "OffsetY": 50.0,
       "Triggers": [
         {
           "Type": "ClientRequest",

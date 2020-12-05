@@ -46,47 +46,21 @@ namespace InstrumentDesigner
         {
             cmbAnimationType.Items.Clear();
             cmbAnimationType.DataSource = ((AnimationItemTypeEnum[])Enum.GetValues(typeof(AnimationItemTypeEnum))).OrderBy(x => x.ToString()).ToList();
-            //foreach (var itemType in ((AnimationItemTypeEnum[])Enum.GetValues(typeof(AnimationItemTypeEnum))).OrderBy(x => x.ToString()))
-            //{
-            //    cmbAnimationType.Items.Add(itemType.ToString());
-            //}
-            cmbAnimationScaleMethod.Items.Clear();
-            cmbAnimationScaleMethod.DataSource = ((AnimationScaleMethodEnum[])Enum.GetValues(typeof(AnimationScaleMethodEnum))).OrderBy(x => x.ToString()).ToList();
-            //foreach (var scaleType in ((AnimationScaleMethodEnum[])Enum.GetValues(typeof(AnimationScaleMethodEnum))).OrderBy(x => x.ToString()))
-            //{
-            //    cmbAnimationScaleMethod.Items.Add(scaleType.ToString());
-            //}
             cmbAnimationFillColor.Items.Clear();
             cmbAnimationFillColor.DataSource = ((KnownColor[])Enum.GetValues(typeof(KnownColor))).OrderBy(x => x.ToString()).ToList();
-            //foreach (var color in ((KnownColor[])Enum.GetValues(typeof(KnownColor))).OrderBy(x => x.ToString()))
-            //{
-            //    cmbAnimationFillColor.Items.Add(color.ToString());
-            //}
             cmbAnimationFillMethod.Items.Clear();
             cmbAnimationFillMethod.DataSource = ((FillType[])Enum.GetValues(typeof(FillType))).OrderBy(x => x.ToString()).ToList();
-            //foreach (var fillMethod in ((FillType[])Enum.GetValues(typeof(FillType))).OrderBy(x => x.ToString()))
-            //{
-            //    cmbAnimationFillMethod.Items.Add(fillMethod.ToString());
-            //}
             cmbAnimationActionStyle.Items.Clear();
             cmbAnimationActionStyle.DataSource = ((AnimateActionClipEnum[])Enum.GetValues(typeof(AnimateActionClipEnum))).OrderBy(x => x.ToString()).ToList();
             var triggerTypeCol = (DataGridViewComboBoxColumn)gdAnimationTriggers.Columns["Type"];
             triggerTypeCol.Items.Clear();
             triggerTypeCol.DataSource = ((AnimationTriggerTypeEnum[])Enum.GetValues(typeof(AnimationTriggerTypeEnum))).OrderBy(x => x.ToString()).ToList();
-            //foreach (var triggerType in ((AnimationTriggerTypeEnum[])Enum.GetValues(typeof(AnimationTriggerTypeEnum))).OrderBy(x=> x.ToString())){
-            //    triggerTypeCol.Items.Add(triggerType);
-            //}
             var variables = SimVarUnits.DefaultUnits;
             cmbAnimationVariableNames.Items.Clear();
             cmbAnimationVariableNames.DataSource = variables.Keys.OrderBy(x => x).ToList();
-            //foreach (string variableName in variables.Keys.OrderBy(x => x))
-            //{
-            //    cmbAnimationVariableNames.Items.Add(variableName);
-            //}
             var actionTypeCol = (DataGridViewComboBoxColumn)dgAnimationActions.Columns["ActionType"];
             actionTypeCol.Items.Clear();
             actionTypeCol.DataSource = ((AnimationActionTypeEnum[])Enum.GetValues(typeof(AnimationActionTypeEnum))).OrderBy(x => x.ToString()).ToList();
-
         }
 
         private void ClearTab(int tabId)
@@ -122,9 +96,6 @@ namespace InstrumentDesigner
                     {
                         gpAnimationImage.Visible = true;
                         txtAnimationImagePath.Text = ((AnimationImage)_animation).ImagePath ?? "";
-                        cmbAnimationScaleMethod.SelectedIndex = cmbAnimationScaleMethod.Items.IndexOf(((AnimationImage)_animation).ScaleMethod);
-                        //txtAnimationRelativeX.Text = _animation.RelativeX.ToString();
-                        //txtAnimationRelativeY.Text = _animation.RelativeY.ToString();
                         try
                         {
                             var image = Image.FromFile(Path.Combine(baseFolder, txtAnimationImagePath.Text));
@@ -224,11 +195,10 @@ namespace InstrumentDesigner
                     {
                         Name = _animation.Name,
                         Type = AnimationItemTypeEnum.Drawing,
-                        ScaleMethod = _animation.ScaleMethod,
                         FillColor = Color.White,
                         FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
-                        RelativeX = 50,
-                        RelativeY = 50,
+                        OffsetX = 50,
+                        OffsetY = 50,
                         Triggers = _animation.Triggers
                     };
                 }
@@ -238,7 +208,6 @@ namespace InstrumentDesigner
                     {
                         Name = _animation.Name,
                         Type = AnimationItemTypeEnum.Image,
-                        ScaleMethod = _animation.ScaleMethod,
                         ImagePath = "",
                         Triggers = _animation.Triggers
                     };

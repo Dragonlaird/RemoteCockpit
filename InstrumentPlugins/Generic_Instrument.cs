@@ -89,6 +89,7 @@ namespace InstrumentPlugins
             Control.Left = controlLeft;
             Control.Height = controlHeight;
             Control.Width = controlWidth;
+            Control.Name = config?.Name?.Replace(' ', '_');
             previousResults = new List<ClientRequestResult>();
             currentResults = new List<ClientRequestResult>();
             animateTimer = null; // new List<System.Timers.Timer>();
@@ -183,7 +184,8 @@ namespace InstrumentPlugins
                         var rotateAction = (AnimationActionRotate)action;
                         var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
                         var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
-                        initialImage = RotateImage(initialImage, rotateAngle);
+                        var centrePoint = new PointF { X = initialImage.Width * rotateAction.CentrePoint.X/100, Y = initialImage.Height * rotateAction.CentrePoint.Y/100 };
+                        initialImage = RotateImage(initialImage, centrePoint, rotateAngle);
                     }
                     if (action is AnimationActionClip)
                     {
@@ -243,7 +245,7 @@ namespace InstrumentPlugins
             }
         }
 
-        private Bitmap RotateImage(Bitmap bmp, float angle)
+        private Bitmap RotateImage(Bitmap bmp, PointF centrePoint, float angle)
         {
             Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
             rotatedImage.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
@@ -251,11 +253,11 @@ namespace InstrumentPlugins
             using (Graphics g = Graphics.FromImage(rotatedImage))
             {
                 // Set the rotation point to the center in the matrix
-                g.TranslateTransform(bmp.Width / 2, bmp.Height / 2);
+                g.TranslateTransform(centrePoint.X, centrePoint.Y);
                 // Rotate
                 g.RotateTransform(angle);
                 // Restore rotation point in the matrix
-                g.TranslateTransform(-bmp.Width / 2, -bmp.Height / 2);
+                g.TranslateTransform(-centrePoint.X, -centrePoint.Y);
                 // Draw the image on the bitmap
                 g.DrawImage(bmp, new Point(0, 0));
             }
@@ -363,18 +365,15 @@ namespace InstrumentPlugins
             {
                 float absoluteX = 0;
                 float absoluteY = 0;
-                PointF[] points = null;
-                if (animation.ScaleMethod == AnimationScaleMethodEnum.Percent)
-                {
-                    // Resize image using the current scale 
-                    var scaleX = animation.RelativeX / 100.0f;
-                    var scaleY = animation.RelativeY / 100.0f;
-                    var pixelsPerPercentX = Control.Width / 100.0f;
-                    var pixelsPerPercentY = Control.Height / 100.0f;
-                    absoluteX = (float)(Control.Width * scaleX);
-                    absoluteY = (float)(Control.Height * scaleY);
-                    points = animation.PointMap.Select(x => new PointF(x.Point.X * pixelsPerPercentX + absoluteX, x.Point.Y * pixelsPerPercentY + absoluteY)).ToArray();
-                }
+                // Resize animation image to fit the current control size
+                var scaleX = animation.OffsetX / 100.0f;
+                var scaleY = animation.OffsetY / 100.0f;
+                // Points can be between -100% to +100% (a range of 200%)- Therefore we assume 1 percent of control is actually 0.5 percent
+                var pixelsPerPercentX = Control.Width / 200.0f;
+                var pixelsPerPercentY = Control.Height / 200.0f;
+                absoluteX = (float)(Control.Width * scaleX);
+                absoluteY = (float)(Control.Height * scaleY);
+                var points = animation.PointMap.Select(x => new PointF(x.Point.X * pixelsPerPercentX + absoluteX, x.Point.Y * pixelsPerPercentY + absoluteY)).ToArray();
                 Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 bitmap.MakeTransparent();
                 using (Graphics graph = Graphics.FromImage(bitmap))

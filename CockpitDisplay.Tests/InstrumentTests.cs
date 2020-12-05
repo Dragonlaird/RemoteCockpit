@@ -44,11 +44,10 @@ namespace CockpitDisplay.Tests
                                 new AnimationPoint(3.0f, 20.0f),
                                 new AnimationPoint(1.5f, -1.5f)
                             },
-                            RelativeX = 50,
-                            RelativeY = 50,
+                            OffsetX = 50,
+                            OffsetY = 50,
                             FillColor = Color.CornflowerBlue,
                             FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
-                            ScaleMethod = AnimationScaleMethodEnum.Percent,
                             Triggers = new AnimationTriggerClientRequest[]{
                                 new AnimationTriggerClientRequest
                                 {
