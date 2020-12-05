@@ -27,7 +27,7 @@ namespace InstrumentPlugins
         private double LastAirspeed = -1;
         private double needleMoveSpeed = 0;
         private int animationTimeInMs = 3000;
-
+        public event EventHandler<string> LogMessage;
         System.Timers.Timer animateTimer;
 
         public Generic_Airspeed_Indicator()

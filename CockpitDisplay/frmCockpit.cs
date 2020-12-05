@@ -24,7 +24,7 @@ namespace CockpitDisplay
         private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
-        public EventHandler<string> Messages;
+        public EventHandler<string> LogMessage;
         private Point ScreenDimensions;
         public frmCockpit()
         {
@@ -190,6 +190,8 @@ namespace CockpitDisplay
                     {
                         if (plugin != null)
                         {
+                            string message = string.Format("Adding Instrument: {0} (Type: {1})", plugin.Name, plugin.Type.ToString());
+                            ConsoleLog(message);
                             variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
                             var vScaleFactor = (double)ScreenDimensions.Y / 100;
                             var hScaleFactor = (double)ScreenDimensions.X / 100;
@@ -200,6 +202,7 @@ namespace CockpitDisplay
                                 (int)(instrumentPosition.Width * hScaleFactor));
                             AddControl(plugin.Control);
                             usedInstrumentPlugins.Add(plugin);
+                            plugin.LogMessage += LogMessage;
                             UpdateCockpitItem(plugin.Control);
                             //plugin.Control.Enabled = false;
                         }
@@ -227,9 +230,9 @@ namespace CockpitDisplay
                     {
                         RequestValue.DynamicInvoke(this, variable);
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex)
+                    {
                         ConsoleLog(string.Format("LoadLayout (Submit Initial Variables) Error: {0}", ex.Message));
-
                     }
                 }
             }
@@ -240,6 +243,8 @@ namespace CockpitDisplay
         {
             if (layoutDefinitions.Count == 0)
             {
+                string message = string.Format("Loading Layout: {0}", name);
+                ConsoleLog(message);
                 var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
                 var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
                 foreach (var layoutJson in layouts["Layouts"])
@@ -251,13 +256,20 @@ namespace CockpitDisplay
             }
             LayoutDefinition result = layoutDefinitions.SingleOrDefault(x => x.Name == name);
             if (result == null)
+            {
                 result = layoutDefinitions.First();
+                string message = string.Format("Layout Not Defined: {0}\rUsing First Layout: {1}", name, result.Name);
+                ConsoleLog(message);
+            }
             return result;
         }
 
         // Modified from code: https://www.c-sharpcorner.com/article/introduction-to-building-a-plug-in-architecture-using-C-Sharp/
         private List<Assembly> LoadAvailableAssemblies()
         {
+            string message = string.Format("Loading Plugins");
+            ConsoleLog(message);
+
             DirectoryInfo dInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Plugins"));
             if (!dInfo.Exists)
             {
@@ -274,10 +286,12 @@ namespace CockpitDisplay
                 {
                     try
                     {
+                        message = string.Format("Loading Assembly: {0}", file.Name);
+                        ConsoleLog(message);
                         plugInAssemblyList.Add(Assembly.LoadFile(file.FullName)); // May fail if not a .NET assembly
                     }
                     catch(Exception ex) {
-                        ConsoleLog(string.Format("LoadAvilableAssemblies (Add Custom Plugins) Error: {0}", ex.Message));
+                        ConsoleLog(string.Format("LoadAvailableAssemblies (Add Custom Plugins) Error: {0}", ex.Message));
                     }
                 }
             }
@@ -288,7 +302,8 @@ namespace CockpitDisplay
         private List<ICockpitInstrument> GetPlugIns(List<Assembly> assemblies)
         {
             List<Type> availableTypes = new List<Type>();
-
+            string message = string.Format("Fetching Custom plugins");
+            ConsoleLog(message);
             foreach (Assembly currentAssembly in assemblies)
                 try
                 {
@@ -304,6 +319,8 @@ namespace CockpitDisplay
                 return interfaceTypes.Contains(typeof(ICockpitInstrument));
             });
             var customInstruments = instrumentsList.ConvertAll<ICockpitInstrument>(delegate (Type t) { return Activator.CreateInstance(t) as ICockpitInstrument; });
+            message = string.Format("Fetching Generic plugins");
+            ConsoleLog(message);
             foreach (var instrumentDefinition in Directory.GetFiles(".\\GenericInstruments"))
             {
                 try
@@ -322,10 +339,10 @@ namespace CockpitDisplay
 
         private void ConsoleLog(string message)
         {
-            if (Messages != null)
+            if (LogMessage != null)
                 try
                 {
-                    Messages.DynamicInvoke(this, message);
+                    LogMessage.DynamicInvoke(this, message);
                 }
                 catch(Exception ex)
                 {

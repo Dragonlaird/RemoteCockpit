@@ -18,6 +18,8 @@ namespace InstrumentPlugins
         private int controlHeight = 50;
         private int controlWidth = 50;
         private int animationTimeInMs = 3000;
+        public event EventHandler<string> LogMessage;
+
         private List<ClientRequestResult> values = new List<ClientRequestResult>();
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace InstrumentPlugins
         {
             get
             {
-                return new string[] { "" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Generic can be used on all layouts
             }
         }
 
@@ -95,7 +97,7 @@ namespace InstrumentPlugins
         }
 
         /// <summary>
-        /// Inherited from IComponent - not really used
+        /// Inherited from IComponent - not used
         /// </summary>
         public ISite Site { get; set; }
 

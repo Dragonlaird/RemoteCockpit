@@ -29,7 +29,7 @@ namespace InstrumentPlugins
         private double LastPitch = -1;
         private double needleMoveSpeed = 0;
         private int animationTimeInMs = 3000;
-
+        public event EventHandler<string> LogMessage;
         System.Timers.Timer animateTimer;
 
         /// <summary>

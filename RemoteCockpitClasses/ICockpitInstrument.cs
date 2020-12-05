@@ -46,5 +46,7 @@ namespace RemoteCockpitClasses
         Control Control { get; }
 
         void SetLayout(int top, int left, int height, int width);
+
+        event EventHandler<string> LogMessage;
     }
 }

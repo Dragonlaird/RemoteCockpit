@@ -42,6 +42,9 @@ namespace InstrumentPlugins
         private int animationStepCount = 10;
         private int animationUpdateInMs = 300;
         private DateTime lastExecution = DateTime.MinValue;
+        public event EventHandler Disposed;
+        public event EventHandler<string> LogMessage;
+
         public Generic_Instrument()
         {
             config = new Configuration();
@@ -61,6 +64,7 @@ namespace InstrumentPlugins
             configPath = null;
             Initialize();
         }
+
 
         private void Initialize()
         {
@@ -83,7 +87,7 @@ namespace InstrumentPlugins
             }
             catch (Exception ex)
             {
-
+                WriteLog(string.Format("Initialize: Failed to populate Config.\rError: {0}", ex.Message));
             }
             Control.Top = controlTop;
             Control.Left = controlLeft;
@@ -159,12 +163,13 @@ namespace InstrumentPlugins
                                 }
                                 catch(Exception ex)
                                 {
-
+                                    WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
                                 }
                             }
                         }
                         catch(Exception ex)
                         {
+                            WriteLog(string.Format("PaintControl: Failed to Generate Animation Image.\rError: {0}", ex.Message));
                         }
                     }
                     UpdateAnimationImage(animationImage);
@@ -364,77 +369,97 @@ namespace InstrumentPlugins
                         }
                     }
                 }
-                // Trigger paint event of control
-                try
-                {
-                    if (Control.InvokeRequired)
-                    {
-                        Control.Invoke(new MethodInvoker(delegate
-                        {
-                            Control.Invalidate(true);
-                            Control.Update();
-                        }));
-                    }
-                    else
-                    {
-                        Control.Invalidate(true);
-                        Control.Update();
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    // Force Paint event - it will resubmit if invoke is required
-                    PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
-                }
-                catch(Exception ex)
-                {
-                    // Something else cause a problem - cannot update this control
-                }
-                //UpdateInstrument(Control); // Force this control to repaint itself and any children
+                UpdateControl();
             }
             catch (Exception ex)
             {
+                WriteLog(string.Format("ExecuteAnimation: Failed to update latest values.\rError: {0}", ex.Message));
+            }
+        }
+
+        private void UpdateControl() {
+            // Trigger Paint event of control
+            try
+            {
+                if (Control.InvokeRequired)
+                {
+                    Control.Invoke(new MethodInvoker(delegate
+                    {
+                        Control.Invalidate(true);
+                        Control.Update();
+                    }));
+                }
+                else
+                {
+                    Control.Invalidate(true);
+                    Control.Update();
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Force Paint event - it will resubmit if invoke is required
+                PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+            }
+            catch (Exception ex)
+            {
+                // Something else cause a problem - cannot update this control
+                WriteLog(string.Format("UpdateControl: Failed to invoke Control Update.\rError: {0}", ex.Message));
             }
         }
 
         private Image LoadImage(string imagePath)
         {
-            var diretory = Directory.GetCurrentDirectory();
-            var imageFile = File.OpenRead(new Uri(Path.Combine(diretory,imagePath)).AbsolutePath);
-            var image = Image.FromStream(imageFile);
-            aspectRatio = (double)image.Height / image.Width;
-            var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
-            return resizedImage;
+            try
+            {
+                var diretory = Directory.GetCurrentDirectory();
+                var imageFile = File.OpenRead(new Uri(Path.Combine(diretory, imagePath)).AbsolutePath);
+                var image = Image.FromStream(imageFile);
+                aspectRatio = (double)image.Height / image.Width;
+                var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
+                return resizedImage;
+            }
+            catch(Exception ex)
+            {
+                WriteLog(string.Format("LoadImage: Failed to read/resize Image file.\rError: {0}", ex.Message));
+            }
+            return null;
         }
 
         private Bitmap DrawPoints(AnimationDrawing animation)
         {
-            if (animation.PointMap?.Count() > 0)
+            try
             {
-                float absoluteX = 0;
-                float absoluteY = 0;
-                // Resize animation image to fit the current control size
-                var scaleX = animation.OffsetX / 100.0f;
-                var scaleY = animation.OffsetY / 100.0f;
-                // Points can be between -100% to +100% (a range of 200%)- Therefore we assume 1 percent of control is actually 0.5 percent
-                var pixelsPerPercentX = Control.Width / 200.0f;
-                var pixelsPerPercentY = Control.Height / 200.0f;
-                absoluteX = (float)(Control.Width * scaleX);
-                absoluteY = (float)(Control.Height * scaleY);
-                var points = animation.PointMap.Select(x => new PointF(x.Point.X * pixelsPerPercentX + absoluteX, x.Point.Y * pixelsPerPercentY + absoluteY)).ToArray();
-                Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                bitmap.MakeTransparent();
-                using (Graphics graph = Graphics.FromImage(bitmap))
+                if (animation.PointMap?.Count() > 0)
                 {
-                    graph.SmoothingMode = SmoothingMode.AntiAlias;
-                    graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    using (SolidBrush fill = new SolidBrush(animation.FillColor))
+                    float absoluteX = 0;
+                    float absoluteY = 0;
+                    // Resize animation image to fit the current control size
+                    var scaleX = animation.OffsetX / 100.0f;
+                    var scaleY = animation.OffsetY / 100.0f;
+                    // Points can be between -100% to +100% (a range of 200%)- Therefore we assume 1 percent of control is actually 0.5 percent
+                    var pixelsPerPercentX = Control.Width / 200.0f;
+                    var pixelsPerPercentY = Control.Height / 200.0f;
+                    absoluteX = (float)(Control.Width * scaleX);
+                    absoluteY = (float)(Control.Height * scaleY);
+                    var points = animation.PointMap.Select(x => new PointF(x.Point.X * pixelsPerPercentX + absoluteX, x.Point.Y * pixelsPerPercentY + absoluteY)).ToArray();
+                    Bitmap bitmap = new Bitmap(Control.Width, Control.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    bitmap.MakeTransparent();
+                    using (Graphics graph = Graphics.FromImage(bitmap))
                     {
-                        graph.FillPolygon(fill, points);
+                        graph.SmoothingMode = SmoothingMode.AntiAlias;
+                        graph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        graph.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        using (SolidBrush fill = new SolidBrush(animation.FillColor))
+                        {
+                            graph.FillPolygon(fill, points);
+                        }
                     }
+                    return bitmap;
                 }
-                return bitmap;
+            }
+            catch(Exception ex)
+            {
+                WriteLog(string.Format("DrawPoints: Failed to generate image from PointMap.\rError: {0}", ex.Message));
             }
             return null;
         }
@@ -472,7 +497,6 @@ namespace InstrumentPlugins
                 animationTimeInMs = value * 1000;
             }
         }
-        public event EventHandler Disposed;
 
         public void SetLayout(int top, int left, int height, int width)
         {
@@ -485,65 +509,51 @@ namespace InstrumentPlugins
 
         public void ValueUpdate(ClientRequestResult value)
         {
-            var clientRequestResult = currentResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
-            if (clientRequestResult != null)
+            try
             {
-                var resultIdx = currentResults.IndexOf(clientRequestResult);
-                var lastResult = previousResults[resultIdx];
-                lock (currentResults)
-                    currentResults[resultIdx] = value;
-                if (value.Request.Name == "UPDATE FREQUENCY" && value.Request.Unit == "second")
+                var clientRequestResult = currentResults.FirstOrDefault(x => x.Request.Name == value.Request.Name && x.Request.Unit == value.Request.Unit);
+                if (clientRequestResult != null)
                 {
-                    // We now know how often we expect to receive updates - revise the timings accordingly
-                    UpdateStepCount((int)value.Result);
+                    var resultIdx = currentResults.IndexOf(clientRequestResult);
+                    var lastResult = previousResults[resultIdx];
+                    lock (currentResults)
+                        currentResults[resultIdx] = value;
+                    if (value.Request.Name == "UPDATE FREQUENCY" && value.Request.Unit == "second")
+                    {
+                        // We now know how often we expect to receive updates - revise the timings accordingly
+                        UpdateStepCount((int)value.Result);
+                    }
+                    // Check if any animations use this variable as a trigger
+                    if (config.Animations.Any(x => x.Triggers.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
+                    {
+                        // We want to update the animation every 0.3 seconds - determine how much we should move it
+                        // Modify the step size for our control
+                        lock (animationSteps)
+                            animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
+                        // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
+                        StartTimer();
+                    }
                 }
-                // Check if any animations use this variable as a trigger
-                if (config.Animations.Any(x => x.Triggers.Any(y=> y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
-                {
-                    // We want to update the animation every 0.3 seconds - determine how much we should move it
-                    // Modify the step size for our control
-                    lock (animationSteps)
-                        animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
-                    // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
-                    StartTimer();
-                }
+            }
+            catch(Exception ex)
+            {
+                WriteLog(string.Format("ValueUpdate: Invalid ClientRequestValue supplied.\rError: {0}", ex.Message));
             }
         }
 
         private void UpdateStepCount(int serverUpdateTimeInMs)
         {
-            animationTimeInMs = serverUpdateTimeInMs < 100 ? 100 : serverUpdateTimeInMs;
-            animationStepCount = animationTimeInMs / animationUpdateInMs > 50 ? 50 : animationTimeInMs / animationUpdateInMs;
-            animationStepCount = animationStepCount < 10 ? 10 : animationStepCount;
+            try
+            {
+                animationTimeInMs = serverUpdateTimeInMs < 100 ? 100 : serverUpdateTimeInMs;
+                animationStepCount = animationTimeInMs / animationUpdateInMs > 50 ? 50 : animationTimeInMs / animationUpdateInMs;
+                animationStepCount = animationStepCount < 10 ? 10 : animationStepCount;
+            }
+            catch(Exception ex)
+            {
+                WriteLog(string.Format("UpdateStepCount: Invalid serverUpdateTime value supplied ({0}).\rError: {1}", serverUpdateTimeInMs, ex.Message));
+            }
         }
-
-        //private Image ClipToCircle(Image srcImage, PointF center, float radius, Color backGround)
-        //{
-        //    Image dstImage = new Bitmap(srcImage.Width, srcImage.Height, srcImage.PixelFormat);
-
-        //    using (Graphics g = Graphics.FromImage(dstImage))
-        //    {
-        //        RectangleF r = new RectangleF(center.X - radius, center.Y - radius,
-        //                                                 radius * 2, radius * 2);
-
-        //        // enables smoothing of the edge of the circle (less pixelated)
-        //        g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        //        // fills background color
-        //        using (Brush br = new SolidBrush(backGround))
-        //        {
-        //            g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
-        //        }
-
-        //        // adds the new ellipse & draws the image again 
-        //        GraphicsPath path = new GraphicsPath();
-        //        path.AddEllipse(r);
-        //        g.SetClip(path);
-        //        g.DrawImage(srcImage, 0, 0);
-
-        //        return dstImage;
-        //    }
-        //}
 
         protected virtual void Dispose(bool disposing)
         {
@@ -570,18 +580,23 @@ namespace InstrumentPlugins
             }
         }
 
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~Generic_Instrument()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        private void WriteLog(string message)
+        {
+            if(LogMessage != null)
+            {
+                try
+                {
+                    LogMessage.DynamicInvoke(new object[] { message });
+                }
+                catch { }
+            }
         }
     }
 }

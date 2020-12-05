@@ -179,6 +179,9 @@ namespace CockpitDisplay
 
         private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)
         {
+            string message = string.Format("Value Update: {0}({1}) = {2}", requestResult.Request.Name, requestResult.Request.Unit, requestResult.Result);
+            DebugMessage(this, message);
+
             if (requestResults.Any(x => x.Request.Name == requestResult.Request.Name && x.Request.Unit == requestResult.Request.Unit))
                 lock (requestResults)
                 {
@@ -280,7 +283,8 @@ namespace CockpitDisplay
             }
             cockpit = new frmCockpit();
             cockpit.RequestValue += RequestVariable;
-            cockpit.Messages += DebugMessage;
+            cockpit.LogMessage += DebugMessage;
+            cockpit.FormClosed += Cockpit_Closed;
             if (cbFullScreen.Checked)
             {
                 cockpit.WindowState = FormWindowState.Maximized;
@@ -328,7 +332,11 @@ namespace CockpitDisplay
                     ((Control)txtDebugMessages).Invoke(d, new object[] { sender, e });
                     return;
                 }
-                txtDebugMessages.Text += string.Format("{0:HH:mm:ss} {1}\r", DateTime.Now, e);
+                txtDebugMessages.Text += string.Format("{0:HH:mm:ss} {1}\r\n", DateTime.Now, e);
+                while(txtDebugMessages.Text.Count(x=> x=='\n') > 200)
+                {
+                    txtDebugMessages.Text = txtDebugMessages.Text.Substring(txtDebugMessages.Text.IndexOf('\n') + 1);
+                }
                 txtDebugMessages.SelectionStart = txtDebugMessages.Text.Length;
                 txtDebugMessages.ScrollToCaret();
             }
@@ -336,6 +344,8 @@ namespace CockpitDisplay
 
         private void RequestVariable(object sender, ClientRequest request)
         {
+            string message = string.Format("Request Value: {0} ({1})", request.Name, request.Unit);
+            DebugMessage(this, message);
             // Has the variable already been requested and received?
             if (requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
             {
@@ -352,6 +362,11 @@ namespace CockpitDisplay
             }
         }
 
+        private void Cockpit_Closed(object sender, FormClosedEventArgs e)
+        {
+            pbShowCockpit_Click(pbShowCockpit, null);
+        }
+
         private void pbShowCockpit_Click(object sender, EventArgs e)
         {
             var cmdButton = (Button)sender;
@@ -364,7 +379,11 @@ namespace CockpitDisplay
             else
             {
                 cmdButton.Text = "Show Cockpit";
-                cockpit?.Close();
+                if (cockpit.Visible)
+                {
+                    cockpit.Visible = false;
+                    cockpit?.Close();
+                }
                 cockpit?.Dispose();
                 cockpit = null;
             }
@@ -433,7 +452,5 @@ namespace CockpitDisplay
             if (cockpit != null)
                 cockpit.Close();
         }
-
-        
     }
 }

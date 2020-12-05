@@ -30,7 +30,7 @@ namespace InstrumentPlugins
         private double needleMoveSpeed = 0;
         private int animationTimeInMs = 3000;
         System.Timers.Timer animateTimer;
-
+        public event EventHandler<string> LogMessage;
 
         public Generic_Altimeter()
         {
