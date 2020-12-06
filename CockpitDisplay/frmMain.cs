@@ -73,7 +73,7 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        testResult = updateTestResult(testResult, changeAmount, 3000);
+                        testResult = updateTestResult(testResult, 100, 3000.0);
                     }
                     ReceiveResultFromServer(null, testResult);
 
@@ -86,7 +86,7 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        testResult = updateTestResult(testResult, 20, 100);
+                        testResult = updateTestResult(testResult, 20, 100.0);
                     }
                     ReceiveResultFromServer(null, testResult);
 
@@ -99,7 +99,7 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        testResult = updateTestResult(testResult, 20, 0);
+                        testResult = updateTestResult(testResult, 20, 0.0);
                     }
                     ReceiveResultFromServer(null, testResult);
                 }
@@ -107,14 +107,10 @@ namespace CockpitDisplay
             }
         }
 
-        private ClientRequestResult updateTestResult(ClientRequestResult result, int variance, int baseLine)
+        private ClientRequestResult updateTestResult(ClientRequestResult result, int variance, double baseLine)
         {
-            var changeAmount = ((int)(double)variance);
             var rnd = new Random();
-            if (rnd.NextDouble() > 0.5)
-            {
-                changeAmount = -changeAmount;
-            }
+            var changeAmount = (double)rnd.Next(-variance, variance);
             result.Result = (double)result.Result + changeAmount;
             if ((double)result.Result < baseLine - variance)
             {

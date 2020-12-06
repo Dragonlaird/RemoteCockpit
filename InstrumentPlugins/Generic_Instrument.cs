@@ -347,7 +347,6 @@ namespace InstrumentPlugins
         {
             try
             {
-                //RemoveTimer();
                 // Step our animation closer to the target value
                 lock (currentResults)
                 {
@@ -363,6 +362,8 @@ namespace InstrumentPlugins
                                 previousResult.Result = (double)previousResult.Result + stepValue;
                                 if ((double)previousResult.Result > (double)currentResult.Result)
                                 {
+                                    // Reached our target - no need for the timer anymore
+                                    RemoveTimer();
                                     previousResult.Result = currentResult.Result;
                                 }
                             }
@@ -371,6 +372,8 @@ namespace InstrumentPlugins
                                 previousResult.Result = (double)previousResult.Result - stepValue;
                                 if ((double)previousResult.Result < (double)currentResult.Result)
                                 {
+                                    // Reached our target - no need for the timer anymore
+                                    RemoveTimer();
                                     previousResult.Result = currentResult.Result;
                                 }
                             }
