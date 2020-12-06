@@ -370,22 +370,20 @@ namespace InstrumentDesigner
 
         private void NewAnimation_Click(object sender, EventArgs e)
         {
-            int rowIdx = -1;
-            bool newRowExists = false;
-            foreach(DataGridViewRow row in dgAnimations.Rows)
-            {
-                if(row.Cells["What"].Value?.ToString() == "New...")
-                {
-                    rowIdx = dgAnimations.Rows.IndexOf(row);
-                    break;
-                }
-            }
-            if (!newRowExists)
-            {
-                rowIdx = dgAnimations.Rows.Add();
-                dgAnimations.Rows[rowIdx].Cells["What"].Value = "New...";
-            }
+            var rowIdx = dgAnimations.Rows.Add(new object[] {"New..." });
             var colIdx = dgAnimations.Columns.IndexOf(dgAnimations.Columns["Edit"]);
+            var animations = config.Animations.ToList();
+            animations.Add(new AnimationDrawing { 
+                Name = "New...", 
+                Type = AnimationItemTypeEnum.Drawing,
+                Triggers = new IAnimationTrigger[0],
+                OffsetX = 0,
+                OffsetY = 0,
+                FillColor = Color.White,
+                FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
+                PointMap = new AnimationPoint[0] 
+            });
+            config.Animations = animations.ToArray();
             EditDeleteAnimation_Click(dgAnimations, new DataGridViewCellEventArgs(colIdx, rowIdx));
         }
 

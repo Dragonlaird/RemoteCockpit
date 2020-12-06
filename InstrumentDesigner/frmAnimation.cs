@@ -415,6 +415,7 @@ namespace InstrumentDesigner
         {
             gpAnimationActionClip.Visible = false;
             gpAnimationActionRotate.Visible = false;
+            gpAnimationActionMoveX.Visible = false;
             var senderGrid = (DataGridView)sender;
             if (senderGrid.SelectedRows.Count == 1 && senderGrid.SelectedRows[0].Cells["ActionType"].Value != null)
             {
@@ -427,10 +428,10 @@ namespace InstrumentDesigner
                         populatingForm = true;
                         gpAnimationActionClip.Visible = true;
                         cmbAnimationActionStyle.SelectedIndex = cmbAnimationActionStyle.Items.IndexOf(actionClip.Style);
-                        txtAnimationActionStartX.Value = (decimal)actionClip.StartPoint.X;
-                        txtAnimationActionStartY.Value = (decimal)actionClip.StartPoint.Y;
-                        txtAnimationActionEndX.Value = (decimal)actionClip.EndPoint.X;
-                        txtAnimationActionEndY.Value = (decimal)actionClip.EndPoint.Y;
+                        txtAnimationActionStartX.Value = (decimal)(actionClip.StartPoint.X);
+                        txtAnimationActionStartY.Value = (decimal)(actionClip.StartPoint.Y);
+                        txtAnimationActionEndX.Value = (decimal)(actionClip.EndPoint.X);
+                        txtAnimationActionEndY.Value = (decimal)(actionClip.EndPoint.Y);
                         populatingForm = false;
                         break;
                     case AnimationActionTypeEnum.Rotate:
@@ -447,10 +448,10 @@ namespace InstrumentDesigner
                     case AnimationActionTypeEnum.MoveY:
                         var animationMove = (AnimationActionMove)action;
                         populatingForm = true;
+                        gpAnimationActionMoveX.Visible = true;
                         gpAnimationActionMoveX.Text = actionType.ToString();
                         txtAnimationActionMoveXMax.Value = (decimal)animationMove.MaxValue;
                         txtAnimationActionMoveXValue.Value = (decimal)animationMove.Percent;
-                        gpAnimationActionMoveX.Visible = true;
                         populatingForm = false;
                         break;
                 }
@@ -652,7 +653,7 @@ namespace InstrumentDesigner
                                 actionList.Add(new AnimationActionRotate());
                                 break;
                             case "Clip":
-                                actionList.Add(new AnimationActionClip());
+                                actionList.Add(new AnimationActionClip { StartPoint= new AnimationPoint(), EndPoint = new AnimationPoint() });
                                 break;
                             case "MoveX":
                                 actionList.Add(new AnimationActionMove { Type = AnimationActionTypeEnum.MoveX });

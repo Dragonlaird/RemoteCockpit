@@ -4,40 +4,58 @@
   "Type": 4,
   "CreateDate": "2020-11-08T12:00:00",
   "BackgroundImagePath": ".\\InstrumentImages\\Attitude_Generic_Background.png",
-  "Aircraft": [ "Generic" ],
+  "Aircraft": [
+    "Generic"
+  ],
   "AnimationUpdateInMs": 100,
   "Animations": [
     {
-      "Type": "Image",
+      "Type": 0,
       "Name": "Attitude",
       "ImagePath": ".\\InstrumentImages\\Attitude_Indicator_Gimbal.png",
       "Triggers": [
         {
-          "Type": "ClientRequest",
+          "Name": "Roll",
+          "Type": 1,
           "Request": {
             "Name": "ATTITUDE INDICATOR BANK DEGREES",
             "Unit": "radians"
           },
           "Actions": [
             {
-              "Type": "Rotate",
+              "Type": 0,
               "CentrePoint": {
                 "X": 50.0,
                 "Y": 50.0
               },
               "RotateClockwise": true,
               "MaximumValueExpected": 200.0
+            }
+          ]
+        },
+        {
+          "Name": "Pitch",
+          "Type": 1,
+          "Request": {
+            "Name": "ATTITUDE INDICATOR PITCH DEGREES",
+            "Unit": "radians"
+          },
+          "Actions": [
+            {
+              "Type": 1,
+              "MaxValue": -180.0,
+              "Percent": 180.0
             },
             {
-              "Type": "Clip",
-              "Style": "Circle",
+              "Type": 3,
+              "Style": 0,
               "StartPoint": {
-                "X": 38,
-                "Y": 38
+                "X": 38.0,
+                "Y": 38.0
               },
               "EndPoint": {
-                "X": 62,
-                "Y": 62
+                "X": 62.0,
+                "Y": 62.0
               }
             }
           ]
