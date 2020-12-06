@@ -28,8 +28,9 @@ namespace InstrumentPlugins
         private Point centre = new Point(0, 0);
         private double lastAltitude = -1;
         private double needleMoveSpeed = 0;
+        private int animationTimeInMs = 3000;
         System.Timers.Timer animateTimer;
-
+        public event EventHandler<string> LogMessage;
 
         public Generic_Altimeter()
         {
@@ -62,7 +63,7 @@ namespace InstrumentPlugins
         {
             if (control == null)
             {
-                control = new PictureBox();
+                control = new Panel();
                 control.Name = "Generic_Altimeter";
                 control.Top = controlTop;
                 control.Left = controlLeft;
@@ -274,11 +275,11 @@ namespace InstrumentPlugins
             }
         }
 
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {
-                return new string[] { "" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Blank can be used on all layouts
             }
         }
 
@@ -296,6 +297,22 @@ namespace InstrumentPlugins
             get
             {
                 return control;
+            }
+        }
+
+        public string Name => "Generic Altimeter";
+
+        public string Author => "Dragonlaird";
+
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
             }
         }
 

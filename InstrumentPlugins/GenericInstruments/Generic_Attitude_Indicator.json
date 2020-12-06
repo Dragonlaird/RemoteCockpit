@@ -1,0 +1,48 @@
+{
+  "Name": "Generic Attitude Indicator",
+  "Author": "Dragonlaird",
+  "Type": 4,
+  "CreateDate": "2020-11-08T12:00:00",
+  "BackgroundImagePath": ".\\InstrumentImages\\Attitude_Generic_Background.png",
+  "Aircraft": [ "Generic" ],
+  "AnimationUpdateInMs": 100,
+  "Animations": [
+    {
+      "Type": "Image",
+      "Name": "Attitude",
+      "ImagePath": ".\\InstrumentImages\\Attitude_Indicator_Gimbal.png",
+      "Triggers": [
+        {
+          "Type": "ClientRequest",
+          "Request": {
+            "Name": "ATTITUDE INDICATOR BANK DEGREES",
+            "Unit": "radians"
+          },
+          "Actions": [
+            {
+              "Type": "Rotate",
+              "CentrePoint": {
+                "X": 50.0,
+                "Y": 50.0
+              },
+              "RotateClockwise": true,
+              "MaximumValueExpected": 200.0
+            },
+            {
+              "Type": "Clip",
+              "Style": "Circle",
+              "StartPoint": {
+                "X": 38,
+                "Y": 38
+              },
+              "EndPoint": {
+                "X": 62,
+                "Y": 62
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

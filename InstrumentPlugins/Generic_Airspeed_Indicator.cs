@@ -26,6 +26,8 @@ namespace InstrumentPlugins
         private double CurrentAirspeed = 0;
         private double LastAirspeed = -1;
         private double needleMoveSpeed = 0;
+        private int animationTimeInMs = 3000;
+        public event EventHandler<string> LogMessage;
         System.Timers.Timer animateTimer;
 
         public Generic_Airspeed_Indicator()
@@ -37,8 +39,8 @@ namespace InstrumentPlugins
         {
             if (control == null)
             {
-                control = new PictureBox();
-                control.Name = "Generic_Airspeed_Indicator";
+                control = new Panel();
+                control.Name = "Custom_Airspeed_Indicator";
                 control.Top = controlTop;
                 control.Left = controlLeft;
                 control.BackColor = Color.Transparent;
@@ -216,11 +218,11 @@ namespace InstrumentPlugins
             }
         }
 
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {
-                return new string[] { "" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Generic can be used on all layouts
             }
         }
 
@@ -249,6 +251,22 @@ namespace InstrumentPlugins
         }
 
         public ISite Site { get; set; }
+
+        public string Name => "Genereic Airspeed Indicator";
+
+        public string Author => "Dragonlaird";
+
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         public event EventHandler Disposed;
 

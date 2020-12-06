@@ -28,6 +28,8 @@ namespace InstrumentPlugins
         private double CurrentPitch = 0;
         private double LastPitch = -1;
         private double needleMoveSpeed = 0;
+        private int animationTimeInMs = 3000;
+        public event EventHandler<string> LogMessage;
         System.Timers.Timer animateTimer;
 
         /// <summary>
@@ -77,7 +79,7 @@ namespace InstrumentPlugins
             // If we haven't already created the needle, do it now
             if (!control.Controls.ContainsKey("Needle"))
             {
-                var needle = new PictureBox();
+                var needle = new Panel();
                 needle.Name = "Needle";
                 needle.Height = control.Height;
                 needle.Width = control.Width;
@@ -89,7 +91,7 @@ namespace InstrumentPlugins
 
         private void PaintNeedle(object sender, PaintEventArgs e)
         {
-            var needle = (PictureBox)control.Controls["Needle"];
+            var needle = control.Controls["Needle"];
             var gimbal = ImageLibrary.Attitude_Indicator_Gimbal;
             var resizedImage = new Bitmap(gimbal, new Size(needle.Width, needle.Height));
 
@@ -101,7 +103,7 @@ namespace InstrumentPlugins
             // Add the clipped image to our instrument
             var dstImage = ClipToCircle(rotatedImage, centre, 0.7f * (float)resizedImage.Width / 2.0f, Color.Transparent);
 
-            needle.Image = dstImage;
+            needle.BackgroundImage = dstImage;
 
         }
 
@@ -258,11 +260,11 @@ namespace InstrumentPlugins
         /// <summary>
         /// A simple array of FS Aircraft names that this instrument can be used with.
         /// </summary>
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {
-                return new string[] { "" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Blank can be used on all layouts
             }
         }
 
@@ -306,6 +308,22 @@ namespace InstrumentPlugins
         /// Inherited from IComponent - not really used
         /// </summary>
         public ISite Site { get; set; }
+
+        public string Name => "Generic Attitude Indicator";
+
+        public string Author => "Dragonlaird";
+
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         /// <summary>
         /// Notify the cockpit form if the instrument is disposed.

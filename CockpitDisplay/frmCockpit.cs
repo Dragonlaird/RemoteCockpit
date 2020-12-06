@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using InstrumentPlugins;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RemoteCockpitClasses;
 using System;
@@ -16,13 +17,14 @@ namespace CockpitDisplay
     public partial class frmCockpit : Form
     {
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
-        private delegate void SafeControlAddDelegate(Control ctrl, Control parent);
+        private delegate void SafeControlAddDelegate(Control ctrl);
         private delegate void SafeFormUpdateDelegate(Control ctrl);
         private List<ICockpitInstrument> instrumentPlugins;
         private List<ICockpitInstrument> usedInstrumentPlugins;
         private List<LayoutDefinition> layoutDefinitions;
         private LayoutDefinition layoutDefinition;
         public EventHandler<ClientRequest> RequestValue;
+        public EventHandler<string> LogMessage;
         private Point ScreenDimensions;
         public frmCockpit()
         {
@@ -39,27 +41,29 @@ namespace CockpitDisplay
             instrumentPlugins = GetPlugIns(allAssemblies);
         }
 
-        private void AddControl(Control ctrl, Control parent)
+        private void AddControl(Control ctrl)
         {
-            if (parent.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 var d = new SafeControlAddDelegate(AddControl);
-                parent.Invoke(d, new object[] { ctrl, parent });
+                this.Invoke(d, new object[] { ctrl });
                 return;
             }
             ctrl.BackColor = Color.Transparent;
-            parent.Controls.Add(ctrl);
+            this.Controls.Add(ctrl);
+            ctrl.BringToFront();
         }
 
-        private void RemoveControl(Control ctrl, Control parent)
+        private void RemoveControl(Control ctrl)
         {
-            if (parent.InvokeRequired)
+            if (this.InvokeRequired)
             {
                 var d = new SafeControlAddDelegate(RemoveControl);
-                parent.Invoke(d, new object[] { ctrl, parent });
+                this.Invoke(d, new object[] { ctrl });
                 return;
             }
-            parent.Controls.Remove(ctrl);
+            this.Controls.Remove(ctrl);
+            ctrl.Dispose();
         }
 
         private void UpdateProperty(object obj, string propertyName, object value)
@@ -86,9 +90,19 @@ namespace CockpitDisplay
             {
                 if (usedInstrumentPlugins != null)
                 {
-                    lock (usedInstrumentPlugins)
+                    try
+                    {
                         foreach (var instrument in usedInstrumentPlugins)
                         {
+                            if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
+                            {
+                                try
+                                {
+                                    instrument.UpdateFrequency = int.Parse(requestResult.Result?.ToString() ?? "3");
+                                }
+                                catch { }
+                            }
+                            else
                             if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
                                 try
                                 {
@@ -99,6 +113,11 @@ namespace CockpitDisplay
                                 {
                                 }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleLog(string.Format("ResultUpdate Error: {0}", ex.Message));
+                    }
                     UpdateCockpitItem(this);
                 }
             }
@@ -119,20 +138,17 @@ namespace CockpitDisplay
             }
             try
             {
-                obj.Update();
+                //obj.Update();
             }
             catch { }
         }
 
-        internal void LoadLayout(string text)
+        public void LoadLayout(string text)
         {
-            //this.SetStyle(ControlStyles.UserPaint, true);
-            //this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            //this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            // Here we would clear the current cockpit layout and load all the plugins for the new layout
+            // Here we clear the current cockpit layout and load all the plugins for the new layout
             foreach (Control control in this.Controls)
             {
-                RemoveControl(control, this);
+                RemoveControl(control);
             }
             // Find which Instruments are used in this Cockpit
             layoutDefinition = GetLayout(text);
@@ -148,69 +164,63 @@ namespace CockpitDisplay
                     aspectRatio = (double)image.Height / image.Width;
                     if (image.Height * imageScaleFactor > this.Height)
                         imageScaleFactor = (double)this.Height / image.Height;
-                    var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
-                    ScreenDimensions = new Point(backgroundImage.Width, backgroundImage.Height);
-                    var pictureBox = new PictureBox();
-                    pictureBox.Height = this.Height;
-                    pictureBox.Width = this.Width;
-                    pictureBox.Image = backgroundImage;
-                    this.Controls.Add(pictureBox);
+                    var backgroundImage = new Bitmap(this.Width, this.Height);
+                    using (Graphics gr = Graphics.FromImage(backgroundImage))
+                    {
+                        gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+                        ScreenDimensions.X = (int)(image.Width * imageScaleFactor);
+                        ScreenDimensions.Y = (int)(image.Height * imageScaleFactor);
+                    }
+                    this.BackgroundImage = backgroundImage;
                 }
                 catch (Exception ex)
                 {
-
+                    ConsoleLog(string.Format("LoadLayout (Backgound Image) Error: {0}", ex.Message));
                 }
             }
-            var layoutInstruments = new List<ICockpitInstrument>();
-            layoutInstruments.AddRange(instrumentPlugins
-                .Where(x => !string.IsNullOrEmpty(text) && x.Layouts.Contains(layoutDefinition.Name) && layoutDefinition.InstrumentTypes.Contains(x.Type)).GroupBy(
-                x => x.Type,
-                x => x.PluginDate,
-                    (baseType, ages) => new
-                    {
-                        Key = baseType,
-                        Count = ages.Count(),
-                        Min = ages.Min(),
-                        Max = ages.Max()
-                    })
-                .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
-            layoutInstruments.AddRange(instrumentPlugins.Where(x => x.Layouts.Contains("") && layoutDefinition.InstrumentTypes.Contains(x.Type) && !layoutInstruments.Any(y => y.Type == x.Type)).GroupBy(
-                x => x.Type,
-                x => x.PluginDate,
-                    (baseType, ages) => new
-                    {
-                        Key = baseType,
-                        Count = ages.Count(),
-                        Min = ages.Min(),
-                        Max = ages.Max()
-                    })
-                .Select(x => instrumentPlugins.FirstOrDefault(y => y.Type == x.Key && y.PluginDate == x.Max)));
             // Variable layoutInstruments contains all the plugins we can use for this layout
-            // Now we simply add them to the relevant location on the form, suitably resized based on the current fom size
+            // Now we simply add them to the relevant location on the form, suitably resized based on the current form size
             var variables = new List<ClientRequest>();
             try
             {
                 foreach (var instrumentPosition in layoutDefinition.Postions)
                 {
-                    var plugin = instrumentPlugins.FirstOrDefault(x => x.Type == instrumentPosition.Type);
-                    if (plugin != null)
+                    var plugin = instrumentPlugins.Where(x => x.Aircraft != null && (x.Aircraft.Contains(layoutDefinition.Name) || x.Aircraft.Contains("Generic"))).OrderByDescending(x => x.PluginDate).FirstOrDefault(x => x.Type == instrumentPosition.Type);
+                    try
                     {
-                        variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
-                        var vScaleFactor = (double)ScreenDimensions.Y / 100;
-                        var hScaleFactor = (double)ScreenDimensions.X / 100;
-                        plugin.SetLayout(
-                            (int)(instrumentPosition.Top * vScaleFactor),
-                            (int)(instrumentPosition.Left * hScaleFactor),
-                            (int)(instrumentPosition.Height * vScaleFactor),
-                            (int)(instrumentPosition.Width * hScaleFactor));
-                        AddControl(plugin.Control, this);
-                        usedInstrumentPlugins.Add(plugin);
-                        UpdateCockpitItem(plugin.Control);
-                        plugin.Control.BringToFront(); // Ensure control is displayed on top of the background image
+                        if (plugin != null)
+                        {
+                            string message = string.Format("Adding Instrument: {0} (Type: {1})", plugin.Name, plugin.Type.ToString());
+                            ConsoleLog(message);
+                            variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
+                            var vScaleFactor = (double)ScreenDimensions.Y / 100;
+                            var hScaleFactor = (double)ScreenDimensions.X / 100;
+                            plugin.SetLayout(
+                                (int)(instrumentPosition.Top * vScaleFactor),
+                                (int)(instrumentPosition.Left * hScaleFactor),
+                                (int)(instrumentPosition.Height * vScaleFactor),
+                                (int)(instrumentPosition.Width * hScaleFactor));
+                            AddControl(plugin.Control);
+                            usedInstrumentPlugins.Add(plugin);
+                            plugin.LogMessage += LogMessage;
+                            UpdateCockpitItem(plugin.Control);
+                            //plugin.Control.Enabled = false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleLog(string.Format("LoadLayout (Add Plugin) Error: {0}\rError: {1}", plugin.Name, ex.Message));
                     }
                 }
+                if (!variables.Any(x => x.Name == "UPDATE FREQUENCY" && x.Unit == "second"))
+                {
+                    variables.Add(new ClientRequest { Name = "UPDATE FREQUENCY", Unit = "second" });
+                }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                ConsoleLog(string.Format("LoadLayout (Add Instruments) Error: {0}", ex.Message));
+            }
             // Request all variables used by any plugin - even if they've been requested before - duplicate requests are ignored
             if (RequestValue != null)
             {
@@ -220,7 +230,10 @@ namespace CockpitDisplay
                     {
                         RequestValue.DynamicInvoke(this, variable);
                     }
-                    catch(Exception ex) { }
+                    catch (Exception ex)
+                    {
+                        ConsoleLog(string.Format("LoadLayout (Submit Initial Variables) Error: {0}", ex.Message));
+                    }
                 }
             }
 
@@ -230,6 +243,8 @@ namespace CockpitDisplay
         {
             if (layoutDefinitions.Count == 0)
             {
+                string message = string.Format("Loading Layout: {0}", name);
+                ConsoleLog(message);
                 var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
                 var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
                 foreach (var layoutJson in layouts["Layouts"])
@@ -241,14 +256,27 @@ namespace CockpitDisplay
             }
             LayoutDefinition result = layoutDefinitions.SingleOrDefault(x => x.Name == name);
             if (result == null)
+            {
                 result = layoutDefinitions.First();
+                string message = string.Format("Layout Not Defined: {0}\rUsing First Layout: {1}", name, result.Name);
+                ConsoleLog(message);
+            }
             return result;
         }
 
         // Modified from code: https://www.c-sharpcorner.com/article/introduction-to-building-a-plug-in-architecture-using-C-Sharp/
-        private static List<Assembly> LoadAvailableAssemblies()
+        private List<Assembly> LoadAvailableAssemblies()
         {
+            string message = string.Format("Loading Plugins");
+            ConsoleLog(message);
+
             DirectoryInfo dInfo = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Plugins"));
+            if (!dInfo.Exists)
+            {
+                ConsoleLog(string.Format("LoadAvailableAssemblies (Plugins Folder) Error: Folder missing - {0}", Path.Combine(Environment.CurrentDirectory, @"Plugins")));
+                MessageBox.Show("Plugins folder doesn't exist", "Folder Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new List<Assembly>();
+            }
             FileInfo[] files = dInfo.GetFiles("*.dll");
             List<Assembly> plugInAssemblyList = new List<Assembly>();
 
@@ -258,37 +286,68 @@ namespace CockpitDisplay
                 {
                     try
                     {
+                        message = string.Format("Loading Assembly: {0}", file.Name);
+                        ConsoleLog(message);
                         plugInAssemblyList.Add(Assembly.LoadFile(file.FullName)); // May fail if not a .NET assembly
                     }
-                    catch(Exception ex) { }
+                    catch(Exception ex) {
+                        ConsoleLog(string.Format("LoadAvailableAssemblies (Add Custom Plugins) Error: {0}", ex.Message));
+                    }
                 }
             }
 
             return plugInAssemblyList;
         }
 
-        static List<ICockpitInstrument> GetPlugIns(List<Assembly> assemblies)
+        private List<ICockpitInstrument> GetPlugIns(List<Assembly> assemblies)
         {
             List<Type> availableTypes = new List<Type>();
-
+            string message = string.Format("Fetching Custom plugins");
+            ConsoleLog(message);
             foreach (Assembly currentAssembly in assemblies)
                 try
                 {
                     availableTypes.AddRange(currentAssembly.GetTypes());
                 }
-                catch { }
+                catch(Exception ex) {
+                    ConsoleLog(string.Format("GetPlugIns (Assemblies) Error: {0}", ex.Message));
+                }
 
-            // get a list of objects that implement the ICalculator interface AND 
-            // have the CalculationPlugInAttribute
             List<Type> instrumentsList = availableTypes.FindAll(delegate (Type t)
             {
                 List<Type> interfaceTypes = new List<Type>(t.GetInterfaces());
                 return interfaceTypes.Contains(typeof(ICockpitInstrument));
             });
-
+            var customInstruments = instrumentsList.ConvertAll<ICockpitInstrument>(delegate (Type t) { return Activator.CreateInstance(t) as ICockpitInstrument; });
+            message = string.Format("Fetching Generic plugins");
+            ConsoleLog(message);
+            foreach (var instrumentDefinition in Directory.GetFiles(".\\GenericInstruments"))
+            {
+                try
+                {
+                    var genericInstrument = new Generic_Instrument(instrumentDefinition);
+                    customInstruments.Add(genericInstrument);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleLog(string.Format("GetPlugIns (Generic Instrument).\rInstrument: {0}.\rError: {0}", instrumentDefinition, ex.Message));
+                }
+            }
             // convert the list of Objects to an instantiated list of ICalculators
-            return instrumentsList.ConvertAll<ICockpitInstrument>(delegate (Type t) { return Activator.CreateInstance(t) as ICockpitInstrument; });
+            return customInstruments;
+        }
 
+        private void ConsoleLog(string message)
+        {
+            if (LogMessage != null)
+                try
+                {
+                    LogMessage.DynamicInvoke(this, message);
+                }
+                catch(Exception ex)
+                {
+
+                }
         }
     }
 }

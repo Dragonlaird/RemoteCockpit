@@ -1,8 +1,12 @@
-﻿using RemoteCockpitClasses;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RemoteCockpitClasses;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
@@ -14,13 +18,13 @@ namespace CockpitDisplay
         private List<ClientRequestResult> requestResults;
         private RemoteConnector connector;
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
+        private delegate void SafeUpdateDelegate(object sender, string e);
 
-
-        private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
+        //private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
 
         private frmCockpit cockpit;
 
-        private System.Timers.Timer altimeterUpdateTimer;
+        private System.Timers.Timer testTimer;
 
         public frmMain()
         {
@@ -29,58 +33,115 @@ namespace CockpitDisplay
 
             // Only variable needed for this is "TITLE", to be notified whenever the aircraft type changes
             Thread.Sleep(3000);
-            // Always ask to be notified when Connection to FlightSim is made or dropped
-            RequestVariable(new ClientRequest
-            {
-                Name = "FS CONNECTION",
-                Unit = "bool"
-            });
-            // Also, ask to be notified whenever user starts flying a different aircraft
-            RequestVariable(new ClientRequest
-            {
-                Name = "TITLE"
-            });
 
-            //TestAltimeter();
+            TestInstruments();
         }
 
-        private void TestAltimeter()
+        private void TestInstruments()
         {
-            if(altimeterUpdateTimer != null)
+            if(testTimer != null)
             {
-                altimeterUpdateTimer.Stop();
-                altimeterUpdateTimer.Dispose();
-                altimeterUpdateTimer = null;
+                testTimer.Stop();
+                testTimer.Dispose();
+                testTimer = null;
             }
             // Set it to go off every ten seconds
-            altimeterUpdateTimer = new System.Timers.Timer(1000);
+            testTimer = new System.Timers.Timer(2500);
             // Tell the timer what to do when it elapses
-            altimeterUpdateTimer.Elapsed += new ElapsedEventHandler(updateAlitmeter);
+            testTimer.Elapsed += new ElapsedEventHandler(updateInstrumentsForTest);
             // And start it        
-            altimeterUpdateTimer.Start();
+            testTimer.Start();
 
         }
 
-        private void updateAlitmeter(object source, ElapsedEventArgs e)
+        private void updateInstrumentsForTest(object source, ElapsedEventArgs e)
         {
             if (cockpit != null)
             {
-                var rnd = new Random();
-                var changeAmount = rnd.Next(100);
-                if (rnd.NextDouble() > 0.5)
-                    changeAmount = -1 * changeAmount;
-                altitude.Result = double.Parse(altitude.Result?.ToString()) + changeAmount;
-                cockpit.ResultUpdate(altitude);
+                try
+                {
+                    var rnd = new Random();
+                    var changeAmount = rnd.Next(50);
+                    if (rnd.NextDouble() > 0.5)
+                        changeAmount = -changeAmount;
+                    var testResult = requestResults.FirstOrDefault(x => x.Request.Name == "INDICATED ALTITUDE" && x.Request.Unit == "feet");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)3000;
+                    }
+                    else
+                    {
+                        testResult = updateTestResult(testResult, 100, 3000.0);
+                    }
+                    ReceiveResultFromServer(null, testResult);
+
+                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "AIRSPEED INDICATED" && x.Request.Unit == "knots");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "AIRSPEED INDICATED", Unit = "knots" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)100;
+                    }
+                    else
+                    {
+                        testResult = updateTestResult(testResult, 20, 100.0);
+                    }
+                    ReceiveResultFromServer(null, testResult);
+
+                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "ATTITUDE INDICATOR BANK DEGREES" && x.Request.Unit == "radians");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "ATTITUDE INDICATOR BANK DEGREES", Unit = "radians" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)0;
+                    }
+                    else
+                    {
+                        testResult = updateTestResult(testResult, 20, 0.0);
+                    }
+                    ReceiveResultFromServer(null, testResult);
+                }
+                catch (Exception ex) { }
             }
+        }
+
+        private ClientRequestResult updateTestResult(ClientRequestResult result, int variance, double baseLine)
+        {
+            var rnd = new Random();
+            var changeAmount = (double)rnd.Next(-variance, variance);
+            result.Result = (double)result.Result + changeAmount;
+            if ((double)result.Result < baseLine - variance)
+            {
+                result.Result = baseLine - variance;
+            }
+            if ((double)result.Result > baseLine + variance)
+            {
+                result.Result = baseLine + variance;
+            }
+            return result;
         }
 
         private void RequestVariable(ClientRequest request)
         {
+            if(!requestResults.Any(x=> x.Request.Name == request.Name && x.Request.Unit == request.Unit))
+            {
+                requestResults.Add(new ClientRequestResult { Request = request, Result = null });
+            }
             cbConnected.Checked = connector?.Connected ?? false;
             if (connector?.Connected == true)
             {
                 connector.RequestVariable(request);
             }
+        }
+
+        private void RequestAllVariables()
+        {
+            // Assume FS Connection is not established - the re-request the Connection State
+            // If FS Connection returns true, it will automatially resubmit all variable requests
+            cbFSRunning.Checked = false;
+            RequestVariable(new ClientRequest { Name = "FS CONNECTION", Unit = "second" });
         }
 
         private void Initialize()
@@ -92,10 +153,41 @@ namespace CockpitDisplay
             connector.ReceiveData += ReceiveResultFromServer;
             connector.Connect();
             cbConnected.Checked = connector.Connected;
+
+            var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
+            var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
+            cmbCockpitLayout.Items.Clear();
+            foreach (var layoutJson in layouts["Layouts"])
+            {
+                var layout = layoutJson.ToObject<LayoutDefinition>();
+                cmbCockpitLayout.Items.Add(layout.Name);
+            }
+            cmbCockpitLayout.SelectedIndex = 0;
+            // Always ask to be notified when Connection to FlightSim is made or dropped
+            RequestVariable(new ClientRequest
+            {
+                Name = "FS CONNECTION",
+                Unit = "bool"
+            });
+            // Also, ask to be notified whenever user starts flying a different aircraft
+            RequestVariable(new ClientRequest
+            {
+                Name = "TITLE",
+                Unit = "string"
+            });
+
+            RequestVariable(new ClientRequest
+            {
+                Name = "UPDATE FREQUENCY",
+                Unit = "second"
+            });
         }
 
         private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)
         {
+            string message = string.Format("Value Update: {0}({1}) = {2}", requestResult.Request.Name, requestResult.Request.Unit, requestResult.Result);
+            DebugMessage(this, message);
+
             if (requestResults.Any(x => x.Request.Name == requestResult.Request.Name && x.Request.Unit == requestResult.Request.Unit))
                 lock (requestResults)
                 {
@@ -104,22 +196,48 @@ namespace CockpitDisplay
             else
                 requestResults.Add(requestResult);
 
-                // Received a new value for a request - identify which plugins need this variable and send it
-                if (requestResult.Request.Name == "FS CONNECTION")
+            // Received a new value for a request - identify which plugins need this variable and send it
+            if (requestResult.Request.Name == "FS CONNECTION")
             {
                 // Just informing us the current connection state to the Flight Simulator = display it on screen
                 var existingConnectionState = this.Controls.Find("cbFSRunning", true);
                 foreach (Control connectionStateLabel in existingConnectionState)
                 {
                     if ((bool)requestResult.Result)
+                    {
+                        if (!((CheckBox)existingConnectionState.First()).Checked)
+                        {
+                            // Re-request all previous variables after reconnect
+                            foreach (var variableRequest in requestResults.Where(x => x.Request.Name != "FS CONNECTION"))
+                            {
+                                RequestVariable(variableRequest.Request);
+                            }
+                        }
                         UpdateObject(connectionStateLabel, "Checked", true);
+                    }
                     else
                         UpdateObject(connectionStateLabel, "Checked", false);
                 }
             }
-            if(cockpit != null)
+            if (requestResult.Request.Name == "TITLE")
             {
-                cockpit.ResultUpdate(requestResult);
+                // New aircraft selected
+                if (requestResult.Result != null && cmbCockpitLayout.Items.Contains(requestResult.Result?.ToString()) && cbAutoCockpitLayout.Checked)
+                {
+                    // User wants to auto-select the aircraft
+                    UpdateObject(cmbCockpitLayout, "SelectedIndex", cmbCockpitLayout.Items.IndexOf(requestResult.Result?.ToString()));
+                    //cmbCockpitLayout.SelectedIndex = cmbCockpitLayout.Items.IndexOf(requestResult.Result?.ToString());
+                    if (cockpit != null)
+                        // Cockpit already display - reload with the new layout
+                        ReloadCockpit(requestResult.Result.ToString());
+                }
+            }
+            else
+            {
+                if (cockpit != null)
+                {
+                    cockpit.ResultUpdate(requestResult);
+                }
             }
         }
 
@@ -147,7 +265,8 @@ namespace CockpitDisplay
             if (cb.Checked)
             {
                 cmbCockpitLayout.Enabled = false;
-                cmbCockpitLayout.Text = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Result?.ToString();
+                var layout = requestResults.SingleOrDefault(x => x.Request.Name == "TITLE")?.Result?.ToString() ?? "Generic";
+                cmbCockpitLayout.Text = layout;
                 if (cockpit != null)
                     ReloadCockpit(cmbCockpitLayout.Text);
             }
@@ -161,16 +280,17 @@ namespace CockpitDisplay
         {
             if (string.IsNullOrEmpty(text))
             {
-                text = "Cessna 152 ASOBO";
+                text = "Generic";
             }
             if(cockpit != null)
             {
-                cockpit.Close();
+                //cockpit.Close();
                 cockpit.Dispose();
             }
             cockpit = new frmCockpit();
             cockpit.RequestValue += RequestVariable;
-
+            cockpit.LogMessage += DebugMessage;
+            cockpit.FormClosed += Cockpit_Closed;
             if (cbFullScreen.Checked)
             {
                 cockpit.WindowState = FormWindowState.Maximized;
@@ -202,13 +322,36 @@ namespace CockpitDisplay
                 }
             }
             catch { }
+            RequestAllVariables(); // Resubmit all previous requests, in case server disconnected from FS
             //cockpit.Update();
             cockpit.Focus();
             this.Focus();
         }
 
+        private void DebugMessage(object sender, string e)
+        {
+            if (!string.IsNullOrEmpty(e))
+            {
+                if (txtDebugMessages.InvokeRequired)
+                {
+                    var d = new SafeUpdateDelegate(DebugMessage);
+                    ((Control)txtDebugMessages).Invoke(d, new object[] { sender, e });
+                    return;
+                }
+                txtDebugMessages.Text += string.Format("{0:HH:mm:ss} {1}\r\n", DateTime.Now, e);
+                while(txtDebugMessages.Text.Count(x=> x=='\n') > 200)
+                {
+                    txtDebugMessages.Text = txtDebugMessages.Text.Substring(txtDebugMessages.Text.IndexOf('\n') + 1);
+                }
+                txtDebugMessages.SelectionStart = txtDebugMessages.Text.Length;
+                txtDebugMessages.ScrollToCaret();
+            }
+        }
+
         private void RequestVariable(object sender, ClientRequest request)
         {
+            string message = string.Format("Request Value: {0} ({1})", request.Name, request.Unit);
+            DebugMessage(this, message);
             // Has the variable already been requested and received?
             if (requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
             {
@@ -225,6 +368,11 @@ namespace CockpitDisplay
             }
         }
 
+        private void Cockpit_Closed(object sender, FormClosedEventArgs e)
+        {
+            pbShowCockpit_Click(pbShowCockpit, null);
+        }
+
         private void pbShowCockpit_Click(object sender, EventArgs e)
         {
             var cmdButton = (Button)sender;
@@ -237,7 +385,11 @@ namespace CockpitDisplay
             else
             {
                 cmdButton.Text = "Show Cockpit";
-                cockpit?.Close();
+                if (cockpit.Visible)
+                {
+                    cockpit.Visible = false;
+                    cockpit?.Close();
+                }
                 cockpit?.Dispose();
                 cockpit = null;
             }

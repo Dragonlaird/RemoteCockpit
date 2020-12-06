@@ -17,6 +17,9 @@ namespace InstrumentPlugins
         private int controlLeft = 0;
         private int controlHeight = 50;
         private int controlWidth = 50;
+        private int animationTimeInMs = 3000;
+        public event EventHandler<string> LogMessage;
+
         private List<ClientRequestResult> values = new List<ClientRequestResult>();
 
         /// <summary>
@@ -49,11 +52,11 @@ namespace InstrumentPlugins
         /// <summary>
         /// A simple array of FS Aircraft names that this instrument can be used with.
         /// </summary>
-        public string[] Layouts
+        public string[] Aircraft
         {
             get
             {
-                return new string[] { "" }; // Blank can be used on all layouts
+                return new string[] { "Generic" }; // Generic can be used on all layouts
             }
         }
 
@@ -94,9 +97,39 @@ namespace InstrumentPlugins
         }
 
         /// <summary>
-        /// Inherited from IComponent - not really used
+        /// Inherited from IComponent - not used
         /// </summary>
         public ISite Site { get; set; }
+
+        /// <summary>
+        /// Name of the instrument this plugin generates
+        /// Typically the type of instrument this control creates and aircraft it can be used on
+        /// e.g. Airspeed Indicator for Cessna 152
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Name of the organisation or person who created this instrument plugin
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// How often we expect to receive updates from the server (in seconds)
+        /// Useful for producing smooth animations from last to current value.
+        /// Can be used to determine how often the animation should be updated
+        /// and by how much to update it before the next update is expected
+        /// </summary>
+        public int UpdateFrequency
+        {
+            get
+            {
+                return animationTimeInMs / 1000;
+            }
+            set
+            {
+                animationTimeInMs = value * 1000;
+            }
+        }
 
         /// <summary>
         /// Notify the cockpit form if the instrument is disposed.

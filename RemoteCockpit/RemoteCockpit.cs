@@ -16,6 +16,7 @@ namespace RemoteCockpit
         private SocketListener listener;
         private List<SimVarRequestResult> requestResults;
         private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
+        private int _updateFrequency = 0; // How may seconds between each SimConnect poll?
         public RemoteCockpit()
         {
             InitializeComponent();
@@ -28,6 +29,7 @@ namespace RemoteCockpit
             requestResults = new List<SimVarRequestResult>();
             // Add the first Request Variable for Connection State
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
+            requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = false });
         }
 
         private void StartConnector()
@@ -44,6 +46,12 @@ namespace RemoteCockpit
             //var tempRequest = new SimVarRequest { Name = "Title", Unit = null };
             //fsConnector.RequestVariable(tempRequest);
             fsConnector.Start();
+            try
+            {
+                _updateFrequency = fsConnector.ValueRequestInterval;
+                requestResults.First(x => x.Request.Name == "UPDATE FREQUENCY" && x.Request.Unit == "second").Value = _updateFrequency;
+            }
+            catch { }
 
         }
 
@@ -65,6 +73,10 @@ namespace RemoteCockpit
             var currentConnection = requestResults.SingleOrDefault(x => x.Request.Name == "FS CONNECTION" && x.Request.Unit == "bool");
             if (currentConnection != null)
                 listener.SendVariable(currentConnection, true);
+            // Fetch the current Update Frequency
+            currentConnection = new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = _updateFrequency };
+            if (currentConnection != null)
+                listener.SendVariable(currentConnection, true);
 
         }
 
@@ -77,7 +89,7 @@ namespace RemoteCockpit
         private void ClientRequest(object sender, SimVarRequest request)
         {
             // Remote Client has requested a variable - has this vaiable already been requested?
-            if (fsConnector != null && (!requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit) || request.Name == "FS CONNECTION"))
+            if (fsConnector != null && (!requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit) || request.Name == "FS CONNECTION" || request.Name == "UPDATE FREQUENCY"))
             {
                 if (!requestResults.Any(x => x.Request.Name == request.Name && x.Request.Unit == request.Unit))
                     // New request, add it to the list of known requests
@@ -86,7 +98,7 @@ namespace RemoteCockpit
                         requestResults.Add(new SimVarRequestResult { Request = request, Value = null });
                     }
                 // Send the request to FSConnector
-                if(request.Name == "FS CONNECTION" && sender is StateObject)
+                if((request.Name == "FS CONNECTION" || request.Name == "UPDATE FREQUENCY") && sender is StateObject)
                 {
                     ClientConnect(sender, (StateObject)sender);
                 }
