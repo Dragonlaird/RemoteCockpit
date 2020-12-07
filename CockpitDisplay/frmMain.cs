@@ -99,7 +99,7 @@ namespace CockpitDisplay
                     }
                     else
                     {
-                        testResult = updateTestResult(testResult, 20, 0.0);
+                        testResult = updateTestResult(testResult, 0.5, 0.0);
                     }
                     ReceiveResultFromServer(null, testResult);
                     testResult = requestResults.FirstOrDefault(x => x.Request.Name == "ATTITUDE INDICATOR PITCH DEGREES" && x.Request.Unit == "radians");
@@ -122,7 +122,7 @@ namespace CockpitDisplay
         private ClientRequestResult updateTestResult(ClientRequestResult result, double variance, double baseLine)
         {
             var rnd = new Random();
-            var changeAmount = (double)rnd.Next(-variance, variance);
+            var changeAmount = (double)rnd.Next((int)(-100*variance), (int)(100*variance)) / 100.0f;
             result.Result = (double)result.Result + changeAmount;
             if ((double)result.Result < baseLine - variance)
             {
