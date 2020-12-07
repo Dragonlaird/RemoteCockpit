@@ -450,8 +450,8 @@ namespace InstrumentDesigner
                         populatingForm = true;
                         gpAnimationActionMoveX.Visible = true;
                         gpAnimationActionMoveX.Text = actionType.ToString();
-                        txtAnimationActionMoveXMax.Value = (decimal)animationMove.MaxValue;
-                        txtAnimationActionMoveXValue.Value = (decimal)animationMove.Percent;
+                        txtAnimationActionMoveMax.Value = (decimal)animationMove.MaxValue;
+                        cbAnimationActionMoveInvert.Checked = animationMove.Invert;
                         populatingForm = false;
                         break;
                 }
@@ -737,7 +737,7 @@ namespace InstrumentDesigner
                 var trigger = GetSelectedTrigger();
                 var action = (AnimationActionMove)GetSelectedAction();
                 var rowIdx = dgAnimationActions.Rows.IndexOf(dgAnimationActions.SelectedRows[0]);
-                action.MaxValue = (float)txtAnimationActionMoveXMax.Value;
+                action.MaxValue = (float)txtAnimationActionMoveMax.Value;
                 _animation.Triggers[_animation.Triggers.ToList().IndexOf(trigger)].Actions[rowIdx] = action;
             }
         }
@@ -749,7 +749,7 @@ namespace InstrumentDesigner
                 var trigger = GetSelectedTrigger();
                 var action = (AnimationActionMove)GetSelectedAction();
                 var rowIdx = dgAnimationActions.Rows.IndexOf(dgAnimationActions.SelectedRows[0]);
-                action.Percent = (float)txtAnimationActionMoveXValue.Value;
+                action.Invert = cbAnimationActionMoveInvert.Checked;
                 _animation.Triggers[_animation.Triggers.ToList().IndexOf(trigger)].Actions[rowIdx] = action;
             }
         }
@@ -763,6 +763,17 @@ namespace InstrumentDesigner
                     ((AnimationDrawing)_animation).FillColor = Color.FromKnownColor((KnownColor)((ComboBox)sender).SelectedValue);
                 }
                 catch (Exception ex) { }
+            }
+        }
+
+        private void AnimationActionMoveInvert_Change(object sender, EventArgs e)
+        {
+            if(_animation != null && !populatingForm)
+            {
+                try {
+                    ((AnimationActionMove)_animation).Invert = ((CheckBox)sender).Checked;
+                }
+                catch(Exception ex) { }
             }
         }
     }

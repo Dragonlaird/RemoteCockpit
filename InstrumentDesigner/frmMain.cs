@@ -99,7 +99,7 @@ namespace InstrumentDesigner
                 if (anim.Triggers != null)
                 {
                     dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => x.Type.ToString()));
-                    dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => x.Actions.Select(y => y.Type.ToString())));
+                    dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => x.Actions.Select(y => y?.Type.ToString())));
                 }
             }
             populatingForm = false;

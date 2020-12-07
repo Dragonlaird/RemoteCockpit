@@ -8,6 +8,6 @@ namespace RemoteCockpitClasses.Animations
     {
         public AnimationActionTypeEnum Type { get; set; } = AnimationActionTypeEnum.MoveX;
         public float MaxValue { get; set; }
-        public float Percent { get; set; }
+        public bool Invert { get; set; }
     }
 }

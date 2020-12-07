@@ -228,13 +228,103 @@ namespace InstrumentPlugins
                             // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
                             initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
                         }
+                        if(action is AnimationActionMove)
+                        {
+                            var moveAction = (AnimationActionMove)action;
+                            bool moveVertically = moveAction.Type == AnimationActionTypeEnum.MoveY;
+                            var moveAmount = moveAction.Invert ? -1 : 1 * ((double)nextValue % moveAction.MaxValue);
+                            initialImage = MoveImage(initialImage, moveVertically, moveAmount);
+                        }
                     }
                 }
             }
             return initialImage;
         }
 
-        public Image Overlap(Image source1, Image source2)
+        public Bitmap MoveImage(Bitmap initialImage, bool moveVertically, double moveAmount)
+        {
+            var onePercent = 0.0;
+            Bitmap result;
+            if (moveVertically)
+                onePercent = (float)Control.Height / 100.0f;
+            else
+                onePercent = (float)controlWidth / 100.0f;
+            moveAmount = moveAmount * onePercent;
+            result = new Bitmap(
+                initialImage.Width + (int)(moveVertically ? 0 : Math.Abs(moveAmount)),
+                initialImage.Height + (int)(moveVertically ? Math.Abs(moveAmount) : 0),
+                PixelFormat.Format32bppArgb);
+            result.MakeTransparent();
+            // Determine if the Initial Image should be overlaid on the left, right, top or bottom of the new Image
+            if (moveVertically)
+            {
+                if (moveAmount < 0)
+                {
+                    // Put image at top-left (0, 0)
+                    using (var graphics = Graphics.FromImage(result))
+                    {
+                        graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                        graphics.DrawImage(initialImage, 0, 0);
+                    }
+                    // Now crop the image back to the original size
+                    using (Graphics g = Graphics.FromImage(initialImage))
+                    {
+                        g.CompositingMode = CompositingMode.SourceOver;
+                        g.DrawImage(result, new Rectangle(new Point(0, (int)moveAmount), new Size(initialImage.Width, initialImage.Height)));
+                    }
+                }
+                else
+                {
+                    // Put image at bottom (0, moveAmount)
+                    using (var graphics = Graphics.FromImage(result))
+                    {
+                        graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                        graphics.DrawImage(initialImage, 0, (int)Math.Abs(moveAmount));
+                    }
+                    // Now crop the image back to the original size
+                    using (Graphics g = Graphics.FromImage(initialImage))
+                    {
+                        g.CompositingMode = CompositingMode.SourceOver;
+                        g.DrawImage(result, new Rectangle(new Point(0, 0), new Size(initialImage.Width, initialImage.Height)));
+                    }
+                }
+            }
+            else
+            {
+                if (moveAmount < 0)
+                {
+                    // Put image at top-left (0, 0)
+                    using (var graphics = Graphics.FromImage(result))
+                    {
+                        graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                        graphics.DrawImage(initialImage, 0, 0);
+                    }
+                    // Now crop the image back to the original size
+                    using (Graphics g = Graphics.FromImage(initialImage))
+                    {
+                        g.DrawImage(result, new Rectangle(new Point(0, (int)Math.Abs(moveAmount)), new Size(initialImage.Width, initialImage.Height)));
+                    }
+                }
+                else
+                {
+                    // Put image at right (moveAmount, 0)
+                    using (var graphics = Graphics.FromImage(result))
+                    {
+                        graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                        graphics.DrawImage(initialImage, (int)Math.Abs(moveAmount), 0);
+                    }
+                    // Now crop the image back to the original size
+                    using (Graphics g = Graphics.FromImage(initialImage))
+                    {
+                        g.DrawImage(result, new Rectangle(new Point(0, 0), new Size(initialImage.Width, initialImage.Height)));
+                    }
+                }
+            }
+            result.Dispose();
+            return initialImage;
+        }
+
+        public Bitmap Overlap(Image source1, Image source2)
         {
             var target = new Bitmap(Control.Width, Control.Height, PixelFormat.Format32bppArgb);
             target.MakeTransparent();

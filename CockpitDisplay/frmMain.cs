@@ -102,12 +102,24 @@ namespace CockpitDisplay
                         testResult = updateTestResult(testResult, 20, 0.0);
                     }
                     ReceiveResultFromServer(null, testResult);
+                    testResult = requestResults.FirstOrDefault(x => x.Request.Name == "ATTITUDE INDICATOR PITCH DEGREES" && x.Request.Unit == "radians");
+                    if (testResult == null)
+                    {
+                        testResult = new ClientRequestResult { Request = new ClientRequest { Name = "ATTITUDE INDICATOR PITCH DEGREES", Unit = "radians" }, Result = (double)-1 };
+                        requestResults.Add(testResult);
+                        testResult.Result = (double)0;
+                    }
+                    else
+                    {
+                        testResult = updateTestResult(testResult, 0.5, 0.0);
+                    }
+                    ReceiveResultFromServer(null, testResult);
                 }
                 catch (Exception ex) { }
             }
         }
 
-        private ClientRequestResult updateTestResult(ClientRequestResult result, int variance, double baseLine)
+        private ClientRequestResult updateTestResult(ClientRequestResult result, double variance, double baseLine)
         {
             var rnd = new Random();
             var changeAmount = (double)rnd.Next(-variance, variance);
