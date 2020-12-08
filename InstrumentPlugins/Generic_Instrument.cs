@@ -242,39 +242,42 @@ namespace InstrumentPlugins
             return initialImage;
         }
 
-        public Bitmap MoveImage(Bitmap initialImage, bool moveVertically, double moveAmount)
+        public Bitmap MoveImage(Bitmap initialImage, bool moveVertically, double movePercent)
         {
-            if (moveVertically)
-                moveAmount = moveAmount * Control.Height;
-            else
-                moveAmount = moveAmount * Control.Width;
-            Bitmap target = new Bitmap(Control.Width, Control.Height);
+            // movePercent has a range of -1 to 1 (equiv. to -100% to +100%)
+            var moveAbsolute = movePercent * (moveVertically ? initialImage.Height : initialImage.Width);
+            // Create a blank image for us to populate with the result, same dimensions as the original image
+            Bitmap target = new Bitmap(initialImage.Width, initialImage.Height);
             target.MakeTransparent();
-            using (Bitmap workingImage = new Bitmap(
-                Control.Width * (int)(moveVertically ? 1 : 3),
-                Control.Height * (int)(moveVertically ? 3 : 1),
+            // Create an oversized image as a canvas, to allow us to position the original image anywhere
+            using (Bitmap canvasImage = new Bitmap(
+                initialImage.Width * (int)(moveVertically ? 1 : 3),
+                initialImage.Height * (int)(moveVertically ? 3 : 1),
                 PixelFormat.Format32bppArgb))
             {
-                workingImage.MakeTransparent();
-                using (var graphics = Graphics.FromImage(workingImage))
+                canvasImage.MakeTransparent();
+                // Place original image at correct position on our oversized canvas image
+                using (var graphics = Graphics.FromImage(canvasImage))
                 {
-                    graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+                    graphics.CompositingMode = CompositingMode.SourceCopy;
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                     graphics.DrawImage(initialImage,
-                        moveVertically ? 0 : (Control.Width + (int)moveAmount),
-                        moveVertically ? Control.Height + (int)moveAmount : 0);
+                        new Point(
+                            moveVertically ? 0 : initialImage.Width + (int)moveAbsolute,
+                            moveVertically ? initialImage.Height + (int)moveAbsolute : 0
+                            )
+                        );
                 }
-                // Now crop the image back to the original size
-                using (Graphics g = Graphics.FromImage(target))
-                {
-                    g.DrawImage(workingImage,
-                        new Rectangle(
-                            moveVertically ? 0 : Control.Width,
-                            moveVertically ? Control.Height : 0,
-                            Control.Width,
-                            Control.Height
-                        )
-                    );
-                }
+                // Now crop the image back to the original size from the centre of our canvas image
+                Rectangle srcRect = new Rectangle(
+                            moveVertically ? 0 : initialImage.Width,
+                            moveVertically ? initialImage.Height : 0,
+                            initialImage.Width,
+                            initialImage.Height);
+                target = (Bitmap)canvasImage.Clone(srcRect, canvasImage.PixelFormat);
             }
             return target;
         }
