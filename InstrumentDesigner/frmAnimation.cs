@@ -376,6 +376,7 @@ namespace InstrumentDesigner
             var selectedVariableName = ((ComboBox)sender).Items[((ComboBox)sender).SelectedIndex]?.ToString();
             var selectedVariable = SimVarUnits.DefaultUnits.FirstOrDefault(x => x.Key == selectedVariableName);
             txtAnimationClientRequestUnits.Text = selectedVariable.Value?.DefaultUnit ?? "";
+            txtAnimationClientRequestDescription.Text = selectedVariable.Value.Description ?? "";
             if (!populatingForm)
             {
                 var trigger = (AnimationTriggerClientRequest)_animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());

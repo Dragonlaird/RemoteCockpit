@@ -32,14 +32,13 @@ namespace CockpitDisplay
             Initialize();
 
             // Only variable needed for this is "TITLE", to be notified whenever the aircraft type changes
-            Thread.Sleep(3000);
-
-            TestInstruments();
+            //TestInstruments();
         }
 
         private void TestInstruments()
         {
-            if(testTimer != null)
+            Thread.Sleep(3000);
+            if (testTimer != null)
             {
                 testTimer.Stop();
                 testTimer.Dispose();

@@ -68,6 +68,7 @@ namespace InstrumentDesigner
             this.Type = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.tabHow = new System.Windows.Forms.TabPage();
             this.gpAnimationActionMoveX = new System.Windows.Forms.GroupBox();
+            this.cbAnimationActionMoveInvert = new System.Windows.Forms.CheckBox();
             this.lblAnimationActionMoveXPercent = new System.Windows.Forms.Label();
             this.txtAnimationActionMoveMax = new System.Windows.Forms.NumericUpDown();
             this.lblAnimationActionMoveXMax = new System.Windows.Forms.Label();
@@ -101,7 +102,8 @@ namespace InstrumentDesigner
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.cbAnimationActionMoveInvert = new System.Windows.Forms.CheckBox();
+            this.lblAnimationClientRequestDescription = new System.Windows.Forms.Label();
+            this.txtAnimationClientRequestDescription = new System.Windows.Forms.TextBox();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -136,11 +138,10 @@ namespace InstrumentDesigner
             this.tabCollection.Controls.Add(this.tabWhat);
             this.tabCollection.Controls.Add(this.tabWhen);
             this.tabCollection.Controls.Add(this.tabHow);
-            this.tabCollection.Location = new System.Drawing.Point(18, 18);
-            this.tabCollection.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabCollection.Location = new System.Drawing.Point(12, 12);
             this.tabCollection.Name = "tabCollection";
             this.tabCollection.SelectedIndex = 0;
-            this.tabCollection.Size = new System.Drawing.Size(711, 560);
+            this.tabCollection.Size = new System.Drawing.Size(474, 364);
             this.tabCollection.TabIndex = 0;
             // 
             // tabWhat
@@ -152,11 +153,10 @@ namespace InstrumentDesigner
             this.tabWhat.Controls.Add(this.lblAnimationType);
             this.tabWhat.Controls.Add(this.txtAnimationName);
             this.tabWhat.Controls.Add(this.lblAnimationName);
-            this.tabWhat.Location = new System.Drawing.Point(4, 29);
-            this.tabWhat.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabWhat.Location = new System.Drawing.Point(4, 22);
             this.tabWhat.Name = "tabWhat";
-            this.tabWhat.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabWhat.Size = new System.Drawing.Size(703, 527);
+            this.tabWhat.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabWhat.Size = new System.Drawing.Size(466, 338);
             this.tabWhat.TabIndex = 0;
             this.tabWhat.Text = "What";
             this.tabWhat.UseVisualStyleBackColor = true;
@@ -165,10 +165,9 @@ namespace InstrumentDesigner
             // 
             this.lblAnimationTypeWarning.AutoSize = true;
             this.lblAnimationTypeWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblAnimationTypeWarning.Location = new System.Drawing.Point(384, 55);
-            this.lblAnimationTypeWarning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationTypeWarning.Location = new System.Drawing.Point(256, 36);
             this.lblAnimationTypeWarning.Name = "lblAnimationTypeWarning";
-            this.lblAnimationTypeWarning.Size = new System.Drawing.Size(305, 20);
+            this.lblAnimationTypeWarning.Size = new System.Drawing.Size(207, 13);
             this.lblAnimationTypeWarning.TabIndex = 14;
             this.lblAnimationTypeWarning.Text = "Warning: Changing this removes all values";
             // 
@@ -180,11 +179,9 @@ namespace InstrumentDesigner
             this.gpAnimationDrawing.Controls.Add(this.lblAnimationFillMethod);
             this.gpAnimationDrawing.Controls.Add(this.cmbAnimationFillColor);
             this.gpAnimationDrawing.Controls.Add(this.lblAnimationFillColor);
-            this.gpAnimationDrawing.Location = new System.Drawing.Point(9, 151);
-            this.gpAnimationDrawing.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gpAnimationDrawing.Location = new System.Drawing.Point(6, 98);
             this.gpAnimationDrawing.Name = "gpAnimationDrawing";
-            this.gpAnimationDrawing.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gpAnimationDrawing.Size = new System.Drawing.Size(663, 360);
+            this.gpAnimationDrawing.Size = new System.Drawing.Size(442, 234);
             this.gpAnimationDrawing.TabIndex = 7;
             this.gpAnimationDrawing.TabStop = false;
             this.gpAnimationDrawing.Text = "Drawing";
@@ -193,10 +190,9 @@ namespace InstrumentDesigner
             // lblAnimationPointMap
             // 
             this.lblAnimationPointMap.AutoSize = true;
-            this.lblAnimationPointMap.Location = new System.Drawing.Point(387, 26);
-            this.lblAnimationPointMap.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationPointMap.Location = new System.Drawing.Point(258, 17);
             this.lblAnimationPointMap.Name = "lblAnimationPointMap";
-            this.lblAnimationPointMap.Size = new System.Drawing.Size(160, 20);
+            this.lblAnimationPointMap.Size = new System.Drawing.Size(107, 13);
             this.lblAnimationPointMap.TabIndex = 12;
             this.lblAnimationPointMap.Text = "Cartesian Plot Points:";
             // 
@@ -206,11 +202,10 @@ namespace InstrumentDesigner
             this.dgAnimationPlotPoints.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.pointX,
             this.pointY});
-            this.dgAnimationPlotPoints.Location = new System.Drawing.Point(387, 51);
-            this.dgAnimationPlotPoints.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dgAnimationPlotPoints.Location = new System.Drawing.Point(258, 33);
             this.dgAnimationPlotPoints.Name = "dgAnimationPlotPoints";
             this.dgAnimationPlotPoints.RowHeadersWidth = 62;
-            this.dgAnimationPlotPoints.Size = new System.Drawing.Size(267, 300);
+            this.dgAnimationPlotPoints.Size = new System.Drawing.Size(178, 195);
             this.dgAnimationPlotPoints.TabIndex = 11;
             this.dgAnimationPlotPoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.PlotPoint_Change);
             this.dgAnimationPlotPoints.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.PlotPointAdd_Change);
@@ -238,19 +233,17 @@ namespace InstrumentDesigner
             // 
             this.cmbAnimationFillMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationFillMethod.FormattingEnabled = true;
-            this.cmbAnimationFillMethod.Location = new System.Drawing.Point(104, 100);
-            this.cmbAnimationFillMethod.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbAnimationFillMethod.Location = new System.Drawing.Point(69, 65);
             this.cmbAnimationFillMethod.Name = "cmbAnimationFillMethod";
-            this.cmbAnimationFillMethod.Size = new System.Drawing.Size(180, 28);
+            this.cmbAnimationFillMethod.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationFillMethod.TabIndex = 10;
             // 
             // lblAnimationFillMethod
             // 
             this.lblAnimationFillMethod.AutoSize = true;
-            this.lblAnimationFillMethod.Location = new System.Drawing.Point(3, 105);
-            this.lblAnimationFillMethod.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationFillMethod.Location = new System.Drawing.Point(2, 68);
             this.lblAnimationFillMethod.Name = "lblAnimationFillMethod";
-            this.lblAnimationFillMethod.Size = new System.Drawing.Size(90, 20);
+            this.lblAnimationFillMethod.Size = new System.Drawing.Size(61, 13);
             this.lblAnimationFillMethod.TabIndex = 9;
             this.lblAnimationFillMethod.Text = "Fill Method:";
             // 
@@ -258,20 +251,18 @@ namespace InstrumentDesigner
             // 
             this.cmbAnimationFillColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationFillColor.FormattingEnabled = true;
-            this.cmbAnimationFillColor.Location = new System.Drawing.Point(104, 51);
-            this.cmbAnimationFillColor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbAnimationFillColor.Location = new System.Drawing.Point(69, 33);
             this.cmbAnimationFillColor.Name = "cmbAnimationFillColor";
-            this.cmbAnimationFillColor.Size = new System.Drawing.Size(180, 28);
+            this.cmbAnimationFillColor.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationFillColor.TabIndex = 8;
             this.cmbAnimationFillColor.SelectedIndexChanged += new System.EventHandler(this.FillColor_Change);
             // 
             // lblAnimationFillColor
             // 
             this.lblAnimationFillColor.AutoSize = true;
-            this.lblAnimationFillColor.Location = new System.Drawing.Point(21, 55);
-            this.lblAnimationFillColor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationFillColor.Location = new System.Drawing.Point(14, 36);
             this.lblAnimationFillColor.Name = "lblAnimationFillColor";
-            this.lblAnimationFillColor.Size = new System.Drawing.Size(73, 20);
+            this.lblAnimationFillColor.Size = new System.Drawing.Size(49, 13);
             this.lblAnimationFillColor.TabIndex = 7;
             this.lblAnimationFillColor.Text = "Fill Color:";
             // 
@@ -285,21 +276,18 @@ namespace InstrumentDesigner
             this.gpAnimationImage.Controls.Add(this.pbAnimationImage);
             this.gpAnimationImage.Controls.Add(this.txtAnimationImagePath);
             this.gpAnimationImage.Controls.Add(this.lblAnimationImagePath);
-            this.gpAnimationImage.Location = new System.Drawing.Point(9, 151);
-            this.gpAnimationImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gpAnimationImage.Location = new System.Drawing.Point(6, 98);
             this.gpAnimationImage.Name = "gpAnimationImage";
-            this.gpAnimationImage.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gpAnimationImage.Size = new System.Drawing.Size(663, 360);
+            this.gpAnimationImage.Size = new System.Drawing.Size(442, 234);
             this.gpAnimationImage.TabIndex = 6;
             this.gpAnimationImage.TabStop = false;
             this.gpAnimationImage.Text = "Image";
             // 
             // cmdLoadAnimationImage
             // 
-            this.cmdLoadAnimationImage.Location = new System.Drawing.Point(372, 109);
-            this.cmdLoadAnimationImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmdLoadAnimationImage.Location = new System.Drawing.Point(248, 71);
             this.cmdLoadAnimationImage.Name = "cmdLoadAnimationImage";
-            this.cmdLoadAnimationImage.Size = new System.Drawing.Size(112, 35);
+            this.cmdLoadAnimationImage.Size = new System.Drawing.Size(75, 23);
             this.cmdLoadAnimationImage.TabIndex = 24;
             this.cmdLoadAnimationImage.Text = "...";
             this.cmdLoadAnimationImage.UseVisualStyleBackColor = true;
@@ -307,65 +295,58 @@ namespace InstrumentDesigner
             // 
             // txtAnimationRelativeY
             // 
-            this.txtAnimationRelativeY.Location = new System.Drawing.Point(84, 66);
-            this.txtAnimationRelativeY.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationRelativeY.Location = new System.Drawing.Point(56, 43);
             this.txtAnimationRelativeY.Name = "txtAnimationRelativeY";
-            this.txtAnimationRelativeY.Size = new System.Drawing.Size(180, 26);
+            this.txtAnimationRelativeY.Size = new System.Drawing.Size(120, 20);
             this.txtAnimationRelativeY.TabIndex = 23;
             // 
             // txtAnimationRelativeX
             // 
-            this.txtAnimationRelativeX.Location = new System.Drawing.Point(84, 31);
-            this.txtAnimationRelativeX.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationRelativeX.Location = new System.Drawing.Point(56, 20);
             this.txtAnimationRelativeX.Name = "txtAnimationRelativeX";
-            this.txtAnimationRelativeX.Size = new System.Drawing.Size(180, 26);
+            this.txtAnimationRelativeX.Size = new System.Drawing.Size(120, 20);
             this.txtAnimationRelativeX.TabIndex = 22;
             // 
             // lblAnimationRelativeY
             // 
             this.lblAnimationRelativeY.AutoSize = true;
-            this.lblAnimationRelativeY.Location = new System.Drawing.Point(2, 69);
-            this.lblAnimationRelativeY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationRelativeY.Location = new System.Drawing.Point(1, 45);
             this.lblAnimationRelativeY.Name = "lblAnimationRelativeY";
-            this.lblAnimationRelativeY.Size = new System.Drawing.Size(72, 20);
+            this.lblAnimationRelativeY.Size = new System.Drawing.Size(48, 13);
             this.lblAnimationRelativeY.TabIndex = 20;
             this.lblAnimationRelativeY.Text = "Offset Y:";
             // 
             // lblAnimationRelativeX
             // 
             this.lblAnimationRelativeX.AutoSize = true;
-            this.lblAnimationRelativeX.Location = new System.Drawing.Point(2, 34);
-            this.lblAnimationRelativeX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationRelativeX.Location = new System.Drawing.Point(1, 22);
             this.lblAnimationRelativeX.Name = "lblAnimationRelativeX";
-            this.lblAnimationRelativeX.Size = new System.Drawing.Size(72, 20);
+            this.lblAnimationRelativeX.Size = new System.Drawing.Size(48, 13);
             this.lblAnimationRelativeX.TabIndex = 18;
             this.lblAnimationRelativeX.Text = "Offset X:";
             // 
             // pbAnimationImage
             // 
-            this.pbAnimationImage.Location = new System.Drawing.Point(84, 149);
-            this.pbAnimationImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pbAnimationImage.Location = new System.Drawing.Point(56, 97);
             this.pbAnimationImage.Name = "pbAnimationImage";
-            this.pbAnimationImage.Size = new System.Drawing.Size(249, 194);
+            this.pbAnimationImage.Size = new System.Drawing.Size(166, 126);
             this.pbAnimationImage.TabIndex = 10;
             this.pbAnimationImage.TabStop = false;
             // 
             // txtAnimationImagePath
             // 
             this.txtAnimationImagePath.Enabled = false;
-            this.txtAnimationImagePath.Location = new System.Drawing.Point(82, 109);
-            this.txtAnimationImagePath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationImagePath.Location = new System.Drawing.Point(55, 71);
             this.txtAnimationImagePath.Name = "txtAnimationImagePath";
-            this.txtAnimationImagePath.Size = new System.Drawing.Size(277, 26);
+            this.txtAnimationImagePath.Size = new System.Drawing.Size(186, 20);
             this.txtAnimationImagePath.TabIndex = 7;
             // 
             // lblAnimationImagePath
             // 
             this.lblAnimationImagePath.AutoSize = true;
-            this.lblAnimationImagePath.Location = new System.Drawing.Point(15, 117);
-            this.lblAnimationImagePath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationImagePath.Location = new System.Drawing.Point(10, 76);
             this.lblAnimationImagePath.Name = "lblAnimationImagePath";
-            this.lblAnimationImagePath.Size = new System.Drawing.Size(58, 20);
+            this.lblAnimationImagePath.Size = new System.Drawing.Size(39, 13);
             this.lblAnimationImagePath.TabIndex = 6;
             this.lblAnimationImagePath.Text = "Image:";
             // 
@@ -373,39 +354,35 @@ namespace InstrumentDesigner
             // 
             this.cmbAnimationType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationType.FormattingEnabled = true;
-            this.cmbAnimationType.Location = new System.Drawing.Point(104, 49);
-            this.cmbAnimationType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbAnimationType.Location = new System.Drawing.Point(69, 32);
             this.cmbAnimationType.Name = "cmbAnimationType";
-            this.cmbAnimationType.Size = new System.Drawing.Size(276, 28);
+            this.cmbAnimationType.Size = new System.Drawing.Size(185, 21);
             this.cmbAnimationType.TabIndex = 3;
             this.cmbAnimationType.SelectedIndexChanged += new System.EventHandler(this.ChangeAnimationType_Select);
             // 
             // lblAnimationType
             // 
             this.lblAnimationType.AutoSize = true;
-            this.lblAnimationType.Location = new System.Drawing.Point(42, 55);
-            this.lblAnimationType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationType.Location = new System.Drawing.Point(28, 36);
             this.lblAnimationType.Name = "lblAnimationType";
-            this.lblAnimationType.Size = new System.Drawing.Size(47, 20);
+            this.lblAnimationType.Size = new System.Drawing.Size(34, 13);
             this.lblAnimationType.TabIndex = 2;
             this.lblAnimationType.Text = "Type:";
             // 
             // txtAnimationName
             // 
-            this.txtAnimationName.Location = new System.Drawing.Point(104, 11);
-            this.txtAnimationName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationName.Location = new System.Drawing.Point(69, 7);
             this.txtAnimationName.Name = "txtAnimationName";
-            this.txtAnimationName.Size = new System.Drawing.Size(276, 26);
+            this.txtAnimationName.Size = new System.Drawing.Size(185, 20);
             this.txtAnimationName.TabIndex = 1;
             this.txtAnimationName.TextChanged += new System.EventHandler(this.UpdateName_Changed);
             // 
             // lblAnimationName
             // 
             this.lblAnimationName.AutoSize = true;
-            this.lblAnimationName.Location = new System.Drawing.Point(36, 15);
-            this.lblAnimationName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationName.Location = new System.Drawing.Point(24, 10);
             this.lblAnimationName.Name = "lblAnimationName";
-            this.lblAnimationName.Size = new System.Drawing.Size(55, 20);
+            this.lblAnimationName.Size = new System.Drawing.Size(38, 13);
             this.lblAnimationName.TabIndex = 0;
             this.lblAnimationName.Text = "Name:";
             // 
@@ -413,27 +390,26 @@ namespace InstrumentDesigner
             // 
             this.tabWhen.Controls.Add(this.gpAnimationClientRequest);
             this.tabWhen.Controls.Add(this.gdAnimationTriggers);
-            this.tabWhen.Location = new System.Drawing.Point(4, 29);
-            this.tabWhen.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabWhen.Location = new System.Drawing.Point(4, 22);
             this.tabWhen.Name = "tabWhen";
-            this.tabWhen.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabWhen.Size = new System.Drawing.Size(703, 527);
+            this.tabWhen.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabWhen.Size = new System.Drawing.Size(466, 338);
             this.tabWhen.TabIndex = 1;
             this.tabWhen.Text = "When";
             this.tabWhen.UseVisualStyleBackColor = true;
             // 
             // gpAnimationClientRequest
             // 
+            this.gpAnimationClientRequest.Controls.Add(this.txtAnimationClientRequestDescription);
+            this.gpAnimationClientRequest.Controls.Add(this.lblAnimationClientRequestDescription);
             this.gpAnimationClientRequest.Controls.Add(this.cbAnimationClientRequestUnitsOverride);
             this.gpAnimationClientRequest.Controls.Add(this.txtAnimationClientRequestUnits);
             this.gpAnimationClientRequest.Controls.Add(this.lblAnimationClientRequestUnits);
             this.gpAnimationClientRequest.Controls.Add(this.cmbAnimationVariableNames);
             this.gpAnimationClientRequest.Controls.Add(this.lblAnimationClientRequestName);
-            this.gpAnimationClientRequest.Location = new System.Drawing.Point(10, 246);
-            this.gpAnimationClientRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gpAnimationClientRequest.Location = new System.Drawing.Point(7, 160);
             this.gpAnimationClientRequest.Name = "gpAnimationClientRequest";
-            this.gpAnimationClientRequest.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gpAnimationClientRequest.Size = new System.Drawing.Size(680, 265);
+            this.gpAnimationClientRequest.Size = new System.Drawing.Size(453, 172);
             this.gpAnimationClientRequest.TabIndex = 2;
             this.gpAnimationClientRequest.TabStop = false;
             this.gpAnimationClientRequest.Text = "Client Request";
@@ -442,10 +418,9 @@ namespace InstrumentDesigner
             // cbAnimationClientRequestUnitsOverride
             // 
             this.cbAnimationClientRequestUnitsOverride.AutoSize = true;
-            this.cbAnimationClientRequestUnitsOverride.Location = new System.Drawing.Point(375, 74);
-            this.cbAnimationClientRequestUnitsOverride.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cbAnimationClientRequestUnitsOverride.Location = new System.Drawing.Point(250, 48);
             this.cbAnimationClientRequestUnitsOverride.Name = "cbAnimationClientRequestUnitsOverride";
-            this.cbAnimationClientRequestUnitsOverride.Size = new System.Drawing.Size(103, 24);
+            this.cbAnimationClientRequestUnitsOverride.Size = new System.Drawing.Size(72, 17);
             this.cbAnimationClientRequestUnitsOverride.TabIndex = 4;
             this.cbAnimationClientRequestUnitsOverride.Text = "Override?";
             this.cbAnimationClientRequestUnitsOverride.UseVisualStyleBackColor = true;
@@ -455,19 +430,17 @@ namespace InstrumentDesigner
             // txtAnimationClientRequestUnits
             // 
             this.txtAnimationClientRequestUnits.Enabled = false;
-            this.txtAnimationClientRequestUnits.Location = new System.Drawing.Point(138, 69);
-            this.txtAnimationClientRequestUnits.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationClientRequestUnits.Location = new System.Drawing.Point(92, 45);
             this.txtAnimationClientRequestUnits.Name = "txtAnimationClientRequestUnits";
-            this.txtAnimationClientRequestUnits.Size = new System.Drawing.Size(224, 26);
+            this.txtAnimationClientRequestUnits.Size = new System.Drawing.Size(151, 20);
             this.txtAnimationClientRequestUnits.TabIndex = 3;
             // 
             // lblAnimationClientRequestUnits
             // 
             this.lblAnimationClientRequestUnits.AutoSize = true;
-            this.lblAnimationClientRequestUnits.Location = new System.Drawing.Point(78, 74);
-            this.lblAnimationClientRequestUnits.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationClientRequestUnits.Location = new System.Drawing.Point(52, 48);
             this.lblAnimationClientRequestUnits.Name = "lblAnimationClientRequestUnits";
-            this.lblAnimationClientRequestUnits.Size = new System.Drawing.Size(50, 20);
+            this.lblAnimationClientRequestUnits.Size = new System.Drawing.Size(34, 13);
             this.lblAnimationClientRequestUnits.TabIndex = 2;
             this.lblAnimationClientRequestUnits.Text = "Units:";
             // 
@@ -475,20 +448,18 @@ namespace InstrumentDesigner
             // 
             this.cmbAnimationVariableNames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbAnimationVariableNames.FormattingEnabled = true;
-            this.cmbAnimationVariableNames.Location = new System.Drawing.Point(138, 26);
-            this.cmbAnimationVariableNames.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbAnimationVariableNames.Location = new System.Drawing.Point(92, 17);
             this.cmbAnimationVariableNames.Name = "cmbAnimationVariableNames";
-            this.cmbAnimationVariableNames.Size = new System.Drawing.Size(390, 28);
+            this.cmbAnimationVariableNames.Size = new System.Drawing.Size(261, 21);
             this.cmbAnimationVariableNames.TabIndex = 1;
             this.cmbAnimationVariableNames.SelectedIndexChanged += new System.EventHandler(this.VariableName_Change);
             // 
             // lblAnimationClientRequestName
             // 
             this.lblAnimationClientRequestName.AutoSize = true;
-            this.lblAnimationClientRequestName.Location = new System.Drawing.Point(10, 31);
-            this.lblAnimationClientRequestName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationClientRequestName.Location = new System.Drawing.Point(7, 20);
             this.lblAnimationClientRequestName.Name = "lblAnimationClientRequestName";
-            this.lblAnimationClientRequestName.Size = new System.Drawing.Size(117, 20);
+            this.lblAnimationClientRequestName.Size = new System.Drawing.Size(79, 13);
             this.lblAnimationClientRequestName.TabIndex = 0;
             this.lblAnimationClientRequestName.Text = "Variable Name:";
             // 
@@ -498,11 +469,10 @@ namespace InstrumentDesigner
             this.gdAnimationTriggers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Trigger,
             this.Type});
-            this.gdAnimationTriggers.Location = new System.Drawing.Point(9, 5);
-            this.gdAnimationTriggers.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gdAnimationTriggers.Location = new System.Drawing.Point(6, 3);
             this.gdAnimationTriggers.Name = "gdAnimationTriggers";
             this.gdAnimationTriggers.RowHeadersWidth = 62;
-            this.gdAnimationTriggers.Size = new System.Drawing.Size(681, 231);
+            this.gdAnimationTriggers.Size = new System.Drawing.Size(454, 150);
             this.gdAnimationTriggers.TabIndex = 1;
             this.gdAnimationTriggers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gdAnimationTriggers_CellValueChanged);
             this.gdAnimationTriggers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.TriggerMisconfigured);
@@ -538,11 +508,10 @@ namespace InstrumentDesigner
             this.tabHow.Controls.Add(this.lblAnimationActions);
             this.tabHow.Controls.Add(this.dgAnimationActions);
             this.tabHow.Controls.Add(this.lblAnimationHowNoTrigger);
-            this.tabHow.Location = new System.Drawing.Point(4, 29);
-            this.tabHow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabHow.Location = new System.Drawing.Point(4, 22);
             this.tabHow.Name = "tabHow";
-            this.tabHow.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabHow.Size = new System.Drawing.Size(703, 527);
+            this.tabHow.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabHow.Size = new System.Drawing.Size(466, 338);
             this.tabHow.TabIndex = 2;
             this.tabHow.Text = "How";
             this.tabHow.UseVisualStyleBackColor = true;
@@ -553,29 +522,42 @@ namespace InstrumentDesigner
             this.gpAnimationActionMoveX.Controls.Add(this.lblAnimationActionMoveXPercent);
             this.gpAnimationActionMoveX.Controls.Add(this.txtAnimationActionMoveMax);
             this.gpAnimationActionMoveX.Controls.Add(this.lblAnimationActionMoveXMax);
-            this.gpAnimationActionMoveX.Location = new System.Drawing.Point(9, 272);
-            this.gpAnimationActionMoveX.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gpAnimationActionMoveX.Location = new System.Drawing.Point(6, 177);
             this.gpAnimationActionMoveX.Name = "gpAnimationActionMoveX";
-            this.gpAnimationActionMoveX.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gpAnimationActionMoveX.Size = new System.Drawing.Size(681, 238);
+            this.gpAnimationActionMoveX.Size = new System.Drawing.Size(454, 155);
             this.gpAnimationActionMoveX.TabIndex = 5;
             this.gpAnimationActionMoveX.TabStop = false;
             this.gpAnimationActionMoveX.Text = "MoveX";
             // 
+            // cbAnimationActionMoveInvert
+            // 
+            this.cbAnimationActionMoveInvert.AutoSize = true;
+            this.cbAnimationActionMoveInvert.Location = new System.Drawing.Point(73, 40);
+            this.cbAnimationActionMoveInvert.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbAnimationActionMoveInvert.Name = "cbAnimationActionMoveInvert";
+            this.cbAnimationActionMoveInvert.Size = new System.Drawing.Size(15, 14);
+            this.cbAnimationActionMoveInvert.TabIndex = 3;
+            this.cbAnimationActionMoveInvert.UseVisualStyleBackColor = true;
+            this.cbAnimationActionMoveInvert.CheckedChanged += new System.EventHandler(this.AnimationActionMoveInvert_Change);
+            // 
             // lblAnimationActionMoveXPercent
             // 
             this.lblAnimationActionMoveXPercent.AutoSize = true;
-            this.lblAnimationActionMoveXPercent.Location = new System.Drawing.Point(30, 65);
-            this.lblAnimationActionMoveXPercent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionMoveXPercent.Location = new System.Drawing.Point(20, 42);
             this.lblAnimationActionMoveXPercent.Name = "lblAnimationActionMoveXPercent";
-            this.lblAnimationActionMoveXPercent.Size = new System.Drawing.Size(53, 20);
+            this.lblAnimationActionMoveXPercent.Size = new System.Drawing.Size(37, 13);
             this.lblAnimationActionMoveXPercent.TabIndex = 2;
             this.lblAnimationActionMoveXPercent.Text = "Invert:";
             // 
             // txtAnimationActionMoveMax
             // 
-            this.txtAnimationActionMoveMax.Location = new System.Drawing.Point(110, 28);
-            this.txtAnimationActionMoveMax.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionMoveMax.DecimalPlaces = 2;
+            this.txtAnimationActionMoveMax.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.txtAnimationActionMoveMax.Location = new System.Drawing.Point(73, 18);
             this.txtAnimationActionMoveMax.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -587,17 +569,16 @@ namespace InstrumentDesigner
             0,
             -2147483648});
             this.txtAnimationActionMoveMax.Name = "txtAnimationActionMoveMax";
-            this.txtAnimationActionMoveMax.Size = new System.Drawing.Size(180, 26);
+            this.txtAnimationActionMoveMax.Size = new System.Drawing.Size(120, 20);
             this.txtAnimationActionMoveMax.TabIndex = 1;
             this.txtAnimationActionMoveMax.ValueChanged += new System.EventHandler(this.AnimationActionMoveMax_Changed);
             // 
             // lblAnimationActionMoveXMax
             // 
             this.lblAnimationActionMoveXMax.AutoSize = true;
-            this.lblAnimationActionMoveXMax.Location = new System.Drawing.Point(10, 31);
-            this.lblAnimationActionMoveXMax.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionMoveXMax.Location = new System.Drawing.Point(7, 20);
             this.lblAnimationActionMoveXMax.Name = "lblAnimationActionMoveXMax";
-            this.lblAnimationActionMoveXMax.Size = new System.Drawing.Size(87, 20);
+            this.lblAnimationActionMoveXMax.Size = new System.Drawing.Size(60, 13);
             this.lblAnimationActionMoveXMax.TabIndex = 0;
             this.lblAnimationActionMoveXMax.Text = "Max Value:";
             // 
@@ -615,11 +596,9 @@ namespace InstrumentDesigner
             this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionStartPoint);
             this.gpAnimationActionClip.Controls.Add(this.cmbAnimationActionStyle);
             this.gpAnimationActionClip.Controls.Add(this.lblAnimationActionStyle);
-            this.gpAnimationActionClip.Location = new System.Drawing.Point(9, 271);
-            this.gpAnimationActionClip.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gpAnimationActionClip.Location = new System.Drawing.Point(6, 176);
             this.gpAnimationActionClip.Name = "gpAnimationActionClip";
-            this.gpAnimationActionClip.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gpAnimationActionClip.Size = new System.Drawing.Size(681, 238);
+            this.gpAnimationActionClip.Size = new System.Drawing.Size(454, 155);
             this.gpAnimationActionClip.TabIndex = 4;
             this.gpAnimationActionClip.TabStop = false;
             this.gpAnimationActionClip.Text = "Clip";
@@ -627,137 +606,125 @@ namespace InstrumentDesigner
             // 
             // txtAnimationActionEndY
             // 
-            this.txtAnimationActionEndY.Location = new System.Drawing.Point(375, 140);
-            this.txtAnimationActionEndY.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionEndY.Location = new System.Drawing.Point(250, 91);
             this.txtAnimationActionEndY.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.txtAnimationActionEndY.Name = "txtAnimationActionEndY";
-            this.txtAnimationActionEndY.Size = new System.Drawing.Size(102, 26);
+            this.txtAnimationActionEndY.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionEndY.TabIndex = 11;
             this.txtAnimationActionEndY.ValueChanged += new System.EventHandler(this.AnimationActionClipEndY_Changed);
             // 
             // lblAnimationActionEndY
             // 
             this.lblAnimationActionEndY.AutoSize = true;
-            this.lblAnimationActionEndY.Location = new System.Drawing.Point(340, 143);
-            this.lblAnimationActionEndY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionEndY.Location = new System.Drawing.Point(227, 93);
             this.lblAnimationActionEndY.Name = "lblAnimationActionEndY";
-            this.lblAnimationActionEndY.Size = new System.Drawing.Size(24, 20);
+            this.lblAnimationActionEndY.Size = new System.Drawing.Size(17, 13);
             this.lblAnimationActionEndY.TabIndex = 10;
             this.lblAnimationActionEndY.Text = "Y:";
             // 
             // txtAnimationActionEndX
             // 
-            this.txtAnimationActionEndX.Location = new System.Drawing.Point(375, 100);
-            this.txtAnimationActionEndX.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionEndX.Location = new System.Drawing.Point(250, 65);
             this.txtAnimationActionEndX.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.txtAnimationActionEndX.Name = "txtAnimationActionEndX";
-            this.txtAnimationActionEndX.Size = new System.Drawing.Size(102, 26);
+            this.txtAnimationActionEndX.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionEndX.TabIndex = 9;
             this.txtAnimationActionEndX.ValueChanged += new System.EventHandler(this.AnimationActionClipEndX_Changed);
             // 
             // lblAnimationActionEndX
             // 
             this.lblAnimationActionEndX.AutoSize = true;
-            this.lblAnimationActionEndX.Location = new System.Drawing.Point(340, 103);
-            this.lblAnimationActionEndX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionEndX.Location = new System.Drawing.Point(227, 67);
             this.lblAnimationActionEndX.Name = "lblAnimationActionEndX";
-            this.lblAnimationActionEndX.Size = new System.Drawing.Size(24, 20);
+            this.lblAnimationActionEndX.Size = new System.Drawing.Size(17, 13);
             this.lblAnimationActionEndX.TabIndex = 8;
             this.lblAnimationActionEndX.Text = "X:";
             // 
             // lblAnimationActionEndPoint
             // 
             this.lblAnimationActionEndPoint.AutoSize = true;
-            this.lblAnimationActionEndPoint.Location = new System.Drawing.Point(285, 72);
-            this.lblAnimationActionEndPoint.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionEndPoint.Location = new System.Drawing.Point(190, 47);
             this.lblAnimationActionEndPoint.Name = "lblAnimationActionEndPoint";
-            this.lblAnimationActionEndPoint.Size = new System.Drawing.Size(82, 20);
+            this.lblAnimationActionEndPoint.Size = new System.Drawing.Size(56, 13);
             this.lblAnimationActionEndPoint.TabIndex = 7;
             this.lblAnimationActionEndPoint.Text = "End Point:";
             // 
             // txtAnimationActionStartY
             // 
-            this.txtAnimationActionStartY.Location = new System.Drawing.Point(110, 140);
-            this.txtAnimationActionStartY.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionStartY.Location = new System.Drawing.Point(73, 91);
             this.txtAnimationActionStartY.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.txtAnimationActionStartY.Name = "txtAnimationActionStartY";
-            this.txtAnimationActionStartY.Size = new System.Drawing.Size(102, 26);
+            this.txtAnimationActionStartY.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionStartY.TabIndex = 6;
             this.txtAnimationActionStartY.ValueChanged += new System.EventHandler(this.AnimationActionClipStartY_Changed);
             // 
             // lblAnimationActionStartY
             // 
             this.lblAnimationActionStartY.AutoSize = true;
-            this.lblAnimationActionStartY.Location = new System.Drawing.Point(75, 143);
-            this.lblAnimationActionStartY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionStartY.Location = new System.Drawing.Point(50, 93);
             this.lblAnimationActionStartY.Name = "lblAnimationActionStartY";
-            this.lblAnimationActionStartY.Size = new System.Drawing.Size(24, 20);
+            this.lblAnimationActionStartY.Size = new System.Drawing.Size(17, 13);
             this.lblAnimationActionStartY.TabIndex = 5;
             this.lblAnimationActionStartY.Text = "Y:";
             // 
             // txtAnimationActionStartX
             // 
-            this.txtAnimationActionStartX.Location = new System.Drawing.Point(110, 100);
-            this.txtAnimationActionStartX.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionStartX.Location = new System.Drawing.Point(73, 65);
             this.txtAnimationActionStartX.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.txtAnimationActionStartX.Name = "txtAnimationActionStartX";
-            this.txtAnimationActionStartX.Size = new System.Drawing.Size(102, 26);
+            this.txtAnimationActionStartX.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionStartX.TabIndex = 4;
             this.txtAnimationActionStartX.ValueChanged += new System.EventHandler(this.AnimationActionClipStartX_Changed);
             // 
             // lblAnimationActionStartX
             // 
             this.lblAnimationActionStartX.AutoSize = true;
-            this.lblAnimationActionStartX.Location = new System.Drawing.Point(75, 103);
-            this.lblAnimationActionStartX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionStartX.Location = new System.Drawing.Point(50, 67);
             this.lblAnimationActionStartX.Name = "lblAnimationActionStartX";
-            this.lblAnimationActionStartX.Size = new System.Drawing.Size(24, 20);
+            this.lblAnimationActionStartX.Size = new System.Drawing.Size(17, 13);
             this.lblAnimationActionStartX.TabIndex = 3;
             this.lblAnimationActionStartX.Text = "X:";
             // 
             // lblAnimationActionStartPoint
             // 
             this.lblAnimationActionStartPoint.AutoSize = true;
-            this.lblAnimationActionStartPoint.Location = new System.Drawing.Point(20, 72);
-            this.lblAnimationActionStartPoint.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionStartPoint.Location = new System.Drawing.Point(13, 47);
             this.lblAnimationActionStartPoint.Name = "lblAnimationActionStartPoint";
-            this.lblAnimationActionStartPoint.Size = new System.Drawing.Size(88, 20);
+            this.lblAnimationActionStartPoint.Size = new System.Drawing.Size(59, 13);
             this.lblAnimationActionStartPoint.TabIndex = 2;
             this.lblAnimationActionStartPoint.Text = "Start Point:";
             // 
             // cmbAnimationActionStyle
             // 
             this.cmbAnimationActionStyle.FormattingEnabled = true;
-            this.cmbAnimationActionStyle.Location = new System.Drawing.Point(82, 26);
-            this.cmbAnimationActionStyle.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbAnimationActionStyle.Location = new System.Drawing.Point(55, 17);
             this.cmbAnimationActionStyle.Name = "cmbAnimationActionStyle";
-            this.cmbAnimationActionStyle.Size = new System.Drawing.Size(180, 28);
+            this.cmbAnimationActionStyle.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationActionStyle.TabIndex = 1;
             this.cmbAnimationActionStyle.SelectedIndexChanged += new System.EventHandler(this.AnimationClipStyle_Changed);
             // 
             // lblAnimationActionStyle
             // 
             this.lblAnimationActionStyle.AutoSize = true;
-            this.lblAnimationActionStyle.Location = new System.Drawing.Point(24, 31);
-            this.lblAnimationActionStyle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionStyle.Location = new System.Drawing.Point(16, 20);
             this.lblAnimationActionStyle.Name = "lblAnimationActionStyle";
-            this.lblAnimationActionStyle.Size = new System.Drawing.Size(48, 20);
+            this.lblAnimationActionStyle.Size = new System.Drawing.Size(33, 13);
             this.lblAnimationActionStyle.TabIndex = 0;
             this.lblAnimationActionStyle.Text = "Style:";
             // 
@@ -772,11 +739,9 @@ namespace InstrumentDesigner
             this.gpAnimationActionRotate.Controls.Add(this.lblAnimationActionRotateMaxVal);
             this.gpAnimationActionRotate.Controls.Add(this.cbAnimationActionRotateClockwise);
             this.gpAnimationActionRotate.Controls.Add(this.txtAnimationActionRotateClockwise);
-            this.gpAnimationActionRotate.Location = new System.Drawing.Point(9, 272);
-            this.gpAnimationActionRotate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gpAnimationActionRotate.Location = new System.Drawing.Point(6, 177);
             this.gpAnimationActionRotate.Name = "gpAnimationActionRotate";
-            this.gpAnimationActionRotate.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gpAnimationActionRotate.Size = new System.Drawing.Size(681, 238);
+            this.gpAnimationActionRotate.Size = new System.Drawing.Size(454, 155);
             this.gpAnimationActionRotate.TabIndex = 3;
             this.gpAnimationActionRotate.TabStop = false;
             this.gpAnimationActionRotate.Text = "Rotate";
@@ -784,66 +749,66 @@ namespace InstrumentDesigner
             // 
             // txtAnimationActionCentrePointY
             // 
-            this.txtAnimationActionCentrePointY.Location = new System.Drawing.Point(110, 92);
-            this.txtAnimationActionCentrePointY.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionCentrePointY.Location = new System.Drawing.Point(73, 60);
             this.txtAnimationActionCentrePointY.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.txtAnimationActionCentrePointY.Name = "txtAnimationActionCentrePointY";
-            this.txtAnimationActionCentrePointY.Size = new System.Drawing.Size(102, 26);
+            this.txtAnimationActionCentrePointY.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionCentrePointY.TabIndex = 11;
             this.txtAnimationActionCentrePointY.ValueChanged += new System.EventHandler(this.AnimationActionRotateCentreY_Changed);
             // 
             // lblAnimationActionCentrePointY
             // 
             this.lblAnimationActionCentrePointY.AutoSize = true;
-            this.lblAnimationActionCentrePointY.Location = new System.Drawing.Point(75, 95);
-            this.lblAnimationActionCentrePointY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionCentrePointY.Location = new System.Drawing.Point(50, 62);
             this.lblAnimationActionCentrePointY.Name = "lblAnimationActionCentrePointY";
-            this.lblAnimationActionCentrePointY.Size = new System.Drawing.Size(24, 20);
+            this.lblAnimationActionCentrePointY.Size = new System.Drawing.Size(17, 13);
             this.lblAnimationActionCentrePointY.TabIndex = 10;
             this.lblAnimationActionCentrePointY.Text = "Y:";
             // 
             // txtAnimationActionCentrePointX
             // 
-            this.txtAnimationActionCentrePointX.Location = new System.Drawing.Point(110, 52);
-            this.txtAnimationActionCentrePointX.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionCentrePointX.Location = new System.Drawing.Point(73, 34);
             this.txtAnimationActionCentrePointX.Maximum = new decimal(new int[] {
             10000,
             0,
             0,
             0});
             this.txtAnimationActionCentrePointX.Name = "txtAnimationActionCentrePointX";
-            this.txtAnimationActionCentrePointX.Size = new System.Drawing.Size(102, 26);
+            this.txtAnimationActionCentrePointX.Size = new System.Drawing.Size(68, 20);
             this.txtAnimationActionCentrePointX.TabIndex = 9;
             this.txtAnimationActionCentrePointX.ValueChanged += new System.EventHandler(this.AnimationActionRotateCentreX_Changed);
             // 
             // lblAnimationActionCentrePointX
             // 
             this.lblAnimationActionCentrePointX.AutoSize = true;
-            this.lblAnimationActionCentrePointX.Location = new System.Drawing.Point(75, 55);
-            this.lblAnimationActionCentrePointX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionCentrePointX.Location = new System.Drawing.Point(50, 36);
             this.lblAnimationActionCentrePointX.Name = "lblAnimationActionCentrePointX";
-            this.lblAnimationActionCentrePointX.Size = new System.Drawing.Size(24, 20);
+            this.lblAnimationActionCentrePointX.Size = new System.Drawing.Size(17, 13);
             this.lblAnimationActionCentrePointX.TabIndex = 8;
             this.lblAnimationActionCentrePointX.Text = "X:";
             // 
             // lblAnimationActionCentrePoint
             // 
             this.lblAnimationActionCentrePoint.AutoSize = true;
-            this.lblAnimationActionCentrePoint.Location = new System.Drawing.Point(20, 25);
-            this.lblAnimationActionCentrePoint.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionCentrePoint.Location = new System.Drawing.Point(13, 16);
             this.lblAnimationActionCentrePoint.Name = "lblAnimationActionCentrePoint";
-            this.lblAnimationActionCentrePoint.Size = new System.Drawing.Size(101, 20);
+            this.lblAnimationActionCentrePoint.Size = new System.Drawing.Size(68, 13);
             this.lblAnimationActionCentrePoint.TabIndex = 7;
             this.lblAnimationActionCentrePoint.Text = "Centre Point:";
             // 
             // txtAnimationActionRotateMaxVal
             // 
-            this.txtAnimationActionRotateMaxVal.Location = new System.Drawing.Point(104, 192);
-            this.txtAnimationActionRotateMaxVal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtAnimationActionRotateMaxVal.DecimalPlaces = 2;
+            this.txtAnimationActionRotateMaxVal.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.txtAnimationActionRotateMaxVal.Location = new System.Drawing.Point(69, 125);
             this.txtAnimationActionRotateMaxVal.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -855,27 +820,25 @@ namespace InstrumentDesigner
             0,
             -2147483648});
             this.txtAnimationActionRotateMaxVal.Name = "txtAnimationActionRotateMaxVal";
-            this.txtAnimationActionRotateMaxVal.Size = new System.Drawing.Size(104, 26);
+            this.txtAnimationActionRotateMaxVal.Size = new System.Drawing.Size(69, 20);
             this.txtAnimationActionRotateMaxVal.TabIndex = 3;
             this.txtAnimationActionRotateMaxVal.ValueChanged += new System.EventHandler(this.AnimationActionRotateMaxVal_Changed);
             // 
             // lblAnimationActionRotateMaxVal
             // 
             this.lblAnimationActionRotateMaxVal.AutoSize = true;
-            this.lblAnimationActionRotateMaxVal.Location = new System.Drawing.Point(4, 195);
-            this.lblAnimationActionRotateMaxVal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActionRotateMaxVal.Location = new System.Drawing.Point(3, 127);
             this.lblAnimationActionRotateMaxVal.Name = "lblAnimationActionRotateMaxVal";
-            this.lblAnimationActionRotateMaxVal.Size = new System.Drawing.Size(87, 20);
+            this.lblAnimationActionRotateMaxVal.Size = new System.Drawing.Size(60, 13);
             this.lblAnimationActionRotateMaxVal.TabIndex = 2;
             this.lblAnimationActionRotateMaxVal.Text = "Max Value:";
             // 
             // cbAnimationActionRotateClockwise
             // 
             this.cbAnimationActionRotateClockwise.AutoSize = true;
-            this.cbAnimationActionRotateClockwise.Location = new System.Drawing.Point(105, 157);
-            this.cbAnimationActionRotateClockwise.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cbAnimationActionRotateClockwise.Location = new System.Drawing.Point(70, 102);
             this.cbAnimationActionRotateClockwise.Name = "cbAnimationActionRotateClockwise";
-            this.cbAnimationActionRotateClockwise.Size = new System.Drawing.Size(22, 21);
+            this.cbAnimationActionRotateClockwise.Size = new System.Drawing.Size(15, 14);
             this.cbAnimationActionRotateClockwise.TabIndex = 1;
             this.cbAnimationActionRotateClockwise.UseVisualStyleBackColor = true;
             this.cbAnimationActionRotateClockwise.CheckedChanged += new System.EventHandler(this.AnimationActionRotateClockwise_Changed);
@@ -883,20 +846,18 @@ namespace InstrumentDesigner
             // txtAnimationActionRotateClockwise
             // 
             this.txtAnimationActionRotateClockwise.AutoSize = true;
-            this.txtAnimationActionRotateClockwise.Location = new System.Drawing.Point(4, 155);
-            this.txtAnimationActionRotateClockwise.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.txtAnimationActionRotateClockwise.Location = new System.Drawing.Point(3, 101);
             this.txtAnimationActionRotateClockwise.Name = "txtAnimationActionRotateClockwise";
-            this.txtAnimationActionRotateClockwise.Size = new System.Drawing.Size(92, 20);
+            this.txtAnimationActionRotateClockwise.Size = new System.Drawing.Size(64, 13);
             this.txtAnimationActionRotateClockwise.TabIndex = 0;
             this.txtAnimationActionRotateClockwise.Text = "Clockwise?:";
             // 
             // lblAnimationActions
             // 
             this.lblAnimationActions.AutoSize = true;
-            this.lblAnimationActions.Location = new System.Drawing.Point(28, 26);
-            this.lblAnimationActions.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationActions.Location = new System.Drawing.Point(19, 17);
             this.lblAnimationActions.Name = "lblAnimationActions";
-            this.lblAnimationActions.Size = new System.Drawing.Size(66, 20);
+            this.lblAnimationActions.Size = new System.Drawing.Size(45, 13);
             this.lblAnimationActions.TabIndex = 2;
             this.lblAnimationActions.Text = "Actions:";
             // 
@@ -905,11 +866,10 @@ namespace InstrumentDesigner
             this.dgAnimationActions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgAnimationActions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ActionType});
-            this.dgAnimationActions.Location = new System.Drawing.Point(9, 55);
-            this.dgAnimationActions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.dgAnimationActions.Location = new System.Drawing.Point(6, 36);
             this.dgAnimationActions.Name = "dgAnimationActions";
             this.dgAnimationActions.RowHeadersWidth = 62;
-            this.dgAnimationActions.Size = new System.Drawing.Size(250, 206);
+            this.dgAnimationActions.Size = new System.Drawing.Size(167, 134);
             this.dgAnimationActions.TabIndex = 1;
             this.dgAnimationActions.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.ActionType_Validated);
             this.dgAnimationActions.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.ActionType_Validate);
@@ -935,20 +895,18 @@ namespace InstrumentDesigner
             // 
             this.lblAnimationHowNoTrigger.AutoSize = true;
             this.lblAnimationHowNoTrigger.ForeColor = System.Drawing.Color.Red;
-            this.lblAnimationHowNoTrigger.Location = new System.Drawing.Point(153, 31);
-            this.lblAnimationHowNoTrigger.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnimationHowNoTrigger.Location = new System.Drawing.Point(102, 20);
             this.lblAnimationHowNoTrigger.Name = "lblAnimationHowNoTrigger";
-            this.lblAnimationHowNoTrigger.Size = new System.Drawing.Size(345, 20);
+            this.lblAnimationHowNoTrigger.Size = new System.Drawing.Size(232, 13);
             this.lblAnimationHowNoTrigger.TabIndex = 0;
             this.lblAnimationHowNoTrigger.Text = "You must select a Trigger on the When tab first.";
             // 
             // cmdAnimationSave
             // 
             this.cmdAnimationSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdAnimationSave.Location = new System.Drawing.Point(482, 586);
-            this.cmdAnimationSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmdAnimationSave.Location = new System.Drawing.Point(321, 381);
             this.cmdAnimationSave.Name = "cmdAnimationSave";
-            this.cmdAnimationSave.Size = new System.Drawing.Size(112, 35);
+            this.cmdAnimationSave.Size = new System.Drawing.Size(75, 23);
             this.cmdAnimationSave.TabIndex = 1;
             this.cmdAnimationSave.Text = "Save";
             this.cmdAnimationSave.UseVisualStyleBackColor = true;
@@ -956,33 +914,39 @@ namespace InstrumentDesigner
             // cmdAnimationCancel
             // 
             this.cmdAnimationCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdAnimationCancel.Location = new System.Drawing.Point(604, 588);
-            this.cmdAnimationCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmdAnimationCancel.Location = new System.Drawing.Point(403, 382);
             this.cmdAnimationCancel.Name = "cmdAnimationCancel";
-            this.cmdAnimationCancel.Size = new System.Drawing.Size(112, 35);
+            this.cmdAnimationCancel.Size = new System.Drawing.Size(75, 23);
             this.cmdAnimationCancel.TabIndex = 2;
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
-            // cbAnimationActionMoveInvert
+            // lblAnimationClientRequestDescription
             // 
-            this.cbAnimationActionMoveInvert.AutoSize = true;
-            this.cbAnimationActionMoveInvert.Location = new System.Drawing.Point(110, 62);
-            this.cbAnimationActionMoveInvert.Name = "cbAnimationActionMoveInvert";
-            this.cbAnimationActionMoveInvert.Size = new System.Drawing.Size(22, 21);
-            this.cbAnimationActionMoveInvert.TabIndex = 3;
-            this.cbAnimationActionMoveInvert.UseVisualStyleBackColor = true;
-            this.cbAnimationActionMoveInvert.CheckedChanged += new System.EventHandler(this.AnimationActionMoveInvert_Change);
+            this.lblAnimationClientRequestDescription.AutoSize = true;
+            this.lblAnimationClientRequestDescription.Location = new System.Drawing.Point(23, 82);
+            this.lblAnimationClientRequestDescription.Name = "lblAnimationClientRequestDescription";
+            this.lblAnimationClientRequestDescription.Size = new System.Drawing.Size(63, 13);
+            this.lblAnimationClientRequestDescription.TabIndex = 5;
+            this.lblAnimationClientRequestDescription.Text = "Description:";
+            // 
+            // txtAnimationClientRequestDescription
+            // 
+            this.txtAnimationClientRequestDescription.Enabled = false;
+            this.txtAnimationClientRequestDescription.Location = new System.Drawing.Point(92, 79);
+            this.txtAnimationClientRequestDescription.Multiline = true;
+            this.txtAnimationClientRequestDescription.Name = "txtAnimationClientRequestDescription";
+            this.txtAnimationClientRequestDescription.Size = new System.Drawing.Size(355, 87);
+            this.txtAnimationClientRequestDescription.TabIndex = 6;
             // 
             // frmAnimation
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(747, 640);
+            this.ClientSize = new System.Drawing.Size(498, 416);
             this.Controls.Add(this.cmdAnimationCancel);
             this.Controls.Add(this.cmdAnimationSave);
             this.Controls.Add(this.tabCollection);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmAnimation";
             this.Text = "Animation";
             this.tabCollection.ResumeLayout(false);
@@ -1093,5 +1057,7 @@ namespace InstrumentDesigner
         private NumericUpDown txtAnimationActionMoveMax;
         private Label lblAnimationActionMoveXMax;
         private CheckBox cbAnimationActionMoveInvert;
+        private Label lblAnimationClientRequestDescription;
+        private TextBox txtAnimationClientRequestDescription;
     }
 }
