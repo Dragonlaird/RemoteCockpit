@@ -66,7 +66,6 @@ namespace RemoteCockpit
                     {
                         // Set the event to nonsignaled state.  
                         allDone.Reset();
-
                         // Start an asynchronous socket to listen for connections.  
                         listener.BeginAccept(
                             new AsyncCallback(AcceptCallback),
@@ -124,48 +123,50 @@ namespace RemoteCockpit
                 // from the asynchronous state object.  
                 StateObject state = (StateObject)ar.AsyncState;
                 Socket handler = state.workSocket;
-
+                //handler.ConnectionDropped += ClientDisconnect;
+                if (handler.IsConnected()) { 
                 // Read data from the client socket.
                 int bytesRead = handler.EndReceive(ar);
 
-                if (bytesRead > 0)
-                {
-                    // There  might be more data, so store the data received so far.  
-                    state.sb.Append(Encoding.ASCII.GetString(
-                        state.buffer, 0, bytesRead));
-                    // Check for end-of-file tag. If it is not there, read
-                    // more data.  
-                    content = state.sb.ToString()?.Replace("\n", "");
-                    if (content.IndexOf(requestSeparator) > -1)
+                    if (bytesRead > 0)
                     {
-                        // All the data has been read from the client.
-                        if (RequestReceived != null)
+                        // There  might be more data, so store the data received so far.  
+                        state.sb.Append(Encoding.ASCII.GetString(
+                            state.buffer, 0, bytesRead));
+                        // Check for end-of-file tag. If it is not there, read
+                        // more data.  
+                        content = state.sb.ToString()?.Replace("\n", "");
+                        if (content.IndexOf(requestSeparator) > -1)
                         {
-                            try
+                            // All the data has been read from the client.
+                            if (RequestReceived != null)
                             {
-                                foreach (var request in content.Split(new string[] { requestSeparator }, StringSplitOptions.RemoveEmptyEntries))
+                                try
                                 {
-                                    try
+                                    foreach (var request in content.Split(new string[] { requestSeparator }, StringSplitOptions.RemoveEmptyEntries))
                                     {
-                                        RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(request));
+                                        try
+                                        {
+                                            RequestReceived.DynamicInvoke(state, JsonConvert.DeserializeObject<ClientRequest>(request));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            ErrorHandler(state, ex);
+                                        }
                                     }
-                                    catch (Exception ex)
-                                    {
-                                        ErrorHandler(state, ex);
-                                    }
+                                    state.sb = new StringBuilder();
+                                    state.sb.Append(content.Substring(content.LastIndexOf(requestSeparator)));
                                 }
-                                state.sb = new StringBuilder();
-                                state.sb.Append(content.Substring(content.LastIndexOf(requestSeparator)));
-                            }
-                            catch (Exception ex)
-                            {
-                                ErrorHandler(state, ex);
+                                catch (Exception ex)
+                                {
+                                    ErrorHandler(state, ex);
+                                }
                             }
                         }
+                        // Get more data/requests
+                        handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                            new AsyncCallback(ReadCallback), state);
                     }
-                    // Get more data/requests
-                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                        new AsyncCallback(ReadCallback), state);
                 }
             }
             catch (Exception ex)
@@ -205,6 +206,11 @@ namespace RemoteCockpit
                 }
                 catch { }
             }
+        }
+
+        private static void ClientDisconnect(StateObject socketState)
+        {
+
         }
 
         private static void SendCallback(IAsyncResult ar)

@@ -18,6 +18,7 @@ namespace RemoteCockpit
         private AsynchronousSocketListener _listener;
         public EventHandler<LogMessage> LogReceived;
         public EventHandler<StateObject> ClientConnect;
+        public EventHandler<StateObject> ClientDisconnect;
         public EventHandler<SimVarRequest> ClientRequest;
         public EventHandler<Exception> ClientError;
 
@@ -57,7 +58,7 @@ namespace RemoteCockpit
             }
             catch (Exception ex)
             {
-
+                WriteLog(string.Format("NewConnection Error: {0}", ex.Message), EventLogEntryType.Error);
             }
         }
 
@@ -91,6 +92,7 @@ namespace RemoteCockpit
                             }
                             catch(Exception ex)
                             {
+                                WriteLog(string.Format("Request Received Error: {0}", ex.Message), EventLogEntryType.Error);
                                 ClientError.DynamicInvoke(sender, ex);
                             }
                         }

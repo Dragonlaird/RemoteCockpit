@@ -140,7 +140,9 @@ namespace CockpitDisplay
             {
                 requestResults.Add(new ClientRequestResult { Request = request, Result = null });
             }
-            cbConnected.Checked = connector?.Connected ?? false;
+            // Needs to be thread-safe
+            UpdateObject(cbConnected, "Checked", connector?.Connected ?? false);
+            //cbConnected.Checked = connector?.Connected ?? false;
             if (connector?.Connected == true)
             {
                 connector.RequestVariable(request);

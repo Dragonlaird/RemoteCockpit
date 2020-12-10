@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsynchronousSocketExtensions.cs" />
     <Compile Include="AsynchronousSocketListener.cs" />
     <Compile Include="FSConnector.cs" />
     <Compile Include="MessageHandler.cs">

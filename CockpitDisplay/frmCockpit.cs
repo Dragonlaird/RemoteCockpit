@@ -325,7 +325,7 @@ namespace CockpitDisplay
             {
                 try
                 {
-                    var genericInstrument = new Generic_Instrument(instrumentDefinition);
+                    var genericInstrument = new Generic_Instrument(100, 100, instrumentDefinition);
                     customInstruments.Add(genericInstrument);
                 }
                 catch (Exception ex)

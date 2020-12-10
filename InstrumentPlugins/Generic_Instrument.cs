@@ -49,40 +49,55 @@ namespace InstrumentPlugins
         {
             config = new Configuration();
             configPath = null;
+            SetLayout(0, 0, 100, 100);
         }
 
-        public Generic_Instrument(string filePath)
+        public Generic_Instrument(int maxHeight, int maxWidth)
+        {
+            config = new Configuration();
+            configPath = null;
+            SetLayout(0, 0, maxHeight, maxWidth);
+        }
+
+        public Generic_Instrument(int maxHeight, int maxWidth, string filePath)
         {
             configPath = filePath;
             config = null;
-            Initialize();
+            SetLayout(0, 0, maxHeight, maxWidth);
         }
 
-        public Generic_Instrument(Configuration configuration)
+        public Generic_Instrument(int maxHeight, int maxWidth, Configuration configuration)
         {
             config = configuration;
             configPath = null;
-            Initialize();
+            SetLayout(0, 0, maxHeight, maxWidth);
         }
 
 
         private void Initialize()
         {
             UpdateStepCount(animationTimeInMs);
-            Control = new Panel();
+            if (Control == null)
+                Control = new Panel();
             try
             {
                 if (!string.IsNullOrEmpty(configPath))
                     config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configPath));
                 scaleFactor = 1.0;
                 var image = LoadImage(config.BackgroundImagePath);
-                aspectRatio = (double)image.Height / image.Width;
-                scaleFactor = controlHeight < controlWidth ? (double)controlWidth / image.Width : (double)controlHeight / image.Height;
-                var backgroundImage = LoadImage(config.BackgroundImagePath); //new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
-                controlHeight = backgroundImage.Height;
-                controlWidth = backgroundImage.Width;
+                if (image != null)
+                {
+                    aspectRatio = (double)image.Height / image.Width;
+                    scaleFactor = controlHeight < controlWidth ? (double)controlWidth / image.Width : (double)controlHeight / image.Height;
+                }
+                //var backgroundImage = LoadImage(config.BackgroundImagePath); //new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
+                //controlHeight = image.Height;
+                //controlWidth = image.Width;
+                Control.Height = controlHeight;
+                Control.Width = controlWidth;
                 Control.BackColor = Color.Transparent;
-                Control.BackgroundImage = backgroundImage;
+                Control.BackgroundImage = image;
+                Control.BackgroundImageLayout = ImageLayout.Stretch;
                 Control.Controls.Add(new PictureBox { Name = "Animation", Height = controlHeight, Width = controlWidth });
             }
             catch (Exception ex)
@@ -126,7 +141,7 @@ namespace InstrumentPlugins
                     }
                 }
                 Control.Paint += PaintControl;
-                Control.Invalidate();
+                Control.Invalidate(true);
                 Control.Update();
             }
         }
@@ -562,8 +577,8 @@ namespace InstrumentPlugins
         {
             controlTop = top;
             controlLeft = left;
-            controlHeight = height;
-            controlWidth = width;
+            controlHeight = height == 0 ? 50 : height;
+            controlWidth = width == 0 ? 50 : width;
             Initialize();
         }
 
