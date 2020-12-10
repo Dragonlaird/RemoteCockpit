@@ -158,20 +158,24 @@ namespace CockpitDisplay
             {
                 try
                 {
+                    this.FindForm().BackColor = Color.Black;
                     var imageFile = File.OpenRead(string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background));
                     var image = Image.FromStream(imageFile);
-                    var imageScaleFactor = (double)this.Width / image.Width;
+                    var imageScaleFactor = (double)this.DisplayRectangle.Width / (double)image.Width;
                     aspectRatio = (double)image.Height / image.Width;
                     if (image.Height * imageScaleFactor > this.Height)
                         imageScaleFactor = (double)this.Height / image.Height;
-                    var backgroundImage = new Bitmap(this.Width, this.Height);
-                    using (Graphics gr = Graphics.FromImage(backgroundImage))
-                    {
-                        gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
-                        ScreenDimensions.X = (int)(image.Width * imageScaleFactor);
-                        ScreenDimensions.Y = (int)(image.Height * imageScaleFactor);
-                    }
+                    var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
+                    ScreenDimensions.X = backgroundImage.Width;
+                    ScreenDimensions.Y = backgroundImage.Height;
+                    //using (Graphics gr = Graphics.FromImage(backgroundImage))
+                    //{
+                    //    gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
+                    //    ScreenDimensions.X = (int)(image.Width * imageScaleFactor);
+                    //    ScreenDimensions.Y = (int)(image.Height * imageScaleFactor);
+                    //}
                     this.BackgroundImage = backgroundImage;
+                    this.BackgroundImageLayout = ImageLayout.None;
                 }
                 catch (Exception ex)
                 {
@@ -236,7 +240,8 @@ namespace CockpitDisplay
                     }
                 }
             }
-
+            this.Invalidate(true);
+            this.Update();
         }
 
         private LayoutDefinition GetLayout(string name)

@@ -107,8 +107,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Content Include="Layouts\Dashboards\Cessna_152_Dasboard.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Layouts\Dashboards\Cessna_152_Dashboard.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Layouts\Dashboards\Generic_Dashboard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
