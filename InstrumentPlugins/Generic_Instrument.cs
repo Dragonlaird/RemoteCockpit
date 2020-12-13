@@ -120,15 +120,21 @@ namespace InstrumentPlugins
             if (config?.Animations != null)
             {
                 animationImages = new List<Bitmap>();
-                foreach(var animation in config.Animations)
+                foreach (var animation in config.Animations)
                 {
-                    // If this is an Image Animation - pre-fetch the image into the cache
-                    if (animation is AnimationImage)
-                    {
-                        animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
-                    }
-                    else
-                        animationImages.Add(DrawPoints((AnimationDrawing)animation));
+                    switch (animation.Type) {
+                        case AnimationItemTypeEnum.Image:
+                            // If this is an Image Animation - pre-fetch the image into the cache
+                            animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
+                            break;
+                        case AnimationItemTypeEnum.Drawing:
+                            // If this is a Drawing Animation - generate the image and add to the cache
+                            animationImages.Add(DrawPoints((AnimationDrawing)animation));
+                            break;
+                        case AnimationItemTypeEnum.External:
+                            // If this is an External Animation - featch, update the image and add to the cache
+                            break;
+                }
                 }
                 foreach (var clientRequest in config?.ClientRequests)
                 {

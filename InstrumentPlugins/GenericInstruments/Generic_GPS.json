@@ -4,15 +4,40 @@
   "Type": 9,
   "CreateDate": "2020-12-12T10:00:00",
   "BackgroundImagePath": ".\\InstrumentImages\\GPS_Generic_Background.png",
-  "RemoteURL": "",
-  "RemoteUsername": null,
-  "RemoteToken": null,
-  "RequestMethod": null,
-  "RequestFormat": null,
   "Aircraft": [
     "Generic"
   ],
   "AnimationUpdateInMs": 50,
   "Animations": [
+    {
+      "Name": "Map",
+      "RemoteURL": "",
+      "RemoteUsername": "Dragonlaird",
+      "RemoteToken": "pk.eyJ1IjoiZHJhZ29ubGFpcmQiLCJhIjoiY2tpbGg3dDI3MGhwMDJzbGI5NDJxdm1pNiJ9.jtAEPKfPm5S1Be_ol6tODw",
+      "RequestMethod": "POST",
+      "RequestFormat": "",
+      "Triggers": [
+        {
+          "Name": "Latitude",
+          "Type": 1,
+          "Request": {
+            "Name": "GPS POSITION LAT",
+            "Unit": "degrees"
+          },
+          "Actions": [
+          ]
+        },
+        {
+          "Name": "Longitude",
+          "Type": 1,
+          "Request": {
+            "Name": "GPS POSITION LON",
+            "Unit": "degrees"
+          },
+          "Actions": [
+          ]
+        }
+      ]
+    }
   ]
 }

@@ -128,7 +128,14 @@ namespace RemoteCockpitClasses.Animations
                                 }
                                 else
                                 {
-                                    actualValue = jsonProperty.First().ToObject(prop.PropertyType);
+                                    try
+                                    {
+                                        actualValue = jsonProperty.First().ToObject(prop.PropertyType);
+                                    }
+                                    catch
+                                    {
+                                        actualValue = Activator.CreateInstance(prop.PropertyType, new object[] { jsonProperty.First().ToString() });
+                                    }
                                 }
                             }
                             if (resultClass.GetType().GetProperty(propertyName).CanWrite)
