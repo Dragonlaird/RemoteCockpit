@@ -13,7 +13,7 @@ namespace RemoteCockpit
     {
         static void Main(string[] args)
         {
-            var remoteCockpit = new RemoteCockpit();
+            var remoteCockpit = new FSRemoteCockpitServer();
            Application.Run();
         }
 

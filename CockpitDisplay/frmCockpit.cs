@@ -168,12 +168,6 @@ namespace CockpitDisplay
                     var backgroundImage = new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor)));
                     ScreenDimensions.X = backgroundImage.Width;
                     ScreenDimensions.Y = backgroundImage.Height;
-                    //using (Graphics gr = Graphics.FromImage(backgroundImage))
-                    //{
-                    //    gr.DrawImage(new Bitmap(image, new Size((int)(image.Width * imageScaleFactor), (int)(image.Height * imageScaleFactor))), new Point(0, 0));
-                    //    ScreenDimensions.X = (int)(image.Width * imageScaleFactor);
-                    //    ScreenDimensions.Y = (int)(image.Height * imageScaleFactor);
-                    //}
                     this.BackgroundImage = backgroundImage;
                     this.BackgroundImageLayout = ImageLayout.None;
                 }

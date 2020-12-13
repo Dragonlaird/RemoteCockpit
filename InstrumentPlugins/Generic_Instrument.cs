@@ -150,17 +150,6 @@ namespace InstrumentPlugins
         {
             if (!disposedValue)
             {
-                // sender should always be the Control but we will address/use the Control directly
-                //if (Control.InvokeRequired)
-                //{
-                //    try
-                //    {
-                //        //var d = new SafeUpdateDelegate(PaintControl);
-                //        Control.Invoke(new MethodInvoker(delegate { PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle)); }));
-                //    }
-                //    catch { }
-                //    return;
-                //}
                 if (config?.Animations != null)
                 {
                     // We have a foreground to update
@@ -214,6 +203,11 @@ namespace InstrumentPlugins
             var triggers = animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray(); Bitmap initialImage;
             lock (animationImages)
             {
+                // Fetch the image we want to animate
+                if(animation.Type == AnimationItemTypeEnum.External)
+                {
+                    initialImage = GetRemoteImage(animation);
+                }
                 initialImage = animationImages[animationId];
                 foreach (var trigger in triggers)
                 {
@@ -255,6 +249,14 @@ namespace InstrumentPlugins
                 }
             }
             return initialImage;
+        }
+
+        private Bitmap GetRemoteImage(IAnimationItem animation)
+        {
+            var animationId = config.Animations.ToList().IndexOf(animation);
+            Bitmap image = new Bitmap(Control.Width, Control.Height);
+
+            return image;
         }
 
         public Bitmap MoveImage(Bitmap initialImage, bool moveVertically, double movePercent)

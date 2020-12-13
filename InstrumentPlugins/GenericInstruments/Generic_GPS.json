@@ -1,0 +1,18 @@
+{
+  "Name": "Generic GPS",
+  "Author": "Dragonlaird",
+  "Type": 9,
+  "CreateDate": "2020-12-12T10:00:00",
+  "BackgroundImagePath": ".\\InstrumentImages\\GPS_Generic_Background.png",
+  "RemoteURL": "",
+  "RemoteUsername": null,
+  "RemoteToken": null,
+  "RequestMethod": null,
+  "RequestFormat": null,
+  "Aircraft": [
+    "Generic"
+  ],
+  "AnimationUpdateInMs": 50,
+  "Animations": [
+  ]
+}

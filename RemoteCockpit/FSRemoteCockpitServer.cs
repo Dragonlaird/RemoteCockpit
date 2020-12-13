@@ -9,15 +9,15 @@ using RemoteCockpitClasses;
 
 namespace RemoteCockpit
 {
-    public class RemoteCockpit
+    public class FSRemoteCockpitServer
     {
         public EventHandler<LogMessage> LogReceived;
         private FSConnector fsConnector;
         private SocketListener listener;
         private List<SimVarRequestResult> requestResults;
         private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
-        private int _updateFrequency = 0; // How may seconds between each SimConnect poll?
-        public RemoteCockpit()
+        private int _updateFrequency = 2; // How may seconds between each SimConnect poll?
+        public FSRemoteCockpitServer()
         {
             InitializeComponent();
             StartConnector();
@@ -29,7 +29,8 @@ namespace RemoteCockpit
             requestResults = new List<SimVarRequestResult>();
             // Add the first Request Variable for Connection State
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
-            requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = false });
+            requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = _updateFrequency });
+            requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "TITLE", Unit = "string" }, Value = "None" });
         }
 
         private void StartConnector()

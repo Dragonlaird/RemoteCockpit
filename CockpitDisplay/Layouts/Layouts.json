@@ -24,6 +24,13 @@
           "Left": 24,
           "Height": 30,
           "Width": 8.5
+        },
+        {
+          "Type": 9, // 9 = GPS
+          "Top": 30.0,
+          "Left": 35.0,
+          "Height": 40.0,
+          "Width": 20.0
         }
       ]
     },

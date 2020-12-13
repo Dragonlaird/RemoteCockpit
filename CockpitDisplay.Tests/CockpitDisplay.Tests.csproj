@@ -68,6 +68,10 @@
       <Project>{e5f55cef-4f61-4d3b-98d8-4e4e035199f0}</Project>
       <Name>CockpitDisplay</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Generic_Altitude_Indicator\Generic_Altitude_Indicator.csproj">
+      <Project>{84db7c4a-95a6-4a76-8e2c-4c0449793af2}</Project>
+      <Name>Generic_Altitude_Indicator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InstrumentPlugins\InstrumentPlugins.csproj">
       <Project>{6A197BAC-121C-4D34-A215-14DA7AF32C86}</Project>
       <Name>InstrumentPlugins</Name>

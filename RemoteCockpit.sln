@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30404.54
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteCockpit", "RemoteCockpit\RemoteCockpit.csproj", "{7AE7FDAC-1ABB-4E92-BEAF-7DD5FCD70AE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSRemoteCockpitServer", "RemoteCockpit\FSRemoteCockpitServer.csproj", "{7AE7FDAC-1ABB-4E92-BEAF-7DD5FCD70AE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitDisplay", "CockpitDisplay\CockpitDisplay.csproj", "{E5F55CEF-4F61-4D3B-98D8-4E4E035199F0}"
 EndProject
@@ -14,6 +14,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitDisplay.Tests", "CockpitDisplay.Tests\CockpitDisplay.Tests.csproj", "{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentDesigner", "InstrumentDesigner\InstrumentDesigner.csproj", "{2302D97E-8E57-4C4C-A653-878629D5F1C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic_Airspeed_Indicator", "Generic_Airspeed_Indicator\Generic_Airspeed_Indicator.csproj", "{058A1176-3F75-4020-9998-7E01B457CF6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic_Attitude_Indicator", "Generic_Attitude_Indicator\Generic_Attitude_Indicator.csproj", "{B2264A6D-9F5B-4FA9-B863-63D6C11F07D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic_Altitude_Indicator", "Generic_Altitude_Indicator\Generic_Altitude_Indicator.csproj", "{84DB7C4A-95A6-4A76-8E2C-4C0449793AF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8B1708ED-17F4-493C-8939-20B2DBB1D6CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +53,26 @@ Global
 		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058A1176-3F75-4020-9998-7E01B457CF6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058A1176-3F75-4020-9998-7E01B457CF6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058A1176-3F75-4020-9998-7E01B457CF6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058A1176-3F75-4020-9998-7E01B457CF6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2264A6D-9F5B-4FA9-B863-63D6C11F07D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2264A6D-9F5B-4FA9-B863-63D6C11F07D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2264A6D-9F5B-4FA9-B863-63D6C11F07D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2264A6D-9F5B-4FA9-B863-63D6C11F07D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84DB7C4A-95A6-4A76-8E2C-4C0449793AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84DB7C4A-95A6-4A76-8E2C-4C0449793AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84DB7C4A-95A6-4A76-8E2C-4C0449793AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84DB7C4A-95A6-4A76-8E2C-4C0449793AF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{058A1176-3F75-4020-9998-7E01B457CF6F} = {8B1708ED-17F4-493C-8939-20B2DBB1D6CA}
+		{B2264A6D-9F5B-4FA9-B863-63D6C11F07D8} = {8B1708ED-17F4-493C-8939-20B2DBB1D6CA}
+		{84DB7C4A-95A6-4A76-8E2C-4C0449793AF2} = {8B1708ED-17F4-493C-8939-20B2DBB1D6CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {295AD1DE-D8CF-4DC8-B7C7-FB2BAB157FDC}

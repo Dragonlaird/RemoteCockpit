@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Generic_Attitude_Indicator;
 using RemoteCockpitClasses;
 
 namespace InstrumentPlugins

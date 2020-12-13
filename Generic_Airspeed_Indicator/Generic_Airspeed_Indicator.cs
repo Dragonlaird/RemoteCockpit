@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using Generic_Airspeed_Indicator;
 using RemoteCockpitClasses;
 
 namespace InstrumentPlugins

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace InstrumentPlugins {
+namespace Generic_Airspeed_Indicator {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace InstrumentPlugins {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("InstrumentPlugins.ImageLibrary", typeof(ImageLibrary).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Generic_Airspeed_Indicator.ImageLibrary", typeof(ImageLibrary).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,36 +66,6 @@ namespace InstrumentPlugins {
         internal static System.Drawing.Bitmap Airspeed_Background {
             get {
                 object obj = ResourceManager.GetObject("Airspeed_Background", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Attitude_Background {
-            get {
-                object obj = ResourceManager.GetObject("Attitude_Background", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Attitude_Indicator_Gimbal {
-            get {
-                object obj = ResourceManager.GetObject("Attitude_Indicator_Gimbal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Background {
-            get {
-                object obj = ResourceManager.GetObject("Background", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
