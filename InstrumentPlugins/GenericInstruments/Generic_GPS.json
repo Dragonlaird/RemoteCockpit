@@ -11,11 +11,11 @@
   "Animations": [
     {
       "Name": "Map",
-      "RemoteURL": "",
+      "RemoteURL": "https://api.mapbox.com/styles/v1/mapbox/streets-v11/static",
       "RemoteUsername": "Dragonlaird",
       "RemoteToken": "pk.eyJ1IjoiZHJhZ29ubGFpcmQiLCJhIjoiY2tpbGg3dDI3MGhwMDJzbGI5NDJxdm1pNiJ9.jtAEPKfPm5S1Be_ol6tODw",
       "RequestMethod": "POST",
-      "RequestFormat": "",
+      "RequestFormat": "/{Latitude},{Longitude},{MapZoom},0,60/600x600?access_token={RemoteToken}",
       "Triggers": [
         {
           "Name": "Latitude",
@@ -36,6 +36,20 @@
           },
           "Actions": [
           ]
+        },
+        {
+          "Name": "MapZoom",
+          "Type": 2,
+          "ClickZone": {
+            "x": 90,
+            "y": 90,
+            "height": 10,
+            "width": 10
+          },
+          "Value": 10.0,
+          "MaxValue": 10.0,
+          "MinValue": 0.0,
+          "IncrementAmount": 0.1
         }
       ]
     }
