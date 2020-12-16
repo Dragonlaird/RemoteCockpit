@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Drawing.Imaging;
 using System.Numerics;
+using System.Net.Http;
 
 namespace InstrumentPlugins
 {
@@ -119,23 +120,6 @@ namespace InstrumentPlugins
             }
             if (config?.Animations != null)
             {
-                animationImages = new List<Bitmap>();
-                foreach (var animation in config.Animations)
-                {
-                    switch (animation.Type) {
-                        case AnimationItemTypeEnum.Image:
-                            // If this is an Image Animation - pre-fetch the image into the cache
-                            animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
-                            break;
-                        case AnimationItemTypeEnum.Drawing:
-                            // If this is a Drawing Animation - generate the image and add to the cache
-                            animationImages.Add(DrawPoints((AnimationDrawing)animation));
-                            break;
-                        case AnimationItemTypeEnum.External:
-                            // If this is an External Animation - featch, update the image and add to the cache
-                            break;
-                }
-                }
                 foreach (var clientRequest in config?.ClientRequests)
                 {
                     if (!currentResults.Any(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit))
@@ -146,9 +130,113 @@ namespace InstrumentPlugins
                         animationSteps.Add(1);
                     }
                 }
+                animationImages = new List<Bitmap>();
+                foreach (var animation in config.Animations)
+                {
+                    switch (animation.Type)
+                    {
+                        case AnimationItemTypeEnum.Image:
+                            // If this is an Image Animation - pre-fetch the image into the cache
+                            animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
+                            break;
+                        case AnimationItemTypeEnum.Drawing:
+                            // If this is a Drawing Animation - generate the image and add to the cache
+                            animationImages.Add(DrawPoints((AnimationDrawing)animation));
+                            break;
+                        case AnimationItemTypeEnum.External:
+                            // If this is an External Animation - fetch, update the image and add to the cache
+                            LoadImageFromRemote((AnimationExternal)animation);
+                            break;
+                    }
+                }
+
                 Control.Paint += PaintControl;
                 Control.Invalidate(true);
                 Control.Update();
+            }
+        }
+
+        private void LoadImageFromRemote(AnimationExternal animation)
+        {
+            // Check if image is already in cache, with surrounding images - If not, fetch any that are missing
+            //https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/-3.7375,56.035,11,0/300x200?access_token=YOUR_MAPBOX_ACCESS_TOKEN
+            var remoteUrl = animation.RemoteURL;
+            var requestFormat = animation.RequestFormat;
+            // The following values are static and should only be applied once
+            foreach (var property in this.GetType().GetProperties())
+            {
+                var placeholder = "{" + property.Name + "}";
+                if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                {
+                    if (property.CanRead)
+                    {
+                        var val = property.GetValue(this)?.ToString();
+                        remoteUrl = remoteUrl.Replace(placeholder, val);
+                        requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                    }
+                }
+            }
+            animation.RemoteURL = remoteUrl;
+            animation.RequestFormat = requestFormat;
+            foreach(var trigger in animation.Triggers)
+            {
+                var placeholder = "{" + trigger.Name + "}";
+                if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                {
+                    string val = null;
+                    switch (trigger.Type) {
+                        case AnimationTriggerTypeEnum.ClientRequest:
+                            val = previousResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
+                            break;
+                        case AnimationTriggerTypeEnum.MouseClick:
+                            val = previousResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "1";
+                            break;
+                    }
+                    if (val == null)
+                    {
+                        val = "";
+                    }
+                    remoteUrl = remoteUrl.Replace(placeholder, val);
+                    requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                }
+            }
+            foreach(var property in animation.GetType().GetProperties()){
+                var placeholder = "{" + property.Name + "}";
+                if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                {
+                    if (property.CanRead)
+                    {
+                        var val = property.GetValue(animation)?.ToString() ?? "1";
+                        remoteUrl = remoteUrl.Replace(placeholder, val);
+                        requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                    }
+                }
+            }
+            // We should have the URL for our remote service - fetch the image
+            Image image = null;
+            HttpResponseMessage httpResponse;
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(remoteUrl);
+
+                switch(animation.RequestMethod.ToString())
+                {
+                    case "POST":
+                        httpResponse = client.PostAsync(remoteUrl, new StringContent(requestFormat)).Result;
+                        break;
+                    default:
+                        httpResponse = client.GetAsync(new Uri(new Uri(remoteUrl), requestFormat)).Result;
+                        break;
+
+                }
+            }
+            if (httpResponse.IsSuccessStatusCode && (httpResponse.Content.Headers.ContentType.MediaType?.ToLower().StartsWith("image") ?? false))
+            {
+                image = Image.FromStream(httpResponse.Content.ReadAsStreamAsync().Result);
+            }
+            if(image != null)
+            {
+                animationImages.Add((Bitmap)image);
             }
         }
 
