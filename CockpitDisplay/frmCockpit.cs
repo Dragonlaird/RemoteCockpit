@@ -200,7 +200,7 @@ namespace CockpitDisplay
                                 (int)(instrumentPosition.Width * hScaleFactor));
                             AddControl(plugin.Control);
                             usedInstrumentPlugins.Add(plugin);
-                            plugin.LogMessage += LogMessage;
+                            plugin.LogMessage += ConsoleLog;
                             UpdateCockpitItem(plugin.Control);
                             //plugin.Control.Enabled = false;
                         }
@@ -334,6 +334,11 @@ namespace CockpitDisplay
             }
             // convert the list of Objects to an instantiated list of ICalculators
             return customInstruments;
+        }
+
+        private void ConsoleLog(object sender, string e)
+        {
+            ConsoleLog(e);
         }
 
         private void ConsoleLog(string message)

@@ -145,7 +145,7 @@ namespace InstrumentPlugins
                             break;
                         case AnimationItemTypeEnum.External:
                             // If this is an External Animation - fetch, update the image and add to the cache
-                            LoadImageFromRemote((AnimationExternal)animation);
+                            animationImages.Add(LoadImageFromRemote((AnimationExternal)animation));
                             break;
                     }
                 }
@@ -156,88 +156,100 @@ namespace InstrumentPlugins
             }
         }
 
-        private void LoadImageFromRemote(AnimationExternal animation)
+        private Bitmap LoadImageFromRemote(AnimationExternal animation)
         {
-            // Check if image is already in cache, with surrounding images - If not, fetch any that are missing
-            //https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/-3.7375,56.035,11,0/300x200?access_token=YOUR_MAPBOX_ACCESS_TOKEN
-            var remoteUrl = animation.RemoteURL;
-            var requestFormat = animation.RequestFormat;
-            // The following values are static and should only be applied once
-            foreach (var property in this.GetType().GetProperties())
+            try
             {
-                var placeholder = "{" + property.Name + "}";
-                if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                // Check if image is already in cache, with surrounding images - If not, fetch any that are missing
+
+                //https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/-3.7375,56.035,11,0/300x200?access_token=YOUR_MAPBOX_ACCESS_TOKEN
+                var remoteUrl = animation.RemoteURL;
+                var requestFormat = animation.RequestFormat;
+                // The following values are static and should only be applied once
+                foreach (var property in this.GetType().GetProperties())
                 {
-                    if (property.CanRead)
+                    var placeholder = "{" + property.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
                     {
-                        var val = property.GetValue(this)?.ToString();
+                        if (property.CanRead)
+                        {
+                            var val = property.GetValue(this)?.ToString();
+                            remoteUrl = remoteUrl.Replace(placeholder, val);
+                            requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        }
+                    }
+                }
+                animation.RemoteURL = remoteUrl;
+                animation.RequestFormat = requestFormat;
+                foreach (var trigger in animation.Triggers)
+                {
+                    var placeholder = "{" + trigger.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                    {
+                        string val = null;
+                        switch (trigger.Type)
+                        {
+                            case AnimationTriggerTypeEnum.ClientRequest:
+                                val = previousResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
+                                break;
+                            case AnimationTriggerTypeEnum.MouseClick:
+                                val = previousResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "2";
+                                break;
+                        }
+                        if (val == null)
+                        {
+                            val = "";
+                        }
                         remoteUrl = remoteUrl.Replace(placeholder, val);
                         requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
                     }
                 }
-            }
-            animation.RemoteURL = remoteUrl;
-            animation.RequestFormat = requestFormat;
-            foreach(var trigger in animation.Triggers)
-            {
-                var placeholder = "{" + trigger.Name + "}";
-                if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                foreach (var property in animation.GetType().GetProperties())
                 {
-                    string val = null;
-                    switch (trigger.Type) {
-                        case AnimationTriggerTypeEnum.ClientRequest:
-                            val = previousResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
-                            break;
-                        case AnimationTriggerTypeEnum.MouseClick:
-                            val = previousResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "1";
-                            break;
-                    }
-                    if (val == null)
+                    var placeholder = "{" + property.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
                     {
-                        val = "";
+                        if (property.CanRead)
+                        {
+                            var val = property.GetValue(animation)?.ToString() ?? "1";
+                            remoteUrl = remoteUrl.Replace(placeholder, val);
+                            requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        }
                     }
-                    remoteUrl = remoteUrl.Replace(placeholder, val);
-                    requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
                 }
-            }
-            foreach(var property in animation.GetType().GetProperties()){
-                var placeholder = "{" + property.Name + "}";
-                if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                // We should have the URL for our remote service - fetch the image
+                Image image = null;
+                HttpResponseMessage httpResponse;
+                WriteLog(string.Format("Remote Image Request: From: {0} - {1} {2}", remoteUrl, animation.RequestMethod, requestFormat));
+                using (HttpClient client = new HttpClient())
                 {
-                    if (property.CanRead)
+                    client.BaseAddress = new Uri(remoteUrl);
+
+                    switch (animation.RequestMethod.ToString())
                     {
-                        var val = property.GetValue(animation)?.ToString() ?? "1";
-                        remoteUrl = remoteUrl.Replace(placeholder, val);
-                        requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        case "POST":
+                            httpResponse = client.PostAsync(remoteUrl, new StringContent(requestFormat)).Result;
+                            break;
+                        default:
+                            httpResponse = client.GetAsync(new Uri(new Uri(remoteUrl), requestFormat)).Result;
+                            break;
+
                     }
                 }
-            }
-            // We should have the URL for our remote service - fetch the image
-            Image image = null;
-            HttpResponseMessage httpResponse;
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(remoteUrl);
-
-                switch(animation.RequestMethod.ToString())
+                if (httpResponse.IsSuccessStatusCode && (httpResponse.Content.Headers.ContentType.MediaType?.ToLower().StartsWith("image") ?? false))
                 {
-                    case "POST":
-                        httpResponse = client.PostAsync(remoteUrl, new StringContent(requestFormat)).Result;
-                        break;
-                    default:
-                        httpResponse = client.GetAsync(new Uri(new Uri(remoteUrl), requestFormat)).Result;
-                        break;
-
+                    image = Image.FromStream(httpResponse.Content.ReadAsStreamAsync().Result);
+                }
+                if (image != null)
+                {
+                    return (Bitmap)image;
                 }
             }
-            if (httpResponse.IsSuccessStatusCode && (httpResponse.Content.Headers.ContentType.MediaType?.ToLower().StartsWith("image") ?? false))
+            catch(Exception ex)
             {
-                image = Image.FromStream(httpResponse.Content.ReadAsStreamAsync().Result);
+                WriteLog(string.Format("Remote Image Request: Failed: {0}", ex.Message));
             }
-            if(image != null)
-            {
-                animationImages.Add((Bitmap)image);
-            }
+            return null;
         }
 
         private void PaintControl(object sender, PaintEventArgs e)
@@ -255,17 +267,16 @@ namespace InstrumentPlugins
                         {
                             try
                             {
-                                using (var overlapImage = GenerateAnimationImage(animation))
+                                var overlapImage = GenerateAnimationImage(animation);
+                                try
                                 {
-                                    try
-                                    {
-                                        animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
-                                    }
+                                    animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
                                 }
+                                catch (Exception ex)
+                                {
+                                    WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
+                                }
+                                //overlapImage.Dispose();
                             }
                             catch (Exception ex)
                             {
@@ -298,10 +309,6 @@ namespace InstrumentPlugins
             lock (animationImages)
             {
                 // Fetch the image we want to animate
-                if(animation.Type == AnimationItemTypeEnum.External)
-                {
-                    initialImage = GetRemoteImage(animation);
-                }
                 initialImage = animationImages[animationId];
                 foreach (var trigger in triggers)
                 {
@@ -348,7 +355,7 @@ namespace InstrumentPlugins
         private Bitmap GetRemoteImage(IAnimationItem animation)
         {
             var animationId = config.Animations.ToList().IndexOf(animation);
-            Bitmap image = new Bitmap(Control.Width, Control.Height);
+            Bitmap image = animationImages[animationId];
 
             return image;
         }
@@ -409,7 +416,7 @@ namespace InstrumentPlugins
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
         {
-            Bitmap dstImage = new Bitmap(image.Width, image.Height, image.PixelFormat);
+            Bitmap dstImage = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
             var onePercentX = image.Width / 100.0f;
             var onePercentY = image.Height / 100.0f;
             var topLeft = new PointF(start.X * onePercentX/2, start.Y * onePercentY/2);
@@ -764,9 +771,9 @@ namespace InstrumentPlugins
             {
                 try
                 {
-                    LogMessage.DynamicInvoke(new object[] { message });
+                    LogMessage.DynamicInvoke(new object[] { this, message });
                 }
-                catch { }
+                catch(Exception ex) { }
             }
         }
     }

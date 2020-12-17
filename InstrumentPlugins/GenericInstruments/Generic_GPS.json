@@ -35,6 +35,18 @@
             "Unit": "degrees"
           },
           "Actions": [
+            {
+              "Type": 3,
+              "Style": 1,
+              "StartPoint": {
+                "X": 3.0,
+                "Y": 3.0
+              },
+              "EndPoint": {
+                "X": 97.0,
+                "Y": 97.0
+              }
+            }
           ]
         },
         {
