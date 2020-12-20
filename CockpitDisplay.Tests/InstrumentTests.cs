@@ -73,7 +73,27 @@ namespace CockpitDisplay.Tests
         [TestMethod]
         public void CreateGPSInstrument()
         {
-            instrument = new Generic_Instrument(150, 350, GetConfiguration());
+            Form testForm = new Form();
+            var scaleFactor = testForm.Width < testForm.Height ? testForm.Width / testForm.Height : testForm.Height / testForm.Width;
+            testForm.BackgroundImage = LoadImage(Path.Combine(Directory.GetCurrentDirectory(), "Layouts\\Dashboards", "Generic_Dashboard.png"), scaleFactor);
+            instrument = new Generic_Instrument(150, 350, GetConfiguration("Generic_GPS.json"));
+            testForm.Controls.Add(instrument.Control);
+            testForm.Invalidate();
+            testForm.Show();
+            double lastValue = 40;
+            var clientRequests = instrument.RequiredValues;
+
+            for (var i = 0; i < 3; i++)
+            {
+                Thread.Sleep(1000);
+                lastValue += new Random().NextDouble() * 70.0;
+                instrument.ValueUpdate(new ClientRequestResult
+                {
+                    Request = clientRequests.First(),
+                    Result = lastValue
+                });
+                testForm.Update();
+            }
         }
     }
 }
