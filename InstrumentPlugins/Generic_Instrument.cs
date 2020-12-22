@@ -163,6 +163,7 @@ namespace InstrumentPlugins
                 // Check if image is already in cache, with surrounding images - If not, fetch any that are missing
 
                 //https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/-3.7375,56.035,11,0/300x200?access_token=YOUR_MAPBOX_ACCESS_TOKEN
+                //https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/\[-77.043686,38.892035,-77.028923,38.904192\]/400x400?access_token=YOUR_MAPBOX_ACCESS_TOKEN
                 var remoteUrl = animation.RemoteURL;
                 var requestFormat = animation.RequestFormat;
                 // The following values are static and should only be applied once
@@ -217,9 +218,30 @@ namespace InstrumentPlugins
                         }
                     }
                 }
+                foreach (var property in Control.GetType().GetProperties())
+                {
+                    var placeholder = "{" + property.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                    {
+                        if (property.CanRead)
+                        {
+                            var val = property.GetValue(Control)?.ToString() ?? "1";
+                            remoteUrl = remoteUrl.Replace(placeholder, val);
+                            requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        }
+                    }
+                }
                 // We should have the URL for our remote service - fetch the image
                 Image image = null;
                 HttpResponseMessage httpResponse;
+                if(remoteUrl.IndexOf("Calculate{") > -1 && remoteUrl.IndexOf("}") > remoteUrl.IndexOf("Calculate{"))
+                {
+                    remoteUrl = Calculate(remoteUrl);
+                }
+                if (requestFormat.IndexOf("Calculate{") > -1 && requestFormat.IndexOf("}") > remoteUrl.IndexOf("Calculate{"))
+                {
+                    requestFormat = Calculate(requestFormat);
+                }
                 WriteLog(string.Format("Remote Image Request: From: {0} - {1} {2}", remoteUrl, animation.RequestMethod, requestFormat));
                 using (HttpClient client = new HttpClient())
                 {
@@ -250,6 +272,33 @@ namespace InstrumentPlugins
                 WriteLog(string.Format("Remote Image Request: Failed: {0}", ex.Message));
             }
             return null;
+        }
+
+        /// <summary>
+        /// If a URL or Parameters need to perform a calculation, extract the values and operators to replace the content with the result
+        /// </summary>
+        /// <param name="initialString">URL or Parameters containing the calculation(s) to perform</param>
+        /// <returns>initialString with all calculations replaced by results</returns>
+        private string Calculate(string initialString)
+        {
+            System.Data.DataTable dt = new System.Data.DataTable();
+            while(initialString.IndexOf("Calculate{")>-1 && initialString.IndexOf("}")> initialString.IndexOf("Calculate{"))
+            {
+                double result = 0;
+                var rawCalculation = initialString.Substring(initialString.IndexOf("Calculate{"), 1 + initialString.IndexOf("}") - initialString.IndexOf("Calculate{"));
+                var actualCalculation = rawCalculation.Substring(rawCalculation.IndexOf("{") + 1, rawCalculation.IndexOf("}") - rawCalculation.IndexOf("{") - 1);
+                try
+                {
+                    result = double.Parse(dt.Compute(actualCalculation, "").ToString());
+                }
+                catch(Exception ex)
+                {
+                    // Cannot perform calculation
+                    WriteLog(string.Format("Unable to perform calculation on: {0}\rError: {1}", actualCalculation, ex.Message));
+                }
+                initialString = initialString.Replace(rawCalculation, result.ToString());
+            }
+            return initialString;
         }
 
         private void PaintControl(object sender, PaintEventArgs e)
@@ -416,56 +465,64 @@ namespace InstrumentPlugins
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
         {
-            Bitmap dstImage = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
-            var onePercentX = image.Width / 100.0f;
-            var onePercentY = image.Height / 100.0f;
-            var topLeft = new PointF(start.X * onePercentX/2, start.Y * onePercentY/2);
-            var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
-            using (Graphics g = Graphics.FromImage(dstImage))
+            if (image != null)
             {
-                // enables smoothing of the edge of the circle (less pixelated)
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-
-                // fills background color
-                using (Brush br = new SolidBrush(Color.Transparent))
+                Bitmap dstImage = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
+                var onePercentX = image.Width / 100.0f;
+                var onePercentY = image.Height / 100.0f;
+                var topLeft = new PointF(start.X * onePercentX / 2, start.Y * onePercentY / 2);
+                var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
+                using (Graphics g = Graphics.FromImage(dstImage))
                 {
-                    g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
-                }
+                    // enables smoothing of the edge of the circle (less pixelated)
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                // adds the new ellipse & draws the image again 
-                using (GraphicsPath path = new GraphicsPath())
-                {
-                    // Clipping a circular path
-                    if (style == AnimateActionClipEnum.Circle)
-                        path.AddEllipse(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y);
-                    // Clipping a square
-                    if (style == AnimateActionClipEnum.Square)
-                        path.AddRectangle(new RectangleF(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y));
-                    g.SetClip(path);
-                    g.DrawImage(image, 0, 0);
+                    // fills background color
+                    using (Brush br = new SolidBrush(Color.Transparent))
+                    {
+                        g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
+                    }
+
+                    // adds the new ellipse & draws the image again 
+                    using (GraphicsPath path = new GraphicsPath())
+                    {
+                        // Clipping a circular path
+                        if (style == AnimateActionClipEnum.Circle)
+                            path.AddEllipse(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y);
+                        // Clipping a square
+                        if (style == AnimateActionClipEnum.Square)
+                            path.AddRectangle(new RectangleF(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y));
+                        g.SetClip(path);
+                        g.DrawImage(image, 0, 0);
+                    }
+                    return dstImage;
                 }
-                return dstImage;
             }
+            return null;
         }
 
         private Bitmap RotateImage(Bitmap bmp, PointF centrePoint, float angle)
         {
-            Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
-            rotatedImage.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
-
-            using (Graphics g = Graphics.FromImage(rotatedImage))
+            if (bmp != null)
             {
-                // Set the rotation point to the center in the matrix
-                g.TranslateTransform(centrePoint.X, centrePoint.Y);
-                // Rotate
-                g.RotateTransform(angle);
-                // Restore rotation point in the matrix
-                g.TranslateTransform(-centrePoint.X, -centrePoint.Y);
-                // Draw the image on the bitmap
-                g.DrawImage(bmp, new Point(0, 0));
-            }
+                Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
+                rotatedImage.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
 
-            return rotatedImage;
+                using (Graphics g = Graphics.FromImage(rotatedImage))
+                {
+                    // Set the rotation point to the center in the matrix
+                    g.TranslateTransform(centrePoint.X, centrePoint.Y);
+                    // Rotate
+                    g.RotateTransform(angle);
+                    // Restore rotation point in the matrix
+                    g.TranslateTransform(-centrePoint.X, -centrePoint.Y);
+                    // Draw the image on the bitmap
+                    g.DrawImage(bmp, new Point(0, 0));
+                }
+
+                return rotatedImage;
+            }
+            return null;
         }
 
 
@@ -477,13 +534,6 @@ namespace InstrumentPlugins
                 animateTimer.Dispose();
                 animateTimer = null;
             }
-            //if(timerIdx > -1-1 && animateTimers[timerIdx] != null)
-            //{
-            //    if (animateTimers[timerIdx].Enabled)
-            //        animateTimers[timerIdx].Stop();
-            //    animateTimers[timerIdx]?.Dispose();
-            //    animateTimers[timerIdx] = null;
-            //}
         }
 
         private void StopTimer()
