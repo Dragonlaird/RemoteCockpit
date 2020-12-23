@@ -15,7 +15,7 @@
       "RemoteUsername": "Dragonlaird",
       "RemoteToken": "pk.eyJ1IjoiZHJhZ29ubGFpcmQiLCJhIjoiY2tpbGg3dDI3MGhwMDJzbGI5NDJxdm1pNiJ9.jtAEPKfPm5S1Be_ol6tODw",
       "RequestMethod": "GET",
-      "RequestFormat": "\\[Calculate{{Latitude}-{Width}*{MapZoom}},Calculate{{Longitude}+{Height}*{MapZoom}},Calculate{{Latitude}-{Width}*{MapZoom}},Calculate{{Longitude}+{Height}*{MapZoom}}\\]/{Width}x{Height}?access_token={RemoteToken}",
+      "RequestFormat": "[Calculate{{Latitude}-180/{Width}*{MapZoom}},Calculate{{Longitude}-180/{Height}*{MapZoom}},Calculate{{Latitude}+180/{Width}*{MapZoom}},Calculate{{Longitude}+180/{Height}*{MapZoom}}]/{Width}x{Height}?access_token={RemoteToken}",
       "Triggers": [
         {
           "Name": "Latitude",

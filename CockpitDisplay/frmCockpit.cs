@@ -190,6 +190,7 @@ namespace CockpitDisplay
                         {
                             string message = string.Format("Adding Instrument: {0} (Type: {1})", plugin.Name, plugin.Type.ToString());
                             ConsoleLog(message);
+                            plugin.LogMessage += ConsoleLog;
                             variables.AddRange(plugin.RequiredValues.Distinct().Where(x => !variables.Any(y => y.Name == x.Name && y.Unit == x.Unit)));
                             var vScaleFactor = (double)ScreenDimensions.Y / 100;
                             var hScaleFactor = (double)ScreenDimensions.X / 100;
@@ -200,7 +201,6 @@ namespace CockpitDisplay
                                 (int)(instrumentPosition.Width * hScaleFactor));
                             AddControl(plugin.Control);
                             usedInstrumentPlugins.Add(plugin);
-                            plugin.LogMessage += ConsoleLog;
                             UpdateCockpitItem(plugin.Control);
                             //plugin.Control.Enabled = false;
                         }
@@ -322,15 +322,16 @@ namespace CockpitDisplay
             ConsoleLog(message);
             foreach (var instrumentDefinition in Directory.GetFiles(".\\GenericInstruments"))
             {
-                try
-                {
-                    var genericInstrument = new Generic_Instrument(100, 100, instrumentDefinition);
-                    customInstruments.Add(genericInstrument);
-                }
-                catch (Exception ex)
-                {
-                    ConsoleLog(string.Format("GetPlugIns (Generic Instrument).\rInstrument: {0}.\rError: {0}", instrumentDefinition, ex.Message));
-                }
+                if (instrumentDefinition?.ToLower().EndsWith(".json") == true)
+                    try
+                    {
+                        var genericInstrument = new Generic_Instrument(100, 100, instrumentDefinition);
+                        customInstruments.Add(genericInstrument);
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleLog(string.Format("GetPlugIns (Generic Instrument).\rInstrument: {0}.\rError: {0}", instrumentDefinition, ex.Message));
+                    }
             }
             // convert the list of Objects to an instantiated list of ICalculators
             return customInstruments;

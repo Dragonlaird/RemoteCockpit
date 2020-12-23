@@ -99,11 +99,13 @@ namespace InstrumentPlugins
                 Control.BackColor = Color.Transparent;
                 Control.BackgroundImage = image;
                 Control.BackgroundImageLayout = ImageLayout.Stretch;
+                if (Control?.Controls != null && Control.Controls["Animation"] != null)
+                    Control.Controls["Animation"].Dispose();
                 Control.Controls.Add(new PictureBox { Name = "Animation", Height = controlHeight, Width = controlWidth });
             }
             catch (Exception ex)
             {
-                WriteLog(string.Format("Initialize: Failed to populate Config.\rError: {0}", ex.Message));
+                WriteLog("Initialize: Failed to populate Config.", ex);
             }
             Control.Top = controlTop;
             Control.Left = controlLeft;
@@ -242,7 +244,7 @@ namespace InstrumentPlugins
                 {
                     requestFormat = Calculate(requestFormat);
                 }
-                WriteLog(string.Format("Remote Image Request: From: {0} - {1} {2}", remoteUrl, animation.RequestMethod, requestFormat));
+                WriteLog(string.Format("Remote Image Request: From: {0}{1} ({2})", remoteUrl, animation.RequestMethod, requestFormat));
                 using (HttpClient client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(remoteUrl);
@@ -253,7 +255,7 @@ namespace InstrumentPlugins
                             httpResponse = client.PostAsync(remoteUrl, new StringContent(requestFormat)).Result;
                             break;
                         default:
-                            httpResponse = client.GetAsync(new Uri(new Uri(remoteUrl), requestFormat)).Result;
+                            httpResponse = client.GetAsync(string.Format("{0}{1}", remoteUrl, requestFormat)).Result;
                             break;
 
                     }
@@ -262,6 +264,10 @@ namespace InstrumentPlugins
                 {
                     image = Image.FromStream(httpResponse.Content.ReadAsStreamAsync().Result);
                 }
+                else
+                {
+                    WriteLog(string.Format("Remote Image Failed: Response: {0} ({1})", httpResponse.Content, httpResponse.ReasonPhrase));
+                }
                 if (image != null)
                 {
                     return (Bitmap)image;
@@ -269,7 +275,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("Remote Image Request: Failed: {0}", ex.Message));
+                WriteLog("Remote Image Request: Failed", ex);
             }
             return null;
         }
@@ -294,7 +300,7 @@ namespace InstrumentPlugins
                 catch(Exception ex)
                 {
                     // Cannot perform calculation
-                    WriteLog(string.Format("Unable to perform calculation on: {0}\rError: {1}", actualCalculation, ex.Message));
+                    WriteLog(string.Format("Unable to perform calculation on: {0}", actualCalculation), ex);
                 }
                 initialString = initialString.Replace(rawCalculation, result.ToString());
             }
@@ -319,17 +325,18 @@ namespace InstrumentPlugins
                                 var overlapImage = GenerateAnimationImage(animation);
                                 try
                                 {
-                                    animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
+                                    if (animationImage != null && overlapImage != null)
+                                        animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
                                 }
                                 catch (Exception ex)
                                 {
-                                    WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
+                                    WriteLog("Paint Control: Failed to Overlay Animation Images.", ex);
                                 }
                                 //overlapImage.Dispose();
                             }
                             catch (Exception ex)
                             {
-                                WriteLog(string.Format("PaintControl: Failed to Generate Animation Image.\rError: {0}", ex.Message));
+                                WriteLog("PaintControl: Failed to Generate Animation Image.", ex);
                             }
                         }
                     }
@@ -600,7 +607,7 @@ namespace InstrumentPlugins
             }
             catch (Exception ex)
             {
-                WriteLog(string.Format("ExecuteAnimation: Failed to update latest values.\rError: {0}", ex.Message));
+                WriteLog("ExecuteAnimation: Failed to update latest values.", ex);
             }
         }
 
@@ -631,7 +638,7 @@ namespace InstrumentPlugins
             catch (Exception ex)
             {
                 // Something else cause a problem - cannot update this control
-                WriteLog(string.Format("UpdateControl: Failed to invoke Control Update.\rError: {0}", ex.Message));
+                WriteLog("UpdateControl: Failed to invoke Control Update.", ex);
             }
         }
 
@@ -639,16 +646,19 @@ namespace InstrumentPlugins
         {
             try
             {
-                var diretory = Directory.GetCurrentDirectory();
-                var imageFile = File.OpenRead(new Uri(Path.Combine(diretory, imagePath)).AbsolutePath);
-                var image = Image.FromStream(imageFile);
-                aspectRatio = (double)image.Height / image.Width;
-                var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
-                return resizedImage;
+                if (!string.IsNullOrEmpty(imagePath))
+                {
+                    var diretory = Directory.GetCurrentDirectory();
+                    var imageFile = File.OpenRead(new Uri(Path.Combine(diretory, imagePath)).AbsolutePath);
+                    var image = Image.FromStream(imageFile);
+                    aspectRatio = (double)image.Height / image.Width;
+                    var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
+                    return resizedImage;
+                }
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("LoadImage: Failed to read/resize Image file.\rError: {0}", ex.Message));
+                WriteLog("LoadImage: Failed to read/resize Image file.", ex);
             }
             return null;
         }
@@ -687,7 +697,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("DrawPoints: Failed to generate image from PointMap.\rError: {0}", ex.Message));
+                WriteLog("DrawPoints: Failed to generate image from PointMap.", ex);
             }
             return null;
         }
@@ -765,7 +775,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("ValueUpdate: Invalid ClientRequestValue supplied.\rError: {0}", ex.Message));
+                WriteLog("ValueUpdate: Invalid ClientRequestValue supplied.", ex);
             }
         }
 
@@ -779,7 +789,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("UpdateStepCount: Invalid serverUpdateTime value supplied ({0}).\rError: {1}", serverUpdateTimeInMs, ex.Message));
+                WriteLog(string.Format("UpdateStepCount: Invalid serverUpdateTime value supplied ({0}).", serverUpdateTimeInMs), ex);
             }
         }
 
@@ -825,6 +835,16 @@ namespace InstrumentPlugins
                 }
                 catch(Exception ex) { }
             }
+        }
+
+        private void WriteLog(string message, Exception ex)
+        {
+            while(ex != null && !string.IsNullOrEmpty(ex.Message))
+            {
+                message += string.Format("\r\nError: {0}", ex.Message);
+                ex = ex.InnerException;
+            }
+            WriteLog(message);
         }
     }
 }
