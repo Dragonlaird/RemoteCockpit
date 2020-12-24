@@ -244,7 +244,7 @@ namespace InstrumentPlugins
                 {
                     requestFormat = Calculate(requestFormat);
                 }
-                WriteLog(string.Format("Remote Image Request: From: {0}{1} ({2})", remoteUrl, animation.RequestMethod, requestFormat));
+                WriteLog(string.Format("Remote Image Request: From: {0}{1} ({2})", remoteUrl, requestFormat, animation.RequestMethod));
                 using (HttpClient client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(remoteUrl);
@@ -406,14 +406,6 @@ namespace InstrumentPlugins
                 }
             }
             return initialImage;
-        }
-
-        private Bitmap GetRemoteImage(IAnimationItem animation)
-        {
-            var animationId = config.Animations.ToList().IndexOf(animation);
-            Bitmap image = animationImages[animationId];
-
-            return image;
         }
 
         public Bitmap MoveImage(Bitmap initialImage, bool moveVertically, double movePercent)
@@ -761,6 +753,14 @@ namespace InstrumentPlugins
                         // We now know how often we expect to receive updates - revise the timings accordingly
                         UpdateStepCount((int)value.Result);
                     }
+                    foreach (var animation in config.Animations)
+                    {
+                        if (animation is AnimationExternal && animation.Triggers.Any(x => ((AnimationTriggerClientRequest)x).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == value.Request.Unit))
+                        {
+                            // Need to update an external image
+                            animationImages[config.Animations.ToList().IndexOf(animation)] = LoadImageFromRemote((AnimationExternal)animation);
+                        }
+                    }
                     // Check if any animations use this variable as a trigger
                     if (config.Animations.Any(x => x.Triggers.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                     {
@@ -768,6 +768,7 @@ namespace InstrumentPlugins
                         // Modify the step size for our control
                         lock (animationSteps)
                             animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
+
                         // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
                         StartTimer();
                     }
