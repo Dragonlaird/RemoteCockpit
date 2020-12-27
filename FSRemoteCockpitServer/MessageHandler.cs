@@ -31,7 +31,7 @@ namespace RemoteCockpit
         protected override void WndProc(ref Message msg)
         {
             // filter messages here for your purposes
-            if (msg.Msg == 1026 && MessageReceived != null)
+            if (msg.Msg == 0x0402 && MessageReceived != null)
                 MessageReceived.DynamicInvoke(this, msg);
             else
                 base.WndProc(ref msg);
