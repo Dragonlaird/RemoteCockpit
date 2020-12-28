@@ -193,10 +193,10 @@ namespace InstrumentPlugins
                         switch (trigger.Type)
                         {
                             case AnimationTriggerTypeEnum.ClientRequest:
-                                val = previousResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
+                                val = currentResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
                                 break;
                             case AnimationTriggerTypeEnum.MouseClick:
-                                val = previousResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "2";
+                                val = currentResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "2";
                                 break;
                         }
                         if (val == null)
