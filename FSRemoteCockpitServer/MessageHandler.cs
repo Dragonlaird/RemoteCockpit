@@ -13,30 +13,30 @@ using RemoteCockpitClasses;
 
 namespace RemoteCockpit
 {
-    // Adaped from http://stackoverflow.com/questions/2443867/message-pump-in-net-windows-service
+    // Adapted from http://stackoverflow.com/questions/2443867/message-pump-in-net-windows-service
 
-    internal class MessageHandler : NativeWindow
+internal class MessageHandler : NativeWindow
+{
+    public event EventHandler<Message> MessageReceived;
+
+    public MessageHandler()
     {
-        public event EventHandler<Message> MessageReceived;
-
-        public MessageHandler()
-        {
-        }
-
-        internal void CreateHandle()
-        {
-            CreateHandle(new CreateParams());
-        }
-
-        protected override void WndProc(ref Message msg)
-        {
-            // filter messages here for your purposes
-            if (msg.Msg == 1026 && MessageReceived != null)
-                MessageReceived.DynamicInvoke(this, msg);
-            else
-                base.WndProc(ref msg);
-        }
     }
+
+    internal void CreateHandle()
+    {
+        CreateHandle(new CreateParams());
+    }
+
+    protected override void WndProc(ref Message msg)
+    {
+        // filter messages here for your purposes
+        if (msg.Msg == 1026 && MessageReceived != null)
+            MessageReceived.DynamicInvoke(this, msg);
+        else
+            base.WndProc(ref msg);
+    }
+}
 
     public class MessagePumpManager
     {
