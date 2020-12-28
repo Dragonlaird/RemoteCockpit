@@ -238,10 +238,12 @@ namespace InstrumentPlugins
                 HttpResponseMessage httpResponse;
                 if(remoteUrl.IndexOf("Calculate{") > -1 && remoteUrl.IndexOf("}") > remoteUrl.IndexOf("Calculate{"))
                 {
+                    // Looks like our URL still contains some non-static values - perform a calculation to retrieve the value(s) required
                     remoteUrl = Calculate(remoteUrl);
                 }
                 if (requestFormat.IndexOf("Calculate{") > -1 && requestFormat.IndexOf("}") > remoteUrl.IndexOf("Calculate{"))
                 {
+                    // Looks like our Request still contains some non-static values - perform a calculation to retrieve the value(s) required
                     requestFormat = Calculate(requestFormat);
                 }
                 WriteLog(string.Format("Remote Image Request: From: {0}{1} ({2})", remoteUrl, requestFormat, animation.RequestMethod));

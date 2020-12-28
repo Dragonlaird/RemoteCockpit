@@ -14,6 +14,22 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -39,13 +55,22 @@
   <PropertyGroup>
     <StartupObject>RemoteCockpit.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>47138DF259D5F95B92274A99B690A9D400A3AA3E</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>FSCockpitServer_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CTrue.FsConnect, Version=1.0.3.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\CTrue.FsConnect.1.0.3\lib\net40\CTrue.FsConnect.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.FlightSimulator.SimConnect, Version=11.0.62651.3, Culture=neutral, PublicKeyToken=baf445ffb3a06b5c, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+      <HintPath>SimConnectSDK\Managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -77,18 +102,22 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FSRemoteCockpitServer.cs" />
+    <Compile Include="FSCockpitServer.cs" />
     <Compile Include="SocketListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="FSCockpitServer_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="SimConnect.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="SimConnectSDK\SimConnect.lib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ContentWithTargetPath Include="$(MSFS_SDK)/SimConnect SDK/lib/SimConnect.dll">
+    <ContentWithTargetPath Include="C:\MSFS SDK\/SimConnect SDK/lib/SimConnect.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>SimConnect.dll</TargetPath>
     </ContentWithTargetPath>
@@ -99,15 +128,28 @@
       <Name>RemoteCockpitClasses</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="SimConnectSDK\Managed\Microsoft.FlightSimulator.SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SimConnectSDK\SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /D /Y "$(MSFS_SDK)SimConnect SDK\lib\SimConnect.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\CTrue.FsConnect.1.0.3\build\CTrue.FsConnect.targets" Condition="Exists('..\packages\CTrue.FsConnect.1.0.3\build\CTrue.FsConnect.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\CTrue.FsConnect.1.0.3\build\CTrue.FsConnect.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CTrue.FsConnect.1.0.3\build\CTrue.FsConnect.targets'))" />
-  </Target>
 </Project>

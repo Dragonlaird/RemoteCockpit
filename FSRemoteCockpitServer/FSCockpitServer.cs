@@ -9,7 +9,7 @@ using RemoteCockpitClasses;
 
 namespace RemoteCockpit
 {
-    public class FSRemoteCockpitServer
+    public class FSCockpitServer
     {
         public EventHandler<LogMessage> LogReceived;
         private FSConnector fsConnector;
@@ -17,11 +17,10 @@ namespace RemoteCockpit
         private List<SimVarRequestResult> requestResults;
         private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
         private int _updateFrequency = 2; // How may seconds between each SimConnect poll?
-        public FSRemoteCockpitServer()
+        public FSCockpitServer()
         {
             InitializeComponent();
-            StartConnector();
-            StartListener();
+            Start();
         }
 
         private void InitializeComponent()
@@ -31,6 +30,22 @@ namespace RemoteCockpit
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = _updateFrequency });
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "TITLE", Unit = "string" }, Value = "None" });
+        }
+
+        public void Start()
+        {
+            WriteLog(this, new LogMessage { Message = "FSCockpit Starting", Type = System.Diagnostics.EventLogEntryType.Information });
+            StartConnector();
+            StartListener();
+            WriteLog(this, new LogMessage { Message = "FSCockpit Started", Type = System.Diagnostics.EventLogEntryType.Information });
+        }
+
+        public void Stop()
+        {
+            WriteLog(this, new LogMessage { Message = "FSCockpit Stopping", Type = System.Diagnostics.EventLogEntryType.Information });
+            fsConnector?.Stop();
+            listener?.Stop();
+            WriteLog(this, new LogMessage { Message = "FSCockpit Stopped", Type = System.Diagnostics.EventLogEntryType.Information });
         }
 
         private void StartConnector()
@@ -143,7 +158,7 @@ namespace RemoteCockpit
             MessageReceived(this, connectionChanged);
         }
 
-        public void WriteLog(object sender, LogMessage msg)
+        private void WriteLog(object sender, LogMessage msg)
         {
             if (LogReceived != null)
             {
