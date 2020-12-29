@@ -1,5 +1,5 @@
 ﻿
-namespace FSRemoteService
+namespace RemoteCockpit
 {
     partial class ProjectInstaller
     {
@@ -40,7 +40,7 @@ namespace FSRemoteService
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.ServiceName = "FS Remote Server";
+            this.serviceInstaller1.ServiceName = "FS Cockpit Server";
             // 
             // ProjectInstaller
             // 

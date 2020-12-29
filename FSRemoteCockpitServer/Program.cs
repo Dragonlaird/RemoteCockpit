@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +14,12 @@ namespace RemoteCockpit
     {
         static void Main(string[] args)
         {
-            var remoteCockpit = new FSCockpitServer();
-           Application.Run();
+            ServiceBase[] ServicesToRun;
+            ServicesToRun = new ServiceBase[]
+            {
+                new FSCockpitServer()
+            };
+            ServiceBase.Run(ServicesToRun);
         }
 
         static void WriteLog(object sender, LogMessage message)

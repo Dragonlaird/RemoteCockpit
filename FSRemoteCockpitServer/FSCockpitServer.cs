@@ -1,15 +1,20 @@
-﻿using System;
+﻿using RemoteCockpit;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Net;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using RemoteCockpitClasses;
+using System.Configuration;
+using System.Net;
 
 namespace RemoteCockpit
 {
-    public class FSCockpitServer
+    public partial class FSCockpitServer : ServiceBase
     {
         public EventHandler<LogMessage> LogReceived;
         private FSConnector fsConnector;
@@ -17,19 +22,34 @@ namespace RemoteCockpit
         private List<SimVarRequestResult> requestResults;
         private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
         private int _updateFrequency = 2; // How may seconds between each SimConnect poll?
+        private EventLog logger = null;
         public FSCockpitServer()
         {
-            InitializeComponent();
-            Start();
+            Initialize();
         }
 
-        private void InitializeComponent()
+        private void Initialize()
         {
+            try
+            {
+                logger = new EventLog("Application", "localhost", "FS Remote Cockpit Server");
+            }
+            catch { }
             requestResults = new List<SimVarRequestResult>();
             // Add the first Request Variable for Connection State
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = _updateFrequency });
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "TITLE", Unit = "string" }, Value = "None" });
+        }
+
+        protected override void OnStart(string[] args)
+        {
+            Start();
+        }
+
+        protected override void OnStop()
+        {
+            Stop();
         }
 
         public void Start()
@@ -40,7 +60,7 @@ namespace RemoteCockpit
             WriteLog(this, new LogMessage { Message = "FSCockpit Started", Type = System.Diagnostics.EventLogEntryType.Information });
         }
 
-        public void Stop()
+        public new void Stop()
         {
             WriteLog(this, new LogMessage { Message = "FSCockpit Stopping", Type = System.Diagnostics.EventLogEntryType.Information });
             fsConnector?.Stop();
@@ -167,9 +187,16 @@ namespace RemoteCockpit
             else
             {
                 var strType = msg.Type.ToString().Substring(0, 3);
-                Console.WriteLine("({0}) [{1}] {2}", sender?.GetType().Name, strType, msg.Message);
+                var logMsg = string.Format("({0}) [{1}] {2}", sender?.GetType().Name, strType, msg.Message);
+                if (logger != null)
+                {
+                    logger.WriteEntry(logMsg);
+                }
+                else
+                {
+                    Console.WriteLine(logMsg);
+                }
             }
-
         }
     }
 }
