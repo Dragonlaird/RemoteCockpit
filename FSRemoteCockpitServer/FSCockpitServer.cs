@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using RemoteCockpitClasses;
 using System.Configuration;
 using System.Net;
+using System.IO;
+using System.Windows.Forms;
+using Serilog;
+using Serilog.Core;
 
 namespace RemoteCockpit
 {
@@ -23,8 +27,10 @@ namespace RemoteCockpit
         private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
         private int _updateFrequency = 2; // How may seconds between each SimConnect poll?
         private EventLog logger = null;
-        public FSCockpitServer()
+        private readonly Logger _log;
+        public FSCockpitServer(Logger log)
         {
+            _log = log;
             Initialize();
         }
 
@@ -32,7 +38,7 @@ namespace RemoteCockpit
         {
             try
             {
-                logger = new EventLog("Application", "localhost", "FS Remote Cockpit Server");
+                logger = new EventLog("Application", "localhost", "FS Cockpit Server");
             }
             catch { }
             requestResults = new List<SimVarRequestResult>();
@@ -134,7 +140,7 @@ namespace RemoteCockpit
                         requestResults.Add(new SimVarRequestResult { Request = request, Value = null });
                     }
                 // Send the request to FSConnector
-                if((request.Name == "FS CONNECTION" || request.Name == "UPDATE FREQUENCY") && sender is StateObject)
+                if ((request.Name == "FS CONNECTION" || request.Name == "UPDATE FREQUENCY") && sender is StateObject)
                 {
                     ClientConnect(sender, (StateObject)sender);
                 }
@@ -188,13 +194,24 @@ namespace RemoteCockpit
             {
                 var strType = msg.Type.ToString().Substring(0, 3);
                 var logMsg = string.Format("({0}) [{1}] {2}", sender?.GetType().Name, strType, msg.Message);
-                if (logger != null)
+                try
                 {
-                    logger.WriteEntry(logMsg);
+                    switch (msg.Type)
+                    {
+                        case EventLogEntryType.Error:
+                            _log.Error(logMsg);
+                            break;
+                        case EventLogEntryType.Warning:
+                            _log.Warning(logMsg);
+                            break;
+                        default:
+                            _log.Information(logMsg);
+                            break;
+                    }
                 }
-                else
+                catch
                 {
-                    Console.WriteLine(logMsg);
+
                 }
             }
         }
