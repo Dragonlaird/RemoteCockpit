@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RemoteCockpitServer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Remote Service API for MSFS")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dragonlaird")]
 [assembly: AssemblyProduct("RemoteCockpit")]
 [assembly: AssemblyCopyright("Copyright ©  2020 - Dragonlaird")]
 [assembly: AssemblyTrademark("")]
