@@ -186,7 +186,7 @@ namespace RemoteCockpit
                 else
                 {
                     request = simVarRequests.First(x => x.Name == request.Name && x.Unit == request.Unit);
-                    WriteLog(string.Format("Request already submitted: {0} - {1} ({2})", request.ID, request.Name, request.Unit));
+                    WriteLog(string.Format("Request already submitted: {0} - {1} ({2})", request.ID, request.Name, request.Unit), EventLogEntryType.Warning);
                 }
             }
             else

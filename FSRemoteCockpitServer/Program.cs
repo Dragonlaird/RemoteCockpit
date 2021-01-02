@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration.Install;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
@@ -15,6 +17,7 @@ namespace RemoteCockpit
 {
     class Program
     {
+        private static FSCockpitServer server;
         static void Main(string[] args)
         {
             var logConfig = new LoggerConfiguration();
@@ -24,18 +27,57 @@ namespace RemoteCockpit
             {
                 logConfig.WriteTo.File(Path.Combine(Path.GetTempPath(), string.Format("FSCockpitServer_{0:yyMMdd}", DateTime.Now))).ToString();
             }
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
+            var log = logConfig.CreateLogger();
+            if (args != null && args.Length == 1 && args[0].Length > 1
+                    && (args[0][0] == '-' || args[0][0] == '/'))
             {
-                new FSCockpitServer(logConfig.CreateLogger())
-            };
-            ServiceBase.Run(ServicesToRun);
-        }
-
-        static void WriteLog(object sender, LogMessage message)
-        {
-            var strType = message.Type.ToString().Substring(0, 3).ToUpper();
-            Console.WriteLine("({1}) [{0}] {2}", strType, sender.GetType().Name, message.Message);
+                switch (args[0].Substring(1).ToLower())
+                {
+                    default:
+                        break;
+                    case "install":
+                    case "i":
+                        log.Information("Installing Remote Cockpit as a Windows Service");
+                        SelfInstaller.InstallMe();
+                        break;
+                    case "uninstall":
+                    case "u":
+                        log.Information("Uninstalling Remote Cockpit Windows Service");
+                        SelfInstaller.UninstallMe();
+                        break;
+                    case "console":
+                    case "c":
+                    case "start":
+                        log.Information("Starting Remote Cockpit Manually");
+                        if (server?.IsRunning != true)
+                        {
+                            server = new FSCockpitServer(logConfig.CreateLogger());
+                            server.Start();
+                        }
+                        break;
+                    case "stop":
+                        log.Information("Stopping Remote Cockpit Manually");
+                        if (server?.IsRunning == true)
+                        {
+                            server.Stop();
+                            while (server?.IsRunning == true)
+                            {
+                                Thread.Sleep(10);
+                            }
+                            server = null;
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                ServiceBase[] ServicesToRun;
+                ServicesToRun = new ServiceBase[]
+                {
+                    new FSCockpitServer(log)
+                };
+                ServiceBase.Run(ServicesToRun);
+            }
         }
     }
 }

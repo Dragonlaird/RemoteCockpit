@@ -15,18 +15,18 @@ namespace RemoteCockpit
 {
     // Adapted from http://stackoverflow.com/questions/2443867/message-pump-in-net-windows-service
 
-internal class MessageHandler : NativeWindow
-{
-    public event EventHandler<Message> MessageReceived;
-
-    public MessageHandler()
+    internal class MessageHandler : NativeWindow
     {
-    }
+        public event EventHandler<Message> MessageReceived;
 
-    internal void CreateHandle()
-    {
-        CreateHandle(new CreateParams());
-    }
+        public MessageHandler()
+        {
+        }
+
+        internal void CreateHandle()
+        {
+            CreateHandle(new CreateParams());
+        }
 
         protected override void WndProc(ref Message msg)
         {
@@ -63,7 +63,7 @@ internal class MessageHandler : NativeWindow
             //simConnect.RegisterDataDefineStruct<string>((DEFINITION)1);
             //return;
             var unit = request.Unit;
-            if(unit?.IndexOf("string") > -1)
+            if (unit?.IndexOf("string") > -1)
             {
                 unit = null;
             }
@@ -115,7 +115,7 @@ internal class MessageHandler : NativeWindow
                 {
                     simConnect.ReceiveMessage();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     // Seen to happen if FS is shutting down
                 }
@@ -155,7 +155,8 @@ internal class MessageHandler : NativeWindow
                 simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(SimConnect_OnRecvSimobjectDataBytype);
 
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
 
             }
         }
@@ -167,7 +168,7 @@ internal class MessageHandler : NativeWindow
                 {
                     SimData.DynamicInvoke(this, data);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }

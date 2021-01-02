@@ -22,19 +22,25 @@
         "Entry"
         {
         "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
+        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
+        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
+        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
         "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
-        "OwnerKey" = "8:_5813819CEFF5A714CB071E3FEE6343B9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
-        "OwnerKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -46,13 +52,7 @@
         "Entry"
         {
         "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
-        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
-        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "OwnerKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -87,68 +87,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "OwnerKey" = "8:_5813819CEFF5A714CB071E3FEE6343B9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_2D632F803AFACA4A03AD881903D59BC4"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C7ADB94FA3B25DAC09CD9C4446E201B"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C7ADB94FA3B25DAC09CD9C4446E201B"
-        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C7ADB94FA3B25DAC09CD9C4446E201B"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C7ADB94FA3B25DAC09CD9C4446E201B"
-        "OwnerKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C7ADB94FA3B25DAC09CD9C4446E201B"
-        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -177,32 +117,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5813819CEFF5A714CB071E3FEE6343B9"
-        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_585EC5FA9EE749119A973211D048C3E1"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
-        "OwnerKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -215,6 +131,54 @@
         {
         "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
+        "OwnerKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -232,7 +196,13 @@
         "Entry"
         {
         "MsmKey" = "8:_715D3F0EDD45747CC726F3EF4808E853"
-        "OwnerKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
+        "OwnerKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -245,6 +215,36 @@
         {
         "MsmKey" = "8:_8D7FF5BFE2FB597A887961B22432788C"
         "OwnerKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9126D50FA75068792EAF6B6EDED688A0"
+        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9126D50FA75068792EAF6B6EDED688A0"
+        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9126D50FA75068792EAF6B6EDED688A0"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9126D50FA75068792EAF6B6EDED688A0"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9126D50FA75068792EAF6B6EDED688A0"
+        "OwnerKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -280,31 +280,31 @@
         "Entry"
         {
         "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
-        "OwnerKey" = "8:_5813819CEFF5A714CB071E3FEE6343B9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
         "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
+        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -328,31 +328,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5813819CEFF5A714CB071E3FEE6343B9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_25F62E475526A36DD5E104B07D0B21AA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -388,31 +364,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_663DEDD5909DD2127EA067C2BBD8CE07"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4CA75C958A10AEEFA56A82B3A8BF3BDE"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_94319ABF1E2D12235B2358F8135CBD59"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8D7FF5BFE2FB597A887961B22432788C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -454,19 +406,67 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_626D89A591EFE65B5266C29FCD97B502"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_9126D50FA75068792EAF6B6EDED688A0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_0CD454635B8B449D248FADABDF2B2051"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3C7ADB94FA3B25DAC09CD9C4446E201B"
+        "OwnerKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C3CBF5BEFBEB9E206A8AD0973F67018D"
+        "OwnerKey" = "8:_6161F9D8857D5949D5D4AA24358DE566"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_663DEDD5909DD2127EA067C2BBD8CE07"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4CA75C958A10AEEFA56A82B3A8BF3BDE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_94319ABF1E2D12235B2358F8135CBD59"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_8D7FF5BFE2FB597A887961B22432788C"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -487,6 +487,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -503,6 +519,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -656,37 +688,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_25F62E475526A36DD5E104B07D0B21AA"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RemoteCockpitClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_25F62E475526A36DD5E104B07D0B21AA"
-                    {
-                    "Name" = "8:RemoteCockpitClasses.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:RemoteCockpitClasses.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2D632F803AFACA4A03AD881903D59BC4"
             {
             "AssemblyRegister" = "3:1"
@@ -712,37 +713,6 @@
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3C7ADB94FA3B25DAC09CD9C4446E201B"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.FlightSimulator.SimConnect, Version=11.0.62651.3, Culture=neutral, PublicKeyToken=baf445ffb3a06b5c, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_3C7ADB94FA3B25DAC09CD9C4446E201B"
-                    {
-                    "Name" = "8:Microsoft.FlightSimulator.SimConnect.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.FlightSimulator.SimConnect.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:TRUE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
@@ -811,37 +781,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5813819CEFF5A714CB071E3FEE6343B9"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:InstrumentPlugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_5813819CEFF5A714CB071E3FEE6343B9"
-                    {
-                    "Name" = "8:InstrumentPlugins.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:InstrumentPlugins.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_585EC5FA9EE749119A973211D048C3E1"
             {
             "SourcePath" = "8:..\\FSRemoteCockpitServer\\SimConnectSDK\\SimConnect.dll"
@@ -876,6 +815,37 @@
                     }
                 }
             "SourcePath" = "8:netstandard.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_626D89A591EFE65B5266C29FCD97B502"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:RemoteCockpitClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_626D89A591EFE65B5266C29FCD97B502"
+                    {
+                    "Name" = "8:RemoteCockpitClasses.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:RemoteCockpitClasses.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -955,6 +925,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:InstrumentPlugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_84D14F0CBE3693FA1988BABDEB6EF4F0"
+                    {
+                    "Name" = "8:InstrumentPlugins.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:InstrumentPlugins.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8622863B5E693DBF8AA9D08E4E13DFFD"
             {
             "AssemblyRegister" = "3:1"
@@ -1011,6 +1012,37 @@
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9126D50FA75068792EAF6B6EDED688A0"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.FlightSimulator.SimConnect, Version=11.0.62651.3, Culture=neutral, PublicKeyToken=baf445ffb3a06b5c, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_9126D50FA75068792EAF6B6EDED688A0"
+                    {
+                    "Name" = "8:Microsoft.FlightSimulator.SimConnect.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.FlightSimulator.SimConnect.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:TRUE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
@@ -1198,13 +1230,24 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_12526694CDE6499B980D3DD127627F63"
+                    {
+                    "Name" = "8:FS Remote Cockpit"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_F8F96012B01C486492A07DC06020B052"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_DB021720326240E1AF78943127E5E9C7"
             {
             "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:TARGETDIR"
@@ -1229,7 +1272,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FS Remote Cockpit"
         "ProductCode" = "8:{2BABE3B9-265B-49F4-BB2D-0A0F41E8A897}"
-        "PackageCode" = "8:{5FA3B37E-7614-44DC-B0B4-A1E84E548B8E}"
+        "PackageCode" = "8:{0BA0E094-ED4D-4C87-BAED-4A68DDB1C0E5}"
         "UpgradeCode" = "8:{F25817B9-883E-4FFF-947D-0B68B0F1BA9F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1349,6 +1392,76 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_396AD165AB26404FA34AC7BEE668C1DE"
+            {
+            "Name" = "8:Uninstall Remote Cockpit Serevice"
+            "Arguments" = "8:-uninstall"
+            "Description" = "8:Must be run as Administrator"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+            "Folder" = "8:_12526694CDE6499B980D3DD127627F63"
+            "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_619ED6CCDC684482A23D8F9367F7924D"
+            {
+            "Name" = "8:Cockpit Display"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+            "Folder" = "8:_12526694CDE6499B980D3DD127627F63"
+            "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D9C9EA388355464E8854F73DCE578A5D"
+            {
+            "Name" = "8:FS Remote Cockpit"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Folder" = "8:_CB26765D258145F2A22752F908FAC551"
+            "WorkingFolder" = "8:_CB26765D258145F2A22752F908FAC551"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E5C1B02C625A4D9CB555BCBA57A0D7F0"
+            {
+            "Name" = "8:Install Remote Cockpit Service"
+            "Arguments" = "8:-install"
+            "Description" = "8:Must be run as Administrator"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+            "Folder" = "8:_12526694CDE6499B980D3DD127627F63"
+            "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F451615D15B3425CA4B094482EA64778"
+            {
+            "Name" = "8:Instrument Designer"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_BF5F53DC3C344849BF183E39919D017A"
+            "Folder" = "8:_12526694CDE6499B980D3DD127627F63"
+            "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -1750,7 +1863,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_438C15E99F544E50B989FA83AA3EE17A"
             {
-            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\Release\\InstrumentPlugins.dll"
+            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\Debug\\InstrumentPlugins.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -1778,7 +1891,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BF5F53DC3C344849BF183E39919D017A"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\obj\\Release\\InstrumentDesigner.exe"
+            "SourcePath" = "8:..\\InstrumentDesigner\\obj\\Debug\\InstrumentDesigner.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -1806,7 +1919,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CAE74BD877FE40679700D8F9AB6180DA"
             {
-            "SourcePath" = "8:..\\FSRemoteCockpitServer\\obj\\Release\\RemoteCockpit.exe"
+            "SourcePath" = "8:..\\FSRemoteCockpitServer\\obj\\Debug\\RemoteCockpit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -1834,7 +1947,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_ECAFCD88074A44C99461181FDAA8906E"
             {
-            "SourcePath" = "8:..\\CockpitDisplay\\obj\\x64\\Release\\CockpitDisplay.exe"
+            "SourcePath" = "8:..\\CockpitDisplay\\obj\\x64\\Debug\\CockpitDisplay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"

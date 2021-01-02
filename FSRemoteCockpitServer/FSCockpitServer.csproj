@@ -130,6 +130,7 @@
     <Compile Include="FSCockpitServer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SelfInstaller.cs" />
     <Compile Include="SocketListener.cs" />
   </ItemGroup>
   <ItemGroup>

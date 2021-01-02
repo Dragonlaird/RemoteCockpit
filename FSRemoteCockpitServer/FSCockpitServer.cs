@@ -28,6 +28,7 @@ namespace RemoteCockpit
         private int _updateFrequency = 2; // How may seconds between each SimConnect poll?
         private EventLog logger = null;
         private readonly Logger _log;
+        public bool IsRunning = false;
         public FSCockpitServer(Logger log)
         {
             _log = log;
@@ -60,6 +61,7 @@ namespace RemoteCockpit
 
         public void Start()
         {
+            IsRunning = true;
             WriteLog(this, new LogMessage { Message = "FSCockpit Starting", Type = System.Diagnostics.EventLogEntryType.Information });
             StartConnector();
             StartListener();
@@ -72,6 +74,7 @@ namespace RemoteCockpit
             fsConnector?.Stop();
             listener?.Stop();
             WriteLog(this, new LogMessage { Message = "FSCockpit Stopped", Type = System.Diagnostics.EventLogEntryType.Information });
+            IsRunning = false;
         }
 
         private void StartConnector()
