@@ -159,41 +159,48 @@ namespace CockpitDisplay
 
         private void Initialize()
         {
-            requestResults = new List<RemoteCockpitClasses.ClientRequestResult>();
-            var ipAddress = IPAddress.Parse("127.0.0.1");
-            var ipPort = 5555;
-            connector = new RemoteConnector(new System.Net.IPEndPoint(ipAddress, ipPort));
-            connector.ReceiveData += ReceiveResultFromServer;
-            connector.Connect();
-            cbConnected.Checked = connector.Connected;
-
-            var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
-            var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
-            cmbCockpitLayout.Items.Clear();
-            foreach (var layoutJson in layouts["Layouts"])
+            try
             {
-                var layout = layoutJson.ToObject<LayoutDefinition>();
-                cmbCockpitLayout.Items.Add(layout.Name);
+                requestResults = new List<RemoteCockpitClasses.ClientRequestResult>();
+                var ipAddress = IPAddress.Parse("127.0.0.1");
+                var ipPort = 5555;
+                connector = new RemoteConnector(new System.Net.IPEndPoint(ipAddress, ipPort));
+                connector.ReceiveData += ReceiveResultFromServer;
+                connector.Connect();
+                cbConnected.Checked = connector.Connected;
+
+                var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
+                var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
+                cmbCockpitLayout.Items.Clear();
+                foreach (var layoutJson in layouts["Layouts"])
+                {
+                    var layout = layoutJson.ToObject<LayoutDefinition>();
+                    cmbCockpitLayout.Items.Add(layout.Name);
+                }
+                cmbCockpitLayout.SelectedIndex = 0;
+                // Always ask to be notified when Connection to FlightSim is made or dropped
+                RequestVariable(new ClientRequest
+                {
+                    Name = "FS CONNECTION",
+                    Unit = "bool"
+                });
+                // Also, ask to be notified whenever user starts flying a different aircraft
+                RequestVariable(new ClientRequest
+                {
+                    Name = "TITLE",
+                    Unit = "string"
+                });
+
+                RequestVariable(new ClientRequest
+                {
+                    Name = "UPDATE FREQUENCY",
+                    Unit = "second"
+                });
             }
-            cmbCockpitLayout.SelectedIndex = 0;
-            // Always ask to be notified when Connection to FlightSim is made or dropped
-            RequestVariable(new ClientRequest
+            catch(Exception ex)
             {
-                Name = "FS CONNECTION",
-                Unit = "bool"
-            });
-            // Also, ask to be notified whenever user starts flying a different aircraft
-            RequestVariable(new ClientRequest
-            {
-                Name = "TITLE",
-                Unit = "string"
-            });
-
-            RequestVariable(new ClientRequest
-            {
-                Name = "UPDATE FREQUENCY",
-                Unit = "second"
-            });
+                MessageBox.Show("Error loading Cockpit: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)

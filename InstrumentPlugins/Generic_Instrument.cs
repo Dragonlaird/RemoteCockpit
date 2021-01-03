@@ -127,7 +127,7 @@ namespace InstrumentPlugins
                     if (!currentResults.Any(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit))
                     {
                         currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
-                        previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)-1 });
+                        previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
                         //animateTimers.Add(null);
                         animationSteps.Add(1);
                     }
@@ -643,7 +643,7 @@ namespace InstrumentPlugins
                 if (!string.IsNullOrEmpty(imagePath))
                 {
                     var diretory = Directory.GetCurrentDirectory();
-                    var imageFile = File.OpenRead(new Uri(Path.Combine(diretory, imagePath)).AbsolutePath);
+                    var imageFile = File.OpenRead(Path.Combine(diretory, imagePath));
                     var image = Image.FromStream(imageFile);
                     aspectRatio = (double)image.Height / image.Width;
                     var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
