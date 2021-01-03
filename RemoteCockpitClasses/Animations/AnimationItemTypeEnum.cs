@@ -7,6 +7,7 @@ namespace RemoteCockpitClasses.Animations
     public enum AnimationItemTypeEnum
     {
         Image,
-        Drawing
+        Drawing,
+        External
     }
 }

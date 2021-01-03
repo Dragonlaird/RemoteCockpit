@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Drawing.Imaging;
 using System.Numerics;
+using System.Net.Http;
 
 namespace InstrumentPlugins
 {
@@ -98,11 +99,13 @@ namespace InstrumentPlugins
                 Control.BackColor = Color.Transparent;
                 Control.BackgroundImage = image;
                 Control.BackgroundImageLayout = ImageLayout.Stretch;
+                if (Control?.Controls != null && Control.Controls["Animation"] != null)
+                    Control.Controls["Animation"].Dispose();
                 Control.Controls.Add(new PictureBox { Name = "Animation", Height = controlHeight, Width = controlWidth });
             }
             catch (Exception ex)
             {
-                WriteLog(string.Format("Initialize: Failed to populate Config.\rError: {0}", ex.Message));
+                WriteLog("Initialize: Failed to populate Config.", ex);
             }
             Control.Top = controlTop;
             Control.Left = controlLeft;
@@ -119,48 +122,197 @@ namespace InstrumentPlugins
             }
             if (config?.Animations != null)
             {
-                animationImages = new List<Bitmap>();
-                foreach(var animation in config.Animations)
-                {
-                    // If this is an Image Animation - pre-fetch the image into the cache
-                    if (animation is AnimationImage)
-                    {
-                        animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
-                    }
-                    else
-                        animationImages.Add(DrawPoints((AnimationDrawing)animation));
-                }
                 foreach (var clientRequest in config?.ClientRequests)
                 {
                     if (!currentResults.Any(x => x.Request.Name == clientRequest.Name && x.Request.Unit == clientRequest.Unit))
                     {
                         currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
-                        previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)-1 });
+                        previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
                         //animateTimers.Add(null);
                         animationSteps.Add(1);
                     }
                 }
+                animationImages = new List<Bitmap>();
+                foreach (var animation in config.Animations)
+                {
+                    switch (animation.Type)
+                    {
+                        case AnimationItemTypeEnum.Image:
+                            // If this is an Image Animation - pre-fetch the image into the cache
+                            animationImages.Add((Bitmap)LoadImage(((AnimationImage)animation).ImagePath));
+                            break;
+                        case AnimationItemTypeEnum.Drawing:
+                            // If this is a Drawing Animation - generate the image and add to the cache
+                            animationImages.Add(DrawPoints((AnimationDrawing)animation));
+                            break;
+                        case AnimationItemTypeEnum.External:
+                            // If this is an External Animation - fetch, update the image and add to the cache
+                            animationImages.Add(LoadImageFromRemote((AnimationExternal)animation));
+                            break;
+                    }
+                }
+
                 Control.Paint += PaintControl;
                 Control.Invalidate(true);
                 Control.Update();
             }
         }
 
+        private Bitmap LoadImageFromRemote(AnimationExternal animation)
+        {
+            try
+            {
+                // Check if image is already in cache, with surrounding images - If not, fetch any that are missing
+
+                //https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/-3.7375,56.035,11,0/300x200?access_token=YOUR_MAPBOX_ACCESS_TOKEN
+                //https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/\[-77.043686,38.892035,-77.028923,38.904192\]/400x400?access_token=YOUR_MAPBOX_ACCESS_TOKEN
+                var remoteUrl = animation.RemoteURL;
+                var requestFormat = animation.RequestFormat;
+                // The following values are static and should only be applied once
+                foreach (var property in this.GetType().GetProperties())
+                {
+                    var placeholder = "{" + property.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                    {
+                        if (property.CanRead)
+                        {
+                            var val = property.GetValue(this)?.ToString();
+                            remoteUrl = remoteUrl.Replace(placeholder, val);
+                            requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        }
+                    }
+                }
+                animation.RemoteURL = remoteUrl;
+                animation.RequestFormat = requestFormat;
+                foreach (var trigger in animation.Triggers)
+                {
+                    var placeholder = "{" + trigger.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                    {
+                        string val = null;
+                        switch (trigger.Type)
+                        {
+                            case AnimationTriggerTypeEnum.ClientRequest:
+                                val = currentResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
+                                break;
+                            case AnimationTriggerTypeEnum.MouseClick:
+                                val = currentResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "2";
+                                break;
+                        }
+                        if (val == null)
+                        {
+                            val = "";
+                        }
+                        remoteUrl = remoteUrl.Replace(placeholder, val);
+                        requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                    }
+                }
+                foreach (var property in animation.GetType().GetProperties())
+                {
+                    var placeholder = "{" + property.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                    {
+                        if (property.CanRead)
+                        {
+                            var val = property.GetValue(animation)?.ToString() ?? "1";
+                            remoteUrl = remoteUrl.Replace(placeholder, val);
+                            requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        }
+                    }
+                }
+                foreach (var property in Control.GetType().GetProperties())
+                {
+                    var placeholder = "{" + property.Name + "}";
+                    if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
+                    {
+                        if (property.CanRead)
+                        {
+                            var val = property.GetValue(Control)?.ToString() ?? "1";
+                            remoteUrl = remoteUrl.Replace(placeholder, val);
+                            requestFormat = requestFormat.Replace(placeholder, Uri.EscapeUriString(val));
+                        }
+                    }
+                }
+                // We should have the URL for our remote service - fetch the image
+                Image image = null;
+                HttpResponseMessage httpResponse;
+                if(remoteUrl.IndexOf("Calculate{") > -1 && remoteUrl.IndexOf("}") > remoteUrl.IndexOf("Calculate{"))
+                {
+                    // Looks like our URL still contains some non-static values - perform a calculation to retrieve the value(s) required
+                    remoteUrl = Calculate(remoteUrl);
+                }
+                if (requestFormat.IndexOf("Calculate{") > -1 && requestFormat.IndexOf("}") > remoteUrl.IndexOf("Calculate{"))
+                {
+                    // Looks like our Request still contains some non-static values - perform a calculation to retrieve the value(s) required
+                    requestFormat = Calculate(requestFormat);
+                }
+                WriteLog(string.Format("Remote Image Request: From: {0}{1} ({2})", remoteUrl, requestFormat, animation.RequestMethod));
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(remoteUrl);
+
+                    switch (animation.RequestMethod.ToString())
+                    {
+                        case "POST":
+                            httpResponse = client.PostAsync(remoteUrl, new StringContent(requestFormat)).Result;
+                            break;
+                        default:
+                            httpResponse = client.GetAsync(string.Format("{0}{1}", remoteUrl, requestFormat)).Result;
+                            break;
+
+                    }
+                }
+                if (httpResponse.IsSuccessStatusCode && (httpResponse.Content.Headers.ContentType.MediaType?.ToLower().StartsWith("image") ?? false))
+                {
+                    image = Image.FromStream(httpResponse.Content.ReadAsStreamAsync().Result);
+                }
+                else
+                {
+                    WriteLog(string.Format("Remote Image Failed: Response: {0} ({1})", httpResponse.Content, httpResponse.ReasonPhrase));
+                }
+                if (image != null)
+                {
+                    return (Bitmap)image;
+                }
+            }
+            catch(Exception ex)
+            {
+                WriteLog("Remote Image Request: Failed", ex);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// If a URL or Parameters need to perform a calculation, extract the values and operators to replace the content with the result
+        /// </summary>
+        /// <param name="initialString">URL or Parameters containing the calculation(s) to perform</param>
+        /// <returns>initialString with all calculations replaced by results</returns>
+        private string Calculate(string initialString)
+        {
+            System.Data.DataTable dt = new System.Data.DataTable();
+            while(initialString.IndexOf("Calculate{")>-1 && initialString.IndexOf("}")> initialString.IndexOf("Calculate{"))
+            {
+                double result = 0;
+                var rawCalculation = initialString.Substring(initialString.IndexOf("Calculate{"), 1 + initialString.IndexOf("}") - initialString.IndexOf("Calculate{"));
+                var actualCalculation = rawCalculation.Substring(rawCalculation.IndexOf("{") + 1, rawCalculation.IndexOf("}") - rawCalculation.IndexOf("{") - 1);
+                try
+                {
+                    result = double.Parse(dt.Compute(actualCalculation, "").ToString());
+                }
+                catch(Exception ex)
+                {
+                    // Cannot perform calculation
+                    WriteLog(string.Format("Unable to perform calculation on: {0}", actualCalculation), ex);
+                }
+                initialString = initialString.Replace(rawCalculation, result.ToString());
+            }
+            return initialString;
+        }
+
         private void PaintControl(object sender, PaintEventArgs e)
         {
             if (!disposedValue)
             {
-                // sender should always be the Control but we will address/use the Control directly
-                //if (Control.InvokeRequired)
-                //{
-                //    try
-                //    {
-                //        //var d = new SafeUpdateDelegate(PaintControl);
-                //        Control.Invoke(new MethodInvoker(delegate { PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle)); }));
-                //    }
-                //    catch { }
-                //    return;
-                //}
                 if (config?.Animations != null)
                 {
                     // We have a foreground to update
@@ -172,21 +324,21 @@ namespace InstrumentPlugins
                         {
                             try
                             {
-                                using (var overlapImage = GenerateAnimationImage(animation))
+                                var overlapImage = GenerateAnimationImage(animation);
+                                try
                                 {
-                                    try
-                                    {
+                                    if (animationImage != null && overlapImage != null)
                                         animationImage = (Bitmap)Overlap((Image)animationImage, overlapImage);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        WriteLog(string.Format("Paint Control: Failed to Overlay Animation Images.\rError: {0}", ex.Message));
-                                    }
                                 }
+                                catch (Exception ex)
+                                {
+                                    WriteLog("Paint Control: Failed to Overlay Animation Images.", ex);
+                                }
+                                //overlapImage.Dispose();
                             }
                             catch (Exception ex)
                             {
-                                WriteLog(string.Format("PaintControl: Failed to Generate Animation Image.\rError: {0}", ex.Message));
+                                WriteLog("PaintControl: Failed to Generate Animation Image.", ex);
                             }
                         }
                     }
@@ -214,6 +366,7 @@ namespace InstrumentPlugins
             var triggers = animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray(); Bitmap initialImage;
             lock (animationImages)
             {
+                // Fetch the image we want to animate
                 initialImage = animationImages[animationId];
                 foreach (var trigger in triggers)
                 {
@@ -313,56 +466,64 @@ namespace InstrumentPlugins
 
         private Bitmap ClipImage(Bitmap image, AnimateActionClipEnum style, AnimationPoint start, AnimationPoint end)
         {
-            Bitmap dstImage = new Bitmap(image.Width, image.Height, image.PixelFormat);
-            var onePercentX = image.Width / 100.0f;
-            var onePercentY = image.Height / 100.0f;
-            var topLeft = new PointF(start.X * onePercentX/2, start.Y * onePercentY/2);
-            var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
-            using (Graphics g = Graphics.FromImage(dstImage))
+            if (image != null)
             {
-                // enables smoothing of the edge of the circle (less pixelated)
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-
-                // fills background color
-                using (Brush br = new SolidBrush(Color.Transparent))
+                Bitmap dstImage = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
+                var onePercentX = image.Width / 100.0f;
+                var onePercentY = image.Height / 100.0f;
+                var topLeft = new PointF(start.X * onePercentX / 2, start.Y * onePercentY / 2);
+                var btmRight = new PointF(end.X * onePercentX, end.Y * onePercentY);
+                using (Graphics g = Graphics.FromImage(dstImage))
                 {
-                    g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
-                }
+                    // enables smoothing of the edge of the circle (less pixelated)
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
 
-                // adds the new ellipse & draws the image again 
-                using (GraphicsPath path = new GraphicsPath())
-                {
-                    // Clipping a circular path
-                    if (style == AnimateActionClipEnum.Circle)
-                        path.AddEllipse(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y);
-                    // Clipping a square
-                    if (style == AnimateActionClipEnum.Square)
-                        path.AddRectangle(new RectangleF(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y));
-                    g.SetClip(path);
-                    g.DrawImage(image, 0, 0);
+                    // fills background color
+                    using (Brush br = new SolidBrush(Color.Transparent))
+                    {
+                        g.FillRectangle(br, 0, 0, dstImage.Width, dstImage.Height);
+                    }
+
+                    // adds the new ellipse & draws the image again 
+                    using (GraphicsPath path = new GraphicsPath())
+                    {
+                        // Clipping a circular path
+                        if (style == AnimateActionClipEnum.Circle)
+                            path.AddEllipse(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y);
+                        // Clipping a square
+                        if (style == AnimateActionClipEnum.Square)
+                            path.AddRectangle(new RectangleF(topLeft.X, topLeft.Y, btmRight.X, btmRight.Y));
+                        g.SetClip(path);
+                        g.DrawImage(image, 0, 0);
+                    }
+                    return dstImage;
                 }
-                return dstImage;
             }
+            return null;
         }
 
         private Bitmap RotateImage(Bitmap bmp, PointF centrePoint, float angle)
         {
-            Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
-            rotatedImage.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
-
-            using (Graphics g = Graphics.FromImage(rotatedImage))
+            if (bmp != null)
             {
-                // Set the rotation point to the center in the matrix
-                g.TranslateTransform(centrePoint.X, centrePoint.Y);
-                // Rotate
-                g.RotateTransform(angle);
-                // Restore rotation point in the matrix
-                g.TranslateTransform(-centrePoint.X, -centrePoint.Y);
-                // Draw the image on the bitmap
-                g.DrawImage(bmp, new Point(0, 0));
-            }
+                Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
+                rotatedImage.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
 
-            return rotatedImage;
+                using (Graphics g = Graphics.FromImage(rotatedImage))
+                {
+                    // Set the rotation point to the center in the matrix
+                    g.TranslateTransform(centrePoint.X, centrePoint.Y);
+                    // Rotate
+                    g.RotateTransform(angle);
+                    // Restore rotation point in the matrix
+                    g.TranslateTransform(-centrePoint.X, -centrePoint.Y);
+                    // Draw the image on the bitmap
+                    g.DrawImage(bmp, new Point(0, 0));
+                }
+
+                return rotatedImage;
+            }
+            return null;
         }
 
 
@@ -374,13 +535,6 @@ namespace InstrumentPlugins
                 animateTimer.Dispose();
                 animateTimer = null;
             }
-            //if(timerIdx > -1-1 && animateTimers[timerIdx] != null)
-            //{
-            //    if (animateTimers[timerIdx].Enabled)
-            //        animateTimers[timerIdx].Stop();
-            //    animateTimers[timerIdx]?.Dispose();
-            //    animateTimers[timerIdx] = null;
-            //}
         }
 
         private void StopTimer()
@@ -447,7 +601,7 @@ namespace InstrumentPlugins
             }
             catch (Exception ex)
             {
-                WriteLog(string.Format("ExecuteAnimation: Failed to update latest values.\rError: {0}", ex.Message));
+                WriteLog("ExecuteAnimation: Failed to update latest values.", ex);
             }
         }
 
@@ -478,7 +632,7 @@ namespace InstrumentPlugins
             catch (Exception ex)
             {
                 // Something else cause a problem - cannot update this control
-                WriteLog(string.Format("UpdateControl: Failed to invoke Control Update.\rError: {0}", ex.Message));
+                WriteLog("UpdateControl: Failed to invoke Control Update.", ex);
             }
         }
 
@@ -486,16 +640,19 @@ namespace InstrumentPlugins
         {
             try
             {
-                var diretory = Directory.GetCurrentDirectory();
-                var imageFile = File.OpenRead(new Uri(Path.Combine(diretory, imagePath)).AbsolutePath);
-                var image = Image.FromStream(imageFile);
-                aspectRatio = (double)image.Height / image.Width;
-                var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
-                return resizedImage;
+                if (!string.IsNullOrEmpty(imagePath))
+                {
+                    var diretory = Directory.GetCurrentDirectory();
+                    var imageFile = File.OpenRead(Path.Combine(diretory, imagePath));
+                    var image = Image.FromStream(imageFile);
+                    aspectRatio = (double)image.Height / image.Width;
+                    var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
+                    return resizedImage;
+                }
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("LoadImage: Failed to read/resize Image file.\rError: {0}", ex.Message));
+                WriteLog("LoadImage: Failed to read/resize Image file.", ex);
             }
             return null;
         }
@@ -534,7 +691,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("DrawPoints: Failed to generate image from PointMap.\rError: {0}", ex.Message));
+                WriteLog("DrawPoints: Failed to generate image from PointMap.", ex);
             }
             return null;
         }
@@ -598,6 +755,14 @@ namespace InstrumentPlugins
                         // We now know how often we expect to receive updates - revise the timings accordingly
                         UpdateStepCount((int)value.Result);
                     }
+                    foreach (var animation in config.Animations)
+                    {
+                        if (animation is AnimationExternal && animation.Triggers.Any(x => ((AnimationTriggerClientRequest)x).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == value.Request.Unit))
+                        {
+                            // Need to update an external image
+                            animationImages[config.Animations.ToList().IndexOf(animation)] = LoadImageFromRemote((AnimationExternal)animation);
+                        }
+                    }
                     // Check if any animations use this variable as a trigger
                     if (config.Animations.Any(x => x.Triggers.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                     {
@@ -605,6 +770,7 @@ namespace InstrumentPlugins
                         // Modify the step size for our control
                         lock (animationSteps)
                             animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
+
                         // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
                         StartTimer();
                     }
@@ -612,7 +778,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("ValueUpdate: Invalid ClientRequestValue supplied.\rError: {0}", ex.Message));
+                WriteLog("ValueUpdate: Invalid ClientRequestValue supplied.", ex);
             }
         }
 
@@ -626,7 +792,7 @@ namespace InstrumentPlugins
             }
             catch(Exception ex)
             {
-                WriteLog(string.Format("UpdateStepCount: Invalid serverUpdateTime value supplied ({0}).\rError: {1}", serverUpdateTimeInMs, ex.Message));
+                WriteLog(string.Format("UpdateStepCount: Invalid serverUpdateTime value supplied ({0}).", serverUpdateTimeInMs), ex);
             }
         }
 
@@ -668,10 +834,20 @@ namespace InstrumentPlugins
             {
                 try
                 {
-                    LogMessage.DynamicInvoke(new object[] { message });
+                    LogMessage.DynamicInvoke(new object[] { this, message });
                 }
-                catch { }
+                catch(Exception ex) { }
             }
+        }
+
+        private void WriteLog(string message, Exception ex)
+        {
+            while(ex != null && !string.IsNullOrEmpty(ex.Message))
+            {
+                message += string.Format("\r\nError: {0}", ex.Message);
+                ex = ex.InnerException;
+            }
+            WriteLog(message);
         }
     }
 }

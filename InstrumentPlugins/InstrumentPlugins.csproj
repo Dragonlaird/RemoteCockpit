@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>preview</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>preview</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -49,19 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generic_Airspeed_Indicator.cs" />
-    <Compile Include="Generic_Altimeter.cs" />
     <Compile Include="Generic_Instrument.cs" />
-    <Compile Include="ImageLibrary.Designer.cs">
-      <DependentUpon>ImageLibrary.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Generic_Attitude_Indicator.cs" />
     <Compile Include="Initial_Instrument_Template.cs" />
-    <Compile Include="InstrumentPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,16 +62,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ImageLibrary.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ImageLibrary.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="GenericInstruments\Generic_Attitude_Indicator.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="GenericInstruments\Cessna_152_Altimeter.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -90,20 +71,13 @@
     <None Include="GenericInstruments\Generic_Altitude_Indicator.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GenericInstruments\Generic_Attitude_Indicator.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GenericInstruments\Generic_GPS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="Resources\Needle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Airspeed_Background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Attitude_Background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Attitude Indicator Gimbal.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="InstrumentImages\Airspeed_Background.png">
@@ -120,6 +94,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="InstrumentImages\Generic_Altitude_Background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="InstrumentImages\GPS_Generic_Background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

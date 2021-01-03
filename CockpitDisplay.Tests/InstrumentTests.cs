@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using Newtonsoft.Json;
 using System.Threading;
+using Generic_Altitude_Indicator;
 
 namespace CockpitDisplay.Tests
 {
@@ -20,58 +21,11 @@ namespace CockpitDisplay.Tests
     {
         private ICockpitInstrument instrument;
 
-        private Configuration GetConfiguration()
+        private string GetConfiguration(string instrumentFilename = "Generic_Airspeed_Indicator.json")
         {
-            var config = new Configuration
-            {
-                Name = "Test Instrument for all aircraft",
-                Author = "Dragonlaird",
-                Aircraft = new string[] { "Cessna 152 ASOBO" },
-                Type = InstrumentType.Airspeed_Indicator,
-                BackgroundImagePath = ".\\Backgrounds\\Airspeed_Indicator.png",
-                CreateDate = DateTime.Now,
-                AnimationUpdateInMs = 250,
-                Animations = new AnimationDrawing[]
-                {
-                    new AnimationDrawing
-                    {
-                            Name = "Needle",
-                            PointMap = new AnimationPoint[]
-                            {
-                                new AnimationPoint(-1.5f, -1.5f),
-                                new AnimationPoint(-3.0f, 20.0f),
-                                new AnimationPoint(0, 27.0f),
-                                new AnimationPoint(3.0f, 20.0f),
-                                new AnimationPoint(1.5f, -1.5f)
-                            },
-                            OffsetX = 50,
-                            OffsetY = 50,
-                            FillColor = Color.CornflowerBlue,
-                            FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
-                            Triggers = new AnimationTriggerClientRequest[]{
-                                new AnimationTriggerClientRequest
-                                {
-                                    Type = AnimationTriggerTypeEnum.ClientRequest,
-                                    Request = new ClientRequest
-                                    {
-                                        Name = "AIRSPEED INDICATED", Unit = "knots"
-                                    },
-                                    Actions = new IAnimationAction[]
-                                    {
-                                        new AnimationActionRotate
-                                        {
-                                            CentrePoint = new AnimationPoint(50,50),
-                                            MaximumValueExpected = 200,
-                                            RotateClockwise = true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                    }
-            };
+            var strPath = Path.Combine(Directory.GetCurrentDirectory(), "..\\..\\..", "InstrumentPlugins", "GenericInstruments", instrumentFilename);
+            return strPath;
 
-            return config;
         }
 
         private Image LoadImage(string imagePath, double scaleFactor)
@@ -82,24 +36,10 @@ namespace CockpitDisplay.Tests
             return resizedImage;
         }
 
-        //private PointF GetPoint(double length, double angleInDegrees)
-        //{
-        //    return new PointF((float)(length * Math.Sin(ConvertToRadians(angleInDegrees))), (float)(length * Math.Cos(ConvertToRadians(angleInDegrees))));
-        //}
-
-        //private double ConvertToRadians(double angle)
-        //{
-        //    while (angle < 0)
-        //        angle += 360;
-        //    while (angle >= 360)
-        //        angle -= 360;
-        //    return 0.01745 * angle;
-        //}
-
         [TestMethod]
         public void CreateAltimeter()
         {
-            instrument = new Generic_Altimeter();
+            instrument = new InstrumentPlugins.Generic_Altitude_Indicator();
             instrument.SetLayout(0, 0, 100, 100);
         }
 
@@ -108,11 +48,11 @@ namespace CockpitDisplay.Tests
         {
             Form testForm = new Form();
             var scaleFactor = testForm.Width < testForm.Height ? testForm.Width / testForm.Height : testForm.Height / testForm.Width;
-            instrument = new Generic_Instrument(GetConfiguration());
+            instrument = new Generic_Instrument(testForm.Height, testForm.Width, GetConfiguration("Generic_Airspeed_Indicator.json"));
             var instrumentJson = JsonConvert.SerializeObject(GetConfiguration());
             instrument.SetLayout(50, 50, 200, 200);
             var clientRequests = instrument.RequiredValues;
-            testForm.BackgroundImage = LoadImage(".\\CockpitBackgrounds\\Cockpit_Background.jpg", scaleFactor);
+            testForm.BackgroundImage = LoadImage(Path.Combine(Directory.GetCurrentDirectory(), "Layouts\\Dashboards", "Generic_Dashboard.png"), scaleFactor);
             testForm.Controls.Add(instrument.Control);
             testForm.Invalidate();
             testForm.Show();
@@ -120,6 +60,32 @@ namespace CockpitDisplay.Tests
             for (var i = 0; i < 3; i++)
             {
                 Thread.Sleep(2900);
+                lastValue += new Random().NextDouble() * 70.0;
+                instrument.ValueUpdate(new ClientRequestResult
+                {
+                    Request = clientRequests.First(),
+                    Result = lastValue
+                });
+                testForm.Update();
+            }
+        }
+
+        [TestMethod]
+        public void CreateGPSInstrument()
+        {
+            Form testForm = new Form();
+            var scaleFactor = testForm.Width < testForm.Height ? testForm.Width / testForm.Height : testForm.Height / testForm.Width;
+            testForm.BackgroundImage = LoadImage(Path.Combine(Directory.GetCurrentDirectory(), "Layouts\\Dashboards", "Generic_Dashboard.png"), scaleFactor);
+            instrument = new Generic_Instrument(150, 350, GetConfiguration("Generic_GPS.json"));
+            testForm.Controls.Add(instrument.Control);
+            testForm.Invalidate();
+            testForm.Show();
+            double lastValue = 40;
+            var clientRequests = instrument.RequiredValues;
+
+            for (var i = 0; i < 3; i++)
+            {
+                Thread.Sleep(1000);
                 lastValue += new Random().NextDouble() * 70.0;
                 instrument.ValueUpdate(new ClientRequestResult
                 {

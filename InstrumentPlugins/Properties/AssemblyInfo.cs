@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("InstrumentPlugins")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Generic Instrument for Cockpit")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Dragonlaird")]
 [assembly: AssemblyProduct("InstrumentPlugins")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
