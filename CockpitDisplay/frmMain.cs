@@ -162,12 +162,11 @@ namespace CockpitDisplay
             try
             {
                 requestResults = new List<RemoteCockpitClasses.ClientRequestResult>();
-                var ipAddress = IPAddress.Parse("127.0.0.1");
-                var ipPort = 5555;
+                var ipAddress = IPAddress.Parse(txtServerAddress.Text);
+                var ipPort = (int)txtServerPort.Value;
                 connector = new RemoteConnector(new System.Net.IPEndPoint(ipAddress, ipPort));
                 connector.ReceiveData += ReceiveResultFromServer;
                 connector.Connect();
-                cbConnected.Checked = connector.Connected;
 
                 var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
                 var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
@@ -196,8 +195,9 @@ namespace CockpitDisplay
                     Name = "UPDATE FREQUENCY",
                     Unit = "second"
                 });
+                cbConnected.Checked = connector.Connected;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error loading Cockpit: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

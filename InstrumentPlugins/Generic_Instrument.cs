@@ -268,7 +268,7 @@ namespace InstrumentPlugins
                 }
                 else
                 {
-                    WriteLog(string.Format("Remote Image Failed: Response: {0} ({1})", httpResponse.Content, httpResponse.ReasonPhrase));
+                    WriteLog(string.Format("Remote Image Failed: Response: {0} ({1})", httpResponse.StatusCode, httpResponse.ReasonPhrase));
                 }
                 if (image != null)
                 {

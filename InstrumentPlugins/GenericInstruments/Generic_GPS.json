@@ -15,7 +15,7 @@
       "RemoteUsername": "Dragonlaird",
       "RemoteToken": "pk.eyJ1IjoiZHJhZ29ubGFpcmQiLCJhIjoiY2tpbGg3dDI3MGhwMDJzbGI5NDJxdm1pNiJ9.jtAEPKfPm5S1Be_ol6tODw",
       "RequestMethod": "GET",
-      "RequestFormat": "[Calculate{{Latitude}-180/{Width}*{MapZoom}},Calculate{{Longitude}-180/{Height}*{MapZoom}},Calculate{{Latitude}+180/{Width}*{MapZoom}},Calculate{{Longitude}+180/{Height}*{MapZoom}}]/{Width}x{Height}?access_token={RemoteToken}",
+      "RequestFormat": "[Calculate{{Longitude}-180/{Height}*{MapZoom}},Calculate{{Latitude}-180/{Width}*{MapZoom}},Calculate{{Longitude}+180/{Height}*{MapZoom}},Calculate{{Latitude}+180/{Width}*{MapZoom}}]/{Width}x{Height}?access_token={RemoteToken}",
       "Triggers": [
         {
           "Name": "Latitude",
@@ -58,8 +58,8 @@
             "height": 10,
             "width": 10
           },
-          "Value": 11.0,
-          "MaxValue": 10.0,
+          "Value": 8.0,
+          "MaxValue": 20.0,
           "MinValue": 0.0,
           "IncrementAmount": 0.1
         },
@@ -72,8 +72,8 @@
             "height": 10,
             "width": 10
           },
-          "Value": 11.0,
-          "MaxValue": 10.0,
+          "Value": 8.0,
+          "MaxValue": 20.0,
           "MinValue": 0.0,
           "IncrementAmount": -0.1
         }
