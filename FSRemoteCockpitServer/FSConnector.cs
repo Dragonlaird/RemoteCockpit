@@ -15,7 +15,7 @@ namespace RemoteCockpit
     public class FSConnector : IDisposable
     {
         private const int connectionCheckInterval = 10; // Seconds to recheck for FS connection 
-        private int _valueRequestInterval = 3; // Seconds between each batch of requests for variable updates
+        private int _valueRequestInterval = 1; // Seconds between each batch of requests for variable updates
         private MessagePumpManager handler;
         private bool disposedValue;
         private List<SimVarRequest> simVarRequests;

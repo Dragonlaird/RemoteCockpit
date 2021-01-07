@@ -31,6 +31,13 @@
           "Left": 35.0,
           "Height": 40.0,
           "Width": 20.0
+        },
+        {
+          "Type": 3, // 9 = Bearing
+          "Top": 30.0,
+          "Left": 55.0,
+          "Height": 30.0,
+          "Width": 8.5
         }
       ]
     },

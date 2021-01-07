@@ -45,7 +45,7 @@ namespace InstrumentPlugins
         private DateTime lastExecution = DateTime.MinValue;
         public event EventHandler Disposed;
         public event EventHandler<string> LogMessage;
-
+        private bool isStarting = true;
         public Generic_Instrument()
         {
             config = new Configuration();
@@ -77,6 +77,7 @@ namespace InstrumentPlugins
 
         private void Initialize()
         {
+            isStarting = true;
             UpdateStepCount(animationTimeInMs);
             if (Control == null)
                 Control = new Panel();
@@ -311,7 +312,7 @@ namespace InstrumentPlugins
 
         private void PaintControl(object sender, PaintEventArgs e)
         {
-            if (!disposedValue)
+            if (!disposedValue && ShouldUpdate())
             {
                 if (config?.Animations != null)
                 {
@@ -345,6 +346,14 @@ namespace InstrumentPlugins
                     UpdateAnimationImage(animationImage);
                 }
             }
+        }
+
+        private bool ShouldUpdate()
+        {
+            var result = isStarting || currentResults.Any(x => previousResults.First(y => y.Request.Name == x.Request.Name && y.Request.Unit == x.Request.Unit).Result?.ToString() != x.Result?.ToString());
+            if (isStarting)
+                isStarting = false;
+            return result;
         }
 
         private void UpdateAnimationImage(Image animationImage)
