@@ -232,6 +232,10 @@ namespace CockpitDisplay
                 {
                     row.Cells["Value"].Value = requestResult.Result?.ToString();
                 }
+                if (row.Cells["Updated"] != null)
+                {
+                    row.Cells["Updated"].Value = requestResult.LastUpdated.TimeOfDay.ToString();
+                }
             }
             catch { }
         }

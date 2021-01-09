@@ -56,13 +56,14 @@
             this.lblHeight = new System.Windows.Forms.Label();
             this.cbFullScreen = new System.Windows.Forms.CheckBox();
             this.lblFullScreen = new System.Windows.Forms.Label();
+            this.tabValues = new System.Windows.Forms.TabPage();
+            this.dgValues = new System.Windows.Forms.DataGridView();
             this.tabDebug = new System.Windows.Forms.TabPage();
             this.lblDebugMessages = new System.Windows.Forms.Label();
             this.txtDebugMessages = new System.Windows.Forms.TextBox();
-            this.tabValues = new System.Windows.Forms.TabPage();
-            this.dgValues = new System.Windows.Forms.DataGridView();
             this.SimVar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Updated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabCockpitWindow.SuspendLayout();
             this.grpCockpit.SuspendLayout();
@@ -71,9 +72,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitTop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitHeight)).BeginInit();
-            this.tabDebug.SuspendLayout();
             this.tabValues.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgValues)).BeginInit();
+            this.tabDebug.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -435,6 +436,32 @@
             this.lblFullScreen.TabIndex = 0;
             this.lblFullScreen.Text = "Full Screen:";
             // 
+            // tabValues
+            // 
+            this.tabValues.Controls.Add(this.dgValues);
+            this.tabValues.Location = new System.Drawing.Point(4, 22);
+            this.tabValues.Name = "tabValues";
+            this.tabValues.Padding = new System.Windows.Forms.Padding(3);
+            this.tabValues.Size = new System.Drawing.Size(453, 307);
+            this.tabValues.TabIndex = 2;
+            this.tabValues.Text = "Latest Values";
+            this.tabValues.UseVisualStyleBackColor = true;
+            // 
+            // dgValues
+            // 
+            this.dgValues.AllowUserToAddRows = false;
+            this.dgValues.AllowUserToDeleteRows = false;
+            this.dgValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SimVar,
+            this.Value,
+            this.Updated});
+            this.dgValues.Location = new System.Drawing.Point(7, 24);
+            this.dgValues.Name = "dgValues";
+            this.dgValues.ReadOnly = true;
+            this.dgValues.Size = new System.Drawing.Size(440, 277);
+            this.dgValues.TabIndex = 0;
+            // 
             // tabDebug
             // 
             this.tabDebug.Controls.Add(this.lblDebugMessages);
@@ -469,42 +496,24 @@
             this.txtDebugMessages.Size = new System.Drawing.Size(449, 289);
             this.txtDebugMessages.TabIndex = 0;
             // 
-            // tabValues
-            // 
-            this.tabValues.Controls.Add(this.dgValues);
-            this.tabValues.Location = new System.Drawing.Point(4, 22);
-            this.tabValues.Name = "tabValues";
-            this.tabValues.Padding = new System.Windows.Forms.Padding(3);
-            this.tabValues.Size = new System.Drawing.Size(453, 307);
-            this.tabValues.TabIndex = 2;
-            this.tabValues.Text = "Latest Values";
-            this.tabValues.UseVisualStyleBackColor = true;
-            // 
-            // dgValues
-            // 
-            this.dgValues.AllowUserToAddRows = false;
-            this.dgValues.AllowUserToDeleteRows = false;
-            this.dgValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SimVar,
-            this.Value});
-            this.dgValues.Location = new System.Drawing.Point(7, 24);
-            this.dgValues.Name = "dgValues";
-            this.dgValues.ReadOnly = true;
-            this.dgValues.Size = new System.Drawing.Size(440, 277);
-            this.dgValues.TabIndex = 0;
-            // 
             // SimVar
             // 
             this.SimVar.HeaderText = "SimVar Name";
             this.SimVar.Name = "SimVar";
             this.SimVar.ReadOnly = true;
+            this.SimVar.Width = 200;
             // 
             // Value
             // 
             this.Value.HeaderText = "Latest Value";
             this.Value.Name = "Value";
             this.Value.ReadOnly = true;
+            // 
+            // Updated
+            // 
+            this.Updated.HeaderText = "Updated";
+            this.Updated.Name = "Updated";
+            this.Updated.ReadOnly = true;
             // 
             // frmMain
             // 
@@ -525,10 +534,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitTop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitHeight)).EndInit();
-            this.tabDebug.ResumeLayout(false);
-            this.tabDebug.PerformLayout();
             this.tabValues.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgValues)).EndInit();
+            this.tabDebug.ResumeLayout(false);
+            this.tabDebug.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -570,5 +579,6 @@
         private System.Windows.Forms.DataGridView dgValues;
         private System.Windows.Forms.DataGridViewTextBoxColumn SimVar;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Updated;
     }
 }
