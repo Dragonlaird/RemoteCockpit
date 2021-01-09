@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Dragonlaird")]
 [assembly: AssemblyProduct("RemoteCockpit")]
-[assembly: AssemblyCopyright("Copyright ©  2020 - Dragonlaird")]
+[assembly: AssemblyCopyright("Copyright Dragonlaird ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

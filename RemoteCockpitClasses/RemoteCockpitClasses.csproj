@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
+    <UserSecretsId>8cc3c70a-5f36-4c3b-8aad-320205348369</UserSecretsId>
+    <Copyright>Copyright Dragonlaird ©  2020</Copyright>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Company>Dragonlaird</Company>
+    <Authors>Dragonlaird</Authors>
+    <Description>Common components for FS Remote Cockpit Apps</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
