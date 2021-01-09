@@ -130,6 +130,12 @@
     <Content Include="InstrumentImages\Attitude_Indicator_Gimbal.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="InstrumentImages\Bearing_Background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="InstrumentImages\Bearing_Foreground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="InstrumentImages\Cessna_152_Airspeed_Indicator.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

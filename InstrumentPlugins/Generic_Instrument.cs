@@ -372,7 +372,8 @@ namespace InstrumentPlugins
         private Image GenerateAnimationImage(IAnimationItem animation)
         {
             var animationId = config.Animations.ToList().IndexOf(animation);
-            var triggers = animation.Triggers.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray(); Bitmap initialImage;
+            var triggers = animation.Triggers?.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray() ?? new IAnimationTrigger[0];
+            Bitmap initialImage;
             lock (animationImages)
             {
                 // Fetch the image we want to animate
@@ -382,7 +383,7 @@ namespace InstrumentPlugins
                     var nextValue = animation.LastAppliedValue ?? 0;
                     if (trigger is AnimationTriggerClientRequest)
                     {
-                        nextValue = previousResults.First(x => x.Request.Name == trigger.Request.Name && x.Request.Unit == trigger.Request.Unit).Result;
+                        nextValue = previousResults.First(x => x.Request.Name == ((AnimationTriggerClientRequest)trigger).Request.Name && x.Request.Unit == ((AnimationTriggerClientRequest)trigger).Request.Unit).Result;
                     }
                     animation.LastAppliedValue = nextValue;
                     lock (config.Animations)

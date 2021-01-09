@@ -87,6 +87,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1713235713624837A49AAA2E2557BBF6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_197FD1164D6C31541CD94CD3A60E14B1"
         "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
         "MsmSig" = "8:_UNDEFINED"
@@ -107,6 +113,12 @@
         {
         "MsmKey" = "8:_197FD1164D6C31541CD94CD3A60E14B1"
         "OwnerKey" = "8:_8622863B5E693DBF8AA9D08E4E13DFFD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1EBE878C91FC4B49B5D2BB0EF6B63567"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -166,6 +178,12 @@
         "Entry"
         {
         "MsmKey" = "8:_585EC5FA9EE749119A973211D048C3E1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CBEF528D097466082F0A6CAE7F4F61F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -913,6 +931,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1713235713624837A49AAA2E2557BBF6"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
+            "TargetName" = "8:Bearing_Foreground.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_197FD1164D6C31541CD94CD3A60E14B1"
             {
             "AssemblyRegister" = "3:1"
@@ -942,6 +980,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1EBE878C91FC4B49B5D2BB0EF6B63567"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
+            "TargetName" = "8:Bearing_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_26C8392BF9574CDF95096FAFB4BBE43A"
@@ -1070,6 +1128,26 @@
             {
             "SourcePath" = "8:..\\FSRemoteCockpitServer\\SimConnectSDK\\SimConnect.dll"
             "TargetName" = "8:SimConnect.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5CBEF528D097466082F0A6CAE7F4F61F"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
+            "TargetName" = "8:Generic_Bearing_Indicator.json"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
@@ -1843,7 +1921,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FS Remote Cockpit"
         "ProductCode" = "8:{2BABE3B9-265B-49F4-BB2D-0A0F41E8A897}"
-        "PackageCode" = "8:{022FA2C3-8CCE-45AB-8603-FB03A21F086B}"
+        "PackageCode" = "8:{2493E8C9-1501-4716-8370-B22554D404BC}"
         "UpgradeCode" = "8:{F25817B9-883E-4FFF-947D-0B68B0F1BA9F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
