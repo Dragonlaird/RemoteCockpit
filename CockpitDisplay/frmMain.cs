@@ -203,6 +203,39 @@ namespace CockpitDisplay
             }
         }
 
+        private void UpdateValuesGrid(ClientRequestResult requestResult)
+        {
+            if (dgValues.InvokeRequired)
+            {
+                MethodInvoker del = delegate { UpdateValuesGrid(requestResult); };
+                dgValues.Invoke(del);
+                return;
+            }
+            try
+            {
+                var row = dgValues.Rows.Cast<DataGridViewRow>()
+                    .Where(x => x.Cells["SimVar"] != null && x.Cells["SimVar"].Value?.ToString() == requestResult.Request.Name).FirstOrDefault();
+
+                if (row == null)
+                {
+                    // Add new row for this SimVar
+                    try
+                    {
+                        row = dgValues.Rows[dgValues.Rows.Add()];
+                        row.Cells["SimVar"].Value = requestResult.Request.Name;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+                if (row.Cells["Value"] != null)
+                {
+                    row.Cells["Value"].Value = requestResult.Result?.ToString();
+                }
+            }
+            catch { }
+        }
+
         private void ReceiveResultFromServer(object sender, ClientRequestResult requestResult)
         {
             string message = string.Format("Value Update: {0}({1}) = {2}", requestResult.Request.Name, requestResult.Request.Unit, requestResult.Result);
@@ -216,6 +249,7 @@ namespace CockpitDisplay
             else
                 requestResults.Add(requestResult);
 
+            UpdateValuesGrid(requestResult);
             // Received a new value for a request - identify which plugins need this variable and send it
             if (requestResult.Request.Name == "FS CONNECTION")
             {

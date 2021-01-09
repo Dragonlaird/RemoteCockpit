@@ -1,0 +1,37 @@
+{
+  "Name": "Generic Bearing Indicator",
+  "Author": "Dragonlaird",
+  "Type": 3,
+  "CreateDate": "2021-01-07T08:23:00",
+  "BackgroundImagePath": ".\\InstrumentImages\\Bearing_Background.png",
+  "Aircraft": [ "Generic" ],
+  "AnimationUpdateInMs": 50,
+  "Animations": [
+    {
+      "Type": 0,
+      "Name": "Bearing",
+      "ImagePath": ".\\InstrumentImages\\Bearing_Foreground.png",
+      "Triggers": [
+        {
+          "Name": "Guage",
+          "Type": 1,
+          "Request": {
+            "Name": "MAGNETIC COMPASS",
+            "Unit": "degrees"
+          },
+          "Actions": [
+            {
+              "Type": 0,
+              "CentrePoint": {
+                "X": 50.0,
+                "Y": 50.0
+              },
+              "RotateClockwise": true,
+              "MaximumValueExpected": 360.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

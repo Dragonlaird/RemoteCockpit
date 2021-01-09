@@ -31,6 +31,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCockpitWindow = new System.Windows.Forms.TabPage();
             this.grpCockpit = new System.Windows.Forms.GroupBox();
+            this.txtServerPort = new System.Windows.Forms.NumericUpDown();
+            this.lblServerPort = new System.Windows.Forms.Label();
+            this.txtServerAddress = new System.Windows.Forms.TextBox();
+            this.lblServerAddress = new System.Windows.Forms.Label();
             this.cbConnected = new System.Windows.Forms.CheckBox();
             this.lblServerConnected = new System.Windows.Forms.Label();
             this.cbFSRunning = new System.Windows.Forms.CheckBox();
@@ -55,24 +59,27 @@
             this.tabDebug = new System.Windows.Forms.TabPage();
             this.lblDebugMessages = new System.Windows.Forms.Label();
             this.txtDebugMessages = new System.Windows.Forms.TextBox();
-            this.lblServerAddress = new System.Windows.Forms.Label();
-            this.txtServerAddress = new System.Windows.Forms.TextBox();
-            this.lblServerPort = new System.Windows.Forms.Label();
-            this.txtServerPort = new System.Windows.Forms.NumericUpDown();
+            this.tabValues = new System.Windows.Forms.TabPage();
+            this.dgValues = new System.Windows.Forms.DataGridView();
+            this.SimVar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabCockpitWindow.SuspendLayout();
             this.grpCockpit.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtServerPort)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitTop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitHeight)).BeginInit();
             this.tabDebug.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtServerPort)).BeginInit();
+            this.tabValues.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgValues)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabCockpitWindow);
+            this.tabControl1.Controls.Add(this.tabValues);
             this.tabControl1.Controls.Add(this.tabDebug);
             this.tabControl1.Location = new System.Drawing.Point(8, 8);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
@@ -129,6 +136,54 @@
             this.grpCockpit.TabIndex = 18;
             this.grpCockpit.TabStop = false;
             this.grpCockpit.Text = "Cockpit Window";
+            // 
+            // txtServerPort
+            // 
+            this.txtServerPort.Location = new System.Drawing.Point(112, 40);
+            this.txtServerPort.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.txtServerPort.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtServerPort.Name = "txtServerPort";
+            this.txtServerPort.Size = new System.Drawing.Size(73, 20);
+            this.txtServerPort.TabIndex = 27;
+            this.txtServerPort.Value = new decimal(new int[] {
+            5555,
+            0,
+            0,
+            0});
+            // 
+            // lblServerPort
+            // 
+            this.lblServerPort.AutoSize = true;
+            this.lblServerPort.Location = new System.Drawing.Point(36, 44);
+            this.lblServerPort.Name = "lblServerPort";
+            this.lblServerPort.Size = new System.Drawing.Size(63, 13);
+            this.lblServerPort.TabIndex = 26;
+            this.lblServerPort.Text = "Server Port:";
+            // 
+            // txtServerAddress
+            // 
+            this.txtServerAddress.Location = new System.Drawing.Point(112, 17);
+            this.txtServerAddress.Name = "txtServerAddress";
+            this.txtServerAddress.Size = new System.Drawing.Size(100, 20);
+            this.txtServerAddress.TabIndex = 25;
+            this.txtServerAddress.Text = "127.0.0.1";
+            // 
+            // lblServerAddress
+            // 
+            this.lblServerAddress.AutoSize = true;
+            this.lblServerAddress.Location = new System.Drawing.Point(24, 20);
+            this.lblServerAddress.Name = "lblServerAddress";
+            this.lblServerAddress.Size = new System.Drawing.Size(82, 13);
+            this.lblServerAddress.TabIndex = 24;
+            this.lblServerAddress.Text = "Server Address:";
             // 
             // cbConnected
             // 
@@ -414,53 +469,42 @@
             this.txtDebugMessages.Size = new System.Drawing.Size(449, 289);
             this.txtDebugMessages.TabIndex = 0;
             // 
-            // lblServerAddress
+            // tabValues
             // 
-            this.lblServerAddress.AutoSize = true;
-            this.lblServerAddress.Location = new System.Drawing.Point(24, 20);
-            this.lblServerAddress.Name = "lblServerAddress";
-            this.lblServerAddress.Size = new System.Drawing.Size(82, 13);
-            this.lblServerAddress.TabIndex = 24;
-            this.lblServerAddress.Text = "Server Address:";
+            this.tabValues.Controls.Add(this.dgValues);
+            this.tabValues.Location = new System.Drawing.Point(4, 22);
+            this.tabValues.Name = "tabValues";
+            this.tabValues.Padding = new System.Windows.Forms.Padding(3);
+            this.tabValues.Size = new System.Drawing.Size(453, 307);
+            this.tabValues.TabIndex = 2;
+            this.tabValues.Text = "Latest Values";
+            this.tabValues.UseVisualStyleBackColor = true;
             // 
-            // txtServerAddress
+            // dgValues
             // 
-            this.txtServerAddress.Location = new System.Drawing.Point(112, 17);
-            this.txtServerAddress.Name = "txtServerAddress";
-            this.txtServerAddress.Size = new System.Drawing.Size(100, 20);
-            this.txtServerAddress.TabIndex = 25;
-            this.txtServerAddress.Text = "127.0.0.1";
+            this.dgValues.AllowUserToAddRows = false;
+            this.dgValues.AllowUserToDeleteRows = false;
+            this.dgValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SimVar,
+            this.Value});
+            this.dgValues.Location = new System.Drawing.Point(7, 24);
+            this.dgValues.Name = "dgValues";
+            this.dgValues.ReadOnly = true;
+            this.dgValues.Size = new System.Drawing.Size(440, 277);
+            this.dgValues.TabIndex = 0;
             // 
-            // lblServerPort
+            // SimVar
             // 
-            this.lblServerPort.AutoSize = true;
-            this.lblServerPort.Location = new System.Drawing.Point(36, 44);
-            this.lblServerPort.Name = "lblServerPort";
-            this.lblServerPort.Size = new System.Drawing.Size(63, 13);
-            this.lblServerPort.TabIndex = 26;
-            this.lblServerPort.Text = "Server Port:";
+            this.SimVar.HeaderText = "SimVar Name";
+            this.SimVar.Name = "SimVar";
+            this.SimVar.ReadOnly = true;
             // 
-            // txtServerPort
+            // Value
             // 
-            this.txtServerPort.Location = new System.Drawing.Point(112, 40);
-            this.txtServerPort.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.txtServerPort.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.txtServerPort.Name = "txtServerPort";
-            this.txtServerPort.Size = new System.Drawing.Size(73, 20);
-            this.txtServerPort.TabIndex = 27;
-            this.txtServerPort.Value = new decimal(new int[] {
-            5555,
-            0,
-            0,
-            0});
+            this.Value.HeaderText = "Latest Value";
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
             // 
             // frmMain
             // 
@@ -476,13 +520,15 @@
             this.tabCockpitWindow.ResumeLayout(false);
             this.grpCockpit.ResumeLayout(false);
             this.grpCockpit.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtServerPort)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitLeft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitTop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCockpitHeight)).EndInit();
             this.tabDebug.ResumeLayout(false);
             this.tabDebug.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtServerPort)).EndInit();
+            this.tabValues.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgValues)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -520,5 +566,9 @@
         private System.Windows.Forms.Label lblServerPort;
         private System.Windows.Forms.TextBox txtServerAddress;
         private System.Windows.Forms.Label lblServerAddress;
+        private System.Windows.Forms.TabPage tabValues;
+        private System.Windows.Forms.DataGridView dgValues;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SimVar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
     }
 }

@@ -397,6 +397,10 @@ namespace InstrumentPlugins
                             var rotateAction = (AnimationActionRotate)action;
                             var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
                             var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
+                            if (!rotateAction.RotateClockwise)
+                            {
+                                rotateAngle = -rotateAngle;
+                            }
                             var centrePoint = new PointF { X = initialImage.Width * rotateAction.CentrePoint.X / 100, Y = initialImage.Height * rotateAction.CentrePoint.Y / 100 };
                             initialImage = RotateImage(initialImage, centrePoint, rotateAngle);
                         }

@@ -94,6 +94,9 @@
     <None Include="GenericInstruments\Generic_Attitude_Indicator.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="GenericInstruments\Generic_Bearing_Indicator.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="GenericInstruments\Generic_GPS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
