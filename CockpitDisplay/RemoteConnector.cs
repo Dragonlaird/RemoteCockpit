@@ -16,6 +16,7 @@ namespace CockpitDisplay
         private IPEndPoint _endPoint;
 
         public EventHandler<ClientRequestResult> ReceiveData;
+        public EventHandler<string> LogMessage;
 
         public bool Connected
         {
@@ -68,15 +69,15 @@ namespace CockpitDisplay
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.ToString());
+                    WriteLog(e.ToString());
                 }
 
-                Console.WriteLine("Socket connected to {0}",
-                    client.RemoteEndPoint.ToString());
+                WriteLog(string.Format("Socket connected to {0}",
+                    client.RemoteEndPoint.ToString()));
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                WriteLog(e.ToString());
             }
         }
 
@@ -110,7 +111,7 @@ namespace CockpitDisplay
                                     ReceiveData.DynamicInvoke(state, requestResult);
                                 }
                             }
-                            catch(Exception ex)
+                            catch//(Exception ex)
                             {
 
                             }
@@ -132,7 +133,7 @@ namespace CockpitDisplay
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                WriteLog(e.ToString());
             }
         }
 
@@ -151,6 +152,23 @@ namespace CockpitDisplay
                 var requestString = JsonConvert.SerializeObject(request) + "\r\r";
                 var requestBytes = Encoding.UTF8.GetBytes(requestString.ToArray());
                 this.Client.Connection.Send(requestBytes, SocketFlags.None);
+            }
+        }
+
+        private void WriteLog(string message)
+        {
+            if(LogMessage != null)
+            {
+                try
+                {
+
+                    LogMessage.DynamicInvoke(this, message);
+                }
+                catch { }
+            }
+            else
+            {
+                Console.WriteLine(message);
             }
         }
     }

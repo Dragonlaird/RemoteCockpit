@@ -17,7 +17,8 @@ namespace RemoteCockpit
             {
                 return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
             }
-            catch (SocketException ex) {
+            catch// (SocketException ex)
+            {
                 if(ConnectionDropped != null)
                 {
                     try

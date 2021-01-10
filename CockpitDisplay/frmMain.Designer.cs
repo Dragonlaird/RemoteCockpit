@@ -58,12 +58,12 @@
             this.lblFullScreen = new System.Windows.Forms.Label();
             this.tabValues = new System.Windows.Forms.TabPage();
             this.dgValues = new System.Windows.Forms.DataGridView();
-            this.tabDebug = new System.Windows.Forms.TabPage();
-            this.lblDebugMessages = new System.Windows.Forms.Label();
-            this.txtDebugMessages = new System.Windows.Forms.TextBox();
             this.SimVar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Updated = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabDebug = new System.Windows.Forms.TabPage();
+            this.lblDebugMessages = new System.Windows.Forms.Label();
+            this.txtDebugMessages = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabCockpitWindow.SuspendLayout();
             this.grpCockpit.SuspendLayout();
@@ -79,6 +79,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabCockpitWindow);
             this.tabControl1.Controls.Add(this.tabValues);
             this.tabControl1.Controls.Add(this.tabDebug);
@@ -451,6 +454,9 @@
             // 
             this.dgValues.AllowUserToAddRows = false;
             this.dgValues.AllowUserToDeleteRows = false;
+            this.dgValues.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SimVar,
@@ -461,6 +467,25 @@
             this.dgValues.ReadOnly = true;
             this.dgValues.Size = new System.Drawing.Size(440, 277);
             this.dgValues.TabIndex = 0;
+            // 
+            // SimVar
+            // 
+            this.SimVar.HeaderText = "SimVar Name";
+            this.SimVar.Name = "SimVar";
+            this.SimVar.ReadOnly = true;
+            this.SimVar.Width = 200;
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Latest Value";
+            this.Value.Name = "Value";
+            this.Value.ReadOnly = true;
+            // 
+            // Updated
+            // 
+            this.Updated.HeaderText = "Updated";
+            this.Updated.Name = "Updated";
+            this.Updated.ReadOnly = true;
             // 
             // tabDebug
             // 
@@ -487,6 +512,9 @@
             // 
             // txtDebugMessages
             // 
+            this.txtDebugMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDebugMessages.Location = new System.Drawing.Point(5, 19);
             this.txtDebugMessages.Margin = new System.Windows.Forms.Padding(2);
             this.txtDebugMessages.Multiline = true;
@@ -495,25 +523,6 @@
             this.txtDebugMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtDebugMessages.Size = new System.Drawing.Size(449, 289);
             this.txtDebugMessages.TabIndex = 0;
-            // 
-            // SimVar
-            // 
-            this.SimVar.HeaderText = "SimVar Name";
-            this.SimVar.Name = "SimVar";
-            this.SimVar.ReadOnly = true;
-            this.SimVar.Width = 200;
-            // 
-            // Value
-            // 
-            this.Value.HeaderText = "Latest Value";
-            this.Value.Name = "Value";
-            this.Value.ReadOnly = true;
-            // 
-            // Updated
-            // 
-            this.Updated.HeaderText = "Updated";
-            this.Updated.Name = "Updated";
-            this.Updated.ReadOnly = true;
             // 
             // frmMain
             // 

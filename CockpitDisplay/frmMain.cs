@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Channels;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Timers;
@@ -114,7 +115,8 @@ namespace CockpitDisplay
                     }
                     ReceiveResultFromServer(null, testResult);
                 }
-                catch (Exception ex) { }
+                catch// (Exception ex) 
+                { }
             }
         }
 
@@ -165,6 +167,7 @@ namespace CockpitDisplay
                 var ipAddress = IPAddress.Parse(txtServerAddress.Text);
                 var ipPort = (int)txtServerPort.Value;
                 connector = new RemoteConnector(new System.Net.IPEndPoint(ipAddress, ipPort));
+                connector.LogMessage += DebugMessage;
                 connector.ReceiveData += ReceiveResultFromServer;
                 connector.Connect();
 
@@ -224,7 +227,7 @@ namespace CockpitDisplay
                         row = dgValues.Rows[dgValues.Rows.Add()];
                         row.Cells["SimVar"].Value = requestResult.Request.Name;
                     }
-                    catch (Exception ex)
+                    catch //(Exception ex)
                     {
                     }
                 }
@@ -236,6 +239,7 @@ namespace CockpitDisplay
                 {
                     row.Cells["Updated"].Value = requestResult.LastUpdated.TimeOfDay.ToString();
                 }
+                dgValues.Update();
             }
             catch { }
         }
@@ -386,17 +390,17 @@ namespace CockpitDisplay
             this.Focus();
         }
 
-        private void DebugMessage(object sender, string e)
+        private void DebugMessage(object sender, string message)
         {
-            if (!string.IsNullOrEmpty(e))
+            if (!string.IsNullOrEmpty(message))
             {
                 if (txtDebugMessages.InvokeRequired)
                 {
                     var d = new SafeUpdateDelegate(DebugMessage);
-                    ((Control)txtDebugMessages).Invoke(d, new object[] { sender, e });
+                    ((Control)txtDebugMessages).Invoke(d, new object[] { sender, message });
                     return;
                 }
-                txtDebugMessages.Text += string.Format("{0:HH:mm:ss} {1}\r\n", DateTime.Now, e);
+                txtDebugMessages.Text += string.Format("{0:HH:mm:ss} ({1}) {2}\r\n", DateTime.Now, sender?.GetType().Name ?? "Unknown", message);
                 while(txtDebugMessages.Text.Count(x=> x=='\n') > 200)
                 {
                     txtDebugMessages.Text = txtDebugMessages.Text.Substring(txtDebugMessages.Text.IndexOf('\n') + 1);

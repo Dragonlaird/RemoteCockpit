@@ -185,7 +185,7 @@ namespace InstrumentPlugins
                 }
                 animation.RemoteURL = remoteUrl;
                 animation.RequestFormat = requestFormat;
-                foreach (var trigger in animation.Triggers)
+                foreach (var trigger in animation.Triggers.Where(x=> x is AnimationTriggerClientRequest || x is AnimationTriggerClientMouseClick))
                 {
                     var placeholder = "{" + trigger.Name + "}";
                     if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
@@ -197,7 +197,7 @@ namespace InstrumentPlugins
                                 val = currentResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
                                 break;
                             case AnimationTriggerTypeEnum.MouseClick:
-                                val = currentResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "2";
+                                val = ((AnimationTriggerClientMouseClick)trigger).Value.ToString(); //currentResults.FirstOrDefault(x => x?.Request?.Name == trigger.Name)?.Result?.ToString() ?? "2";
                                 break;
                         }
                         if (val == null)
@@ -372,7 +372,7 @@ namespace InstrumentPlugins
         private Image GenerateAnimationImage(IAnimationItem animation)
         {
             var animationId = config.Animations.ToList().IndexOf(animation);
-            var triggers = animation.Triggers?.Where(x => x.Type == AnimationTriggerTypeEnum.ClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray() ?? new IAnimationTrigger[0];
+            var triggers = animation.Triggers?.Where(x => x is AnimationTriggerClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray() ?? new IAnimationTrigger[0];
             Bitmap initialImage;
             lock (animationImages)
             {
@@ -641,6 +641,7 @@ namespace InstrumentPlugins
             catch (InvalidOperationException ex)
             {
                 // Force Paint event - it will resubmit if invoke is required
+                WriteLog(string.Format("Update Control failed. Forcing Paint after error: {0}", ex.Message));
                 PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
             }
             catch (Exception ex)
@@ -830,7 +831,6 @@ namespace InstrumentPlugins
                     animationSteps?.Clear();
                     animationSteps = null;
                 }
-
                 disposedValue = true;
             }
         }
@@ -840,6 +840,14 @@ namespace InstrumentPlugins
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+            if(Disposed != null)
+            {
+                try
+                {
+                    Disposed.Invoke(this, new EventArgs());
+                }
+                catch { }
+            }
         }
 
         private void WriteLog(string message)
@@ -850,7 +858,10 @@ namespace InstrumentPlugins
                 {
                     LogMessage.DynamicInvoke(new object[] { this, message });
                 }
-                catch(Exception ex) { }
+                catch//(Exception ex)
+                {
+                    // Failed to send log message to event - eventhandler likely has a bug, beyond our control
+                }
             }
         }
 

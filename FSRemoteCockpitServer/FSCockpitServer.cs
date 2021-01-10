@@ -24,8 +24,8 @@ namespace RemoteCockpit
         private FSConnector fsConnector;
         private SocketListener listener;
         private List<SimVarRequestResult> requestResults;
-        private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
-        private int _updateFrequency = 2; // How may seconds between each SimConnect poll?
+        private bool AlwaysSendVariable { get; set; } = true;// Should variable always be retransmitted to clients, even if value hasn't changed?
+        private int _updateFrequency = 1; // How may seconds between each SimConnect poll?
         private EventLog logger = null;
         private readonly Logger _log;
         public bool IsRunning = false;

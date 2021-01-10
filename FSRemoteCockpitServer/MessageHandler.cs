@@ -115,7 +115,7 @@ namespace RemoteCockpit
                 {
                     simConnect.ReceiveMessage();
                 }
-                catch (Exception ex)
+                catch// (Exception ex)
                 {
                     // Seen to happen if FS is shutting down
                 }
@@ -127,7 +127,7 @@ namespace RemoteCockpit
             {
                 simConnect?.RequestDataOnSimObjectType(request.ReqID, request.DefID, 0, SIMCONNECT_SIMOBJECT_TYPE.USER);
             }
-            catch (Exception ex)
+            catch// (Exception ex)
             {
                 // Likely cause, no request for this variable has been received
             }
@@ -155,7 +155,7 @@ namespace RemoteCockpit
                 simConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(SimConnect_OnRecvSimobjectDataBytype);
 
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
 
             }
@@ -168,7 +168,7 @@ namespace RemoteCockpit
                 {
                     SimData.DynamicInvoke(this, data);
                 }
-                catch (Exception ex)
+                catch// (Exception ex)
                 {
 
                 }
@@ -177,19 +177,31 @@ namespace RemoteCockpit
         private void SimConnect_OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
         {
             if (SimError != null)
-                SimError.DynamicInvoke(this, data);
+                try
+                {
+                    SimError.DynamicInvoke(this, data);
+                }
+                catch { }
         }
 
         private void SimConnect_OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
         {
             if (SimConnected != null)
-                SimConnected.DynamicInvoke(this, true);
+                try
+                {
+                    SimConnected.DynamicInvoke(this, true);
+                }
+                catch { }
         }
 
         private void SimConnect_OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
         {
             if (SimConnected != null)
-                SimConnected.DynamicInvoke(this, false);
+                try
+                {
+                    SimConnected.DynamicInvoke(this, false);
+                }
+                catch { }
         }
     }
 

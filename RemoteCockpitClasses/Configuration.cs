@@ -39,9 +39,9 @@ namespace RemoteCockpitClasses.Animations
             get
             {
                 return Animations
-                    .Where(x => x.Triggers?.Any(y => y.Type == AnimationTriggerTypeEnum.ClientRequest) == true)
+                    .Where(x => x.Triggers?.Any(y => y is AnimationTriggerClientRequest) == true)
                     .SelectMany(x => x.Triggers?
-                        .Where(y => y.Type == AnimationTriggerTypeEnum.ClientRequest)
+                        .Where(y => y is AnimationTriggerClientRequest)
                         .Select(y => ((AnimationTriggerClientRequest)y).Request))
                     .ToArray();
             }

@@ -144,7 +144,7 @@ namespace InstrumentDesigner
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Unable to load Image:\r\r{0}", imagePath), "Load File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("Unable to load Image:\r\r{0}\rError: {1}", imagePath, ex.Message), "Load File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return image;
         }
@@ -176,7 +176,7 @@ namespace InstrumentDesigner
                 catch (IOException ex)
                 {
                     config = new Configuration();
-                    MessageBox.Show(string.Format("Error opening Configuration file:\r\r{0}", fileName), "File Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Error opening Configuration file:\r\r{0}\r\rError: {1}", fileName, ex.Message), "File Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {

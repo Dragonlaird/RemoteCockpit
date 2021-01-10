@@ -28,7 +28,7 @@ namespace RemoteCockpitClasses.Animations
                         result.Add((IAnimationItem)child);
                 }
             }
-            catch(Exception ex)
+            catch//(Exception ex)
             {
                 // Failed to deserialize
             }
@@ -61,7 +61,7 @@ namespace RemoteCockpitClasses.Animations
                                     if (!cls.IsAbstract && !cls.IsInterface && checkType.IsAssignableFrom(cls))
                                         assignableClasses.Add(cls);
                                 }
-                                catch (Exception ex)
+                                catch// (Exception ex)
                                 {
                                     // Here we can access .Types as a property
                                 }

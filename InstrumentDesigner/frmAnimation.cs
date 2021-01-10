@@ -763,7 +763,8 @@ namespace InstrumentDesigner
                 {
                     ((AnimationDrawing)_animation).FillColor = Color.FromKnownColor((KnownColor)((ComboBox)sender).SelectedValue);
                 }
-                catch (Exception ex) { }
+                catch// (Exception ex)
+                { }
             }
         }
 
@@ -774,7 +775,8 @@ namespace InstrumentDesigner
                 try {
                     ((AnimationActionMove)_animation).Invert = ((CheckBox)sender).Checked;
                 }
-                catch(Exception ex) { }
+                catch//(Exception ex) 
+                { }
             }
         }
     }

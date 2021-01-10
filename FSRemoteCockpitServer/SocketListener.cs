@@ -122,7 +122,7 @@ namespace RemoteCockpit
                         {
                             client.Client.workSocket.Send(Encoding.UTF8.GetBytes(resultString));
                         }
-                        catch(Exception ex)
+                        catch//(Exception ex)
                         {
                             // Often happens if the connection is dropped - should be removed from subscribedClients list
                         }

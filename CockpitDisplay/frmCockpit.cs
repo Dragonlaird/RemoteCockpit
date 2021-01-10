@@ -111,6 +111,7 @@ namespace CockpitDisplay
                                 }
                                 catch (Exception ex)
                                 {
+                                    ConsoleLog(string.Format("Instrument Update Failed.\rInstrument: {0}\rSimVar: {1}\rError: {2}", instrument.Name, requestResult.Request.Name, ex.Message));
                                 }
                         }
                     }
@@ -349,7 +350,7 @@ namespace CockpitDisplay
                 {
                     LogMessage.DynamicInvoke(this, message);
                 }
-                catch(Exception ex)
+                catch//(Exception ex)
                 {
 
                 }
