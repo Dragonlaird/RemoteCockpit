@@ -1,9 +1,10 @@
-﻿using System;
+﻿using RemoteCockpitClasses.Animations.Actions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace RemoteCockpitClasses.Animations
+namespace RemoteCockpitClasses.Animations.Triggers
 {
     public class AnimationTriggerClientMouseClick : IAnimationTrigger
     {

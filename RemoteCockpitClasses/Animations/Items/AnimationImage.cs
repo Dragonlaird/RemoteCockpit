@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RemoteCockpitClasses.Animations.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Windows.Forms.VisualStyles;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace RemoteCockpitClasses.Animations
+namespace RemoteCockpitClasses.Animations.Items
 {
     //[JsonConverter(typeof(ConcreteConverter<AnimationImage[]>))]
     public class AnimationImage : IAnimationItem

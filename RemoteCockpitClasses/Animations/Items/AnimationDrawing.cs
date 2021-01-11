@@ -1,8 +1,11 @@
 ﻿using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Newtonsoft.Json;
+using RemoteCockpitClasses.Animations.Actions;
+using RemoteCockpitClasses.Animations.Triggers;
 
-namespace RemoteCockpitClasses.Animations
+namespace RemoteCockpitClasses.Animations.Items
+
 {
     //[JsonConverter(typeof(ConcreteConverter<AnimationDrawing[]>))]
     public class AnimationDrawing : IAnimationItem

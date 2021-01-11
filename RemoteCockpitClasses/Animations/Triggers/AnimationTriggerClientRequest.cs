@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using RemoteCockpitClasses.Animations.Actions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RemoteCockpitClasses.Animations
+namespace RemoteCockpitClasses.Animations.Triggers
 {
     public class AnimationTriggerClientRequest : IAnimationTrigger
     {

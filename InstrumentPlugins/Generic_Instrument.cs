@@ -18,6 +18,9 @@ using System.Runtime.CompilerServices;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Net.Http;
+using RemoteCockpitClasses.Animations.Items;
+using RemoteCockpitClasses.Animations.Triggers;
+using RemoteCockpitClasses.Animations.Actions;
 
 namespace InstrumentPlugins
 {

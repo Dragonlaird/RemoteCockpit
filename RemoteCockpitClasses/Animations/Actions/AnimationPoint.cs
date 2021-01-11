@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace RemoteCockpitClasses.Animations
+namespace RemoteCockpitClasses.Animations.Actions
 {
     public class AnimationPoint
     {

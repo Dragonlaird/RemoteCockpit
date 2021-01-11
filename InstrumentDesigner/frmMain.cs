@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using RemoteCockpitClasses;
 using RemoteCockpitClasses.Animations;
+using RemoteCockpitClasses.Animations.Actions;
+using RemoteCockpitClasses.Animations.Items;
+using RemoteCockpitClasses.Animations.Triggers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
