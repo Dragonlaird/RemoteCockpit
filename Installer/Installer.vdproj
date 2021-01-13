@@ -15,19 +15,25 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_015E79462079498381F22DC3E2814711"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_05806BEF1ED34CB78B34BF82B1121975"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_083BD4D823FFDCC6E4597780308E56C6"
         "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_0D6964B3921B42E1A9622858CCA42915"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_12B1E827CBA64DE08AF798D519045319"
+        "MsmKey" = "8:_0942C9C4EFD84E17AC28D1C45BA8EA5A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -35,60 +41,6 @@
         {
         "MsmKey" = "8:_12EE9B3F2330C916D382FD5BD77C93E6"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_91881D9096F642EABC8371E4AF1A9671"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1547D425C4C57291680555767C42F697"
-        "OwnerKey" = "8:_4290235A07F64AFAA49FF3C5A7CF9A82"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1713235713624837A49AAA2E2557BBF6"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -117,13 +69,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1EBE878C91FC4B49B5D2BB0EF6B63567"
+        "MsmKey" = "8:_21DBB87D03FF44CAB6C0767F63354D8C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_26C8392BF9574CDF95096FAFB4BBE43A"
+        "MsmKey" = "8:_227BA6BD12F2448EB9A48D093FD0ABC9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2BD2DDA2309B4122BCAAA0E050D4AB69"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -141,6 +99,36 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_392DA5B8EE4F4468B71B3DD74CE87B76"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_395152D4BF1841A39CA6C4E3B16781DB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B1DAF68E6C044F8B0056FC428795B90"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3C0305BC39874CB6A496596F84F6C567"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3C3CE2C80A7E4217989387C2B3AE4904"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4290235A07F64AFAA49FF3C5A7CF9A82"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -153,7 +141,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4749A185D901434AA74DE6FC395BA543"
+        "MsmKey" = "8:_4C706FDB39764761B9448D3E993FC55B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4DB22009E4294DDA9F44F0F0DFCBD110"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -171,7 +165,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_517CCC0DE5824769BCAE516746D2748F"
+        "MsmKey" = "8:_541B49C8E6E646EFA86E08862779375A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5761FFDD394F450D94D723977B76DBE8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -183,13 +183,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5CBEF528D097466082F0A6CAE7F4F61F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5CDBB317E8EC479092475AE4088AA5C9"
+        "MsmKey" = "8:_590806D04AEF46259A31083495B84C7D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -197,6 +191,12 @@
         {
         "MsmKey" = "8:_603700E9CAEB3AD00EAB27571D748E67"
         "OwnerKey" = "8:_63083A641BBA903378ABA96024239AFD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_613DFE973F574A9DB52B7B44A3E25DBA"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -244,7 +244,7 @@
         "Entry"
         {
         "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
-        "OwnerKey" = "8:_1547D425C4C57291680555767C42F697"
+        "OwnerKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -261,7 +261,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_70231C1B7D294CD998D249B7F2566B20"
+        "MsmKey" = "8:_6B64B5B311464F55A55FE8E57D8545A8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -274,24 +274,30 @@
         "Entry"
         {
         "MsmKey" = "8:_715D3F0EDD45747CC726F3EF4808E853"
-        "OwnerKey" = "8:_1547D425C4C57291680555767C42F697"
+        "OwnerKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7E665441295A4AD58E090CF96FF0564E"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "MsmKey" = "8:_717F8A9E46E7E78CF352487329DE700E"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_85E169CFCE504D9FB9D524568C707344"
+        "MsmKey" = "8:_7425680BC96949BB92705B04B7E7B541"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_76383475FF3A46339E13BB0C8C73A72C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_782DA9896BE84784A7CA8E98EAA1B9EA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -315,7 +321,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9ECE26D5D0624DA694B2475AC98739A0"
+        "MsmKey" = "8:_9600DCC3B1C044B3AB6C7A0285ED2D8D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9AEB99667D434F469EE9208F87CBB5E5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9CD232FF4507462994C9031FF93C4414"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -327,8 +345,110 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A2B6B81FAE134AF6835DA59F0B3AAC6C"
+        "MsmKey" = "8:_A1B6A726410A4E02A4FD1AD449727BEB"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_91881D9096F642EABC8371E4AF1A9671"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_4290235A07F64AFAA49FF3C5A7CF9A82"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
+        "OwnerKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A7A957831C394D48989A574077A77B03"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_717F8A9E46E7E78CF352487329DE700E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_91881D9096F642EABC8371E4AF1A9671"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
+        "OwnerKey" = "8:_4290235A07F64AFAA49FF3C5A7CF9A82"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -339,7 +459,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_BBC034E29FE6434BA2E83A6CF97CD3FB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C1E2C26E29EF401AA43F45842B88BF09"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -351,7 +483,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CF0489E0323C4538A99FD4472DF38F3D"
+        "MsmKey" = "8:_D208A2213BBF4415972C3A02C223B662"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -370,7 +502,7 @@
         "Entry"
         {
         "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
-        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "OwnerKey" = "8:_717F8A9E46E7E78CF352487329DE700E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -417,6 +549,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D99E6C19DD3F407E8449458E9E38F9F3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DCD37FFB812F422BC91AA2FD2E4DA13F"
         "OwnerKey" = "8:_63083A641BBA903378ABA96024239AFD"
         "MsmSig" = "8:_UNDEFINED"
@@ -430,7 +568,7 @@
         "Entry"
         {
         "MsmKey" = "8:_E136B1FE64384111872672A396203992"
-        "OwnerKey" = "8:_1547D425C4C57291680555767C42F697"
+        "OwnerKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -442,7 +580,7 @@
         "Entry"
         {
         "MsmKey" = "8:_E136B1FE64384111872672A396203992"
-        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "OwnerKey" = "8:_717F8A9E46E7E78CF352487329DE700E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -459,13 +597,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E1EACBBE401A4F1BB5A854AF79833824"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E262E524C1244EDFA391D1A093F5881A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E51D139A26EC4E5287A1219020E67A1F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E53B01121D644AABA2C0EC6E5C1CE1F1"
+        "MsmKey" = "8:_E65F7789C692410BAB924D104E5B19B0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -477,50 +627,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_BF5F53DC3C344849BF183E39919D017A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_91881D9096F642EABC8371E4AF1A9671"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_438C15E99F544E50B989FA83AA3EE17A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_4290235A07F64AFAA49FF3C5A7CF9A82"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EF26D73EDE0934807164553EC97D1333"
-        "OwnerKey" = "8:_1547D425C4C57291680555767C42F697"
+        "MsmKey" = "8:_ED8F3BAF480643939DD2BC80E2B7FA5A"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -531,7 +639,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FBB499F8CC56467282B0A05E94B5B986"
+        "MsmKey" = "8:_F88BB4BCFD904D4483A7F2574C19DF7B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -580,7 +688,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+        "OwnerKey" = "8:_717F8A9E46E7E78CF352487329DE700E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -658,13 +766,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1547D425C4C57291680555767C42F697"
+        "OwnerKey" = "8:_AE460B5D5364B2A772BBF63CD9701E84"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EF26D73EDE0934807164553EC97D1333"
+        "OwnerKey" = "8:_A49DD523ED4330EB572B906BEFFC4DAF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -775,6 +883,36 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_3C85A9EC3D8A40BCBD4CC94B8B68378F"
+            {
+            "Name" = "8:Install Service"
+            "Condition" = "8:"
+            "Object" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:-install"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_673398EC_4FBA_4CFF_B4AF_8406F092A49A"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            "Run64Bit" = "11:TRUE"
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_712F13E177EF43FDAF7F339E5B6C00D3"
+            {
+            "Name" = "8:Primary output from FSCockpitServer (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_CAE74BD877FE40679700D8F9AB6180DA"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:-uninstall"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_7EDDF48D_8F78_439B_9B61_3344929517FF"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            "Run64Bit" = "11:TRUE"
+            }
         }
         "DefaultFeature"
         {
@@ -798,6 +936,46 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_015E79462079498381F22DC3E2814711"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Cessna_152_Altimeter.json"
+            "TargetName" = "8:Cessna_152_Altimeter.json"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05806BEF1ED34CB78B34BF82B1121975"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Generic_Altitude_Background.png"
+            "TargetName" = "8:Generic_Altitude_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_083BD4D823FFDCC6E4597780308E56C6"
             {
             "AssemblyRegister" = "3:1"
@@ -829,32 +1007,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0D6964B3921B42E1A9622858CCA42915"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0942C9C4EFD84E17AC28D1C45BA8EA5A"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\InstrumentImages\\Airspeed_Background.png"
-            "TargetName" = "8:Airspeed_Background.png"
+            "SourcePath" = "8:..\\04-Instrument Plugins.txt"
+            "TargetName" = "8:04-Instrument Plugins.txt"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12B1E827CBA64DE08AF798D519045319"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\GPS_Generic_Background.png"
-            "TargetName" = "8:GPS_Generic_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Folder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -900,57 +1058,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1547D425C4C57291680555767C42F697"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RemoteCockpitClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_1547D425C4C57291680555767C42F697"
-                    {
-                    "Name" = "8:RemoteCockpitClasses.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:RemoteCockpitClasses.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1713235713624837A49AAA2E2557BBF6"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
-            "TargetName" = "8:Bearing_Foreground.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_197FD1164D6C31541CD94CD3A60E14B1"
             {
             "AssemblyRegister" = "3:1"
@@ -982,12 +1089,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1EBE878C91FC4B49B5D2BB0EF6B63567"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_21DBB87D03FF44CAB6C0767F63354D8C"
             {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
-            "TargetName" = "8:Bearing_Background.png"
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\GPS_Generic_Background.png"
+            "TargetName" = "8:GPS_Generic_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1002,12 +1109,32 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_26C8392BF9574CDF95096FAFB4BBE43A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_227BA6BD12F2448EB9A48D093FD0ABC9"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\GenericInstruments\\Generic_Altitude_Indicator.json"
-            "TargetName" = "8:Generic_Altitude_Indicator.json"
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json"
+            "TargetName" = "8:Generic_Attitude_Indicator.json"
             "Tag" = "8:"
             "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2BD2DDA2309B4122BCAAA0E050D4AB69"
+            {
+            "SourcePath" = "8:..\\01-Introduction.txt"
+            "TargetName" = "8:01-Introduction.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1053,12 +1180,132 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4749A185D901434AA74DE6FC395BA543"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_392DA5B8EE4F4468B71B3DD74CE87B76"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\GenericInstruments\\Cessna_152_Attitude_Indicator.json"
-            "TargetName" = "8:Cessna_152_Attitude_Indicator.json"
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Altitude_Indicator.json"
+            "TargetName" = "8:Generic_Altitude_Indicator.json"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_395152D4BF1841A39CA6C4E3B16781DB"
+            {
+            "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Dashboards\\Cessna_152_Dashboard.png"
+            "TargetName" = "8:Cessna_152_Dashboard.png"
+            "Tag" = "8:"
+            "Folder" = "8:_F1FE109987D84A5C910C80C5EE88FFE1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3B1DAF68E6C044F8B0056FC428795B90"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json"
+            "TargetName" = "8:Generic_Attitude_Indicator.json"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3C0305BC39874CB6A496596F84F6C567"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png"
+            "TargetName" = "8:Cessna_152_Airspeed_Indicator.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3C3CE2C80A7E4217989387C2B3AE4904"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
+            "TargetName" = "8:Generic_Bearing_Indicator.json"
             "Tag" = "8:"
             "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4C706FDB39764761B9448D3E993FC55B"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Airspeed_Indicator.json"
+            "TargetName" = "8:Generic_Airspeed_Indicator.json"
+            "Tag" = "8:"
+            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4DB22009E4294DDA9F44F0F0DFCBD110"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Indicator_Gimbal.png"
+            "TargetName" = "8:Attitude_Indicator_Gimbal.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1104,12 +1351,32 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_517CCC0DE5824769BCAE516746D2748F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_541B49C8E6E646EFA86E08862779375A"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png"
-            "TargetName" = "8:Cessna_152_Airspeed_Indicator.png"
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
+            "TargetName" = "8:Bearing_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5761FFDD394F450D94D723977B76DBE8"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\GPS_Generic_Background.png"
+            "TargetName" = "8:GPS_Generic_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1144,30 +1411,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5CBEF528D097466082F0A6CAE7F4F61F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_590806D04AEF46259A31083495B84C7D"
             {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
-            "TargetName" = "8:Generic_Bearing_Indicator.json"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5CDBB317E8EC479092475AE4088AA5C9"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_GPS.json"
-            "TargetName" = "8:Generic_GPS.json"
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Altitude_Indicator.json"
+            "TargetName" = "8:Generic_Altitude_Indicator.json"
             "Tag" = "8:"
             "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
             "Condition" = "8:"
@@ -1213,6 +1460,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_613DFE973F574A9DB52B7B44A3E25DBA"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
+            "TargetName" = "8:Bearing_Foreground.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_63083A641BBA903378ABA96024239AFD"
@@ -1277,12 +1544,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_70231C1B7D294CD998D249B7F2566B20"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B64B5B311464F55A55FE8E57D8545A8"
             {
-            "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Dashboards\\Cessna_152_Dashboard.png"
-            "TargetName" = "8:Cessna_152_Dashboard.png"
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Airspeed_Background.png"
+            "TargetName" = "8:Airspeed_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_F1FE109987D84A5C910C80C5EE88FFE1"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1328,34 +1595,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E665441295A4AD58E090CF96FF0564E"
-            {
-            "SourcePath" = "8:..\\InstrumentDesigner\\GenericInstruments\\Generic_Airspeed_Indicator.json"
-            "TargetName" = "8:Generic_Airspeed_Indicator.json"
-            "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_84D14F0CBE3693FA1988BABDEB6EF4F0"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_717F8A9E46E7E78CF352487329DE700E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:InstrumentPlugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_84D14F0CBE3693FA1988BABDEB6EF4F0"
+                    "_717F8A9E46E7E78CF352487329DE700E"
                     {
                     "Name" = "8:InstrumentPlugins.dll"
                     "Attributes" = "3:512"
@@ -1379,12 +1626,52 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85E169CFCE504D9FB9D524568C707344"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7425680BC96949BB92705B04B7E7B541"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\InstrumentImages\\Attitude_Generic_Background.png"
-            "TargetName" = "8:Attitude_Generic_Background.png"
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_GPS.json"
+            "TargetName" = "8:Generic_GPS.json"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76383475FF3A46339E13BB0C8C73A72C"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Airspeed_Indicator.json"
+            "TargetName" = "8:Generic_Airspeed_Indicator.json"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_782DA9896BE84784A7CA8E98EAA1B9EA"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
+            "TargetName" = "8:Generic_Bearing_Indicator.json"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1461,12 +1748,52 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9ECE26D5D0624DA694B2475AC98739A0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9600DCC3B1C044B3AB6C7A0285ED2D8D"
             {
             "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Dashboards\\Generic_Dashboard.png"
             "TargetName" = "8:Generic_Dashboard.png"
             "Tag" = "8:"
             "Folder" = "8:_F1FE109987D84A5C910C80C5EE88FFE1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9AEB99667D434F469EE9208F87CBB5E5"
+            {
+            "SourcePath" = "8:..\\05-Instrument Designer.txt"
+            "TargetName" = "8:05-Instrument Designer.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9CD232FF4507462994C9031FF93C4414"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Generic_Background.png"
+            "TargetName" = "8:Attitude_Generic_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1512,10 +1839,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A2B6B81FAE134AF6835DA59F0B3AAC6C"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A1B6A726410A4E02A4FD1AD449727BEB"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\InstrumentImages\\Generic_Altitude_Background.png"
-            "TargetName" = "8:Generic_Altitude_Background.png"
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png"
+            "TargetName" = "8:Cessna_152_Airspeed_Indicator.png"
             "Tag" = "8:"
             "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
             "Condition" = "8:"
@@ -1530,6 +1857,88 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A49DD523ED4330EB572B906BEFFC4DAF"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.FlightSimulator.SimConnect, Version=11.0.62651.3, Culture=neutral, PublicKeyToken=baf445ffb3a06b5c, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_A49DD523ED4330EB572B906BEFFC4DAF"
+                    {
+                    "Name" = "8:Microsoft.FlightSimulator.SimConnect.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.FlightSimulator.SimConnect.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:TRUE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A7A957831C394D48989A574077A77B03"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Generic_Background.png"
+            "TargetName" = "8:Attitude_Generic_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_AE460B5D5364B2A772BBF63CD9701E84"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:RemoteCockpitClasses, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_AE460B5D5364B2A772BBF63CD9701E84"
+                    {
+                    "Name" = "8:RemoteCockpitClasses.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:RemoteCockpitClasses.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B58DF85533F7C31483963350361C2A94"
@@ -1563,12 +1972,52 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CF0489E0323C4538A99FD4472DF38F3D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BBC034E29FE6434BA2E83A6CF97CD3FB"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\GenericInstruments\\Cessna_152_Altimeter.json"
-            "TargetName" = "8:Cessna_152_Altimeter.json"
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
+            "TargetName" = "8:Bearing_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C1E2C26E29EF401AA43F45842B88BF09"
+            {
+            "SourcePath" = "8:..\\02-Server Component.txt"
+            "TargetName" = "8:02-Server Component.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D208A2213BBF4415972C3A02C223B662"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
+            "TargetName" = "8:Bearing_Foreground.png"
+            "Tag" = "8:"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1645,6 +2094,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D99E6C19DD3F407E8449458E9E38F9F3"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Cessna_152_Altimeter.json"
+            "TargetName" = "8:Cessna_152_Altimeter.json"
+            "Tag" = "8:"
+            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DCD37FFB812F422BC91AA2FD2E4DA13F"
             {
             "AssemblyRegister" = "3:1"
@@ -1707,6 +2176,46 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E1EACBBE401A4F1BB5A854AF79833824"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Generic_Altitude_Background.png"
+            "TargetName" = "8:Generic_Altitude_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E262E524C1244EDFA391D1A093F5881A"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Airspeed_Background.png"
+            "TargetName" = "8:Airspeed_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E51D139A26EC4E5287A1219020E67A1F"
             {
             "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Layouts.json"
@@ -1727,12 +2236,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E53B01121D644AABA2C0EC6E5C1CE1F1"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E65F7789C692410BAB924D104E5B19B0"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\InstrumentImages\\Attitude_Indicator_Gimbal.png"
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Indicator_Gimbal.png"
             "TargetName" = "8:Attitude_Indicator_Gimbal.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
+            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1747,23 +2256,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EF26D73EDE0934807164553EC97D1333"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED8F3BAF480643939DD2BC80E2B7FA5A"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.FlightSimulator.SimConnect, Version=11.0.62651.3, Culture=neutral, PublicKeyToken=baf445ffb3a06b5c, processorArchitecture=AMD64"
-                "ScatterAssemblies"
-                {
-                    "_EF26D73EDE0934807164553EC97D1333"
-                    {
-                    "Name" = "8:Microsoft.FlightSimulator.SimConnect.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.FlightSimulator.SimConnect.dll"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_GPS.json"
+            "TargetName" = "8:Generic_GPS.json"
             "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1771,19 +2269,19 @@
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
             "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:TRUE"
+            "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FBB499F8CC56467282B0A05E94B5B986"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F88BB4BCFD904D4483A7F2574C19DF7B"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\GenericInstruments\\Generic_Attitude_Indicator.json"
-            "TargetName" = "8:Generic_Attitude_Indicator.json"
+            "SourcePath" = "8:..\\03-Client Component.txt"
+            "TargetName" = "8:03-Client Component.txt"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
+            "Folder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1833,6 +2331,17 @@
                     "Property" = "8:_F8F96012B01C486492A07DC06020B052"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_3FAF3E2B5DAB4D0694B01C0DAA270343"
+                            {
+                            "Name" = "8:Service Tools (RunAs Administrator)"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_5FABC18A8D8B4ABC9801D56054CFF2EF"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -1902,6 +2411,17 @@
                             }
                         }
                     }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9D78675B3E80427CA432FA626F0C4CF5"
+                    {
+                    "Name" = "8:Documentation"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_ADEB4D83071C43518B463E088A2D82FA"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -1921,7 +2441,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FS Remote Cockpit"
         "ProductCode" = "8:{2BABE3B9-265B-49F4-BB2D-0A0F41E8A897}"
-        "PackageCode" = "8:{2493E8C9-1501-4716-8370-B22554D404BC}"
+        "PackageCode" = "8:{346F4CDA-B710-4850-A674-6FE8CF64D55F}"
         "UpgradeCode" = "8:{F25817B9-883E-4FFF-947D-0B68B0F1BA9F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2045,12 +2565,12 @@
             {
             "Name" = "8:Uninstall Remote Cockpit Serevice"
             "Arguments" = "8:-uninstall"
-            "Description" = "8:Must be run as Administrator"
+            "Description" = "8:Uninstall Remote Cockpit Service - Must be run as Administrator"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_F11A4BA485414AD08723A0191F7A0100"
-            "Folder" = "8:_12526694CDE6499B980D3DD127627F63"
+            "Folder" = "8:_3FAF3E2B5DAB4D0694B01C0DAA270343"
             "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -2083,16 +2603,44 @@
             "Icon" = "8:"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E5C1B02C625A4D9CB555BCBA57A0D7F0"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7A12EFBAD9074EEE9C53B4A39C65219D"
             {
-            "Name" = "8:Install Remote Cockpit Service"
-            "Arguments" = "8:-install"
-            "Description" = "8:Must be run as Administrator"
+            "Name" = "8:Start Remote Cockpit Service"
+            "Arguments" = "8:-start"
+            "Description" = "8:Start Remote Cockpit Service - Must be run as Administrator"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_F11A4BA485414AD08723A0191F7A0100"
-            "Folder" = "8:_12526694CDE6499B980D3DD127627F63"
+            "Folder" = "8:_3FAF3E2B5DAB4D0694B01C0DAA270343"
+            "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_833A8F84EB97487B902A672103591CB9"
+            {
+            "Name" = "8:Stop Remote Cockpit Service"
+            "Arguments" = "8:-stop"
+            "Description" = "8:Stop Remote Cockpit Service - Must be run as Administrator"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F11A4BA485414AD08723A0191F7A0100"
+            "Folder" = "8:_3FAF3E2B5DAB4D0694B01C0DAA270343"
+            "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E5C1B02C625A4D9CB555BCBA57A0D7F0"
+            {
+            "Name" = "8:Install Remote Cockpit Service"
+            "Arguments" = "8:-install"
+            "Description" = "8:Install Remote Cockpit Service - Must be run as Administrator"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F11A4BA485414AD08723A0191F7A0100"
+            "Folder" = "8:_3FAF3E2B5DAB4D0694B01C0DAA270343"
             "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -2512,7 +3060,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_31BC42D1F89848F889B2E71E9864BAD5"
             {
-            "SourcePath" = "8:..\\Generic_Altitude_Indicator\\obj\\Debug\\Generic_Altitude_Indicator.dll"
+            "SourcePath" = "8:..\\Generic_Altitude_Indicator\\obj\\x64\\Debug\\Generic_Altitude_Indicator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -2540,7 +3088,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4290235A07F64AFAA49FF3C5A7CF9A82"
             {
-            "SourcePath" = "8:..\\Generic_Airspeed_Indicator\\obj\\Debug\\Generic_Airspeed_Indicator.dll"
+            "SourcePath" = "8:..\\Generic_Airspeed_Indicator\\obj\\x64\\Debug\\Generic_Airspeed_Indicator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -2568,7 +3116,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_438C15E99F544E50B989FA83AA3EE17A"
             {
-            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\Debug\\InstrumentPlugins.dll"
+            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\x64\\Debug\\InstrumentPlugins.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -2596,7 +3144,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_91881D9096F642EABC8371E4AF1A9671"
             {
-            "SourcePath" = "8:..\\Generic_Attitude_Indicator\\obj\\Debug\\Generic_Attitude_Indicator.dll"
+            "SourcePath" = "8:..\\Generic_Attitude_Indicator\\obj\\x64\\Debug\\Generic_Attitude_Indicator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -2624,7 +3172,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BF5F53DC3C344849BF183E39919D017A"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\obj\\Debug\\InstrumentDesigner.exe"
+            "SourcePath" = "8:..\\InstrumentDesigner\\obj\\x64\\Debug\\InstrumentDesigner.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -2652,7 +3200,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CAE74BD877FE40679700D8F9AB6180DA"
             {
-            "SourcePath" = "8:..\\FSRemoteCockpitServer\\obj\\Debug\\RemoteCockpit.exe"
+            "SourcePath" = "8:..\\FSRemoteCockpitServer\\obj\\x64\\Debug\\RemoteCockpit.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -2680,7 +3228,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_ECAFCD88074A44C99461181FDAA8906E"
             {
-            "SourcePath" = "8:..\\CockpitDisplay\\obj\\Debug\\CockpitDisplay.exe"
+            "SourcePath" = "8:..\\CockpitDisplay\\obj\\x64\\Debug\\CockpitDisplay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"

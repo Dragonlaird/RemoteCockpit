@@ -395,7 +395,7 @@
             this.txtCockpitHeight.Size = new System.Drawing.Size(120, 20);
             this.txtCockpitHeight.TabIndex = 6;
             this.txtCockpitHeight.Value = new decimal(new int[] {
-            400,
+            370,
             0,
             0,
             0});

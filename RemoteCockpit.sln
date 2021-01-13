@@ -30,6 +30,15 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Inst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSServiceInstaller", "FSServiceInstaller\FSServiceInstaller.csproj", "{1475AA73-204C-44FF-829A-2AABE9327F18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{6E6B008F-7CE7-4F5D-B0D9-DDB165B7156D}"
+	ProjectSection(SolutionItems) = preProject
+		01-Introduction.txt = 01-Introduction.txt
+		02-Server Component.txt = 02-Server Component.txt
+		03-Client Component.txt = 03-Client Component.txt
+		04-Instrument Plugins.txt = 04-Instrument Plugins.txt
+		05-Instrument Designer.txt = 05-Instrument Designer.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

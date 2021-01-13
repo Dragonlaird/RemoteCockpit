@@ -34,6 +34,8 @@ namespace CockpitDisplay
 
         public void Initialize()
         {
+            this.Show();
+            this.Update();
             layoutDefinitions = new List<LayoutDefinition>();
             instrumentPlugins = new List<ICockpitInstrument>();
             usedInstrumentPlugins = new List<ICockpitInstrument>();

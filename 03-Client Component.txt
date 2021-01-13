@@ -1,0 +1,26 @@
+Client Component
+
+The Client will be used for 2 purposes.
+
+1. Communicate with the Server to request variables and receive values
+2. Update the cockpit display to reflect the changed variable values
+
+The client should connect to the server component.
+
+The main window should allow the user to choose how they want the Client to display the cockpit layout. This will include options like:
+
+1. Turn cockpit on/off
+2. Display the cockpit as either a window or chromeless fullscreen
+	a. In windowed mode, allow the user to select the size and position of the cockpit
+	b. In fullscreen mode, allow the user to select the screen or screens to use for the cockpit
+3. Automatically select the correct layout for the aircraft being flown
+	a. Change the display each time a different aircraft is used, or
+	b. Permit the user to override this and choose their own layout to display
+
+In the cockpit display, the selected layout should simply identify which instrument types are required, their relative position within the cockpit layout, and the relative size of each.
+
+The instruments themselves should be designed as custom instruments (plugins) or user-defined instruments, to provide an object that will be placed in the correct position and size within the cockpit layout.
+
+If there are no custom instruments for a given layout, the cockpit should use a suitable generic plugin, to act as a fall-back option.
+
+If there is no generic plugin, the cockpit should ignore that part of the layout and display nothing.

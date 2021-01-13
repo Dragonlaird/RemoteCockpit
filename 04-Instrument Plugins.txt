@@ -1,0 +1,34 @@
+Instrument Plugins
+
+Plugin Types
+There are two ways of creating a plugin.
+
+The first is a Customised Instrument, which is a self-contained DLL (known as an assembly). These are modules typically created by other developers.
+
+The second method is to design a Generic Instrument using the Instrument Designer, requiring no coding skills, allowing users to create their own instruments.
+
+Customised Instruments
+Instruments are designed as plugins, allowing other developers to create their own and easily add them to the Client.
+
+Each plugin is a compiled DLL, containing one (or more) instrument definitions.
+
+Each Instrument will identify the type of instrument it is (e.g. Altimeter, Compass, GPS, etc.).
+
+An instrument provides a list of aircraft it can be used with.
+
+They will also provide a date of creation, to allow the Client to determine the latest (and therefore most accurate) instrument to use for each aircraft.
+
+This allows instruments to be developed by others, to be used for specific models of aircraft, with the latest developed instrument automatically selected for use in the layout.
+
+Instruments will also provide a list of variables they need/use. These variables will be requested by the Client automatically (if they aren't already) and any new values will be passed to the instrument whenever they are received from the Server.
+
+Generic Instruments
+Users can design their own instruments, using their own images and defining When, What, and How they will behave.
+
+Each Generic Instrument requires a background image (the dial or bezel that remains static when in use).
+
+Each Generic Instrument contains 1 or more Animations, these are typically images or a Cartesian Plot of an object to be animated. This is referred to as "What" within the designer.
+
+Each Animation responds to 1 or more Triggers, referred to as "When" in the Instrument Designer. Typically you would want an Animation to move whenever a variable changes on the server (such as a change in airspeed).
+
+Finally, each Trigger contains 1 or more Actions, referred to as "How" in the Instrument Designer. This defines how you want the Animation to move, using the value received from the server. This can be actions such as rotate, move up/down/left/right, clip animation (e.g. a circle or rectangle) as no-on.

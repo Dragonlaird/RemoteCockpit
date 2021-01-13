@@ -21,21 +21,21 @@
         {
           "Type": 0, // 0 = Altimeter
           "Top": 25,
-          "Left": 24,
+          "Left": 20,
           "Height": 30,
           "Width": 8.5
         },
         {
           "Type": 9, // 9 = GPS
-          "Top": 30.0,
-          "Left": 35.0,
+          "Top": 20.0,
+          "Left": 30.0,
           "Height": 40.0,
           "Width": 20.0
         },
         {
           "Type": 3, // 9 = Bearing
-          "Top": 30.0,
-          "Left": 55.0,
+          "Top": 25.0,
+          "Left": 50.0,
           "Height": 30.0,
           "Width": 8.5
         }

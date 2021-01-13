@@ -1,0 +1,21 @@
+Introduction
+
+This project is designed to work with Microsoft Flight Simulator 2020 (MSFS), allowing the cockpit layout of any aircraft to be displayed on other PCs or monitors, removing the need to constantly change your viewpoint whilst flying.
+
+There are also considerations to allow haptic feedback to provide a more realistic flight experience. This could include features from something simple, like providing vibrations that vary with Speed, Wind and Engine RPM, to physically moving your Flight Simulator rig as you bank, pitch and otherwise control your aircraft.
+
+MSFS allows third-party applications to access many values (variables) related to the current aircraft, location, environment, and much more, using a Microsoft-supplied Software Development Kit (SDK), known as SimConnect.
+
+This SDK provides access for software applications to send data and receive variable updates, such as requesting the current altitude, or airspeed, or raising and lowering landing gear, etc.
+
+The problem with most external instruments is that they are fixed in size, design, and usually position. They don't look anything like the instruments that are used within a real aircraft, particularly the model being simulated by the user.
+
+The level of detail of the cockpit layout within MSFS is impressive but often takes up too much of the screen and requires the user to change their viewpoint to see all the instruments, and requires the user to switch the display back to look outside again.
+
+This also adds to the computing power needed to update the instruments displayed in MSFS and only adds more pressure to an already overworked computer.
+
+An obvious solution would be to use another PC, with its own dedicated displays, to draw and update the cockpit layout and instruments, freeing up the main computer to display the window views only.
+
+This is the concept that spawned Remote Cockpit. A virtual cockpit solution that can position and draw every instrument in a real cockpit, using another PC (or even multiple PCs), with one or more monitors, connected via a network to the MSFS computer and updated in near-realtime with in-flight variables.
+
+Furthermore, since every aircraft is different, we can redraw the cockpit every time the user changes aircraft, using custom-designed instruments for each model, or replace them with generic instruments if no custom instrument exists.

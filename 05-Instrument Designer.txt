@@ -1,0 +1,17 @@
+Instrument Designer
+
+The Instrument Designer (Designer) allows users to define their own instruments for many purposes.
+
+Each instrument requires a background image and displays images on top of this suitably positioned, rotated and clipped, to display as an animation.
+
+The animation updates gradually to appear smooth instead of jumping from the last to the current position.
+
+Each Instrument can have multiple Animations, each is either a static image or a drawing, defined by the user, in a similar way to creating a drawing on graph paper (ar Cartesian Plot).
+
+Each Animation ("What") can respond to several Triggers ("When"), typically these are different variables requested from the Server.
+
+Every Trigger can have multiple Actions ("How"), such as rotating, moving, and clipping the image.
+
+This allows an Instrument to contain multiple images, each responding differently. For example, an Altimeter may require two needles, one for displaying the altitude in feet, the other to display the current altitude in 1,000's feet.
+
+Each instrument may move an image based on different triggers, such as an attitude indicator rotating to display the bank angle whilst also moving up/down to indicate the pitch angle, finally the image can be cropped (or clipped) to appear as a circle in the centre of the instrument.

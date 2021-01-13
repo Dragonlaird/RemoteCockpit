@@ -1,0 +1,17 @@
+Server Component
+
+As the cockpit is to be displayed using a networked computer, we need a program (Server) that can be run on the MSFS PC to request variables and retransmit them to the networked computer for display.
+
+The Server must be lightweight. It must not use too many resources on the MSFS PC.
+
+Ideally, it should also be running as a Windows Service and monitor to see if MSFS is running. If MSFS isn't running, it should remain idle until it detects MSFS is running again.
+
+There may be one or more remote connections (Client) to request variables. Each Client connection should be managed and monitored, allowing bidirectional, asynchronous communication, and be thread-safe, ensuring data requested by one Client is not also transmitted to another Client, unless that Client has also requested the same variable.
+
+It should be able to communicate with MSFS and retrieve values in a timely manner It should retain a collection of the latest values for each variable requested, as well as remembering which variables are used by each connected Client.
+
+To reduce network traffic and ensure Clients are not being constantly updated, variables should only be sent to a Client if their values have changed.
+
+If MSFS starts running and the Server already has a previous list of variables requested by connected Clients, it should re-request the same variables and continue as before, providing seamless interaction with MSFS, even if MSFS is temporarily offline.
+
+If a Client disconnects, the variables used by that Client should be removed from it's own list and any requests submitted to MSFS for those variables should be cancelled, unless they are still required by another Client
