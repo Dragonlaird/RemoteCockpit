@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CockpitDisplay
@@ -96,25 +97,28 @@ namespace CockpitDisplay
                     {
                         foreach (var instrument in usedInstrumentPlugins)
                         {
-                            if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
+                            Task.Run(() =>
                             {
-                                try
+                                if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
                                 {
-                                    instrument.UpdateFrequency = int.Parse(requestResult.Result?.ToString() ?? "3");
+                                    try
+                                    {
+                                        instrument.UpdateFrequency = int.Parse(requestResult.Result?.ToString() ?? "3");
+                                    }
+                                    catch { }
                                 }
-                                catch { }
-                            }
-                            else
-                            if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
-                                try
-                                {
-                                    instrument.ValueUpdate(requestResult);
-                                    UpdateCockpitItem(instrument.Control);
-                                }
-                                catch (Exception ex)
-                                {
-                                    ConsoleLog(string.Format("Instrument Update Failed.\rInstrument: {0}\rSimVar: {1}\rError: {2}", instrument.Name, requestResult.Request.Name, ex.Message));
-                                }
+                                else
+                                if (instrument.RequiredValues.Any(x => x.Name == requestResult.Request.Name && x.Unit == requestResult.Request.Unit))
+                                    try
+                                    {
+                                        instrument.ValueUpdate(requestResult);
+                                        UpdateCockpitItem(instrument.Control);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        ConsoleLog(string.Format("Instrument Update Failed.\rInstrument: {0}\rSimVar: {1}\rError: {2}", instrument.Name, requestResult.Request.Name, ex.Message));
+                                    }
+                            });
                         }
                     }
                     catch (Exception ex)

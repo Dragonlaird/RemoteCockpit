@@ -2342,6 +2342,17 @@
                                 {
                                 }
                             }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_C6BF1EF8471048EEB7C57DB4FA6AD370"
+                            {
+                            "Name" = "8:Documentation"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_1D1F576F9D294F698AD6B79B05B3E40C"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -2441,7 +2452,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FS Remote Cockpit"
         "ProductCode" = "8:{2BABE3B9-265B-49F4-BB2D-0A0F41E8A897}"
-        "PackageCode" = "8:{346F4CDA-B710-4850-A674-6FE8CF64D55F}"
+        "PackageCode" = "8:{2DB31B19-E829-473C-9369-A0D1AD568CFB}"
         "UpgradeCode" = "8:{F25817B9-883E-4FFF-947D-0B68B0F1BA9F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2575,6 +2586,20 @@
             "Icon" = "8:"
             "Feature" = "8:"
             }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_56CBE1B1D0FE47F2AD29B35ED30D8B45"
+            {
+            "Name" = "8:01-Introduction"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_2BD2DDA2309B4122BCAAA0E050D4AB69"
+            "Folder" = "8:_C6BF1EF8471048EEB7C57DB4FA6AD370"
+            "WorkingFolder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_619ED6CCDC684482A23D8F9367F7924D"
             {
             "Name" = "8:Cockpit Display"
@@ -2628,6 +2653,62 @@
             "Target" = "8:_F11A4BA485414AD08723A0191F7A0100"
             "Folder" = "8:_3FAF3E2B5DAB4D0694B01C0DAA270343"
             "WorkingFolder" = "8:_DB021720326240E1AF78943127E5E9C7"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_91C50A7E553646F0B3780866C8212812"
+            {
+            "Name" = "8:02-Server Component"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_C1E2C26E29EF401AA43F45842B88BF09"
+            "Folder" = "8:_C6BF1EF8471048EEB7C57DB4FA6AD370"
+            "WorkingFolder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9A1B303FE84149B98A1B6989BA160905"
+            {
+            "Name" = "8:04-Instrument Plugins"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_0942C9C4EFD84E17AC28D1C45BA8EA5A"
+            "Folder" = "8:_C6BF1EF8471048EEB7C57DB4FA6AD370"
+            "WorkingFolder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9D3ACACD7263405281F34D70F25F76C3"
+            {
+            "Name" = "8:05-Instrument Designer"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_9AEB99667D434F469EE9208F87CBB5E5"
+            "Folder" = "8:_C6BF1EF8471048EEB7C57DB4FA6AD370"
+            "WorkingFolder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A80F692B5B1543A4A539788F2887AD54"
+            {
+            "Name" = "8:03-Client Component"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_F88BB4BCFD904D4483A7F2574C19DF7B"
+            "Folder" = "8:_C6BF1EF8471048EEB7C57DB4FA6AD370"
+            "WorkingFolder" = "8:_9D78675B3E80427CA432FA626F0C4CF5"
             "Icon" = "8:"
             "Feature" = "8:"
             }
