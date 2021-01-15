@@ -1,4 +1,6 @@
-﻿namespace CockpitDisplay
+﻿using CockpitDisplay.Properties;
+
+namespace CockpitDisplay
 {
     partial class frmMain
     {
@@ -28,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.Icon = Resources.Cockpit_Icon;
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCockpitWindow = new System.Windows.Forms.TabPage();
             this.grpCockpit = new System.Windows.Forms.GroupBox();

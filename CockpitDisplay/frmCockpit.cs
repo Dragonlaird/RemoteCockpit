@@ -324,7 +324,15 @@ namespace CockpitDisplay
                 List<Type> interfaceTypes = new List<Type>(t.GetInterfaces());
                 return interfaceTypes.Contains(typeof(ICockpitInstrument));
             });
-            var customInstruments = instrumentsList.ConvertAll<ICockpitInstrument>(delegate (Type t) { return Activator.CreateInstance(t) as ICockpitInstrument; });
+            var customInstruments = instrumentsList.ConvertAll<ICockpitInstrument>(delegate (Type t) { 
+                try { 
+                    return Activator.CreateInstance(t) as ICockpitInstrument; 
+                } 
+                catch(Exception ex) { 
+                    ConsoleLog(string.Format("Unable to build Cockpit Instrument: {0}\rError: {1}", t.Name, ex.Message)); 
+                    return null; 
+                } 
+            }).Where(x => x != null).ToList();
             message = string.Format("Fetching Generic plugins");
             ConsoleLog(message);
             foreach (var instrumentDefinition in Directory.GetFiles(".\\GenericInstruments"))
