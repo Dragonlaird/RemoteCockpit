@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RemoteCockpitClasses;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Windows.Forms;
 
-namespace RemoteCockpitClasses
+namespace InstrumentPlugins
 {
     public interface ICockpitInstrument : IComponent
     {
