@@ -383,7 +383,7 @@ namespace InstrumentDesigner
                 OffsetX = 0,
                 OffsetY = 0,
                 FillColor = Color.White,
-                FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
+                FillMethod = FillTypeEnum.Solid,
                 PointMap = new AnimationPoint[0] 
             });
             config.Animations = animations.ToArray();

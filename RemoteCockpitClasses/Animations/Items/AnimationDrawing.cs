@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Windows.Forms.VisualStyles;
 using Newtonsoft.Json;
 using RemoteCockpitClasses.Animations.Actions;
 using RemoteCockpitClasses.Animations.Triggers;
@@ -13,7 +12,7 @@ namespace RemoteCockpitClasses.Animations.Items
         public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.Drawing; } set { } }
         public string Name { get; set; }
         public AnimationPoint[] PointMap { get; set; }
-        public FillType FillMethod { get; set; }
+        public FillTypeEnum FillMethod { get; set; }
         public Color FillColor { get; set; }
         public double OffsetX { get; set; }
         public double OffsetY { get; set; }

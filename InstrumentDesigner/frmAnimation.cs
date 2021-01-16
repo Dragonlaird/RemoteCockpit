@@ -199,7 +199,7 @@ namespace InstrumentDesigner
                         Name = _animation.Name,
                         Type = AnimationItemTypeEnum.Drawing,
                         FillColor = Color.White,
-                        FillMethod = System.Windows.Forms.VisualStyles.FillType.Solid,
+                        FillMethod = FillTypeEnum.Solid,
                         OffsetX = 50,
                         OffsetY = 50,
                         Triggers = _animation.Triggers
