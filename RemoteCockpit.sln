@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteCockpitClasses", "Rem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentPlugins", "InstrumentPlugins\InstrumentPlugins.csproj", "{6A197BAC-121C-4D34-A215-14DA7AF32C86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitDisplay.Tests", "CockpitDisplay.Tests\CockpitDisplay.Tests.csproj", "{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentDesigner", "InstrumentDesigner\InstrumentDesigner.csproj", "{2302D97E-8E57-4C4C-A653-878629D5F1C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic_Airspeed_Indicator", "Generic_Airspeed_Indicator\Generic_Airspeed_Indicator.csproj", "{058A1176-3F75-4020-9998-7E01B457CF6F}"
@@ -79,13 +77,6 @@ Global
 		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Release|x64.ActiveCfg = Release|Any CPU
 		{6A197BAC-121C-4D34-A215-14DA7AF32C86}.Release|x64.Build.0 = Release|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Debug|x64.Build.0 = Debug|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02C95DAA-35EC-4A0B-B6C6-E7E98B2185FC}.Release|x64.ActiveCfg = Release|Any CPU
 		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Debug|Any CPU.Build.0 = Debug|x64
 		{2302D97E-8E57-4C4C-A653-878629D5F1C2}.Debug|x64.ActiveCfg = Debug|Any CPU
