@@ -27,125 +27,114 @@ namespace FSCockpitTests
         private static ManualResetEvent receiveDone =
             new ManualResetEvent(false);
 
+        private static RemoteServer server;
+
         public ServerTests()
         {
-            var logConfig = new LoggerConfiguration();
-            logConfig.WriteTo.Console();
-            log = logConfig.CreateLogger();
+            if (server == null)
+            {
+                var logConfig = new LoggerConfiguration();
+                logConfig.WriteTo.Console();
+                log = logConfig.CreateLogger();
+                server = new RemoteServer(log);
+            }
+        }
+
+        private void StartServer()
+        {
+            if(server != null && !server.IsRunning)
+            {
+                server.Start();
+            }
         }
 
         [TestMethod]
         public void TestCreateImplicitInstance()
         {
-            var server = Activator.CreateInstance(typeof(RemoteCockpitServer.RemoteServer), log);
-            Assert.IsNotNull(server);
+            if (server != null && server.IsRunning)
+                server.Stop();
+            var implicitServer = Activator.CreateInstance(typeof(RemoteCockpitServer.RemoteServer), log);
+            Assert.IsNotNull(implicitServer);
         }
 
         [TestMethod]
         public void TestCreateExplicitInstance()
         {
-            using (RemoteServer server = new RemoteServer(log))
-            {
-                Assert.IsNotNull(server);
-            }
+            //StartServer();
+            Assert.IsNotNull(server);
         }
 
         [TestMethod]
         public void TestStartInstanceFor5Seconds()
         {
-            using (RemoteServer server = new RemoteServer(log))
+            StartServer();
+            Assert.IsTrue(server.IsRunning);
+            DateTime endTime = DateTime.Now.AddSeconds(5);
+            while (server.IsRunning && endTime > DateTime.Now)
             {
-                Assert.IsNotNull(server);
-                server.Start();
-                Assert.IsTrue(server.IsRunning);
-                DateTime endTime = DateTime.Now.AddSeconds(5);
-                while (server.IsRunning && endTime > DateTime.Now)
-                {
-                    Thread.Sleep(100);
-                }
-                DateTime completedTime = DateTime.Now;
-                server.Stop();
-                Assert.IsFalse(server.IsRunning);
-                Assert.IsTrue(completedTime > endTime);
+                Thread.Sleep(100);
             }
+            DateTime completedTime = DateTime.Now;
+            server.Stop();
+            Assert.IsFalse(server.IsRunning);
+            Assert.IsTrue(completedTime > endTime);
         }
 
         [TestMethod]
         public void TestConnectivity()
         {
-            using (RemoteServer server = new RemoteServer(log))
+            StartServer();
+            Assert.IsTrue(server.IsRunning);
+            using (var socket = new Socket(SocketType.Stream, ProtocolType.Tcp))
             {
-                Assert.IsNotNull(server);
-                server.Start();
-                Assert.IsTrue(server.IsRunning);
-                using (var socket = new Socket(SocketType.Stream, ProtocolType.Tcp))
-                {
-                    socket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5555));
-                    Assert.IsTrue(socket.Connected);
-                    socket.Close();
-                }
-                server.Stop();
+                socket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5555));
+                Assert.IsTrue(socket.Connected);
+                socket.Close();
             }
+            server.Stop();
         }
 
+        /// <summary>
+        /// This test will only pass if MSFS2020 is installed on this computer.
+        /// Otherwise, SimConnect fails to load and causes server not to shutdown all clients.
+        /// This action is intended, no point in the server running if it has nothing to connect to.
+        /// </summary>
         [TestMethod]
         public void TestReceiveData()
         {
-            using (RemoteServer server = new RemoteServer(log))
+            int connectionTimeoutMs = 3000;
+            var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MSFS_SDK")))
             {
-                Assert.IsNotNull(server);
-                server.Start();
+                StartServer();
                 Assert.IsTrue(server.IsRunning);
                 var result = string.Empty;
-                DateTime endTime = DateTime.Now.AddSeconds(2);
+                DateTime endTime = DateTime.Now.AddMilliseconds(connectionTimeoutMs);
                 using (var client = new TcpClient())
                 {
-                    client.ReceiveTimeout = 2000;
-                    client.SendTimeout = 2000;
+                    client.ReceiveTimeout = connectionTimeoutMs;
+                    client.SendTimeout = connectionTimeoutMs;
                     client.NoDelay = true;
                     client.Connect("127.0.0.1", 5555);
 
                     using (NetworkStream networkStream = client.GetStream())
                     {
-                        networkStream.ReadTimeout = 2000;
+                        networkStream.ReadTimeout = connectionTimeoutMs;
                         using (var reader = new StreamReader(networkStream, Encoding.UTF8))
                         {
-                            while (reader!= null && client.Connected && networkStream.CanRead && endTime > DateTime.Now)
+                            while (reader != null && client.Connected && endTime > DateTime.Now)
                             {
-                                if (reader.Peek() != -1)
+                                if (networkStream.CanRead && networkStream.DataAvailable && reader.Peek() != -1)
                                     result += (char)reader.Read();
                                 else
                                     Thread.Sleep(10);
                             }
                         }
-
                     }
                 }
+                server.Stop();
                 Assert.IsFalse(string.IsNullOrEmpty(result));
                 Assert.IsTrue(result.StartsWith("{"));
-                server.Stop();
-            }
-        }
-
-        private static void ConnectCallback(IAsyncResult ar)
-        {
-            try
-            {
-                // Retrieve the socket from the state object.  
-                Socket client = (Socket)ar.AsyncState;
-
-                // Complete the connection.  
-                client.EndConnect(ar);
-
-                Console.WriteLine("Socket connected to {0}",
-                    client.RemoteEndPoint.ToString());
-
-                // Signal that the connection has been made.  
-                connectDone.Set();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
             }
         }
     }
