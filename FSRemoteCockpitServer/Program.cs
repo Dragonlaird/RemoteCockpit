@@ -13,12 +13,13 @@ using System.Windows.Forms;
 using RemoteCockpitClasses;
 using Serilog;
 
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
-    class Program
+    public class Program
     {
         private static FSCockpitServer server;
-        static void Main(string[] args)
+        private static RemoteServer consoleServer;
+        public static void Main(string[] args)
         {
             var logConfig = new LoggerConfiguration();
             logConfig.WriteTo.Console()
@@ -51,8 +52,8 @@ namespace RemoteCockpit
                         log.Information("Starting Remote Cockpit Manually");
                         if (server?.IsRunning != true)
                         {
-                            server = new FSCockpitServer(logConfig.CreateLogger());
-                            server.Start();
+                            consoleServer = new RemoteServer(logConfig.CreateLogger());
+                            consoleServer.Start();
                         }
                         break;
                     case "stop":
@@ -65,6 +66,10 @@ namespace RemoteCockpit
                                 Thread.Sleep(10);
                             }
                             server = null;
+                        }
+                        if(consoleServer?.IsRunning == true)
+                        {
+                            consoleServer.Stop();
                         }
                         break;
                 }

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Configuration.Install;
 
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
     public static class SelfInstaller
     {

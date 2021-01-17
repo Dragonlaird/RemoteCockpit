@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RemoteCockpitClasses;
 
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
     public class SocketListener
     {

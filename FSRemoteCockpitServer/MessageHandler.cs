@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using RemoteCockpitClasses;
 
 
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
     // Adapted from http://stackoverflow.com/questions/2443867/message-pump-in-net-windows-service
 

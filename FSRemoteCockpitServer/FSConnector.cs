@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Microsoft.FlightSimulator.SimConnect;
 using RemoteCockpitClasses;
 
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
     public class FSConnector : IDisposable
     {
@@ -114,7 +114,7 @@ namespace RemoteCockpit
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(ex.Message, EventLogEntryType.Error);
+                    WriteLog(string.Format("Unable to Start SimConnect Handler: {0}", ex.Message), EventLogEntryType.Error);
                     //Stop();
                 }
             }
@@ -292,9 +292,6 @@ namespace RemoteCockpit
                 case 0:
                     result = "SIMCONNECT_EXCEPTION_NONE";
                     break;
-                case 1:
-                    result = "SIMCONNECT_EXCEPTION_ERROR";
-                    break;
                 case 2:
                     result = "SIMCONNECT_EXCEPTION_SIZE_MISMATCH";
                     break;
@@ -402,6 +399,9 @@ namespace RemoteCockpit
                     break;
                 case 37:
                     result = "SIMCONNECT_EXCEPTION_OBJECT_SCHEDULE";
+                    break;
+                default:
+                    result = "SIMCONNECT_EXCEPTION_ERROR";
                     break;
             }
             return result;

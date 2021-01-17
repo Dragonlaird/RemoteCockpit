@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30404.54
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSCockpitServer", "FSRemoteCockpitServer\FSCockpitServer.csproj", "{7AE7FDAC-1ABB-4E92-BEAF-7DD5FCD70AE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteCockpitServer", "FSRemoteCockpitServer\RemoteCockpitServer.csproj", "{7AE7FDAC-1ABB-4E92-BEAF-7DD5FCD70AE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CockpitDisplay", "CockpitDisplay\CockpitDisplay.csproj", "{E5F55CEF-4F61-4D3B-98D8-4E4E035199F0}"
 EndProject
@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		04-Instrument Plugins.txt = 04-Instrument Plugins.txt
 		05-Instrument Designer.txt = 05-Instrument Designer.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSCockpitTests", "FSCockpitTests\FSCockpitTests.csproj", "{FED05E48-37D5-42B3-93A0-788BE27CB471}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,14 @@ Global
 		{1475AA73-204C-44FF-829A-2AABE9327F18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1475AA73-204C-44FF-829A-2AABE9327F18}.Release|x64.ActiveCfg = Release|Any CPU
 		{1475AA73-204C-44FF-829A-2AABE9327F18}.Release|x64.Build.0 = Release|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Debug|x64.Build.0 = Debug|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Release|x64.ActiveCfg = Release|Any CPU
+		{FED05E48-37D5-42B3-93A0-788BE27CB471}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

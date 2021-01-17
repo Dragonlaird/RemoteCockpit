@@ -1,5 +1,5 @@
 ﻿
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
     partial class ProjectInstaller
     {

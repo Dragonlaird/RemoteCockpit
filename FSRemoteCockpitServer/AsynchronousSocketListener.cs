@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using RemoteCockpitClasses;
 using Newtonsoft.Json;
 
-namespace RemoteCockpit
+namespace RemoteCockpitServer
 {
     /// <summary>
     /// Original code from: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-server-socket-example
