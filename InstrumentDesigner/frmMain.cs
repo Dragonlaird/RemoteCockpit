@@ -415,7 +415,7 @@ namespace InstrumentDesigner
             file.Write(Encoding.ASCII.GetBytes(configJson), 0, configJson.Length);
             file.Close();
             config.HasChanged = false;
-            MessageBox.Show("Configuration Saved.\r\rTo use this configuration, use the Publish menu.", "Config Saved");
+            MessageBox.Show("Configuration Saved.", "Config Saved");
         }
 
         private void Close_Click(object sender, EventArgs e)
@@ -430,6 +430,12 @@ namespace InstrumentDesigner
             ResetForm();
             config = new Configuration();
             configFilePath = "";
+        }
+
+        private void testInstrumentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmInstrumentTest frmTest = new frmInstrumentTest(config);
+            frmTest.ShowDialog();
         }
     }
 }

@@ -73,6 +73,8 @@ namespace InstrumentDesigner
             this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.cmdAddAnimation = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testInstrumentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.gpBasicInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtUpdateMS)).BeginInit();
@@ -85,12 +87,15 @@ namespace InstrumentDesigner
             // 
             // mnuMain
             // 
+            this.mnuMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
-            this.mnuBackground});
+            this.mnuBackground,
+            this.testToolStripMenuItem});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(981, 24);
+            this.mnuMain.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.mnuMain.Size = new System.Drawing.Size(1308, 30);
             this.mnuMain.TabIndex = 0;
             this.mnuMain.Text = "menuStrip1";
             // 
@@ -104,46 +109,46 @@ namespace InstrumentDesigner
             this.fileToolStripMenuItemSep,
             this.exitToolStripMenuItem});
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.mnuFile.Size = new System.Drawing.Size(46, 24);
             this.mnuFile.Text = "&File";
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.Close_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.LoadConfig);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveConfig);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveConfig);
             // 
             // fileToolStripMenuItemSep
             // 
             this.fileToolStripMenuItemSep.Name = "fileToolStripMenuItemSep";
-            this.fileToolStripMenuItemSep.Size = new System.Drawing.Size(111, 6);
+            this.fileToolStripMenuItemSep.Size = new System.Drawing.Size(221, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.CloseForm);
             // 
@@ -154,27 +159,27 @@ namespace InstrumentDesigner
             this.importImageToolStripMenuItem,
             this.resizeToolStripMenuItem});
             this.mnuBackground.Name = "mnuBackground";
-            this.mnuBackground.Size = new System.Drawing.Size(83, 20);
+            this.mnuBackground.Size = new System.Drawing.Size(102, 24);
             this.mnuBackground.Text = "&Background";
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.clearToolStripMenuItem.Text = "C&lear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.cmdClearBackground_Click);
             // 
             // importImageToolStripMenuItem
             // 
             this.importImageToolStripMenuItem.Name = "importImageToolStripMenuItem";
-            this.importImageToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.importImageToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.importImageToolStripMenuItem.Text = "&Load Image";
             this.importImageToolStripMenuItem.Click += new System.EventHandler(this.cmdLoadBackground_Click);
             // 
             // resizeToolStripMenuItem
             // 
             this.resizeToolStripMenuItem.Name = "resizeToolStripMenuItem";
-            this.resizeToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.resizeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.resizeToolStripMenuItem.Text = "&Resize";
             // 
             // openFileDialog
@@ -199,16 +204,19 @@ namespace InstrumentDesigner
             this.gpBasicInfo.Controls.Add(this.txtInstrumentName);
             this.gpBasicInfo.Controls.Add(this.lblInstrumentName);
             this.gpBasicInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gpBasicInfo.Location = new System.Drawing.Point(12, 28);
+            this.gpBasicInfo.Location = new System.Drawing.Point(16, 34);
+            this.gpBasicInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gpBasicInfo.Name = "gpBasicInfo";
-            this.gpBasicInfo.Size = new System.Drawing.Size(294, 396);
+            this.gpBasicInfo.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gpBasicInfo.Size = new System.Drawing.Size(392, 487);
             this.gpBasicInfo.TabIndex = 6;
             this.gpBasicInfo.TabStop = false;
             this.gpBasicInfo.Text = "Instrument Details";
             // 
             // txtUpdateMS
             // 
-            this.txtUpdateMS.Location = new System.Drawing.Point(103, 107);
+            this.txtUpdateMS.Location = new System.Drawing.Point(137, 132);
+            this.txtUpdateMS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtUpdateMS.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -220,7 +228,7 @@ namespace InstrumentDesigner
             0,
             0});
             this.txtUpdateMS.Name = "txtUpdateMS";
-            this.txtUpdateMS.Size = new System.Drawing.Size(120, 20);
+            this.txtUpdateMS.Size = new System.Drawing.Size(160, 23);
             this.txtUpdateMS.TabIndex = 18;
             this.txtUpdateMS.Value = new decimal(new int[] {
             50,
@@ -232,9 +240,10 @@ namespace InstrumentDesigner
             // 
             this.lblAircraft.AutoSize = true;
             this.lblAircraft.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAircraft.Location = new System.Drawing.Point(49, 165);
+            this.lblAircraft.Location = new System.Drawing.Point(65, 203);
+            this.lblAircraft.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblAircraft.Name = "lblAircraft";
-            this.lblAircraft.Size = new System.Drawing.Size(43, 13);
+            this.lblAircraft.Size = new System.Drawing.Size(57, 17);
             this.lblAircraft.TabIndex = 17;
             this.lblAircraft.Text = "Aircraft:";
             // 
@@ -247,9 +256,11 @@ namespace InstrumentDesigner
             this.dgAircraft.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Aircraft,
             this.Options});
-            this.dgAircraft.Location = new System.Drawing.Point(98, 160);
+            this.dgAircraft.Location = new System.Drawing.Point(131, 197);
+            this.dgAircraft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgAircraft.Name = "dgAircraft";
-            this.dgAircraft.Size = new System.Drawing.Size(188, 230);
+            this.dgAircraft.RowHeadersWidth = 51;
+            this.dgAircraft.Size = new System.Drawing.Size(251, 283);
             this.dgAircraft.TabIndex = 16;
             this.dgAircraft.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DeleteGridRow_Click);
             this.dgAircraft.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.EditGridRow_Change);
@@ -257,6 +268,7 @@ namespace InstrumentDesigner
             // Aircraft
             // 
             this.Aircraft.HeaderText = "Aircraft";
+            this.Aircraft.MinimumWidth = 6;
             this.Aircraft.Name = "Aircraft";
             this.Aircraft.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Aircraft.Width = 120;
@@ -264,6 +276,7 @@ namespace InstrumentDesigner
             // Options
             // 
             this.Options.HeaderText = "X";
+            this.Options.MinimumWidth = 6;
             this.Options.Name = "Options";
             this.Options.ToolTipText = "Delete Aircraft";
             this.Options.UseColumnTextForButtonValue = true;
@@ -273,18 +286,20 @@ namespace InstrumentDesigner
             // 
             this.txtCreateDate.AutoSize = true;
             this.txtCreateDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCreateDate.Location = new System.Drawing.Point(103, 138);
+            this.txtCreateDate.Location = new System.Drawing.Point(137, 170);
+            this.txtCreateDate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.txtCreateDate.Name = "txtCreateDate";
-            this.txtCreateDate.Size = new System.Drawing.Size(0, 13);
+            this.txtCreateDate.Size = new System.Drawing.Size(0, 17);
             this.txtCreateDate.TabIndex = 15;
             // 
             // lblCreateDate
             // 
             this.lblCreateDate.AutoSize = true;
             this.lblCreateDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCreateDate.Location = new System.Drawing.Point(49, 138);
+            this.lblCreateDate.Location = new System.Drawing.Point(65, 170);
+            this.lblCreateDate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCreateDate.Name = "lblCreateDate";
-            this.lblCreateDate.Size = new System.Drawing.Size(47, 13);
+            this.lblCreateDate.Size = new System.Drawing.Size(62, 17);
             this.lblCreateDate.TabIndex = 14;
             this.lblCreateDate.Text = "Created:";
             // 
@@ -292,9 +307,10 @@ namespace InstrumentDesigner
             // 
             this.lblUpdateMS.AutoSize = true;
             this.lblUpdateMS.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUpdateMS.Location = new System.Drawing.Point(32, 109);
+            this.lblUpdateMS.Location = new System.Drawing.Point(43, 134);
+            this.lblUpdateMS.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblUpdateMS.Name = "lblUpdateMS";
-            this.lblUpdateMS.Size = new System.Drawing.Size(64, 13);
+            this.lblUpdateMS.Size = new System.Drawing.Size(82, 17);
             this.lblUpdateMS.TabIndex = 12;
             this.lblUpdateMS.Text = "Update MS:";
             // 
@@ -303,9 +319,10 @@ namespace InstrumentDesigner
             this.cmbInstrumentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbInstrumentType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbInstrumentType.FormattingEnabled = true;
-            this.cmbInstrumentType.Location = new System.Drawing.Point(103, 76);
+            this.cmbInstrumentType.Location = new System.Drawing.Point(137, 94);
+            this.cmbInstrumentType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmbInstrumentType.Name = "cmbInstrumentType";
-            this.cmbInstrumentType.Size = new System.Drawing.Size(143, 21);
+            this.cmbInstrumentType.Size = new System.Drawing.Size(189, 25);
             this.cmbInstrumentType.TabIndex = 11;
             this.cmbInstrumentType.SelectedIndexChanged += new System.EventHandler(this.InstrumentType_Changed);
             // 
@@ -313,18 +330,20 @@ namespace InstrumentDesigner
             // 
             this.lblInstrumentType.AutoSize = true;
             this.lblInstrumentType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInstrumentType.Location = new System.Drawing.Point(62, 80);
+            this.lblInstrumentType.Location = new System.Drawing.Point(83, 98);
+            this.lblInstrumentType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblInstrumentType.Name = "lblInstrumentType";
-            this.lblInstrumentType.Size = new System.Drawing.Size(34, 13);
+            this.lblInstrumentType.Size = new System.Drawing.Size(44, 17);
             this.lblInstrumentType.TabIndex = 10;
             this.lblInstrumentType.Text = "Type:";
             // 
             // txtAuthor
             // 
             this.txtAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAuthor.Location = new System.Drawing.Point(103, 47);
+            this.txtAuthor.Location = new System.Drawing.Point(137, 58);
+            this.txtAuthor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtAuthor.Name = "txtAuthor";
-            this.txtAuthor.Size = new System.Drawing.Size(183, 20);
+            this.txtAuthor.Size = new System.Drawing.Size(243, 23);
             this.txtAuthor.TabIndex = 9;
             this.txtAuthor.TextChanged += new System.EventHandler(this.InstrumentAuthor_Changed);
             // 
@@ -332,18 +351,20 @@ namespace InstrumentDesigner
             // 
             this.lblAuthor.AutoSize = true;
             this.lblAuthor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAuthor.Location = new System.Drawing.Point(55, 51);
+            this.lblAuthor.Location = new System.Drawing.Point(73, 63);
+            this.lblAuthor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblAuthor.Name = "lblAuthor";
-            this.lblAuthor.Size = new System.Drawing.Size(41, 13);
+            this.lblAuthor.Size = new System.Drawing.Size(54, 17);
             this.lblAuthor.TabIndex = 8;
             this.lblAuthor.Text = "Author:";
             // 
             // txtInstrumentName
             // 
             this.txtInstrumentName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtInstrumentName.Location = new System.Drawing.Point(103, 18);
+            this.txtInstrumentName.Location = new System.Drawing.Point(137, 22);
+            this.txtInstrumentName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtInstrumentName.Name = "txtInstrumentName";
-            this.txtInstrumentName.Size = new System.Drawing.Size(183, 20);
+            this.txtInstrumentName.Size = new System.Drawing.Size(243, 23);
             this.txtInstrumentName.TabIndex = 7;
             this.txtInstrumentName.TextChanged += new System.EventHandler(this.InstrumentName_Changed);
             // 
@@ -351,9 +372,10 @@ namespace InstrumentDesigner
             // 
             this.lblInstrumentName.AutoSize = true;
             this.lblInstrumentName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInstrumentName.Location = new System.Drawing.Point(6, 22);
+            this.lblInstrumentName.Location = new System.Drawing.Point(8, 27);
+            this.lblInstrumentName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblInstrumentName.Name = "lblInstrumentName";
-            this.lblInstrumentName.Size = new System.Drawing.Size(90, 13);
+            this.lblInstrumentName.Size = new System.Drawing.Size(119, 17);
             this.lblInstrumentName.TabIndex = 6;
             this.lblInstrumentName.Text = "Instrument Name:";
             // 
@@ -368,10 +390,12 @@ namespace InstrumentDesigner
             this.gpBackground.Controls.Add(this.lblBackgroundPath);
             this.gpBackground.Controls.Add(this.pbBackgroundImage);
             this.gpBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gpBackground.Location = new System.Drawing.Point(312, 28);
-            this.gpBackground.MinimumSize = new System.Drawing.Size(230, 250);
+            this.gpBackground.Location = new System.Drawing.Point(416, 34);
+            this.gpBackground.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gpBackground.MinimumSize = new System.Drawing.Size(307, 308);
             this.gpBackground.Name = "gpBackground";
-            this.gpBackground.Size = new System.Drawing.Size(230, 396);
+            this.gpBackground.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gpBackground.Size = new System.Drawing.Size(307, 487);
             this.gpBackground.TabIndex = 7;
             this.gpBackground.TabStop = false;
             this.gpBackground.Text = "Background";
@@ -379,9 +403,10 @@ namespace InstrumentDesigner
             // cmdLoadBackground
             // 
             this.cmdLoadBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdLoadBackground.Location = new System.Drawing.Point(9, 81);
+            this.cmdLoadBackground.Location = new System.Drawing.Point(12, 100);
+            this.cmdLoadBackground.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmdLoadBackground.Name = "cmdLoadBackground";
-            this.cmdLoadBackground.Size = new System.Drawing.Size(75, 23);
+            this.cmdLoadBackground.Size = new System.Drawing.Size(100, 28);
             this.cmdLoadBackground.TabIndex = 9;
             this.cmdLoadBackground.Text = "Load...";
             this.cmdLoadBackground.UseVisualStyleBackColor = true;
@@ -390,9 +415,10 @@ namespace InstrumentDesigner
             // cmdClearBackground
             // 
             this.cmdClearBackground.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdClearBackground.Location = new System.Drawing.Point(9, 51);
+            this.cmdClearBackground.Location = new System.Drawing.Point(12, 63);
+            this.cmdClearBackground.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmdClearBackground.Name = "cmdClearBackground";
-            this.cmdClearBackground.Size = new System.Drawing.Size(75, 23);
+            this.cmdClearBackground.Size = new System.Drawing.Size(100, 28);
             this.cmdClearBackground.TabIndex = 8;
             this.cmdClearBackground.Text = "Clear...";
             this.cmdClearBackground.UseVisualStyleBackColor = true;
@@ -402,18 +428,20 @@ namespace InstrumentDesigner
             // 
             this.txtBackgroundPath.Enabled = false;
             this.txtBackgroundPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBackgroundPath.Location = new System.Drawing.Point(86, 18);
+            this.txtBackgroundPath.Location = new System.Drawing.Point(115, 22);
+            this.txtBackgroundPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtBackgroundPath.Name = "txtBackgroundPath";
-            this.txtBackgroundPath.Size = new System.Drawing.Size(136, 20);
+            this.txtBackgroundPath.Size = new System.Drawing.Size(180, 23);
             this.txtBackgroundPath.TabIndex = 7;
             // 
             // lblBackgroundPath
             // 
             this.lblBackgroundPath.AutoSize = true;
             this.lblBackgroundPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBackgroundPath.Location = new System.Drawing.Point(6, 22);
+            this.lblBackgroundPath.Location = new System.Drawing.Point(8, 27);
+            this.lblBackgroundPath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblBackgroundPath.Name = "lblBackgroundPath";
-            this.lblBackgroundPath.Size = new System.Drawing.Size(74, 13);
+            this.lblBackgroundPath.Size = new System.Drawing.Size(96, 17);
             this.lblBackgroundPath.TabIndex = 6;
             this.lblBackgroundPath.Text = "Relative Path:";
             // 
@@ -423,9 +451,10 @@ namespace InstrumentDesigner
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbBackgroundImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbBackgroundImage.Location = new System.Drawing.Point(6, 118);
+            this.pbBackgroundImage.Location = new System.Drawing.Point(8, 145);
+            this.pbBackgroundImage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pbBackgroundImage.Name = "pbBackgroundImage";
-            this.pbBackgroundImage.Size = new System.Drawing.Size(216, 216);
+            this.pbBackgroundImage.Size = new System.Drawing.Size(287, 265);
             this.pbBackgroundImage.TabIndex = 5;
             this.pbBackgroundImage.TabStop = false;
             // 
@@ -436,9 +465,11 @@ namespace InstrumentDesigner
             this.gpAnimations.Controls.Add(this.dgAnimations);
             this.gpAnimations.Controls.Add(this.cmdAddAnimation);
             this.gpAnimations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gpAnimations.Location = new System.Drawing.Point(550, 28);
+            this.gpAnimations.Location = new System.Drawing.Point(734, 34);
+            this.gpAnimations.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gpAnimations.Name = "gpAnimations";
-            this.gpAnimations.Size = new System.Drawing.Size(420, 396);
+            this.gpAnimations.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gpAnimations.Size = new System.Drawing.Size(560, 487);
             this.gpAnimations.TabIndex = 8;
             this.gpAnimations.TabStop = false;
             this.gpAnimations.Text = "Animations";
@@ -456,33 +487,42 @@ namespace InstrumentDesigner
             this.How,
             this.Edit,
             this.Delete});
-            this.dgAnimations.Location = new System.Drawing.Point(6, 53);
+            this.dgAnimations.Location = new System.Drawing.Point(8, 65);
+            this.dgAnimations.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgAnimations.Name = "dgAnimations";
-            this.dgAnimations.Size = new System.Drawing.Size(408, 337);
+            this.dgAnimations.RowHeadersWidth = 51;
+            this.dgAnimations.Size = new System.Drawing.Size(544, 415);
             this.dgAnimations.TabIndex = 1;
             this.dgAnimations.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EditDeleteAnimation_Click);
             // 
             // What
             // 
             this.What.HeaderText = "What";
+            this.What.MinimumWidth = 6;
             this.What.Name = "What";
             this.What.ReadOnly = true;
+            this.What.Width = 125;
             // 
             // When
             // 
             this.When.HeaderText = "When";
+            this.When.MinimumWidth = 6;
             this.When.Name = "When";
             this.When.ReadOnly = true;
+            this.When.Width = 125;
             // 
             // How
             // 
             this.How.HeaderText = "How";
+            this.How.MinimumWidth = 6;
             this.How.Name = "How";
             this.How.ReadOnly = true;
+            this.How.Width = 125;
             // 
             // Edit
             // 
             this.Edit.HeaderText = "E";
+            this.Edit.MinimumWidth = 6;
             this.Edit.Name = "Edit";
             this.Edit.Text = "E";
             this.Edit.ToolTipText = "Edit Animation";
@@ -492,6 +532,7 @@ namespace InstrumentDesigner
             // Delete
             // 
             this.Delete.HeaderText = "X";
+            this.Delete.MinimumWidth = 6;
             this.Delete.Name = "Delete";
             this.Delete.Text = "X";
             this.Delete.ToolTipText = "Delete Animation";
@@ -501,25 +542,42 @@ namespace InstrumentDesigner
             // cmdAddAnimation
             // 
             this.cmdAddAnimation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdAddAnimation.Location = new System.Drawing.Point(6, 18);
+            this.cmdAddAnimation.Location = new System.Drawing.Point(8, 22);
+            this.cmdAddAnimation.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cmdAddAnimation.Name = "cmdAddAnimation";
-            this.cmdAddAnimation.Size = new System.Drawing.Size(76, 27);
+            this.cmdAddAnimation.Size = new System.Drawing.Size(101, 33);
             this.cmdAddAnimation.TabIndex = 0;
             this.cmdAddAnimation.Text = "New...";
             this.cmdAddAnimation.UseVisualStyleBackColor = true;
             this.cmdAddAnimation.Click += new System.EventHandler(this.NewAnimation_Click);
             // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testInstrumentToolStripMenuItem});
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
+            this.testToolStripMenuItem.Text = "Test";
+            // 
+            // testInstrumentToolStripMenuItem
+            // 
+            this.testInstrumentToolStripMenuItem.Name = "testInstrumentToolStripMenuItem";
+            this.testInstrumentToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.testInstrumentToolStripMenuItem.Text = "Test Instrument";
+            this.testInstrumentToolStripMenuItem.Click += new System.EventHandler(this.testInstrumentToolStripMenuItem_Click);
+            // 
             // frmInstrumentDesigner
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(981, 434);
+            this.ClientSize = new System.Drawing.Size(1308, 534);
             this.Controls.Add(this.gpAnimations);
             this.Controls.Add(this.gpBackground);
             this.Controls.Add(this.gpBasicInfo);
             this.Controls.Add(this.mnuMain);
             this.MainMenuStrip = this.mnuMain;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmInstrumentDesigner";
             this.Text = "Instrument Designer";
             this.Resize += new System.EventHandler(this.FormSize_Changed);
@@ -583,6 +641,8 @@ namespace InstrumentDesigner
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testInstrumentToolStripMenuItem;
     }
 }
 

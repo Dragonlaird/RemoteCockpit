@@ -75,6 +75,12 @@
     <Compile Include="frmAnimation.Designer.cs">
       <DependentUpon>frmAnimation.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmInstrumentTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInstrumentTest.Designer.cs">
+      <DependentUpon>frmInstrumentTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmAnimation.resx">
       <DependentUpon>frmAnimation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInstrumentTest.resx">
+      <DependentUpon>frmInstrumentTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -114,6 +123,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InstrumentPlugins\InstrumentPlugins.csproj">
+      <Project>{6a197bac-121c-4d34-a215-14da7af32c86}</Project>
+      <Name>InstrumentPlugins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RemoteCockpitClasses\RemoteCockpitClasses.csproj">
       <Project>{2C1905B7-E26B-49BF-A521-3D9D2DE37CE1}</Project>
       <Name>RemoteCockpitClasses</Name>

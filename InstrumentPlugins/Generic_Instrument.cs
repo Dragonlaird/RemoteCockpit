@@ -597,7 +597,6 @@ namespace InstrumentPlugins
                                 if ((double)previousResult.Result > (double)currentResult.Result)
                                 {
                                     // Reached our target - no need for the timer anymore
-                                    RemoveTimer();
                                     previousResult.Result = currentResult.Result;
                                 }
                             }
@@ -607,10 +606,11 @@ namespace InstrumentPlugins
                                 if ((double)previousResult.Result < (double)currentResult.Result)
                                 {
                                     // Reached our target - no need for the timer anymore
-                                    RemoveTimer();
                                     previousResult.Result = currentResult.Result;
                                 }
                             }
+                            if(previousResult.Result == currentResult.Result)
+                                RemoveTimer();
                         }
                     }
                 }
@@ -619,6 +619,7 @@ namespace InstrumentPlugins
             catch (Exception ex)
             {
                 WriteLog("ExecuteAnimation: Failed to update latest values.", ex);
+                RemoveTimer();
             }
         }
 
