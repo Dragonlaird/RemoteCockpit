@@ -25,5 +25,6 @@ namespace RemoteCockpitClasses.Animations.Actions
         /// Thus: (360 * 0) / 200 = 0 degrees or (360 * 200) / 200 = 360 degrees
         /// </summary>
         public double MaximumValueExpected { get; set; } = 100;
+        public double MinimumValueExpected { get; set; } = 0;
     }
 }

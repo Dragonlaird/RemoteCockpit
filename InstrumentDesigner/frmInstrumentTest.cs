@@ -17,6 +17,8 @@ namespace InstrumentDesigner
     {
         private readonly Configuration _config;
         private Generic_Instrument instrument;
+        private delegate void SafeUpdateDelegate(object sender, string e);
+
         public frmInstrumentTest(Configuration config)
         {
             _config = config;
@@ -27,6 +29,8 @@ namespace InstrumentDesigner
         public void LoadInstrument()
         {
             instrument = new Generic_Instrument(300,300,_config);
+            instrument.UpdateFrequency = 3;
+            instrument.LogMessage += DebugMessage;
             this.Controls.Add(instrument.Control);
             dgSimVarValues.Rows.Clear();
             foreach(var simVar in instrument.RequiredValues.OrderBy(x=> x.Name))
@@ -35,21 +39,44 @@ namespace InstrumentDesigner
             }
         }
 
+        private void DebugMessage(object sender, string e)
+        {
+            if (!string.IsNullOrEmpty(e))
+            {
+                if (txtDebug.InvokeRequired)
+                {
+                    var d = new SafeUpdateDelegate(DebugMessage);
+                    ((Control)txtDebug).Invoke(d, new object[] { sender, e });
+                    return;
+                }
+                txtDebug.Text += string.Format("{0:HH:mm:ss} ({1}) {2}\r\n", DateTime.Now, sender?.GetType().Name ?? "Unknown", e);
+                while (txtDebug.Text.Count(x => x == '\n') > 200)
+                {
+                    txtDebug.Text = txtDebug.Text.Substring(txtDebug.Text.IndexOf('\n') + 1);
+                }
+                txtDebug.SelectionStart = txtDebug.Text.Length;
+                txtDebug.ScrollToCaret();
+            }
+        }
+
         private void SimVarValue_Changed(object sender, DataGridViewCellEventArgs e)
         {
-            var row = dgSimVarValues.Rows[e.RowIndex];
-            if (row.Cells["VariableValue"].Value == null)
-                row.Cells["VariableValue"].Value = 0;
-            var newValue = new ClientRequestResult
+            if (e != null && e.RowIndex > -1 && e.ColumnIndex > -1)
             {
-                Request = new ClientRequest
+                var row = dgSimVarValues.Rows[e.RowIndex];
+                if (row.Cells["VariableValue"].Value == null)
+                    row.Cells["VariableValue"].Value = 0;
+                var newValue = new ClientRequestResult
                 {
-                    Name = row.Cells["VariableName"].Value?.ToString(),
-                    Unit = row.Cells["VariableUnit"].Value?.ToString()
-                },
-                Result = double.Parse(row.Cells["VariableValue"].Value.ToString())
-            };
-            instrument.ValueUpdate(newValue);
+                    Request = new ClientRequest
+                    {
+                        Name = row.Cells["VariableName"].Value?.ToString(),
+                        Unit = row.Cells["VariableUnit"].Value?.ToString()
+                    },
+                    Result = double.Parse(row.Cells["VariableValue"].Value.ToString())
+                };
+                instrument.ValueUpdate(newValue);
+            }
         }
     }
 }

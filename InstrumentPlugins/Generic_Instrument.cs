@@ -37,6 +37,7 @@ namespace InstrumentPlugins
         private bool disposedValue;
         private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
+        private List<ClientRequestLimits> resultLimits = new List<ClientRequestLimits>();
         //private List<System.Timers.Timer> animateTimers = new List<System.Timers.Timer>();
         private System.Timers.Timer animateTimer;
         private List<double> animationSteps = new List<double>();
@@ -49,6 +50,7 @@ namespace InstrumentPlugins
         public event EventHandler Disposed;
         public event EventHandler<string> LogMessage;
         private bool isStarting = true;
+        private bool lastValue = false;
         public Generic_Instrument()
         {
             config = new Configuration();
@@ -132,7 +134,23 @@ namespace InstrumentPlugins
                     {
                         currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
                         previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
-                        //animateTimers.Add(null);
+                        var action = config.Animations.Where(x =>
+                            x.Triggers != null &&
+                            x.Triggers.Any(y =>
+                                y is AnimationTriggerClientRequest
+                                && y.Actions.Any(z => z is AnimationActionRotate)
+                            ))
+                            .Select(x =>
+                                x.Triggers.Where(y => y is AnimationTriggerClientRequest
+                                    && y.Actions.Any(y => y is AnimationActionRotate))
+                                .Select(x =>
+                                    x.Actions.FirstOrDefault(z => z is AnimationActionRotate))
+                                )
+                            .SingleOrDefault();
+                        resultLimits.Add(new ClientRequestLimits { 
+                            Request = clientRequest, 
+                            Max = action?.Count() == 1 ? ((AnimationActionRotate)action.First()).MaximumValueExpected : double.MaxValue, 
+                            Min = action?.Count() == 1 ? ((AnimationActionRotate)action.First()).MinimumValueExpected : double.MinValue });
                         animationSteps.Add(1);
                     }
                 }
@@ -353,9 +371,14 @@ namespace InstrumentPlugins
 
         private bool ShouldUpdate()
         {
-            var result = isStarting || currentResults.Any(x => previousResults.First(y => y.Request.Name == x.Request.Name && y.Request.Unit == x.Request.Unit).Result?.ToString() != x.Result?.ToString());
+            bool result=false;
+            lock (currentResults)
+                lock (previousResults)
+                    result = isStarting || lastValue || currentResults.Any(x => previousResults.First(y => y.Request.Name == x.Request.Name && y.Request.Unit == x.Request.Unit).Result?.ToString() != x.Result?.ToString());
             if (isStarting)
-                isStarting = false;
+                isStarting = false; 
+            if (lastValue)
+                lastValue = false;
             return result;
         }
 
@@ -557,10 +580,9 @@ namespace InstrumentPlugins
         private void StopTimer()
         {
             if (animateTimer != null)
-            {
-                if (animateTimer.Enabled)
-                    animateTimer.Stop();
-            }
+                lock (animateTimer)
+                    if (animateTimer?.Enabled == true)
+                        animateTimer?.Stop();
         }
 
         private void StartTimer()
@@ -584,34 +606,11 @@ namespace InstrumentPlugins
                 // Step our animation closer to the target value
                 lock (currentResults)
                 {
-                    foreach (var currentResult in currentResults)
+                    for (var triggerIdx = 0; triggerIdx < currentResults.Count;triggerIdx++)
                     {
-                        var triggerIdx = currentResults.IndexOf(currentResult);
                         var previousResult = previousResults[triggerIdx];
-                        if (previousResult.Result != currentResult.Result)
-                        {
-                            var stepValue = Math.Abs(animationSteps[triggerIdx]);
-                            if ((double)previousResult.Result < (double)currentResult.Result)
-                            {
-                                previousResult.Result = (double)previousResult.Result + stepValue;
-                                if ((double)previousResult.Result > (double)currentResult.Result)
-                                {
-                                    // Reached our target - no need for the timer anymore
-                                    previousResult.Result = currentResult.Result;
-                                }
-                            }
-                            if ((double)previousResult.Result > (double)currentResult.Result)
-                            {
-                                previousResult.Result = (double)previousResult.Result - stepValue;
-                                if ((double)previousResult.Result < (double)currentResult.Result)
-                                {
-                                    // Reached our target - no need for the timer anymore
-                                    previousResult.Result = currentResult.Result;
-                                }
-                            }
-                            if(previousResult.Result == currentResult.Result)
-                                RemoveTimer();
-                        }
+                        UpdateLatestValues(ref previousResult, currentResults[triggerIdx], resultLimits[triggerIdx], animationSteps[triggerIdx]);
+                        previousResults[triggerIdx] = previousResult;
                     }
                 }
                 UpdateControl();
@@ -620,6 +619,42 @@ namespace InstrumentPlugins
             {
                 WriteLog("ExecuteAnimation: Failed to update latest values.", ex);
                 RemoveTimer();
+            }
+        }
+
+        private void UpdateLatestValues(ref ClientRequestResult previousResult, ClientRequestResult latestResult, ClientRequestLimits limits, double stepValue)
+        {
+            if ((double)previousResult.Result != (double)latestResult.Result && stepValue != 0)
+            {
+                var nextVal = (double)previousResult.Result + stepValue;
+                if (nextVal > limits.Max)
+                    nextVal = nextVal - limits.Max + limits.Min;
+                if (nextVal < limits.Min)
+                    nextVal = limits.Max + nextVal - limits.Min;
+                // Need to modify this to check if nextValue has exceeded latestResult - taking Limits into account
+                // e.g. if stepValue = -10, latestResult = 0 and previousResult = 9; nextValue becomes 359
+                // but we should detect we have passed latestResult and reset nextValue to zero
+                if (stepValue < 0)
+                {
+                    if (nextVal <= (double)latestResult.Result && nextVal >= (double)latestResult.Result + stepValue)
+                    {
+                        // Direct - does not pass boundary
+                        nextVal = (double)latestResult.Result;
+                        lastValue = true;
+                    }
+                }
+                else
+                {
+                    if (nextVal >= (double)latestResult.Result && nextVal <= (double)latestResult.Result + stepValue)
+                    {
+                        // Direct - does not pass boundary
+                        nextVal = (double)latestResult.Result;
+                        lastValue = true;
+                    }
+                }
+                previousResult.Result = nextVal;
+                if (lastValue)
+                    RemoveTimer();
             }
         }
 
@@ -633,7 +668,7 @@ namespace InstrumentPlugins
                     {
                         Control.Invalidate(true);
                         Control.Update();
-                        PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
+                        //PaintControl(Control, new PaintEventArgs(Control.CreateGraphics(), Control.DisplayRectangle));
                     }));
                 }
                 else
@@ -787,9 +822,11 @@ namespace InstrumentPlugins
                     {
                         // We want to update the animation every 0.3 seconds - determine how much we should move it
                         // Modify the step size for our control
-                        lock (animationSteps)
-                            animationSteps[resultIdx] = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
-
+                        lock (animationSteps) {
+                            double stepSize = 0; // animationSteps[resultIdx];
+                            UpdateAnimationStepSize(ref stepSize, currentResults[resultIdx], lastResult, resultLimits[resultIdx], animationStepCount);
+                            animationSteps[resultIdx] = stepSize;
+                        }
                         // Start timer (or Restart timer if already running), to modify the animation speed correctly and start animating
                         StartTimer();
                     }
@@ -799,6 +836,52 @@ namespace InstrumentPlugins
             {
                 WriteLog("ValueUpdate: Invalid ClientRequestValue supplied.", ex);
             }
+        }
+        private void UpdateAnimationStepSize(ref double stepSize, ClientRequestResult latestResult, ClientRequestResult currentResult, ClientRequestLimits limits, double stepCount)
+        {
+            // Old method for stepSize = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;
+            var targetValue = (double)latestResult.Result;
+            var currentValue = (double)currentResult.Result;
+
+            // 2 possible differences between currnetValue and latestValue (distance)
+            // latestValue - currentValue, or
+            // (limits.Max - latestValue) - (currentValues + limits.Min)
+            // e.g. Latest = 10; Current = 350; the shortest distance is +20, longest distance is -340
+            // Latest = 350; Current = 10; shortest dostance = -20, longest distance is +340
+            // Calculate math.Abs(latestValue - currentValue) (direct route)
+            // Calculate Math.Abs(Max - latestValue) + Math.Abs(Min - currentValue) (indirect route)
+            // Smallest result provides shortest distance
+            // Max - target + current
+            // Max - current + target
+            // //target - current - Max
+
+            var direct = GetNumericDistance((double)currentResult.Result, targetValue, limits, true); //targetValue < currentValue ? currentValue - targetValue : targetValue - currentValue;
+            var indirect = GetNumericDistance((double)currentResult.Result, targetValue, limits, false); //targetValue < currentValue ? (limits.Max - currentValue + targetValue) : (limits.Max - targetValue + currentValue);
+            if (direct < indirect)
+            {
+                stepSize = direct / stepCount;
+                if (currentValue > targetValue)
+                {
+                    stepSize = -stepSize;
+                }
+            }
+            else
+            {
+                stepSize = indirect / stepCount;
+                if (currentValue < targetValue)
+                {
+                    stepSize = -stepSize;
+                }
+            }
+        }
+
+        private double GetNumericDistance(double currentValue, double targetValue, ClientRequestLimits limits, bool direct)
+        {
+            if (direct)
+            {
+                return targetValue < currentValue ? currentValue - targetValue : targetValue - currentValue;
+            }
+            return targetValue < currentValue ? (limits.Max - currentValue + targetValue) : (limits.Max - targetValue + currentValue);
         }
 
         private void UpdateStepCount(int serverUpdateTimeInMs)
