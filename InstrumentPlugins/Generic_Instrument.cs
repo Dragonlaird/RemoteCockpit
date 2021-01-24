@@ -145,12 +145,25 @@ namespace InstrumentPlugins
                                     && y.Actions.Any(y => y is AnimationActionRotate))
                                 .Select(x =>
                                     x.Actions.FirstOrDefault(z => z is AnimationActionRotate))
-                                )
-                            .SingleOrDefault();
-                        resultLimits.Add(new ClientRequestLimits { 
-                            Request = clientRequest, 
-                            Max = action?.Count() == 1 ? ((AnimationActionRotate)action.First()).MaximumValueExpected : double.MaxValue, 
-                            Min = action?.Count() == 1 ? ((AnimationActionRotate)action.First()).MinimumValueExpected : double.MinValue });
+                                ).FirstOrDefault();
+                        if (action != null)
+                        {
+                            resultLimits.Add(new ClientRequestLimits
+                            {
+                                Request = clientRequest,
+                                Max = action?.Count() == 1 ? ((AnimationActionRotate)action.First()).MaximumValueExpected : double.MaxValue,
+                                Min = action?.Count() == 1 ? ((AnimationActionRotate)action.First()).MinimumValueExpected : double.MinValue
+                            });
+                        }
+                        else
+                        {
+                            resultLimits.Add(new ClientRequestLimits
+                            {
+                                Request = clientRequest,
+                                Max = double.MaxValue,
+                                Min = double.MinValue
+                            });
+                        }
                         animationSteps.Add(1);
                     }
                 }

@@ -66,44 +66,69 @@ namespace InstrumentDesigner
         {
             // Populate Instrument Details Group
             populatingForm = true;
-            if (config == null)
+            var currentActivity = "Populating Form";
+            try
             {
-                config = new Configuration();
-            }
-            ResetForm();
-            txtInstrumentName.Text = config.Name;
-            txtAuthor.Text = config.Author;
-            if (!string.IsNullOrEmpty(config.Author))
-                txtAuthor.Enabled = false;
-            cmbInstrumentType.SelectedIndex = cmbInstrumentType.Items.IndexOf(config.Type.ToString());
-            txtUpdateMS.Text = config.AnimationUpdateInMs.ToString();
-            txtCreateDate.Text = string.Format("{0:dd MMMM yyyy HH:mm}", config.CreateDate);
+                if (config == null)
+                {
+                    currentActivity = "Clearing previous Configuration values";
+                    config = new Configuration();
+                }
+                currentActivity = "Resetting form";
+                ResetForm();
+                currentActivity = "Setting Instrument Name";
+                txtInstrumentName.Text = config.Name;
+                currentActivity = "Setting Instrument Author";
+                txtAuthor.Text = config.Author;
+                if (!string.IsNullOrEmpty(config.Author))
+                {
+                    currentActivity = "Disabling Author";
+                    txtAuthor.Enabled = false;
+                }
+                currentActivity = "Setting Instrument Type";
+                cmbInstrumentType.SelectedIndex = cmbInstrumentType.Items.IndexOf(config.Type.ToString());
+                currentActivity = "Setting Instrument Animation Speed";
+                txtUpdateMS.Text = config.AnimationUpdateInMs.ToString();
+                currentActivity = "Setting Instrument Create Date";
+                txtCreateDate.Text = string.Format("{0:dd MMMM yyyy HH:mm}", config.CreateDate);
 
-            // Populate Background
-            txtBackgroundPath.Text = config.BackgroundImagePath;
-            pbBackgroundImage.BackgroundImage = null;
-            if (!string.IsNullOrEmpty(config?.BackgroundImagePath))
-            {
-                var image = LoadImage(Path.Combine(cockpitDirectory, config.BackgroundImagePath));
-                if (image != null)
+                // Populate Background
+                currentActivity = "Setting Instrument Batchground Path";
+                txtBackgroundPath.Text = config.BackgroundImagePath;
+                currentActivity = "Clearing Instrument Background Image";
+                pbBackgroundImage.BackgroundImage = null;
+                if (!string.IsNullOrEmpty(config?.BackgroundImagePath))
                 {
-                    ShowImage(image, pbBackgroundImage);
+                    currentActivity = "Loading Instrument Background Image";
+                    var image = LoadImage(Path.Combine(cockpitDirectory, config.BackgroundImagePath));
+                    if (image != null)
+                    {
+                        currentActivity = "Displaying Instrument Background Image";
+                        ShowImage(image, pbBackgroundImage);
+                    }
+                }
+                foreach (var aircraft in config.Aircraft)
+                {
+                    currentActivity = string.Format("Setting Instrument Aircraft: {0}", aircraft);
+                    var idx = dgAircraft.Rows.Add();
+                    dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
+                }
+                foreach (var anim in config.Animations)
+                {
+                    currentActivity = string.Format("Loading Instrument Animation: {0}", anim?.Name);
+                    var rowIdx = dgAnimations.Rows.Add();
+                    dgAnimations.Rows[rowIdx].Cells["What"].Value = anim.Name?.ToString();
+                    if (anim.Triggers != null)
+                    {
+                        currentActivity = string.Format("Loading Instrument Animation '{0}' Triggers ({1} triggers)", anim?.Name, anim.Triggers?.Count());
+                        dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => x.Type.ToString()));
+                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => x.Actions?.Where(z => z != null && z.Type != null).Select(y => y?.Type.ToString())));
+                    }
                 }
             }
-            foreach (var aircraft in config.Aircraft)
+            catch(Exception ex)
             {
-                var idx = dgAircraft.Rows.Add();
-                dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
-            }
-            foreach (var anim in config.Animations)
-            {
-                var rowIdx = dgAnimations.Rows.Add();
-                dgAnimations.Rows[rowIdx].Cells["What"].Value = anim.Name?.ToString();
-                if (anim.Triggers != null)
-                {
-                    dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => x.Type.ToString()));
-                    dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => x.Actions.Select(y => y?.Type.ToString())));
-                }
+                throw new Exception(string.Format("Load Configuration Failed at step:\r{0}", currentActivity), ex);
             }
             populatingForm = false;
         }
@@ -115,7 +140,6 @@ namespace InstrumentDesigner
             if (image != null)
             {
                 var imageScaleFactor = (double)imageBox.Width / image.Width;
-                var aspectRatio = (double)image.Height / image.Width;
                 if (image.Height * imageScaleFactor > imageBox.Height)
                     imageScaleFactor = (double)imageBox.Height / image.Height;
                 try
@@ -155,36 +179,34 @@ namespace InstrumentDesigner
         private void LoadConfig(object sender, EventArgs e)
         {
             openFileDialog.Title = "Load Instrument Configuration";
-            openFileDialog.Filter = "Instrument Configurations|*.json";
+            openFileDialog.Filter = "Instrument Configurations (*.JSON)|*.json|Instrument Configurations (*.XML)|*.XML|All files (*.*)|*.*";
             openFileDialog.FileName = "";
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".\\GenericInstruments"));
             var dialogResult = openFileDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
-                var fileName = openFileDialog.FileName;
                 try
                 {
-                    var configJson = File.ReadAllText(fileName);
-                    config = JsonConvert.DeserializeObject<Configuration>(configJson);
-                    config.HasChanged = false;
+                    configFilePath = openFileDialog.FileName;
+                    cockpitDirectory = Path.Combine(Path.GetDirectoryName(configFilePath), "..");
+                    openFileDialog.InitialDirectory = Path.GetDirectoryName(configFilePath);
+                    config = new Configuration();
+                    config.Load(configFilePath);
                     if (config == null || config.Name == null)
                     {
                         throw new Exception("Configuration Load Failed");
                     }
-                    configFilePath = fileName;
-                    cockpitDirectory = Path.Combine(Path.GetDirectoryName(configFilePath), "..");
-                    openFileDialog.InitialDirectory = Path.GetDirectoryName(configFilePath);
                     PopulateConfigForm();
                 }
                 catch (IOException ex)
                 {
                     config = new Configuration();
-                    MessageBox.Show(string.Format("Error opening Configuration file:\r\r{0}\r\rError: {1}", fileName, ex.Message), "File Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Error opening Configuration file:\r\r{0}\r\r{1}", configFilePath, ex.Message), "File Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
                     config = new Configuration();
-                    MessageBox.Show(string.Format("Error reading Configuration file:\r\r{0}\r\rError: {1}", fileName, ex.Message), "Invalid File Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Error reading Configuration file:\r\r{0}\r\r{1}", configFilePath, ex.Message), "Invalid File Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 

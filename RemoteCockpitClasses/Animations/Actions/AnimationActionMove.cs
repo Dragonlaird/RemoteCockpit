@@ -7,7 +7,8 @@ namespace RemoteCockpitClasses.Animations.Actions
     public class AnimationActionMove : IAnimationAction
     {
         public AnimationActionTypeEnum Type { get; set; } = AnimationActionTypeEnum.MoveX;
-        public float MaxValue { get; set; }
-        public bool Invert { get; set; }
+        public float MaxValue { get; set; } = 100;
+        public float MinValue { get; set; } = 0;
+        public bool Invert { get; set; } = false;
     }
 }

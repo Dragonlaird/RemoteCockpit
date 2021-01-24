@@ -52,6 +52,7 @@
         {
           "Name": "MapZoom",
           "Type": 2,
+          "Actions": [],
           "ClickZone": {
             "x": 90,
             "y": 90,
@@ -66,6 +67,7 @@
         {
           "Name": "MapZoom",
           "Type": 2,
+          "Actions": [],
           "ClickZone": {
             "x": 0,
             "y": 90,
