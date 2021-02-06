@@ -45,7 +45,7 @@ namespace RemoteCockpitClasses.Animations
             {
                 return ConvertToXmlObject(type, obj);
             }
-            var isLocalClass = checkType.Namespace == "RemoteCockpitClasses.Animations" || (checkType?.IsInterface ?? false);
+            var isLocalClass = checkType?.Namespace == "RemoteCockpitClasses.Animations" || (checkType?.IsInterface ?? false);
             if (isLocalClass)
             {
                 var assignableClasses = GetAssignableClasses(checkType);
@@ -232,18 +232,22 @@ namespace RemoteCockpitClasses.Animations
                             // Determine which underlying type is enumerated
                             if (((object[])actualValue).Length > 0)
                             {
-                                var elementType = ((object[])actualValue)[0].GetType();
-                                var elementInterfaces = elementType.GetInterfaces();
-                                if (elementInterfaces.Any(x => x == typeof(Actions.IAnimationAction)))
-                                    actualValue = ((Array)actualValue).Cast<Actions.IAnimationAction>();
-                                if (elementInterfaces.Any(x => x == typeof(Triggers.IAnimationTrigger)))
-                                    actualValue = ((Array)actualValue).Cast<Triggers.IAnimationTrigger>();
-                                if (elementInterfaces.Any(x => x == typeof(Items.IAnimationItem)))
-                                    actualValue = ((Array)actualValue).Cast<Items.IAnimationItem>();
-                                if (result.GetType().GetProperty(propertyName).PropertyType == typeof(AnimationXMLConverter))
-                                    actualValue = new AnimationXMLConverter((IEnumerable<object>)actualValue);
-                                else
-                                    actualValue = Convert.ChangeType(actualValue, result.GetType().GetProperty(propertyName).PropertyType);
+                                var firstObject = ((object[])actualValue).FirstOrDefault();
+                                if (firstObject != null)
+                                {
+                                    var elementType = firstObject.GetType();
+                                    var elementInterfaces = elementType.GetInterfaces();
+                                    if (elementInterfaces.Any(x => x == typeof(Actions.IAnimationAction)))
+                                        actualValue = ((Array)actualValue).Cast<Actions.IAnimationAction>();
+                                    if (elementInterfaces.Any(x => x == typeof(Triggers.IAnimationTrigger)))
+                                        actualValue = ((Array)actualValue).Cast<Triggers.IAnimationTrigger>();
+                                    if (elementInterfaces.Any(x => x == typeof(Items.IAnimationItem)))
+                                        actualValue = ((Array)actualValue).Cast<Items.IAnimationItem>();
+                                    if (result.GetType().GetProperty(propertyName).PropertyType == typeof(AnimationXMLConverter))
+                                        actualValue = new AnimationXMLConverter((IEnumerable<object>)actualValue);
+                                    else
+                                        actualValue = Convert.ChangeType(actualValue, result.GetType().GetProperty(propertyName).PropertyType);
+                                }
                             }
                         }
                         result.GetType().GetProperty(propertyName).SetValue(result, actualValue);

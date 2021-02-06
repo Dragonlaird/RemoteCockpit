@@ -4,7 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   vc:minVersion="1.1">
   <Name>Generic Bearing Indicator</Name>
-  <Type>3</Type>
+  <Type>11</Type>
   <Author>Dragonlaird</Author>
   <CreateDate>2021-01-27T06:45:00</CreateDate>
   <Aircraft>Generic</Aircraft>

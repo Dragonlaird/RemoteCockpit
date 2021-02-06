@@ -18,7 +18,7 @@ namespace FSServiceInstaller
             try
             {
                 var currentFolder = Assembly.GetExecutingAssembly().Location;
-                var remoteCockpitPath = Path.GetFullPath(Path.Combine(currentFolder, "..\\RemoteCockpit.exe"));
+                var remoteCockpitPath = Path.GetFullPath(Path.Combine(currentFolder, "..\\RemoteCockpitServer.exe"));
                 if (File.Exists(remoteCockpitPath))
                 {
                     if (args?.Contains("install") == true || args?.Contains("-install") == true)
