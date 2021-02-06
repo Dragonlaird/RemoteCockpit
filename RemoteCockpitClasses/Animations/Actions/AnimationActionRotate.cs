@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace RemoteCockpitClasses.Animations.Actions
 {
+    [XmlType("Action")]
     public class AnimationActionRotate : IAnimationAction
     {
+        [XmlAttribute(AttributeName = "type")]
         public AnimationActionTypeEnum Type => AnimationActionTypeEnum.Rotate;
         /// <summary>
         /// The relative point to rotate around.

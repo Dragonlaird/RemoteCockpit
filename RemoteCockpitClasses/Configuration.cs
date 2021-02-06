@@ -13,6 +13,7 @@ using System.Xml.Serialization;
 namespace RemoteCockpitClasses.Animations
 {
     [DebuggerDisplay("\\{Configuration\\} {Name}")]
+    [XmlRoot("InstrumentDefinition")]
     public class Configuration
     {
         private string _name;
@@ -22,7 +23,7 @@ namespace RemoteCockpitClasses.Animations
         private string _backgroundImagePath;
         private string[] _aircraft;
         private int _animationUpdateInMs;
-        private IAnimationItem[] _animations;
+        private AnimationXMLConverter _animations;
         public Configuration()
         {
 
@@ -104,7 +105,7 @@ namespace RemoteCockpitClasses.Animations
             BackgroundImagePath = null;
             Aircraft = new string[0];
             AnimationUpdateInMs = 50;
-            Animations = new IAnimationItem[0];
+            Animations = new AnimationXMLConverter();
             HasChanged = false;
         }
 
@@ -120,15 +121,23 @@ namespace RemoteCockpitClasses.Animations
             }
         }
 
+        [XmlElement("Name")]
         public string Name { get { return _name; } set { if (_name != value) { _name = value; HasChanged = true; } } }
+        [XmlElement("Author")]
         public string Author { get { return _author; } set { if (_author != value) { _author = value; HasChanged = true; } } }
+        [XmlElement("Type")]
         public InstrumentType Type { get { return _type; } set { if (_type != value) { _type = value; HasChanged = true; } } }
+        [XmlElement("CreateDate")]
         public DateTime CreateDate { get { return _createDate; } set { if (_createDate != value) { _createDate = value; HasChanged = true; } } }
+        [XmlElement("BackgroundImagePath")]
         public string BackgroundImagePath { get { return _backgroundImagePath; } set { if (_backgroundImagePath != value) { _backgroundImagePath = value; HasChanged = true; } } }
+        [XmlElement("Aircraft")]
         public string [] Aircraft { get { return _aircraft ?? new string[0]; } set { if (_aircraft != value) { _aircraft = value; HasChanged = true; } } }
+        [XmlElement("AnimationUpdateInMs")]
         public int AnimationUpdateInMs { get { return _animationUpdateInMs; } set { if (_animationUpdateInMs != value) { _animationUpdateInMs = value; HasChanged = true; } } }
-        [JsonConverter(typeof(ConcreteConverter<AnimationDrawing[]>))]
-        public IAnimationItem[] Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }
+        [JsonConverter(typeof(ConcreteJSONConverter<AnimationDrawing[]>))]
+        [XmlElement("Animations")]
+        public AnimationXMLConverter Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }
         [JsonIgnore]
         [XmlIgnore]
         public ClientRequest[] ClientRequests
@@ -138,8 +147,8 @@ namespace RemoteCockpitClasses.Animations
                 if (Animations == null)
                     return new ClientRequest[0];
                 return Animations
-                    .Where(x => x.Triggers?.Any(y => y is AnimationTriggerClientRequest) == true)
-                    .SelectMany(x => x.Triggers?
+                    .Where(x => ((IAnimationItem)x).Triggers?.Any(y => y is AnimationTriggerClientRequest) == true)
+                    .SelectMany(x => ((IAnimationItem)x).Triggers?
                         .Where(y => y is AnimationTriggerClientRequest)
                         .Select(y => ((AnimationTriggerClientRequest)y).Request))
                     .ToArray();

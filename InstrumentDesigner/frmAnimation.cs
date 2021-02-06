@@ -130,7 +130,7 @@ namespace InstrumentDesigner
                     {
                         foreach (var t in _animation.Triggers)
                         {
-                            trigger = t;
+                            trigger = (IAnimationTrigger)t;
                             gdAnimationTriggers.Rows.Add(new object[] { trigger.Name, trigger.Type });
                         }
                     }
@@ -145,7 +145,7 @@ namespace InstrumentDesigner
                     gpAnimationActionMoveX.Visible = false;
                     if (gdAnimationTriggers.SelectedRows.Count == 1 && _animation.Triggers != null)
                     {
-                        trigger = _animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"]?.Value?.ToString());
+                        trigger = ((IEnumerable<IAnimationTrigger>)_animation.Triggers).FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"]?.Value?.ToString());
                         if (trigger != null)
                         {
                             lblAnimationActions.Visible = true;
@@ -156,7 +156,7 @@ namespace InstrumentDesigner
                                 foreach (var action in trigger.Actions)
                                 {
                                     var rowIdx = dgAnimationActions.Rows.Add();
-                                    var itemToSet = ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items[((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items.IndexOf(action.Type)];
+                                    var itemToSet = ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items[((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Items.IndexOf(((IAnimationAction)action).Type)];
                                     ((DataGridViewComboBoxCell)dgAnimationActions.Rows[rowIdx].Cells["ActionType"]).Value = itemToSet;
                                 }
                         }
@@ -332,7 +332,7 @@ namespace InstrumentDesigner
                 var senderGrid = (DataGridView)sender;
                 if (senderGrid.SelectedRows.Count == 1)
                 {
-                    var trigger = _animation.Triggers?.FirstOrDefault(x => x.Name == senderGrid.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+                    var trigger = _animation.Triggers?.FirstOrDefault(x => ((IAnimationTrigger)x).Name == senderGrid.SelectedRows[0].Cells["Trigger"].Value?.ToString());
                     switch (senderGrid.SelectedRows[0].Cells["Type"].EditedFormattedValue?.ToString())
                     {
                         case "ClientRequest":
@@ -365,11 +365,11 @@ namespace InstrumentDesigner
                 // New row being added - need to also add to Animation config
                 if(_animation.Triggers == null)
                 {
-                    _animation.Triggers = new IAnimationTrigger[0];
+                    _animation.Triggers = new AnimationXMLConverter();
                 }
-                var newAnimations = _animation.Triggers.ToList();
-                newAnimations.Add(new AnimationTriggerClientRequest { Name = "", Actions = new IAnimationAction[0], Request = new ClientRequest() });
-                _animation.Triggers = newAnimations.ToArray();
+                var newAnimations = _animation.Triggers;
+                newAnimations.ToList().Add(new AnimationTriggerClientRequest { Name = "", Actions = new AnimationXMLConverter(), Request = new ClientRequest() });
+                _animation.Triggers = newAnimations;
             }
         }
 
@@ -382,10 +382,10 @@ namespace InstrumentDesigner
             txtAnimationClientRequestDescription.Text = selectedVariable.Value.Description ?? "";
             if (!populatingForm)
             {
-                var trigger = (AnimationTriggerClientRequest)_animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+                var trigger = (AnimationTriggerClientRequest)_animation.Triggers.FirstOrDefault(x => ((IAnimationTrigger)x).Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
                 var triggerId = _animation.Triggers.ToList().IndexOf(trigger);
                 trigger.Request = new ClientRequest { Name = selectedVariableName, Unit = selectedVariable.Value.DefaultUnit };
-                _animation.Triggers[triggerId] = trigger;
+                _animation.Triggers.ToArray()[triggerId] = trigger;
             }
         }
 
@@ -402,16 +402,16 @@ namespace InstrumentDesigner
                 var senderGrid = (DataGridView)sender;
                 var colIdx = e.ColumnIndex;
                 var colName = senderGrid.Columns[colIdx].Name?.ToString();
-                var trigger = _animation.Triggers[e.RowIndex];
+                var trigger = _animation.Triggers.ToArray()[e.RowIndex];
                 if (colName == "Trigger")
                 {
-                    trigger.Name = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
+                    ((IAnimationTrigger)trigger).Name = senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
                 }
                 if(colName == "Type")
                 {
-                    trigger.Type = (AnimationTriggerTypeEnum)Enum.Parse(typeof(AnimationTriggerTypeEnum), senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString());
+                    ((IAnimationTrigger)trigger).Type = (AnimationTriggerTypeEnum)Enum.Parse(typeof(AnimationTriggerTypeEnum), senderGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString());
                 }
-                _animation.Triggers[e.RowIndex] = trigger;
+                _animation.Triggers.ToArray()[e.RowIndex] = trigger;
             }
         }
 
@@ -466,7 +466,7 @@ namespace InstrumentDesigner
         {
             if (_animation != null && !populatingForm && gdAnimationTriggers.SelectedRows.Count == 1)
             {
-                return _animation.Triggers.FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+                return ((IEnumerable<IAnimationTrigger>)_animation.Triggers).FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
             }
             return null;
         }
@@ -477,8 +477,8 @@ namespace InstrumentDesigner
             {
                 var actionType = (AnimationActionTypeEnum)Enum.Parse(typeof(AnimationActionTypeEnum),dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value.ToString());
                 var trigger = GetSelectedTrigger();
-                if (trigger != null && trigger.Actions.Any(x=> x.Type == actionType))
-                    return trigger.Actions.First(x => x.Type == actionType);
+                if (trigger != null && trigger.Actions.Any(x=> ((IAnimationAction)x).Type == actionType))
+                    return ((IEnumerable<IAnimationAction>)trigger.Actions).First(x => x.Type == actionType);
             }
             return null;
         }
@@ -559,7 +559,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionClip)GetSelectedAction();
-                ((AnimationActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).Style = ((AnimateActionClipEnum)cmbAnimationActionStyle.Items[cmbAnimationActionStyle.SelectedIndex]);
+                ((AnimationActionClip)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).Style = ((AnimateActionClipEnum)cmbAnimationActionStyle.Items[cmbAnimationActionStyle.SelectedIndex]);
             }
         }
 
@@ -568,7 +568,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionClip)GetSelectedAction();
-                ((AnimationActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).StartPoint.X = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionClip)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).StartPoint.X = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -577,7 +577,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionClip)GetSelectedAction();
-                ((AnimationActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).StartPoint.Y = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionClip)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).StartPoint.Y = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -586,7 +586,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionClip)GetSelectedAction();
-                ((AnimationActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.X = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionClip)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.X = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -595,7 +595,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionClip)GetSelectedAction();
-                ((AnimationActionClip)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.Y = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionClip)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).EndPoint.Y = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -604,7 +604,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionRotate)GetSelectedAction();
-                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).CentrePoint.X = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionRotate)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).CentrePoint.X = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -613,7 +613,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionRotate)GetSelectedAction();
-                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).CentrePoint.Y = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionRotate)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).CentrePoint.Y = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -622,7 +622,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionRotate)GetSelectedAction();
-                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).MaximumValueExpected = (float)((NumericUpDown)sender).Value;
+                ((AnimationActionRotate)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).MaximumValueExpected = (float)((NumericUpDown)sender).Value;
             }
         }
 
@@ -631,7 +631,7 @@ namespace InstrumentDesigner
             if (_animation != null && !populatingForm)
             {
                 var action = (AnimationActionRotate)GetSelectedAction();
-                ((AnimationActionRotate)_animation.Triggers.First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).RotateClockwise = ((CheckBox)sender).Checked;
+                ((AnimationActionRotate)((IEnumerable<IAnimationTrigger>)_animation.Triggers).First(x => x == GetSelectedTrigger()).Actions.First(x => x == action)).RotateClockwise = ((CheckBox)sender).Checked;
             }
         }
 
@@ -644,10 +644,10 @@ namespace InstrumentDesigner
                 var trigger = GetSelectedTrigger();
                 var changedCell = (DataGridViewComboBoxCell)((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
                 var newValue = changedCell.Value?.ToString();
-                if(e.RowIndex >= trigger.Actions.Length)
+                if(e.RowIndex >= trigger.Actions.Count())
                 {
                     // New Row added
-                    if(!trigger.Actions.Any(x=> x.Type.ToString() == newValue))
+                    if(!trigger.Actions.Any(x=> ((IAnimationAction)x).Type.ToString() == newValue))
                     {
                         // User is permitted to add this action type - not already in use
                         var actionList = trigger.Actions.ToList();
@@ -666,7 +666,8 @@ namespace InstrumentDesigner
                                 actionList.Add(new AnimationActionMove { Type = AnimationActionTypeEnum.MoveY });
                                 break;
                         }
-                        _animation.Triggers[_animation.Triggers.ToList().IndexOf(trigger)].Actions = actionList.ToArray();
+                        var iPos = _animation.Triggers.AsEnumerable().IndexOf(trigger);
+                        ((IEnumerable<IAnimationTrigger>)_animation.Triggers).ToArray()[iPos].Actions = (AnimationXMLConverter)actionList.AsEnumerable<object>();
                     }
                     //((DataGridView)sender).Rows[e.RowIndex].Selected = true;
                 }
@@ -681,7 +682,7 @@ namespace InstrumentDesigner
             {
                 // Check if the selection action type has already been used
                 var trigger = GetSelectedTrigger();
-                var usedActions = trigger.Actions.Select(x => x.Type).ToList();
+                var usedActions = trigger.Actions.Select(x => ((IAnimationAction)x).Type).ToList();
                 var selectedAction = dgAnimationActions.Rows[e.RowIndex].Cells["ActionType"].Value;
                 var selectedValue = e.FormattedValue;
                 if (usedActions.Any(x => x.ToString() == selectedValue?.ToString() && usedActions.IndexOf(x) != e.RowIndex))
@@ -705,7 +706,7 @@ namespace InstrumentDesigner
             {
                 // Check if the selection action type has already been used
                 var trigger = GetSelectedTrigger();
-                var usedActions = trigger.Actions.Select(x => x.Type).ToList();
+                var usedActions = trigger.Actions.Select(x => ((IAnimationAction)x).Type).ToList();
                 var selectedAction = dgAnimationActions.Rows[e.RowIndex].Cells["ActionType"].Value;
                 if (usedActions.Any(x => x.ToString() == selectedAction?.ToString() && usedActions.IndexOf(x) != e.RowIndex))
                 {
@@ -724,14 +725,20 @@ namespace InstrumentDesigner
         {
             if (_animation != null && !populatingForm)
             {
-                var actionList = _animation.Triggers[_animation.Triggers.ToList().IndexOf(GetSelectedTrigger())].Actions?.ToList();
+                var actionList = ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.IndexOf(GetSelectedTrigger())]).Actions.ToList();
                 if (e.RowIndex < actionList.Count)
                 {
                     actionList.Remove(actionList[e.RowIndex]);
-                    _animation.Triggers[_animation.Triggers.ToList().IndexOf(GetSelectedTrigger())].Actions = actionList.ToArray();
+                    ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.AsEnumerable().IndexOf(GetSelectedTrigger())]).Actions = (AnimationXMLConverter)actionList.AsEnumerable<object>();
                 }
                 PopulateTab(2);
             }
+        }
+
+        public static int GetPosition<IEnumerable>(IEnumerable<object> target, object item)
+        {
+            var arrItems = target.ToArray();
+            return Array.IndexOf(arrItems, item);
         }
 
         private void AnimationActionMoveMax_Changed(object sender, EventArgs e)
@@ -742,7 +749,7 @@ namespace InstrumentDesigner
                 var action = (AnimationActionMove)GetSelectedAction();
                 var rowIdx = dgAnimationActions.Rows.IndexOf(dgAnimationActions.SelectedRows[0]);
                 action.MaxValue = (float)txtAnimationActionMoveMax.Value;
-                _animation.Triggers[_animation.Triggers.ToList().IndexOf(trigger)].Actions[rowIdx] = action;
+                ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.IndexOf(trigger)]).Actions.ToArray()[rowIdx] = action;
             }
         }
 
@@ -754,7 +761,7 @@ namespace InstrumentDesigner
                 var action = (AnimationActionMove)GetSelectedAction();
                 var rowIdx = dgAnimationActions.Rows.IndexOf(dgAnimationActions.SelectedRows[0]);
                 action.Invert = cbAnimationActionMoveInvert.Checked;
-                _animation.Triggers[_animation.Triggers.ToList().IndexOf(trigger)].Actions[rowIdx] = action;
+                ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.IndexOf(trigger)]).Actions.ToArray()[rowIdx] = action;
             }
         }
 

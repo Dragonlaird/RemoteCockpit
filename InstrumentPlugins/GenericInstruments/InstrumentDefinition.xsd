@@ -1,246 +1,234 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xsd:schema
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
   elementFormDefault="qualified"
   vc:minVersion="1.1">
 
   <!--Instrument Root Element-->
-  <xs:element name="InstrumentDefinition">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Author" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="CreateDate" type="xs:string" />
-        <xs:element name="Aircraft" type="xs:string" />
-        <xs:element name="AnimationUpdateInMs" type="xs:unsignedByte" />
-        <xs:element name="Animations" maxOccurs="1">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Animation" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="AnimationImage"/>
-                <xs:alternative test="@type = 1" type="AnimationDrawing"/>
-                <xs:alternative test="@type = 2" type="AnimationExternal"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:element name="InstrumentDefinition">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="xsd:string" />
+        <xsd:element name="Type" type="xsd:unsignedByte" />
+        <xsd:element name="Author" type="xsd:string" />
+        <xsd:element name="CreateDate" type="xsd:string" />
+        <xsd:element name="Aircraft" type="xsd:string" />
+        <xsd:element name="AnimationUpdateInMs" type="xsd:unsignedByte" />
+        <xsd:element name="BackgroundImagePath" type="xsd:string"/>
+        <xsd:element name="Animations" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Animation" type="AnimationImage" maxOccurs="unbounded">
+                <xsd:alternative test="@type = 1" type="AnimationDrawing"/>
+                <xsd:alternative test="@type = 2" type="AnimationExternal"/>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
 
   <!--Animation Elements-->
   <!--Animation Image-->
-  <xs:element name="AnimationImage">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="LastAppliedValue" type="xs:unsignedInteger" />
-        <xs:element name="Triggers" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Trigger" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="AnimationTimer"/>
-                <xs:alternative test="@type = 1" type="AnimationClientRequest"/>
-                <xs:alternative test="@type = 2" type="AnimationMouseClick"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="AnimationImage">
+    <xsd:sequence>
+        <xsd:element name="Name" type="xsd:string" />
+        <xsd:element name="LastAppliedValue" type="xsd:float" />
+        <xsd:element name="Triggers" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Trigger" type="TriggerTimer" maxOccurs="unbounded">
+                <xsd:alternative test="@type = 1" type="TriggerClientRequest"/>
+                <xsd:alternative test="@type = 2" type="TriggerMouseClick"/>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Animation Drawing-->
-  <xs:element name="AnimationDrawing">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="LastAppliedValue" type="xs:unsignedInteger" />
-        <xs:element name="FillMethod" type="xs.unsignedByte" />
-        <xs:element name="Triggers" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Trigger" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="AnimationTimer"/>
-                <xs:alternative test="@type = 1" type="AnimationClientRequest"/>
-                <xs:alternative test="@type = 2" type="AnimationMouseClick"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="AnimationDrawing">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="Type" type="xsd:unsignedByte" />
+      <xsd:element name="LastAppliedValue" type="xsd:float" />
+      <xsd:element name="FillMethod" type="xs.unsignedByte" />
+      <xsd:element name="Triggers" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Trigger" type="TriggerTimer" maxOccurs="unbounded">
+              <xsd:alternative test="@type = 1" type="TriggerClientRequest"/>
+              <xsd:alternative test="@type = 2" type="TriggerMouseClick"/>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Animation External-->
-  <xs:element name="AnimationExternal">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="LastAppliedValue" type="xs:unsignedInteger" />
-        <xs:element name="Triggers" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Trigger" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="TriggerTimer"/>
-                <xs:alternative test="@type = 1" type="TriggerClientRequest"/>
-                <xs:alternative test="@type = 2" type="TriggerMouseClick"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="AnimationExternal">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="Type" type="xsd:unsignedByte" />
+      <xsd:element name="LastAppliedValue" type="xsd:float" />
+      <xsd:element name="Triggers" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Trigger" type="TriggerTimer" maxOccurs="unbounded">
+              <xsd:alternative test="@type = 1" type="TriggerClientRequest"/>
+              <xsd:alternative test="@type = 2" type="TriggerMouseClick"/>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Trigger Elements-->
   <!--Trigger Mouse Click-->
-  <xs:element name="TriggerTimer">
-    <xs:complexType>
-      <xs:sequence maxOccurs="unbounded">
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="ELpasedTimeInMs" type="xs:unsignedInt"/>
-        <xs:element name="Actions" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Action" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="ActionRotate"/>
-                <xs:alternative test="@type = 1" type="ActionMove"/>
-                <xs:alternative test="@type = 2" type="ActionMove"/>
-                <xs:alternative test="@type = 3" type="ActionClip"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="TriggerTimer">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="ElapsedTimeInMs" type="xsd:unsignedInt"/>
+      <xsd:element name="Actions" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Action" type="ActionRotate" maxOccurs="unbounded">
+              <xsd:alternative test="@type = 1" type="ActionMove"/>
+              <xsd:alternative test="@type = 2" type="ActionMove"/>
+              <xsd:alternative test="@type = 3" type="ActionClip"/>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Trigger Client Request-->
-  <xs:element name="TriggerClientRequest">
-    <xs:complexType>
-      <xs:sequence maxOccurs="unbounded">
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="Request" type="ClientRequest" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="Actions" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Action" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="ActionRotate"/>
-                <xs:alternative test="@type = 1" type="ActionMove"/>
-                <xs:alternative test="@type = 2" type="ActionMove"/>
-                <xs:alternative test="@type = 3" type="ActionClip"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="TriggerClientRequest">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="Request" type="ClientRequest" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Actions" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Action" type="ActionRotate" maxOccurs="unbounded">
+              <xsd:alternative test="@type = 1" type="ActionMove"/>
+              <xsd:alternative test="@type = 2" type="ActionMove"/>
+              <xsd:alternative test="@type = 3" type="ActionClip"/>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Trigger Mouse Click-->
-  <xs:element name="TriggerMouseClick">
-    <xs:complexType>
-      <xs:sequence maxOccurs="unbounded">
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Type" type="xs:unsignedByte" />
-        <xs:element name="ClickZone" type="Rectangle"/>
-        <xs:element name="Actions" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Action" maxOccurs="unbounded">
-                <xs:alternative test="@type = 0" type="ActionRotate"/>
-                <xs:alternative test="@type = 1" type="ActionMove"/>
-                <xs:alternative test="@type = 2" type="ActionMove"/>
-                <xs:alternative test="@type = 3" type="ActionClip"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="TriggerMouseClick">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="ClickZone" type="Rectangle"/>
+      <xsd:element name="Actions" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Action" type="ActionRotate" maxOccurs="unbounded">
+              <xsd:alternative test="@type = 1" type="ActionMove"/>
+              <xsd:alternative test="@type = 2" type="ActionMove"/>
+              <xsd:alternative test="@type = 3" type="ActionClip"/>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Action Components-->
   <!--Action Clip-->
-  <xs:element name="ActionClip">
-    <xs:complexType>
-      <xs:sequence maxOccurs="unbounded">
-        <xs:element name="Type" type="xs:unsignedByte" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="ActionClip">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="Type" type="xsd:unsignedByte" />
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Action Move-->
-  <xs:element name="ActionMove">
-    <xs:complexType>
-      <xs:sequence maxOccurs="unbounded">
-        <xs:element name="Type" type="xs:unsignedByte" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="ActionMove">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="Type" type="xsd:unsignedByte" />
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Action Rotate-->
-  <xs:element name="ActionRotate">
-    <xs:complexType>
-      <xs:sequence maxOccurs="unbounded">
-        <xs:element name="Type" type="xs:unsignedByte" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="ActionRotate">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="Type" type="xsd:unsignedByte" />
+      <xsd:element name="CentrePoint">
+        <xsd:complexType>
+          <xsd:sequence maxOccurs="1">
+            <xsd:element name="X" type="xsd:float" />
+            <xsd:element name="Y" type="xsd:float" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="RotateClockwise" type="xsd:boolean"/>
+      <xsd:element name="MaximumValueExpected" type="xsd:float"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:unsignedByte"/>
+  </xsd:complexType>
 
   <!--Client Request Element-->
-  <xs:element name="ClientRequest">
-    <xs:complexType>
-      <xs:sequence minOccurs="1" maxOccurs="1">
-        <xs:element name="Name" type="xs:string" />
-        <xs:element name="Unit" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="ClientRequest">
+    <xsd:sequence minOccurs="1" maxOccurs="1">
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="Unit" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!--Rectangle Element-->
-  <xs:element name="Rectangle">
-    <xs:complexType>
-      <xs:sequence minOccurs="1" maxOccurs="1">
-        <xs:element name="Top" type="xs:float" />
-        <xs:element name="Left" type="xs:float" />
-        <xs:element name="Height" type="xs:float"/>
-        <xs:element name="Width" type="xs:float"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xsd:complexType name="Rectangle">
+    <xsd:sequence minOccurs="1" maxOccurs="1">
+      <xsd:element name="Top" type="xsd:float" />
+      <xsd:element name="Left" type="xsd:float" />
+      <xsd:element name="Height" type="xsd:float"/>
+      <xsd:element name="Width" type="xsd:float"/>
+    </xsd:sequence>
+  </xsd:complexType>
 
   <!--Types-->
-  <xs:complexType name="animationtype">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="Type" type="xs:unsignedInt" use="required" />
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
+  <xsd:complexType name="animationtype">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="Type" type="xsd:unsignedInt" use="required" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 
 
-  <xs:complexType name="triggertype">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="Type" type="xs:unsignedInt" use="required" />
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
+  <xsd:complexType name="triggertype">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="Type" type="xsd:unsignedInt" use="required" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
 
-  <xs:complexType name="actiontype">
-    <xs:simpleContent>
-      <xs:extension base="xs:string">
-        <xs:attribute name="Type" type="xs:unsignedInt" use="required" />
-      </xs:extension>
-    </xs:simpleContent>
-  </xs:complexType>
-</xs:schema>
+  <xsd:complexType name="actiontype">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="Type" type="xsd:unsignedInt" use="required" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+</xsd:schema>

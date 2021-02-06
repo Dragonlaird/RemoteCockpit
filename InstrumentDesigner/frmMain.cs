@@ -113,7 +113,7 @@ namespace InstrumentDesigner
                     var idx = dgAircraft.Rows.Add();
                     dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
                 }
-                foreach (var anim in config.Animations)
+                foreach (var anim in (IEnumerable<IAnimationItem>)config.Animations)
                 {
                     currentActivity = string.Format("Loading Instrument Animation: {0}", anim?.Name);
                     var rowIdx = dgAnimations.Rows.Add();
@@ -121,8 +121,8 @@ namespace InstrumentDesigner
                     if (anim.Triggers != null)
                     {
                         currentActivity = string.Format("Loading Instrument Animation '{0}' Triggers ({1} triggers)", anim?.Name, anim.Triggers?.Count());
-                        dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => x.Type.ToString()));
-                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => x.Actions?.Where(z => z != null && z.Type != null).Select(y => y?.Type.ToString())));
+                        dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => ((IAnimationTrigger)x).Type.ToString()));
+                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => ((IAnimationTrigger)x).Actions?.Where(z => z != null && ((IAnimationAction)z).Type != null).Select(y => ((IAnimationAction)y)?.Type.ToString())));
                     }
                 }
             }
@@ -357,13 +357,26 @@ namespace InstrumentDesigner
                 switch (action)
                 {
                     case "E":
-                        if(config.Animations == null || !config.Animations.Any(x=>x.Name == name))
+                        if (config.Animations == null || !config.Animations.Any(x => ((IAnimationItem)x).Name == name))
                         {
-                            config.Animations = new IAnimationItem[1] { new AnimationDrawing { Name = name, Triggers = new IAnimationTrigger[] { new AnimationTriggerClientRequest { Type= AnimationTriggerTypeEnum.ClientRequest, Actions = new IAnimationAction[] { } } }, Type = AnimationItemTypeEnum.Drawing } };
+                            var newAnimation = new AnimationDrawing
+                            {
+                                Name = name,
+                                Type = AnimationItemTypeEnum.Drawing,
+                                Triggers = new AnimationXMLConverter()
+                            };
+                            newAnimation.Triggers.ToList().Add(
+                                            (object)new AnimationTriggerClientRequest
+                                            {
+                                                Type = AnimationTriggerTypeEnum.ClientRequest,
+                                                Actions = new AnimationXMLConverter()
+                                            });
+                            config.Animations = new AnimationXMLConverter();
+                            config.Animations.ToList().Add(newAnimation);
                         }
-                        var animation = ObjectClone.Clone(config.Animations.First(x => x.Name == name));
+                        var animation = ObjectClone.Clone<IAnimationItem>(((IEnumerable<IAnimationItem>)config.Animations).First(x => x.Name == name));
                             //ObjectClone.Clone(config.Animations?.First(x => x.Name == name));
-                        using (frm = new frmAnimation(animation, cockpitDirectory))
+                        using (frm = new frmAnimation((IAnimationItem)animation, cockpitDirectory))
                         {
                             result = frm.ShowDialog(this);
                             if (result == DialogResult.OK)
@@ -371,8 +384,8 @@ namespace InstrumentDesigner
                                 var newAnimation = ((frmAnimation)frm).DialogValue;
                                 // Replace existing animation with the modified version
                                 var currentAnimations = config.Animations.ToList();
-                                currentAnimations[currentAnimations.IndexOf(currentAnimations.First(x => x.Name == name))] = newAnimation;
-                                config.Animations = currentAnimations.ToArray();
+                                currentAnimations[currentAnimations.IndexOf(currentAnimations.First(x => ((IAnimationItem)x).Name == name))] = newAnimation;
+                                config.Animations = (AnimationXMLConverter)currentAnimations.AsEnumerable();
                             }
                         }
                         break;
@@ -381,8 +394,8 @@ namespace InstrumentDesigner
                         if(result == DialogResult.OK)
                         {
                             var newAnimations = config.Animations.ToList();
-                            newAnimations.RemoveAt(newAnimations.IndexOf(newAnimations.First(x => x.Name == name)));
-                            config.Animations = newAnimations.ToArray();
+                            newAnimations.RemoveAt(newAnimations.IndexOf(newAnimations.First(x => ((IAnimationItem)x).Name == name)));
+                            config.Animations = (AnimationXMLConverter)newAnimations.AsEnumerable();
                         }
                         break;
                 }
@@ -401,14 +414,14 @@ namespace InstrumentDesigner
             animations.Add(new AnimationDrawing { 
                 Name = "New...", 
                 Type = AnimationItemTypeEnum.Drawing,
-                Triggers = new IAnimationTrigger[0],
+                Triggers = new AnimationXMLConverter(),
                 OffsetX = 0,
                 OffsetY = 0,
                 FillColor = Color.White,
                 FillMethod = FillTypeEnum.Solid,
                 PointMap = new AnimationPoint[0] 
             });
-            config.Animations = animations.ToArray();
+            config.Animations = (AnimationXMLConverter)animations.AsEnumerable();
             EditDeleteAnimation_Click(dgAnimations, new DataGridViewCellEventArgs(colIdx, rowIdx));
         }
 

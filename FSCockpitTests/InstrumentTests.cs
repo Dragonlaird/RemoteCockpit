@@ -14,6 +14,7 @@ namespace FSCockpitTests
             var pathToJSON = Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json");
             Configuration config = new Configuration();
             config.Load(pathToJSON);
+            Assert.IsFalse(string.IsNullOrEmpty(config.Name));
         }
 
         [TestMethod]
@@ -22,6 +23,7 @@ namespace FSCockpitTests
             var pathToXML= Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.xml");
             Configuration config = new Configuration();
             config.Load(pathToXML);
+            Assert.IsFalse(string.IsNullOrEmpty(config.Name));
         }
     }
 }

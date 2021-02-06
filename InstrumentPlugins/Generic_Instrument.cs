@@ -135,16 +135,16 @@ namespace InstrumentPlugins
                         currentResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
                         previousResults.Add(new ClientRequestResult { Request = clientRequest, Result = (double)0 });
                         var action = config.Animations.Where(x =>
-                            x.Triggers != null &&
-                            x.Triggers.Any(y =>
+                            ((IAnimationItem)x).Triggers != null &&
+                            ((IAnimationItem)x).Triggers.Any(y =>
                                 y is AnimationTriggerClientRequest
-                                && y.Actions.Any(z => z is AnimationActionRotate)
+                                && ((IAnimationTrigger)y).Actions.Any(z => z is AnimationActionRotate)
                             ))
                             .Select(x =>
-                                x.Triggers.Where(y => y is AnimationTriggerClientRequest
-                                    && y.Actions.Any(y => y is AnimationActionRotate))
+                                ((IAnimationItem)x).Triggers.Where(y => y is AnimationTriggerClientRequest
+                                    && ((IAnimationTrigger)y).Actions.Any(y => y is AnimationActionRotate))
                                 .Select(x =>
-                                    x.Actions.FirstOrDefault(z => z is AnimationActionRotate))
+                                    ((IAnimationTrigger)x).Actions.FirstOrDefault(z => z is AnimationActionRotate))
                                 ).FirstOrDefault();
                         if (action != null)
                         {
@@ -170,7 +170,7 @@ namespace InstrumentPlugins
                 animationImages = new List<Bitmap>();
                 foreach (var animation in config.Animations)
                 {
-                    switch (animation.Type)
+                    switch (((IAnimationItem)animation).Type)
                     {
                         case AnimationItemTypeEnum.Image:
                             // If this is an Image Animation - pre-fetch the image into the cache
@@ -221,11 +221,11 @@ namespace InstrumentPlugins
                 animation.RequestFormat = requestFormat;
                 foreach (var trigger in animation.Triggers.Where(x=> x is AnimationTriggerClientRequest || x is AnimationTriggerClientMouseClick))
                 {
-                    var placeholder = "{" + trigger.Name + "}";
+                    var placeholder = "{" + ((IAnimationTrigger)trigger).Name + "}";
                     if (remoteUrl.IndexOf(placeholder) > -1 || requestFormat.IndexOf(placeholder) > -1)
                     {
                         string val = null;
-                        switch (trigger.Type)
+                        switch (((IAnimationTrigger)trigger).Type)
                         {
                             case AnimationTriggerTypeEnum.ClientRequest:
                                 val = currentResults.FirstOrDefault(x => x?.Request?.Name == ((AnimationTriggerClientRequest)trigger).Request.Name)?.Result?.ToString();
@@ -359,7 +359,7 @@ namespace InstrumentPlugins
                         {
                             try
                             {
-                                var overlapImage = GenerateAnimationImage(animation);
+                                var overlapImage = GenerateAnimationImage((IAnimationItem)animation);
                                 try
                                 {
                                     if (animationImage != null && overlapImage != null)
@@ -410,7 +410,7 @@ namespace InstrumentPlugins
 
         private Image GenerateAnimationImage(IAnimationItem animation)
         {
-            var animationId = config.Animations.ToList().IndexOf(animation);
+            var animationId = config.Animations.AsEnumerable().IndexOf(animation);
             var triggers = animation.Triggers?.Where(x => x is AnimationTriggerClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray() ?? new IAnimationTrigger[0];
             Bitmap initialImage;
             lock (animationImages)
@@ -427,9 +427,9 @@ namespace InstrumentPlugins
                     animation.LastAppliedValue = nextValue;
                     lock (config.Animations)
                     {
-                        config.Animations[animationId] = animation;
+                        config.Animations.ToArray()[animationId] = animation;
                     }
-                    foreach (var action in trigger.Actions)
+                    foreach (var action in ((IAnimationTrigger)trigger).Actions)
                     {
                         if (action is AnimationActionRotate)
                         {
@@ -824,14 +824,14 @@ namespace InstrumentPlugins
                     }
                     foreach (var animation in config.Animations)
                     {
-                        if (animation is AnimationExternal && animation.Triggers.Any(x => ((AnimationTriggerClientRequest)x).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == value.Request.Unit))
+                        if (animation is AnimationExternal && ((IAnimationItem)animation).Triggers.Any(x => ((AnimationTriggerClientRequest)x).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == value.Request.Unit))
                         {
                             // Need to update an external image
                             animationImages[config.Animations.ToList().IndexOf(animation)] = LoadImageFromRemote((AnimationExternal)animation);
                         }
                     }
                     // Check if any animations use this variable as a trigger
-                    if (config.Animations.Any(x => x.Triggers.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
+                    if (config.Animations.Any(x => ((IAnimationItem)x).Triggers.Any(y => y is AnimationTriggerClientRequest && ((AnimationTriggerClientRequest)y).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)y).Request.Unit == value.Request.Unit)))
                     {
                         // We want to update the animation every 0.3 seconds - determine how much we should move it
                         // Modify the step size for our control
