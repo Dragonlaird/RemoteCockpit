@@ -7,6 +7,7 @@ using Serilog.Sinks;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -135,7 +136,7 @@ namespace FSCockpitTests
             int connectionTimeoutMs = 3000;
             string result = string.Empty;
             IPHostEntry host = Dns.GetHostEntry("localhost");
-            IPAddress ipAddress = host.AddressList[0];
+            IPAddress ipAddress = host.AddressList.Where(x=> x.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
             IPEndPoint remoteEP = new IPEndPoint(ipAddress, 5555);
 
             // Create a TCP/IP  socket.    
