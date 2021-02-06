@@ -140,11 +140,11 @@ namespace InstrumentPlugins
                                 y is AnimationTriggerClientRequest
                                 && ((IAnimationTrigger)y).Actions.Any(z => z is AnimationActionRotate)
                             ))
-                            .Select(x =>
-                                ((IAnimationItem)x).Triggers.Where(y => y is AnimationTriggerClientRequest
-                                    && ((IAnimationTrigger)y).Actions.Any(y => y is AnimationActionRotate))
-                                .Select(x =>
-                                    ((IAnimationTrigger)x).Actions.FirstOrDefault(z => z is AnimationActionRotate))
+                            .Select(a =>
+                                ((IAnimationItem)a).Triggers.Where(b => b is AnimationTriggerClientRequest
+                                    && ((IAnimationTrigger)b).Actions.Any(c => c is AnimationActionRotate))
+                                .Select(d =>
+                                    ((IAnimationTrigger)d).Actions.FirstOrDefault(e => e is AnimationActionRotate))
                                 ).FirstOrDefault();
                         if (action != null)
                         {
