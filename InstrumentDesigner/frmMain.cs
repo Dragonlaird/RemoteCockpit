@@ -66,31 +66,18 @@ namespace InstrumentDesigner
         {
             // Populate Instrument Details Group
             populatingForm = true;
-            var currentActivity = "Populating Form";
-            try
+            if (config == null)
             {
-                if (config == null)
-                {
-                    currentActivity = "Clearing previous Configuration values";
-                    config = new Configuration();
-                }
-                currentActivity = "Resetting form";
-                ResetForm();
-                currentActivity = "Setting Instrument Name";
-                txtInstrumentName.Text = config.Name;
-                currentActivity = "Setting Instrument Author";
-                txtAuthor.Text = config.Author;
-                if (!string.IsNullOrEmpty(config.Author))
-                {
-                    currentActivity = "Disabling Author";
-                    txtAuthor.Enabled = false;
-                }
-                currentActivity = "Setting Instrument Type";
-                cmbInstrumentType.SelectedIndex = cmbInstrumentType.Items.IndexOf(config.Type.ToString());
-                currentActivity = "Setting Instrument Animation Speed";
-                txtUpdateMS.Text = config.AnimationUpdateInMs.ToString();
-                currentActivity = "Setting Instrument Create Date";
-                txtCreateDate.Text = string.Format("{0:dd MMMM yyyy HH:mm}", config.CreateDate);
+                config = new Configuration();
+            }
+            ResetForm();
+            txtInstrumentName.Text = config.Name;
+            txtAuthor.Text = config.Author;
+            if (!string.IsNullOrEmpty(config.Author))
+                txtAuthor.Enabled = false;
+            cmbInstrumentType.SelectedIndex = cmbInstrumentType.Items.IndexOf(config.Type.ToString());
+            txtUpdateMS.Text = config.AnimationUpdateInMs.ToString();
+            txtCreateDate.Text = string.Format("{0:dd MMMM yyyy HH:mm}", config.CreateDate);
 
                 // Populate Background
                 currentActivity = "Setting Instrument Batchground Path";
@@ -128,10 +115,6 @@ namespace InstrumentDesigner
                     }
                 }
             }
-            catch(Exception ex)
-            {
-                throw new Exception(string.Format("Load Configuration Failed at step:\r{0}", currentActivity), ex);
-            }
             populatingForm = false;
         }
 
@@ -142,6 +125,7 @@ namespace InstrumentDesigner
             if (image != null)
             {
                 var imageScaleFactor = (double)imageBox.Width / image.Width;
+                var aspectRatio = (double)image.Height / image.Width;
                 if (image.Height * imageScaleFactor > imageBox.Height)
                     imageScaleFactor = (double)imageBox.Height / image.Height;
                 try
@@ -181,34 +165,36 @@ namespace InstrumentDesigner
         private void LoadConfig(object sender, EventArgs e)
         {
             openFileDialog.Title = "Load Instrument Configuration";
-            openFileDialog.Filter = "Instrument Configurations (*.JSON)|*.json|Instrument Configurations (*.XML)|*.XML|All files (*.*)|*.*";
+            openFileDialog.Filter = "Instrument Configurations|*.json";
             openFileDialog.FileName = "";
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".\\GenericInstruments"));
             var dialogResult = openFileDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
+                var fileName = openFileDialog.FileName;
                 try
                 {
-                    configFilePath = openFileDialog.FileName;
-                    cockpitDirectory = Path.Combine(Path.GetDirectoryName(configFilePath), "..");
-                    openFileDialog.InitialDirectory = Path.GetDirectoryName(configFilePath);
-                    config = new Configuration();
-                    config.Load(configFilePath);
+                    var configJson = File.ReadAllText(fileName);
+                    config = JsonConvert.DeserializeObject<Configuration>(configJson);
+                    config.HasChanged = false;
                     if (config == null || config.Name == null)
                     {
                         throw new Exception("Configuration Load Failed");
                     }
+                    configFilePath = fileName;
+                    cockpitDirectory = Path.Combine(Path.GetDirectoryName(configFilePath), "..");
+                    openFileDialog.InitialDirectory = Path.GetDirectoryName(configFilePath);
                     PopulateConfigForm();
                 }
                 catch (IOException ex)
                 {
                     config = new Configuration();
-                    MessageBox.Show(string.Format("Error opening Configuration file:\r\r{0}\r\r{1}", configFilePath, ex.Message), "File Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Error opening Configuration file:\r\r{0}\r\rError: {1}", fileName, ex.Message), "File Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
                     config = new Configuration();
-                    MessageBox.Show(string.Format("Error reading Configuration file:\r\r{0}\r\r{1}", configFilePath, ex.Message), "Invalid File Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Error reading Configuration file:\r\r{0}\r\rError: {1}", fileName, ex.Message), "Invalid File Format", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 

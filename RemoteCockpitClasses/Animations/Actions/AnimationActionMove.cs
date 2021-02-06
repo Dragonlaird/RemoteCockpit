@@ -10,8 +10,7 @@ namespace RemoteCockpitClasses.Animations.Actions
     {
         [XmlAttribute(AttributeName = "type")]
         public AnimationActionTypeEnum Type { get; set; } = AnimationActionTypeEnum.MoveX;
-        public float MaxValue { get; set; } = 100;
-        public float MinValue { get; set; } = 0;
-        public bool Invert { get; set; } = false;
+        public float MaxValue { get; set; }
+        public bool Invert { get; set; }
     }
 }

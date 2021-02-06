@@ -1,7 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RemoteCockpitClasses.Animations;
 using System;
-using System.IO;
 
 namespace FSCockpitTests
 {
@@ -17,13 +15,6 @@ namespace FSCockpitTests
             Assert.IsFalse(string.IsNullOrEmpty(config.Name));
         }
 
-        [TestMethod]
-        public void LoadXMLConfigTest()
-        {
-            var pathToXML= Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.xml");
-            Configuration config = new Configuration();
-            config.Load(pathToXML);
-            Assert.IsFalse(string.IsNullOrEmpty(config.Name));
         }
     }
 }

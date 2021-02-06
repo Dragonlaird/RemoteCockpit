@@ -98,13 +98,9 @@
     <None Include="GenericInstruments\Generic_GPS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="GenericInstruments\InstrumentDefinition.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GenericInstruments\Generic_Bearing_Indicator.xml" />
     <Content Include="InstrumentImages\Airspeed_Background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
