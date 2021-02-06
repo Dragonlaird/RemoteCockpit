@@ -11,6 +11,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using AutoUpdaterDotNET;
 
 namespace CockpitDisplay
 {
@@ -29,6 +30,7 @@ namespace CockpitDisplay
 
         public frmMain()
         {
+            AutoUpdater.Start("https://dragonlaird.visualstudio.com/_git/RemoteCockpit?path=%2FFSRemoteCockpit.xml");
             InitializeComponent();
             Initialize();
 
