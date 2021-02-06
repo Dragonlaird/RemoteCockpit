@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RemoteCockpitClasses;
+using Serilog.Events;
 
 namespace RemoteCockpitServer
 {
-    public class SocketListener
+    public class SocketListener:IDisposable
     {
         private IPEndPoint _endPoint;
-        private AsynchronousSocketListener _listener;
         public EventHandler<LogMessage> LogReceived;
         public EventHandler<StateObject> ClientConnect;
         public EventHandler<StateObject> ClientDisconnect;
@@ -36,11 +36,10 @@ namespace RemoteCockpitServer
         public void Start()
         {
             WriteLog(string.Format("Starting Socket Listener: {0}:{1}", _endPoint.Address, _endPoint.Port));
-            _listener = new AsynchronousSocketListener(_endPoint);
             AsynchronousSocketListener.NewConnection += NewConnection;
             AsynchronousSocketListener.SocketError += SocketError;
             AsynchronousSocketListener.RequestReceived += RequestReceived;
-            AsynchronousSocketListener.StartListening();
+            AsynchronousSocketListener.StartListening(_endPoint);
         }
 
         private void NewConnection(object sender, StateObject connection)
@@ -48,17 +47,18 @@ namespace RemoteCockpitServer
             try
             {
                 if (connection != null && connection.workSocket != null && connection.workSocket.Connected && !clients.Any(x => x.Client.ConnectionID == connection.ConnectionID))
+                {
                     lock (clients)
                     {
                         clients.Add(new ClientConnection { Client = connection, Requests = new List<SimVarRequest> { new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" } } });
                     }
-
+                }
                 if (ClientConnect != null)
                     ClientConnect.DynamicInvoke(this, connection);
             }
             catch (Exception ex)
             {
-                WriteLog(string.Format("NewConnection Error: {0}", ex.Message), EventLogEntryType.Error);
+                WriteLog(string.Format("NewConnection Error: {0}", ex.Message), LogEventLevel.Error);
             }
         }
 
@@ -92,7 +92,7 @@ namespace RemoteCockpitServer
                             }
                             catch(Exception ex)
                             {
-                                WriteLog(string.Format("Request Received Error: {0}", ex.Message), EventLogEntryType.Error);
+                                WriteLog(string.Format("Request Received Error: {0}", ex.Message), LogEventLevel.Error);
                                 ClientError.DynamicInvoke(sender, ex);
                             }
                         }
@@ -133,11 +133,12 @@ namespace RemoteCockpitServer
 
         private void SocketError(object sender, Exception ex)
         {
-
+            WriteLog(string.Format("Socket Error: {0}", ex.Message), LogEventLevel.Error);
         }
 
         public void Stop()
         {
+            WriteLog("Stopping SocketListener", LogEventLevel.Information);
             AsynchronousSocketListener.StopListening();
         }
 
@@ -155,9 +156,22 @@ namespace RemoteCockpitServer
             }
         }
 
-        private void WriteLog(string message, EventLogEntryType type = EventLogEntryType.Information)
+        private void WriteLog(string message, LogEventLevel type = LogEventLevel.Information)
         {
             WriteLog(this, new LogMessage { Message = message, Type = type });
+        }
+
+        public void Dispose()
+        {
+            lock (clients)
+            {
+                foreach (var client in clients)
+                {
+                    client?.Client?.workSocket?.Disconnect(false);
+                }
+                clients.Clear();
+            }
+            this.Stop();
         }
         #endregion
     }

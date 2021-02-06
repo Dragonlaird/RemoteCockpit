@@ -18,7 +18,7 @@ namespace RemoteCockpitServer
     // State object for reading client data asynchronously  
 
 
-    public class AsynchronousSocketListener
+    public static class AsynchronousSocketListener
     {
         private const string requestSeparator = "\r\r";
         public static EventHandler<StateObject> NewConnection;
@@ -35,22 +35,17 @@ namespace RemoteCockpitServer
         public static bool IsRunning { get; set; } = false;
         public static int MaxConnections { get; private set; }
 
-        public AsynchronousSocketListener(IPEndPoint endPoint)
+        public static void StartListening(IPEndPoint endPoint)
         {
             _endPoint = endPoint;
             IsRunning = false;
             MaxConnections = 100;
-        }
-
-        public static void StartListening()
-        {
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  
-           // IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            //IPAddress ipAddress = ipHostInfo.AddressList[0];
-            //IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
-            // Create a TCP/IP socket.  
+            // IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            // Create a TCP/IP socket.
+            StopListening();
             listener = new Socket(_endPoint.Address.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
 
@@ -84,6 +79,13 @@ namespace RemoteCockpitServer
 
         public static void StopListening()
         {
+            if (listener != null)
+            {
+                if (listener.Connected)
+                    listener.Disconnect(false);
+                listener.Dispose();
+            }
+            listener = null;
             IsRunning = false;
         }
 

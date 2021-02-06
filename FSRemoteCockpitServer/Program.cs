@@ -22,8 +22,9 @@ namespace RemoteCockpitServer
         public static void Main(string[] args)
         {
             var logConfig = new LoggerConfiguration();
-            logConfig.WriteTo.Console()
-                    .WriteTo.EventLog("FS Remote Cockpit", "Application");
+            logConfig
+                .WriteTo.ColoredConsole()
+                .WriteTo.EventLog("FS Remote Cockpit", "Application");
             if (args.Contains("logtofile"))
             {
                 logConfig.WriteTo.File(Path.Combine(Path.GetTempPath(), string.Format("FSCockpitServer_{0:yyMMdd}", DateTime.Now))).ToString();

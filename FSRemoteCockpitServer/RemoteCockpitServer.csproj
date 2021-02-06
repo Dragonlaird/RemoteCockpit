@@ -86,6 +86,9 @@
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.2.10.1-dev-01265\lib\net46\Serilog.dll</HintPath>
     </Reference>
+    <Reference Include="Serilog.Sinks.ColoredConsole, Version=3.0.1.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.ColoredConsole.3.0.1\lib\net45\Serilog.Sinks.ColoredConsole.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog.Sinks.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.Console.4.0.0-dev-00839\lib\net45\Serilog.Sinks.Console.dll</HintPath>
     </Reference>
@@ -149,7 +152,9 @@
     <None Include="SimConnect.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="SimConnectSDK\SimConnect.lib" />
+    <None Include="SimConnectSDK\SimConnect.lib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RemoteCockpitClasses\RemoteCockpitClasses.csproj">
@@ -158,8 +163,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SimConnectSDK\Managed\Microsoft.FlightSimulator.SimConnect.dll" />
-    <Content Include="SimConnectSDK\SimConnect.dll" />
+    <Content Include="SimConnectSDK\Managed\Microsoft.FlightSimulator.SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SimConnectSDK\SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

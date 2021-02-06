@@ -1,9 +1,10 @@
 ﻿using RemoteCockpitClasses;
 using Serilog.Core;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
+//using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -19,7 +20,7 @@ namespace RemoteCockpitServer
         private List<SimVarRequestResult> requestResults;
         private bool AlwaysSendVariable { get; set; } = true;// Should variable always be retransmitted to clients, even if value hasn't changed?
         private int _updateFrequency = 1; // How may seconds between each SimConnect poll?
-        private EventLog logger = null;
+        //private EventLog logger = null;
         private readonly Logger _log;
         public bool IsRunning = false;
         public RemoteServer(Logger log)
@@ -30,11 +31,11 @@ namespace RemoteCockpitServer
 
         private void Initialize()
         {
-            try
-            {
-                logger = new EventLog("Application", "localhost", "FS Cockpit Server");
-            }
-            catch { }
+            //try
+            //{
+            //    logger = new EventLog("Application", "localhost", "FS Cockpit Server");
+            //}
+            //catch { }
             requestResults = new List<SimVarRequestResult>();
             // Add the first Request Variable for Connection State
             requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
@@ -45,18 +46,18 @@ namespace RemoteCockpitServer
         public void Start()
         {
             IsRunning = true;
-            WriteLog(this, new LogMessage { Message = "FSCockpit Starting", Type = System.Diagnostics.EventLogEntryType.Information });
+            WriteLog(this, new LogMessage { Message = "FSCockpit Starting", Type = LogEventLevel.Information });
             StartConnector();
             StartListener();
-            WriteLog(this, new LogMessage { Message = "FSCockpit Started", Type = System.Diagnostics.EventLogEntryType.Information });
+            WriteLog(this, new LogMessage { Message = "FSCockpit Started", Type = LogEventLevel.Information });
         }
 
         public new void Stop()
         {
-            WriteLog(this, new LogMessage { Message = "FSCockpit Stopping", Type = System.Diagnostics.EventLogEntryType.Information });
+            WriteLog(this, new LogMessage { Message = "FSCockpit Stopping", Type = LogEventLevel.Information });
             fsConnector?.Stop();
             listener?.Stop();
-            WriteLog(this, new LogMessage { Message = "FSCockpit Stopped", Type = System.Diagnostics.EventLogEntryType.Information });
+            WriteLog(this, new LogMessage { Message = "FSCockpit Stopped", Type = LogEventLevel.Information });
             IsRunning = false;
         }
 
@@ -149,7 +150,7 @@ namespace RemoteCockpitServer
                     // Update our local list to the latest value
                     requestResults[requestResults.IndexOf(lastRequest)].Value = e.Value;
                 }
-                WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = System.Diagnostics.EventLogEntryType.Information });
+                WriteLog(this, new LogMessage { Message = string.Format("Value Received: {0} - {1} ({2}) = {3}", e.Request.ID, e.Request.Name, e.Request.Unit, e.Value), Type = LogEventLevel.Information });
                 // Send this variable to Socket Listener to retransmit values to Remote Clients
                 listener.SendVariable(e);
             }
@@ -175,7 +176,7 @@ namespace RemoteCockpitServer
                 ex = ex.InnerException;
             }
             logMsg = "An error occurred:" + logMsg;
-            WriteLog(this, new LogMessage { Type = EventLogEntryType.Error, Message = logMsg });
+            WriteLog(this, new LogMessage { Type = LogEventLevel.Error, Message = logMsg });
         }
 
         private void WriteLog(object sender, LogMessage msg)
@@ -192,11 +193,17 @@ namespace RemoteCockpitServer
                 {
                     switch (msg.Type)
                     {
-                        case EventLogEntryType.Error:
+                        case LogEventLevel.Fatal:
+                            _log.Fatal(logMsg);
+                            break;
+                        case LogEventLevel.Error:
                             _log.Error(logMsg);
                             break;
-                        case EventLogEntryType.Warning:
+                        case LogEventLevel.Warning:
                             _log.Warning(logMsg);
+                            break;
+                        case LogEventLevel.Verbose:
+                            _log.Verbose(logMsg);
                             break;
                         default:
                             _log.Information(logMsg);
@@ -215,6 +222,7 @@ namespace RemoteCockpitServer
             if (IsRunning)
                 Stop();
             fsConnector?.Dispose();
+            listener?.Dispose();
             listener = null;
             fsConnector = null;
         }

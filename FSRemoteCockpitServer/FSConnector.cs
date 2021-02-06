@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.FlightSimulator.SimConnect;
 using RemoteCockpitClasses;
+using Serilog.Events;
 
 namespace RemoteCockpitServer
 {
@@ -114,7 +115,7 @@ namespace RemoteCockpitServer
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(string.Format("Unable to Start SimConnect Handler: {0}", ex.Message), EventLogEntryType.Error);
+                    WriteLog(string.Format("Unable to Start SimConnect Handler: {0}", ex.Message), LogEventLevel.Error);
                     //Stop();
                 }
             }
@@ -180,18 +181,18 @@ namespace RemoteCockpitServer
                     }
                     catch(Exception ex)
                     {
-                        WriteLog(string.Format("Request Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
+                        WriteLog(string.Format("Request Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), LogEventLevel.Error);
                     }
                 }
                 else
                 {
                     request = simVarRequests.First(x => x.Name == request.Name && x.Unit == request.Unit);
-                    WriteLog(string.Format("Request already submitted: {0} - {1} ({2})", request.ID, request.Name, request.Unit), EventLogEntryType.Warning);
+                    WriteLog(string.Format("Request already submitted: {0} - {1} ({2})", request.ID, request.Name, request.Unit), LogEventLevel.Warning);
                 }
             }
             else
             {
-                WriteLog(string.Format("Invalid Request for: {0} ({1})", request?.Name, request?.Unit), EventLogEntryType.Error);
+                WriteLog(string.Format("Invalid Request for: {0} ({1})", request?.Name, request?.Unit), LogEventLevel.Error);
             }
         }
 
@@ -205,7 +206,7 @@ namespace RemoteCockpitServer
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(string.Format("SimVarRequest Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), EventLogEntryType.Error);
+                    WriteLog(string.Format("SimVarRequest Error: {0} - {1} ({2}) - {3}", request?.ID, request?.Name, request?.Unit, ex.Message), LogEventLevel.Error);
                 }
         }
 
@@ -247,7 +248,7 @@ namespace RemoteCockpitServer
             var paramId = error.dwIndex; // Which item in the request caused the error
             var errorId = error.dwException;
             var errorString = string.Format("Error: {2}; Req: {0}; Param: {1}; Desc: {3};", reqId, GetSimErrorParameter((int)paramId), errorId, GetSimError((int)errorId));
-            WriteLog(string.Format("SimConnect Exception: {0}", errorString), EventLogEntryType.Error);
+            WriteLog(string.Format("SimConnect Exception: {0}", errorString), LogEventLevel.Error);
             if (ErrorEvent != null)
             {
                 ErrorEvent.DynamicInvoke(this, new Exception(errorString));
@@ -458,7 +459,7 @@ namespace RemoteCockpitServer
             }
         }
 
-        private void WriteLog(string message, EventLogEntryType type = EventLogEntryType.Information)
+        private void WriteLog(string message, LogEventLevel type = LogEventLevel.Information)
         {
             WriteLog(this, new LogMessage { Message = message, Type = type });
         }
