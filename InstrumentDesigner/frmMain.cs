@@ -113,16 +113,18 @@ namespace InstrumentDesigner
                     var idx = dgAircraft.Rows.Add();
                     dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
                 }
-                foreach (var anim in (IEnumerable<IAnimationItem>)config.Animations)
+                currentActivity = "Loading Instrument Animations";
+                foreach (var anim in (AnimationXMLConverter)config.Animations)
                 {
-                    currentActivity = string.Format("Loading Instrument Animation: {0}", anim?.Name);
+                    var animation  = (IAnimationItem)anim;
+                    currentActivity = string.Format("Loading Instrument Animation: {0}", animation?.Name);
                     var rowIdx = dgAnimations.Rows.Add();
-                    dgAnimations.Rows[rowIdx].Cells["What"].Value = anim.Name?.ToString();
-                    if (anim.Triggers != null)
+                    dgAnimations.Rows[rowIdx].Cells["What"].Value = animation.Name?.ToString();
+                    if (animation.Triggers != null)
                     {
-                        currentActivity = string.Format("Loading Instrument Animation '{0}' Triggers ({1} triggers)", anim?.Name, anim.Triggers?.Count());
-                        dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", anim.Triggers?.Select(x => ((IAnimationTrigger)x).Type.ToString()));
-                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", anim.Triggers?.SelectMany(x => ((IAnimationTrigger)x).Actions?.Where(z => z != null && ((IAnimationAction)z).Type != null).Select(y => ((IAnimationAction)y)?.Type.ToString())));
+                        currentActivity = string.Format("Loading Instrument Animation '{0}' Triggers ({1} triggers)", animation?.Name, animation.Triggers?.Count());
+                        dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", animation.Triggers?.Select(x => ((IAnimationTrigger)x).Type.ToString()));
+                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", animation.Triggers?.SelectMany(x => ((IAnimationTrigger)x).Actions?.Where(z => z != null && ((IAnimationAction)z).Type != null).Select(y => ((IAnimationAction)y)?.Type.ToString())));
                     }
                 }
             }
@@ -374,7 +376,7 @@ namespace InstrumentDesigner
                             config.Animations = new AnimationXMLConverter();
                             config.Animations.ToList().Add(newAnimation);
                         }
-                        var animation = ObjectClone.Clone<IAnimationItem>(((IEnumerable<IAnimationItem>)config.Animations).First(x => x.Name == name));
+                        var animation = ObjectClone.Clone<IAnimationItem>((IAnimationItem)config.Animations.First(x => ((IAnimationItem)x).Name == name));
                             //ObjectClone.Clone(config.Animations?.First(x => x.Name == name));
                         using (frm = new frmAnimation((IAnimationItem)animation, cockpitDirectory))
                         {

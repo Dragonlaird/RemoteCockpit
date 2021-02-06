@@ -31,6 +31,7 @@ namespace RemoteCockpitClasses.Animations
             }
             catch (Exception ex)//(Exception ex)
             {
+                System.Windows.Forms.MessageBox.Show(string.Format("Unable to read Configuration: Could not parse {0}", reader.Path), "Config Parse Failed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 // Failed to deserialize
             }
             if (objectType == typeof(AnimationXMLConverter))
@@ -201,7 +202,7 @@ namespace RemoteCockpitClasses.Animations
                                 }
                                 else
                                 {
-                                    actualValue = ConvertToXmlObject(prop.PropertyType, jsonProperty.First()); // Should only be a single instance of base class, it is enumerable so children will map to an instance of an inheritable class
+                                    actualValue = ConvertTo(prop.PropertyType, jsonProperty.First()); // Should only be a single instance of base class, it is enumerable so children will map to an instance of an inheritable class
                                     if (actualValue == null)
                                         actualValue = jsonProperty.First().ToObject(prop.PropertyType);
                                 }
