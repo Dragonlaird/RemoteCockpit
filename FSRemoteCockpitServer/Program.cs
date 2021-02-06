@@ -23,7 +23,6 @@ namespace RemoteCockpitServer
         {
             var logConfig = new LoggerConfiguration();
             logConfig
-                .WriteTo.ColoredConsole()
                 .WriteTo.EventLog("FS Remote Cockpit", "Application");
             if (args.Contains("logtofile"))
             {
