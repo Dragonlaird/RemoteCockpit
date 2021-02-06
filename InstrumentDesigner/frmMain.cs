@@ -78,7 +78,8 @@ namespace InstrumentDesigner
             cmbInstrumentType.SelectedIndex = cmbInstrumentType.Items.IndexOf(config.Type.ToString());
             txtUpdateMS.Text = config.AnimationUpdateInMs.ToString();
             txtCreateDate.Text = string.Format("{0:dd MMMM yyyy HH:mm}", config.CreateDate);
-
+            var currentActivity = string.Empty;
+            try { 
                 // Populate Background
                 currentActivity = "Setting Instrument Batchground Path";
                 txtBackgroundPath.Text = config.BackgroundImagePath;
@@ -101,7 +102,7 @@ namespace InstrumentDesigner
                     dgAircraft.Rows[idx].Cells["Aircraft"].Value = aircraft;
                 }
                 currentActivity = "Loading Instrument Animations";
-                foreach (var anim in (AnimationXMLConverter)config.Animations)
+                foreach (var anim in config.Animations)
                 {
                     var animation  = (IAnimationItem)anim;
                     currentActivity = string.Format("Loading Instrument Animation: {0}", animation?.Name);
@@ -114,6 +115,10 @@ namespace InstrumentDesigner
                         dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", animation.Triggers?.SelectMany(x => ((IAnimationTrigger)x).Actions?.Where(z => z != null && ((IAnimationAction)z).Type != null).Select(y => ((IAnimationAction)y)?.Type.ToString())));
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(string.Format("Failed to load Config.\r\nStep {0}", currentActivity), "Config Load Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             populatingForm = false;
         }
@@ -351,15 +356,15 @@ namespace InstrumentDesigner
                             {
                                 Name = name,
                                 Type = AnimationItemTypeEnum.Drawing,
-                                Triggers = new AnimationXMLConverter()
+                                Triggers = new IAnimationTrigger[0]
                             };
                             newAnimation.Triggers.ToList().Add(
-                                            (object)new AnimationTriggerClientRequest
+                                            (IAnimationTrigger)new AnimationTriggerClientRequest
                                             {
                                                 Type = AnimationTriggerTypeEnum.ClientRequest,
-                                                Actions = new AnimationXMLConverter()
+                                                Actions = new IAnimationAction[0]
                                             });
-                            config.Animations = new AnimationXMLConverter();
+                            config.Animations = new IAnimationItem[0]; ;
                             config.Animations.ToList().Add(newAnimation);
                         }
                         var animation = ObjectClone.Clone<IAnimationItem>((IAnimationItem)config.Animations.First(x => ((IAnimationItem)x).Name == name));
@@ -373,7 +378,7 @@ namespace InstrumentDesigner
                                 // Replace existing animation with the modified version
                                 var currentAnimations = config.Animations.ToList();
                                 currentAnimations[currentAnimations.IndexOf(currentAnimations.First(x => ((IAnimationItem)x).Name == name))] = newAnimation;
-                                config.Animations = new AnimationXMLConverter(currentAnimations);
+                                config.Animations = currentAnimations.ToArray();
                             }
                         }
                         break;
@@ -383,7 +388,7 @@ namespace InstrumentDesigner
                         {
                             var newAnimations = config.Animations.ToList();
                             newAnimations.RemoveAt(newAnimations.IndexOf(newAnimations.First(x => ((IAnimationItem)x).Name == name)));
-                            config.Animations = (AnimationXMLConverter)newAnimations.AsEnumerable();
+                            config.Animations = newAnimations.ToArray();
                         }
                         break;
                 }
@@ -402,14 +407,14 @@ namespace InstrumentDesigner
             animations.Add(new AnimationDrawing { 
                 Name = "New...", 
                 Type = AnimationItemTypeEnum.Drawing,
-                Triggers = new AnimationXMLConverter(),
+                Triggers = new IAnimationTrigger[0],
                 OffsetX = 0,
                 OffsetY = 0,
                 FillColor = Color.White,
                 FillMethod = FillTypeEnum.Solid,
                 PointMap = new AnimationPoint[0] 
             });
-            config.Animations = (AnimationXMLConverter)animations.AsEnumerable();
+            config.Animations = animations.ToArray();
             EditDeleteAnimation_Click(dgAnimations, new DataGridViewCellEventArgs(colIdx, rowIdx));
         }
 

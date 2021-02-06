@@ -91,6 +91,10 @@
       <Project>{7ae7fdac-1abb-4e92-beaf-7dd5fcd70ae8}</Project>
       <Name>RemoteCockpitServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RemoteCockpitClasses\RemoteCockpitClasses.csproj">
+      <Project>{2C1905B7-E26B-49BF-A521-3D9D2DE37CE1}</Project>
+      <Name>RemoteCockpitClasses</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SimConnectSDK\Managed\Microsoft.FlightSimulator.SimConnect.dll">

@@ -11,7 +11,6 @@ using System.Text;
 namespace RemoteCockpitClasses.Animations
 {
     [DebuggerDisplay("\\{Configuration\\} {Name}")]
-    [XmlRoot("InstrumentDefinition")]
     public class Configuration
     {
         private string _name;
@@ -22,27 +21,62 @@ namespace RemoteCockpitClasses.Animations
         private string[] _aircraft;
         private int _animationUpdateInMs;
         private IAnimationItem[] _animations;
+
         public Configuration()
         {
 
         }
 
+        public void Load(string pathToJSON)
+        {
+            var fileContent = System.IO.File.ReadAllText(pathToJSON)?.Trim();
+            LoadFromJSON(fileContent);
+        }
+
+        /// <summary>
+        /// Load Configuration from supplied JSON string
+        /// </summary>
+        /// <param name="configJSON">JSON string containing Configuration Definition</param>
+        public void LoadFromJSON(string configJSON)
+        {
+            var config = JsonConvert.DeserializeObject<Configuration>(configJSON);
+            PopulatePropertiesFromConfigObject(config);
+        }
+
+        public void Clear()
+        {
+            Name = null;
+            Author = null;
+            Type = InstrumentType.Other;
+            CreateDate = DateTime.Now;
+            BackgroundImagePath = null;
+            Aircraft = new string[0];
+            AnimationUpdateInMs = 50;
+            Animations = new IAnimationItem[0];
+            HasChanged = false;
+        }
+
+        private void PopulatePropertiesFromConfigObject(Configuration config)
+        {
+            Clear();
+            foreach (var property in config.GetType().GetProperties())
+            {
+                if (property.CanWrite)
+                {
+                    property.SetValue(this, property.GetValue(config));
+                }
+            }
+        }
+
         public string Name { get { return _name; } set { if (_name != value) { _name = value; HasChanged = true; } } }
-        [XmlElement("Author")]
         public string Author { get { return _author; } set { if (_author != value) { _author = value; HasChanged = true; } } }
-        [XmlElement("Type")]
         public InstrumentType Type { get { return _type; } set { if (_type != value) { _type = value; HasChanged = true; } } }
-        [XmlElement("CreateDate")]
         public DateTime CreateDate { get { return _createDate; } set { if (_createDate != value) { _createDate = value; HasChanged = true; } } }
-        [XmlElement("BackgroundImagePath")]
         public string BackgroundImagePath { get { return _backgroundImagePath; } set { if (_backgroundImagePath != value) { _backgroundImagePath = value; HasChanged = true; } } }
-        [XmlElement("Aircraft")]
         public string [] Aircraft { get { return _aircraft ?? new string[0]; } set { if (_aircraft != value) { _aircraft = value; HasChanged = true; } } }
-        [XmlElement("AnimationUpdateInMs")]
         public int AnimationUpdateInMs { get { return _animationUpdateInMs; } set { if (_animationUpdateInMs != value) { _animationUpdateInMs = value; HasChanged = true; } } }
         [JsonConverter(typeof(ConcreteJSONConverter<AnimationDrawing[]>))]
-        [XmlElement("Animations")]
-        public AnimationXMLConverter Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }
+        public IAnimationItem[] Animations { get { return _animations; } set { if (_animations != value) { _animations = value; HasChanged = true; } } }
         [JsonIgnore]
         public ClientRequest[] ClientRequests
         {

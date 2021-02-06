@@ -34,22 +34,18 @@ namespace RemoteCockpitClasses.Animations
                 System.Windows.Forms.MessageBox.Show(string.Format("Unable to read Configuration: Could not parse {0}", reader.Path), "Config Parse Failed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 // Failed to deserialize
             }
-            if (objectType == typeof(AnimationXMLConverter))
-                return new AnimationXMLConverter(result);
+            //if (objectType == typeof(AnimationXMLConverter))
+            //    return new AnimationXMLConverter(result);
             return result;
         }
 
         private object ConvertTo(Type type, JToken obj)
         {
-            Type checkType = Type.GetType(type?.ToString());
-            if (checkType == typeof(AnimationXMLConverter))
-            {
-                return ConvertToXmlObject(type, obj);
-            }
-            var isLocalClass = checkType?.Namespace == "RemoteCockpitClasses.Animations" || (checkType?.IsInterface ?? false);
+            //Type checkType = Type.GetType(type.ToString());
+            var isLocalClass = type.Namespace.StartsWith("RemoteCockpitClasses.Animations") || type.IsInterface;
             if (isLocalClass)
             {
-                var assignableClasses = GetAssignableClasses(checkType);
+                var assignableClasses = GetAssignableClasses(type);
                 foreach (var assignableType in assignableClasses)
                 {
                     // Populate the properties of the object, unless it is an Interface
@@ -244,8 +240,6 @@ namespace RemoteCockpitClasses.Animations
                                         actualValue = ((Array)actualValue).Cast<Triggers.IAnimationTrigger>();
                                     if (elementInterfaces.Any(x => x == typeof(Items.IAnimationItem)))
                                         actualValue = ((Array)actualValue).Cast<Items.IAnimationItem>();
-                                    if (result.GetType().GetProperty(propertyName).PropertyType == typeof(AnimationXMLConverter))
-                                        actualValue = new AnimationXMLConverter((IEnumerable<object>)actualValue);
                                     else
                                         actualValue = Convert.ChangeType(actualValue, result.GetType().GetProperty(propertyName).PropertyType);
                                 }

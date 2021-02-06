@@ -365,10 +365,10 @@ namespace InstrumentDesigner
                 // New row being added - need to also add to Animation config
                 if(_animation.Triggers == null)
                 {
-                    _animation.Triggers = new AnimationXMLConverter();
+                    _animation.Triggers = new IAnimationTrigger[0];
                 }
                 var newAnimations = _animation.Triggers;
-                newAnimations.ToList().Add(new AnimationTriggerClientRequest { Name = "", Actions = new AnimationXMLConverter(), Request = new ClientRequest() });
+                newAnimations.ToList().Add(new AnimationTriggerClientRequest { Name = "", Actions = new IAnimationAction[0], Request = new ClientRequest() });
                 _animation.Triggers = newAnimations;
             }
         }
@@ -667,7 +667,7 @@ namespace InstrumentDesigner
                                 break;
                         }
                         var iPos = _animation.Triggers.AsEnumerable().IndexOf(trigger);
-                        ((IEnumerable<IAnimationTrigger>)_animation.Triggers).ToArray()[iPos].Actions = (AnimationXMLConverter)actionList.AsEnumerable<object>();
+                        ((IEnumerable<IAnimationTrigger>)_animation.Triggers).ToArray()[iPos].Actions = actionList.ToArray();
                     }
                     //((DataGridView)sender).Rows[e.RowIndex].Selected = true;
                 }
@@ -729,7 +729,7 @@ namespace InstrumentDesigner
                 if (e.RowIndex < actionList.Count)
                 {
                     actionList.Remove(actionList[e.RowIndex]);
-                    ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.AsEnumerable().IndexOf(GetSelectedTrigger())]).Actions = (AnimationXMLConverter)actionList.AsEnumerable<object>();
+                    ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.AsEnumerable().IndexOf(GetSelectedTrigger())]).Actions = actionList.ToArray();
                 }
                 PopulateTab(2);
             }

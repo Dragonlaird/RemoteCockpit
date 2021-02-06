@@ -68,7 +68,7 @@ namespace InstrumentPlugins
         public Generic_Instrument(int maxHeight, int maxWidth, string filePath)
         {
             configPath = filePath;
-            config = null;
+            config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configPath));
             SetLayout(0, 0, maxHeight, maxWidth);
         }
 

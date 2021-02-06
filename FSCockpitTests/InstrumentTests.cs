@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RemoteCockpitClasses.Animations;
 using System;
+using System.IO;
 
 namespace FSCockpitTests
 {
@@ -13,8 +15,6 @@ namespace FSCockpitTests
             Configuration config = new Configuration();
             config.Load(pathToJSON);
             Assert.IsFalse(string.IsNullOrEmpty(config.Name));
-        }
-
         }
     }
 }

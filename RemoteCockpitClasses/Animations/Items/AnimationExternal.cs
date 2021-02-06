@@ -14,7 +14,6 @@ namespace RemoteCockpitClasses.Animations.Items
     [XmlType("Animation")]
     public class AnimationExternal : IAnimationItem
     {
-        [XmlAttribute(AttributeName = "type")]
         public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.External; } set { } }
         public string Name { get; set; }
         public string RemoteURL { get; set; }
@@ -23,10 +22,8 @@ namespace RemoteCockpitClasses.Animations.Items
         public HttpMethod RequestMethod { get; set; } = HttpMethod.Post;
         public string RequestFormat { get; set; }
         [JsonConverter(typeof(ConcreteJSONConverter<AnimationTriggerClientRequest[]>))]
-        [XmlElement("Triggers")]
-        public AnimationXMLConverter Triggers { get; set; }
+        public IAnimationTrigger[] Triggers { get; set; }
         [JsonIgnore]
-        [XmlIgnore]
         public object LastAppliedValue { get; set; }
     }
 }

@@ -13,8 +13,7 @@ namespace RemoteCockpitClasses.Animations.Triggers
         [XmlAttribute(AttributeName = "type")]
         public AnimationTriggerTypeEnum Type { get; set; }
         public string Name { get; set; }
-        [XmlElement("Actions")]
-        public AnimationXMLConverter Actions { get; set; }
+        public IAnimationAction[] Actions { get; set; }
         public RectangleF ClickZone { get; set; }
         public float Value { get; set; }
         public float IncrementAmount { get; set; }

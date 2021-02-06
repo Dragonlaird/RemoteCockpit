@@ -15,7 +15,6 @@ namespace RemoteCockpitClasses.Animations.Triggers
         public AnimationTriggerTypeEnum Type { get; set; }
         public ClientRequest Request { get; set; }
         [JsonConverter(typeof(ConcreteJSONConverter<AnimationActionRotate[]>))]
-        [XmlElement("Actions")]
-        public AnimationXMLConverter Actions { get; set; }
+        public IAnimationAction[] Actions { get; set; }
     }
 }

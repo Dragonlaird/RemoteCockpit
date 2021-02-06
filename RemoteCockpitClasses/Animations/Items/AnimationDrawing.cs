@@ -12,7 +12,6 @@ namespace RemoteCockpitClasses.Animations.Items
     [XmlType("Animation")]
     public class AnimationDrawing : IAnimationItem
     {
-        [XmlAttribute(AttributeName = "type")]
         public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.Drawing; } set { } }
         public string Name { get; set; }
         public AnimationPoint[] PointMap { get; set; }
@@ -21,10 +20,8 @@ namespace RemoteCockpitClasses.Animations.Items
         public double OffsetX { get; set; }
         public double OffsetY { get; set; }
         [JsonConverter(typeof(ConcreteJSONConverter<AnimationTriggerClientRequest[]>))]
-        [XmlElement("Triggers")]
-        public AnimationXMLConverter Triggers { get; set; }
+        public IAnimationTrigger[] Triggers { get; set; }
         [JsonIgnore]
-        [XmlIgnore]
         public object LastAppliedValue { get; set; }
     }
 }

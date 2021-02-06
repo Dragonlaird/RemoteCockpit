@@ -11,15 +11,12 @@ namespace RemoteCockpitClasses.Animations.Items
     [XmlType("Animation")]
     public class AnimationImage : IAnimationItem
     {
-        [XmlAttribute(AttributeName = "type")]
         public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.Image; } set { } }
         public string Name { get; set; }
         public string ImagePath { get; set; }
         [JsonConverter(typeof(ConcreteJSONConverter<AnimationTriggerClientRequest[]>))]
-        [XmlElement("Triggers")]
-        public AnimationXMLConverter Triggers { get; set; }
+        public IAnimationTrigger[] Triggers { get; set; }
         [JsonIgnore]
-        [XmlIgnore]
         public object LastAppliedValue { get; set; }
     }
 }

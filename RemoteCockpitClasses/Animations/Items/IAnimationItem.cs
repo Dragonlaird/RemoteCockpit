@@ -9,12 +9,10 @@ namespace RemoteCockpitClasses.Animations.Items
 {
     public interface IAnimationItem
     {
-        [XmlAttribute(AttributeName = "type")]
         AnimationItemTypeEnum Type { get; set; }
         string Name { get; set; }
         //[JsonConverter(typeof(ConcreteConverter<AnimationTriggerClientRequest>))]
-        [XmlElement("Triggers")]
-        AnimationXMLConverter Triggers { get; set; }
+        IAnimationTrigger[] Triggers { get; set; }
         object LastAppliedValue { get; set; }
     }
 }
