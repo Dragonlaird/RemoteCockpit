@@ -251,7 +251,16 @@ namespace RemoteCockpitClasses.Animations
                                 }
                             }
                         }
-                        result.GetType().GetProperty(propertyName).SetValue(result, actualValue);
+                        try
+                        {
+                            if (actualValue is Array && ((object[])actualValue).Length == 0)
+                                actualValue = Activator.CreateInstance(result.GetType().GetProperty(propertyName).PropertyType);
+                            result.GetType().GetProperty(propertyName).SetValue(result, actualValue);
+                        }
+                        catch(Exception ex)
+                        {
+                            System.Windows.Forms.MessageBox.Show(string.Format("Failed to convert: {0}", propertyName), "Config Malformed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                        }
                     }
                 }
             }

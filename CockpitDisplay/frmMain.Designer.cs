@@ -30,7 +30,6 @@ namespace CockpitDisplay
         /// </summary>
         private void InitializeComponent()
         {
-            this.Icon = Resources.Cockpit_Icon;
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabCockpitWindow = new System.Windows.Forms.TabPage();
             this.grpCockpit = new System.Windows.Forms.GroupBox();
@@ -424,8 +423,6 @@ namespace CockpitDisplay
             // cbFullScreen
             // 
             this.cbFullScreen.AutoSize = true;
-            this.cbFullScreen.Checked = true;
-            this.cbFullScreen.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbFullScreen.Location = new System.Drawing.Point(112, 143);
             this.cbFullScreen.Name = "cbFullScreen";
             this.cbFullScreen.Size = new System.Drawing.Size(15, 14);
@@ -533,6 +530,7 @@ namespace CockpitDisplay
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(473, 346);
             this.Controls.Add(this.tabControl1);
+            this.Icon = global::CockpitDisplay.Properties.Resources.Cockpit_Icon;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmMain";
             this.Text = "Remote Cockpit";

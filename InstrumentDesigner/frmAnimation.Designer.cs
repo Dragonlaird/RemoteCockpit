@@ -58,6 +58,23 @@ namespace InstrumentDesigner
             this.lblAnimationName = new System.Windows.Forms.Label();
             this.tabWhen = new System.Windows.Forms.TabPage();
             this.gpAnimationClientRequest = new System.Windows.Forms.GroupBox();
+            this.gpAnimationMouseClick = new System.Windows.Forms.GroupBox();
+            this.txtAnimationMouseMin = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationMouseMax = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationMouseIncrement = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationMouseVal = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationMouseMin = new System.Windows.Forms.Label();
+            this.lblAnimationMouseMax = new System.Windows.Forms.Label();
+            this.lblAnimationMouseIncrement = new System.Windows.Forms.Label();
+            this.lblAnimationMouseValue = new System.Windows.Forms.Label();
+            this.txtAnimationMouseX = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationMouseHeight = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationMouseWidth = new System.Windows.Forms.NumericUpDown();
+            this.txtAnimationMouseY = new System.Windows.Forms.NumericUpDown();
+            this.lblAnimationMouseWIdth = new System.Windows.Forms.Label();
+            this.lblAnimationMouseHeight = new System.Windows.Forms.Label();
+            this.lblAnimationMouseX = new System.Windows.Forms.Label();
+            this.lblAnimationMouseY = new System.Windows.Forms.Label();
             this.txtAnimationClientRequestDescription = new System.Windows.Forms.TextBox();
             this.lblAnimationClientRequestDescription = new System.Windows.Forms.Label();
             this.cbAnimationClientRequestUnitsOverride = new System.Windows.Forms.CheckBox();
@@ -104,23 +121,6 @@ namespace InstrumentDesigner
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.gpAnimationMouseClick = new System.Windows.Forms.GroupBox();
-            this.lblAnimationMouseY = new System.Windows.Forms.Label();
-            this.lblAnimationMouseX = new System.Windows.Forms.Label();
-            this.lblAnimationMouseHeight = new System.Windows.Forms.Label();
-            this.lblAnimationMouseWIdth = new System.Windows.Forms.Label();
-            this.txtAnimationMouseY = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationMouseWidth = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationMouseHeight = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationMouseX = new System.Windows.Forms.NumericUpDown();
-            this.lblAnimationMouseValue = new System.Windows.Forms.Label();
-            this.lblAnimationMouseIncrement = new System.Windows.Forms.Label();
-            this.lblAnimationMouseMax = new System.Windows.Forms.Label();
-            this.lblAnimationMouseMin = new System.Windows.Forms.Label();
-            this.txtAnimationMouseVal = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationMouseIncrement = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationMouseMax = new System.Windows.Forms.NumericUpDown();
-            this.txtAnimationMouseMin = new System.Windows.Forms.NumericUpDown();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -131,6 +131,15 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.pbAnimationImage)).BeginInit();
             this.tabWhen.SuspendLayout();
             this.gpAnimationClientRequest.SuspendLayout();
+            this.gpAnimationMouseClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseIncrement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseVal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).BeginInit();
             this.tabHow.SuspendLayout();
             this.gpAnimationActionMoveX.SuspendLayout();
@@ -145,15 +154,6 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).BeginInit();
-            this.gpAnimationMouseClick.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseHeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseVal)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseIncrement)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMax)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMin)).BeginInit();
             this.SuspendLayout();
             // 
             // tabCollection
@@ -263,6 +263,7 @@ namespace InstrumentDesigner
             this.cmbAnimationFillMethod.Name = "cmbAnimationFillMethod";
             this.cmbAnimationFillMethod.Size = new System.Drawing.Size(121, 21);
             this.cmbAnimationFillMethod.TabIndex = 10;
+            this.cmbAnimationFillMethod.SelectedIndexChanged += new System.EventHandler(this.FillMethod_Change);
             // 
             // lblAnimationFillMethod
             // 
@@ -441,6 +442,159 @@ namespace InstrumentDesigner
             this.gpAnimationClientRequest.TabStop = false;
             this.gpAnimationClientRequest.Text = "Client Request";
             this.gpAnimationClientRequest.Visible = false;
+            // 
+            // gpAnimationMouseClick
+            // 
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseMin);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseMax);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseIncrement);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseVal);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseMin);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseMax);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseIncrement);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseValue);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseX);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseHeight);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseWidth);
+            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseY);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseWIdth);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseHeight);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseX);
+            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseY);
+            this.gpAnimationMouseClick.Location = new System.Drawing.Point(1, 0);
+            this.gpAnimationMouseClick.Name = "gpAnimationMouseClick";
+            this.gpAnimationMouseClick.Size = new System.Drawing.Size(453, 172);
+            this.gpAnimationMouseClick.TabIndex = 3;
+            this.gpAnimationMouseClick.TabStop = false;
+            this.gpAnimationMouseClick.Text = "Mouse Click";
+            // 
+            // txtAnimationMouseMin
+            // 
+            this.txtAnimationMouseMin.Location = new System.Drawing.Point(252, 68);
+            this.txtAnimationMouseMin.Name = "txtAnimationMouseMin";
+            this.txtAnimationMouseMin.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseMin.TabIndex = 15;
+            // 
+            // txtAnimationMouseMax
+            // 
+            this.txtAnimationMouseMax.Location = new System.Drawing.Point(252, 93);
+            this.txtAnimationMouseMax.Name = "txtAnimationMouseMax";
+            this.txtAnimationMouseMax.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseMax.TabIndex = 14;
+            // 
+            // txtAnimationMouseIncrement
+            // 
+            this.txtAnimationMouseIncrement.Location = new System.Drawing.Point(252, 43);
+            this.txtAnimationMouseIncrement.Name = "txtAnimationMouseIncrement";
+            this.txtAnimationMouseIncrement.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseIncrement.TabIndex = 13;
+            // 
+            // txtAnimationMouseVal
+            // 
+            this.txtAnimationMouseVal.Location = new System.Drawing.Point(253, 18);
+            this.txtAnimationMouseVal.Name = "txtAnimationMouseVal";
+            this.txtAnimationMouseVal.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseVal.TabIndex = 12;
+            // 
+            // lblAnimationMouseMin
+            // 
+            this.lblAnimationMouseMin.AutoSize = true;
+            this.lblAnimationMouseMin.Location = new System.Drawing.Point(219, 72);
+            this.lblAnimationMouseMin.Name = "lblAnimationMouseMin";
+            this.lblAnimationMouseMin.Size = new System.Drawing.Size(27, 13);
+            this.lblAnimationMouseMin.TabIndex = 11;
+            this.lblAnimationMouseMin.Text = "Min:";
+            // 
+            // lblAnimationMouseMax
+            // 
+            this.lblAnimationMouseMax.AutoSize = true;
+            this.lblAnimationMouseMax.Location = new System.Drawing.Point(216, 97);
+            this.lblAnimationMouseMax.Name = "lblAnimationMouseMax";
+            this.lblAnimationMouseMax.Size = new System.Drawing.Size(30, 13);
+            this.lblAnimationMouseMax.TabIndex = 10;
+            this.lblAnimationMouseMax.Text = "Max:";
+            // 
+            // lblAnimationMouseIncrement
+            // 
+            this.lblAnimationMouseIncrement.AutoSize = true;
+            this.lblAnimationMouseIncrement.Location = new System.Drawing.Point(189, 47);
+            this.lblAnimationMouseIncrement.Name = "lblAnimationMouseIncrement";
+            this.lblAnimationMouseIncrement.Size = new System.Drawing.Size(57, 13);
+            this.lblAnimationMouseIncrement.TabIndex = 9;
+            this.lblAnimationMouseIncrement.Text = "Increment:";
+            // 
+            // lblAnimationMouseValue
+            // 
+            this.lblAnimationMouseValue.AutoSize = true;
+            this.lblAnimationMouseValue.Location = new System.Drawing.Point(209, 22);
+            this.lblAnimationMouseValue.Name = "lblAnimationMouseValue";
+            this.lblAnimationMouseValue.Size = new System.Drawing.Size(37, 13);
+            this.lblAnimationMouseValue.TabIndex = 8;
+            this.lblAnimationMouseValue.Text = "Value:";
+            // 
+            // txtAnimationMouseX
+            // 
+            this.txtAnimationMouseX.Location = new System.Drawing.Point(46, 43);
+            this.txtAnimationMouseX.Name = "txtAnimationMouseX";
+            this.txtAnimationMouseX.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseX.TabIndex = 7;
+            // 
+            // txtAnimationMouseHeight
+            // 
+            this.txtAnimationMouseHeight.Location = new System.Drawing.Point(46, 68);
+            this.txtAnimationMouseHeight.Name = "txtAnimationMouseHeight";
+            this.txtAnimationMouseHeight.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseHeight.TabIndex = 6;
+            // 
+            // txtAnimationMouseWidth
+            // 
+            this.txtAnimationMouseWidth.Location = new System.Drawing.Point(46, 93);
+            this.txtAnimationMouseWidth.Name = "txtAnimationMouseWidth";
+            this.txtAnimationMouseWidth.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseWidth.TabIndex = 5;
+            // 
+            // txtAnimationMouseY
+            // 
+            this.txtAnimationMouseY.Location = new System.Drawing.Point(46, 18);
+            this.txtAnimationMouseY.Name = "txtAnimationMouseY";
+            this.txtAnimationMouseY.Size = new System.Drawing.Size(120, 20);
+            this.txtAnimationMouseY.TabIndex = 4;
+            // 
+            // lblAnimationMouseWIdth
+            // 
+            this.lblAnimationMouseWIdth.AutoSize = true;
+            this.lblAnimationMouseWIdth.Location = new System.Drawing.Point(2, 97);
+            this.lblAnimationMouseWIdth.Name = "lblAnimationMouseWIdth";
+            this.lblAnimationMouseWIdth.Size = new System.Drawing.Size(38, 13);
+            this.lblAnimationMouseWIdth.TabIndex = 3;
+            this.lblAnimationMouseWIdth.Text = "Width:";
+            // 
+            // lblAnimationMouseHeight
+            // 
+            this.lblAnimationMouseHeight.AutoSize = true;
+            this.lblAnimationMouseHeight.Location = new System.Drawing.Point(-1, 72);
+            this.lblAnimationMouseHeight.Name = "lblAnimationMouseHeight";
+            this.lblAnimationMouseHeight.Size = new System.Drawing.Size(41, 13);
+            this.lblAnimationMouseHeight.TabIndex = 2;
+            this.lblAnimationMouseHeight.Text = "Height:";
+            // 
+            // lblAnimationMouseX
+            // 
+            this.lblAnimationMouseX.AutoSize = true;
+            this.lblAnimationMouseX.Location = new System.Drawing.Point(11, 22);
+            this.lblAnimationMouseX.Name = "lblAnimationMouseX";
+            this.lblAnimationMouseX.Size = new System.Drawing.Size(29, 13);
+            this.lblAnimationMouseX.TabIndex = 1;
+            this.lblAnimationMouseX.Text = "Top:";
+            // 
+            // lblAnimationMouseY
+            // 
+            this.lblAnimationMouseY.AutoSize = true;
+            this.lblAnimationMouseY.Location = new System.Drawing.Point(12, 47);
+            this.lblAnimationMouseY.Name = "lblAnimationMouseY";
+            this.lblAnimationMouseY.Size = new System.Drawing.Size(28, 13);
+            this.lblAnimationMouseY.TabIndex = 0;
+            this.lblAnimationMouseY.Text = "Left:";
             // 
             // txtAnimationClientRequestDescription
             // 
@@ -966,159 +1120,6 @@ namespace InstrumentDesigner
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
-            // gpAnimationMouseClick
-            // 
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseMin);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseMax);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseIncrement);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseVal);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseMin);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseMax);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseIncrement);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseValue);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseX);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseHeight);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseWidth);
-            this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseY);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseWIdth);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseHeight);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseX);
-            this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseY);
-            this.gpAnimationMouseClick.Location = new System.Drawing.Point(1, 0);
-            this.gpAnimationMouseClick.Name = "gpAnimationMouseClick";
-            this.gpAnimationMouseClick.Size = new System.Drawing.Size(453, 172);
-            this.gpAnimationMouseClick.TabIndex = 3;
-            this.gpAnimationMouseClick.TabStop = false;
-            this.gpAnimationMouseClick.Text = "Mouse Click";
-            // 
-            // lblAnimationMouseY
-            // 
-            this.lblAnimationMouseY.AutoSize = true;
-            this.lblAnimationMouseY.Location = new System.Drawing.Point(12, 47);
-            this.lblAnimationMouseY.Name = "lblAnimationMouseY";
-            this.lblAnimationMouseY.Size = new System.Drawing.Size(28, 13);
-            this.lblAnimationMouseY.TabIndex = 0;
-            this.lblAnimationMouseY.Text = "Left:";
-            // 
-            // lblAnimationMouseX
-            // 
-            this.lblAnimationMouseX.AutoSize = true;
-            this.lblAnimationMouseX.Location = new System.Drawing.Point(11, 22);
-            this.lblAnimationMouseX.Name = "lblAnimationMouseX";
-            this.lblAnimationMouseX.Size = new System.Drawing.Size(29, 13);
-            this.lblAnimationMouseX.TabIndex = 1;
-            this.lblAnimationMouseX.Text = "Top:";
-            // 
-            // lblAnimationMouseHeight
-            // 
-            this.lblAnimationMouseHeight.AutoSize = true;
-            this.lblAnimationMouseHeight.Location = new System.Drawing.Point(-1, 72);
-            this.lblAnimationMouseHeight.Name = "lblAnimationMouseHeight";
-            this.lblAnimationMouseHeight.Size = new System.Drawing.Size(41, 13);
-            this.lblAnimationMouseHeight.TabIndex = 2;
-            this.lblAnimationMouseHeight.Text = "Height:";
-            // 
-            // lblAnimationMouseWIdth
-            // 
-            this.lblAnimationMouseWIdth.AutoSize = true;
-            this.lblAnimationMouseWIdth.Location = new System.Drawing.Point(2, 97);
-            this.lblAnimationMouseWIdth.Name = "lblAnimationMouseWIdth";
-            this.lblAnimationMouseWIdth.Size = new System.Drawing.Size(38, 13);
-            this.lblAnimationMouseWIdth.TabIndex = 3;
-            this.lblAnimationMouseWIdth.Text = "Width:";
-            // 
-            // txtAnimationMouseY
-            // 
-            this.txtAnimationMouseY.Location = new System.Drawing.Point(46, 18);
-            this.txtAnimationMouseY.Name = "txtAnimationMouseY";
-            this.txtAnimationMouseY.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseY.TabIndex = 4;
-            // 
-            // txtAnimationMouseWidth
-            // 
-            this.txtAnimationMouseWidth.Location = new System.Drawing.Point(46, 93);
-            this.txtAnimationMouseWidth.Name = "txtAnimationMouseWidth";
-            this.txtAnimationMouseWidth.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseWidth.TabIndex = 5;
-            // 
-            // txtAnimationMouseHeight
-            // 
-            this.txtAnimationMouseHeight.Location = new System.Drawing.Point(46, 68);
-            this.txtAnimationMouseHeight.Name = "txtAnimationMouseHeight";
-            this.txtAnimationMouseHeight.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseHeight.TabIndex = 6;
-            // 
-            // txtAnimationMouseX
-            // 
-            this.txtAnimationMouseX.Location = new System.Drawing.Point(46, 43);
-            this.txtAnimationMouseX.Name = "txtAnimationMouseX";
-            this.txtAnimationMouseX.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseX.TabIndex = 7;
-            // 
-            // lblAnimationMouseValue
-            // 
-            this.lblAnimationMouseValue.AutoSize = true;
-            this.lblAnimationMouseValue.Location = new System.Drawing.Point(209, 22);
-            this.lblAnimationMouseValue.Name = "lblAnimationMouseValue";
-            this.lblAnimationMouseValue.Size = new System.Drawing.Size(37, 13);
-            this.lblAnimationMouseValue.TabIndex = 8;
-            this.lblAnimationMouseValue.Text = "Value:";
-            // 
-            // lblAnimationMouseIncrement
-            // 
-            this.lblAnimationMouseIncrement.AutoSize = true;
-            this.lblAnimationMouseIncrement.Location = new System.Drawing.Point(189, 47);
-            this.lblAnimationMouseIncrement.Name = "lblAnimationMouseIncrement";
-            this.lblAnimationMouseIncrement.Size = new System.Drawing.Size(57, 13);
-            this.lblAnimationMouseIncrement.TabIndex = 9;
-            this.lblAnimationMouseIncrement.Text = "Increment:";
-            // 
-            // lblAnimationMouseMax
-            // 
-            this.lblAnimationMouseMax.AutoSize = true;
-            this.lblAnimationMouseMax.Location = new System.Drawing.Point(216, 97);
-            this.lblAnimationMouseMax.Name = "lblAnimationMouseMax";
-            this.lblAnimationMouseMax.Size = new System.Drawing.Size(30, 13);
-            this.lblAnimationMouseMax.TabIndex = 10;
-            this.lblAnimationMouseMax.Text = "Max:";
-            // 
-            // lblAnimationMouseMin
-            // 
-            this.lblAnimationMouseMin.AutoSize = true;
-            this.lblAnimationMouseMin.Location = new System.Drawing.Point(219, 72);
-            this.lblAnimationMouseMin.Name = "lblAnimationMouseMin";
-            this.lblAnimationMouseMin.Size = new System.Drawing.Size(27, 13);
-            this.lblAnimationMouseMin.TabIndex = 11;
-            this.lblAnimationMouseMin.Text = "Min:";
-            // 
-            // txtAnimationMouseVal
-            // 
-            this.txtAnimationMouseVal.Location = new System.Drawing.Point(253, 18);
-            this.txtAnimationMouseVal.Name = "txtAnimationMouseVal";
-            this.txtAnimationMouseVal.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseVal.TabIndex = 12;
-            // 
-            // txtAnimationMouseIncrement
-            // 
-            this.txtAnimationMouseIncrement.Location = new System.Drawing.Point(252, 43);
-            this.txtAnimationMouseIncrement.Name = "txtAnimationMouseIncrement";
-            this.txtAnimationMouseIncrement.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseIncrement.TabIndex = 13;
-            // 
-            // txtAnimationMouseMax
-            // 
-            this.txtAnimationMouseMax.Location = new System.Drawing.Point(252, 93);
-            this.txtAnimationMouseMax.Name = "txtAnimationMouseMax";
-            this.txtAnimationMouseMax.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseMax.TabIndex = 14;
-            // 
-            // txtAnimationMouseMin
-            // 
-            this.txtAnimationMouseMin.Location = new System.Drawing.Point(252, 68);
-            this.txtAnimationMouseMin.Name = "txtAnimationMouseMin";
-            this.txtAnimationMouseMin.Size = new System.Drawing.Size(120, 20);
-            this.txtAnimationMouseMin.TabIndex = 15;
-            // 
             // frmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1143,6 +1144,16 @@ namespace InstrumentDesigner
             this.tabWhen.ResumeLayout(false);
             this.gpAnimationClientRequest.ResumeLayout(false);
             this.gpAnimationClientRequest.PerformLayout();
+            this.gpAnimationMouseClick.ResumeLayout(false);
+            this.gpAnimationMouseClick.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseIncrement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseVal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gdAnimationTriggers)).EndInit();
             this.tabHow.ResumeLayout(false);
             this.tabHow.PerformLayout();
@@ -1161,16 +1172,6 @@ namespace InstrumentDesigner
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionCentrePointX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtAnimationActionRotateMaxVal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgAnimationActions)).EndInit();
-            this.gpAnimationMouseClick.ResumeLayout(false);
-            this.gpAnimationMouseClick.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseHeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseVal)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseIncrement)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMax)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtAnimationMouseMin)).EndInit();
             this.ResumeLayout(false);
 
         }

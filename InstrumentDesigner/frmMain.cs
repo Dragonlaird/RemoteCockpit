@@ -387,7 +387,7 @@ namespace InstrumentDesigner
                                 // Replace existing animation with the modified version
                                 var currentAnimations = config.Animations.ToList();
                                 currentAnimations[currentAnimations.IndexOf(currentAnimations.First(x => ((IAnimationItem)x).Name == name))] = newAnimation;
-                                config.Animations = (AnimationXMLConverter)currentAnimations.AsEnumerable();
+                                config.Animations = new AnimationXMLConverter(currentAnimations);
                             }
                         }
                         break;
@@ -472,7 +472,7 @@ namespace InstrumentDesigner
         private void testInstrumentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmInstrumentTest frmTest = new frmInstrumentTest(config);
-            frmTest.ShowDialog();
+            frmTest.ShowDialog(this);
         }
     }
 }

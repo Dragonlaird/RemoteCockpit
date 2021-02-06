@@ -145,7 +145,7 @@ namespace InstrumentDesigner
                     gpAnimationActionMoveX.Visible = false;
                     if (gdAnimationTriggers.SelectedRows.Count == 1 && _animation.Triggers != null)
                     {
-                        trigger = ((IEnumerable<IAnimationTrigger>)_animation.Triggers).FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"]?.Value?.ToString());
+                        trigger = (IAnimationTrigger)_animation.Triggers.FirstOrDefault(x => ((IAnimationTrigger)x).Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"]?.Value?.ToString());
                         if (trigger != null)
                         {
                             lblAnimationActions.Visible = true;
@@ -466,7 +466,7 @@ namespace InstrumentDesigner
         {
             if (_animation != null && !populatingForm && gdAnimationTriggers.SelectedRows.Count == 1)
             {
-                return ((IEnumerable<IAnimationTrigger>)_animation.Triggers).FirstOrDefault(x => x.Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
+                return (IAnimationTrigger)_animation.Triggers.FirstOrDefault(x => ((IAnimationTrigger)x).Name == gdAnimationTriggers.SelectedRows[0].Cells["Trigger"].Value?.ToString());
             }
             return null;
         }
@@ -478,7 +478,7 @@ namespace InstrumentDesigner
                 var actionType = (AnimationActionTypeEnum)Enum.Parse(typeof(AnimationActionTypeEnum),dgAnimationActions.SelectedRows[0].Cells["ActionType"].Value.ToString());
                 var trigger = GetSelectedTrigger();
                 if (trigger != null && trigger.Actions.Any(x=> ((IAnimationAction)x).Type == actionType))
-                    return ((IEnumerable<IAnimationAction>)trigger.Actions).First(x => x.Type == actionType);
+                    return (IAnimationAction)trigger.Actions.First(x => ((IAnimationAction)x).Type == actionType);
             }
             return null;
         }
@@ -786,6 +786,19 @@ namespace InstrumentDesigner
                     ((AnimationActionMove)_animation).Invert = ((CheckBox)sender).Checked;
                 }
                 catch//(Exception ex) 
+                { }
+            }
+        }
+
+        private void FillMethod_Change(object sender, EventArgs e)
+        {
+            if (_animation != null && !populatingForm)
+            {
+                try
+                {
+                    ((AnimationDrawing)_animation).FillMethod = (FillTypeEnum)Enum.Parse(typeof(FillTypeEnum), ((ComboBox)sender).SelectedValue.ToString());
+                }
+                catch// (Exception ex)
                 { }
             }
         }
