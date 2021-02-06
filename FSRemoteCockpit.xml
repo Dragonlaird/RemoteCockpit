@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<item>
+  <version>2.0.0.0</version>
+  <url>https://dragonlaird.visualstudio.com/_git/RemoteCockpit?path=%2FInstaller%2FDebug</url>
+  <changelog>https://dragonlaird.visualstudio.com/RemoteCockpit/_wiki/wikis/RemoteCockpit.wiki/6/1.-Overview</changelog>
+  <mandatory>false</mandatory>
+</item>

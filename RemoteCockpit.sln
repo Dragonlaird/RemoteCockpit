@@ -39,6 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSCockpitTests", "FSCockpitTests\FSCockpitTests.csproj", "{FED05E48-37D5-42B3-93A0-788BE27CB471}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AutoUpdate", "AutoUpdate", "{A73635B0-4A0A-44D4-9578-14597A204B53}"
+	ProjectSection(SolutionItems) = preProject
+		FSRemoteCockpit.xml = FSRemoteCockpit.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
