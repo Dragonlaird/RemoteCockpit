@@ -30,7 +30,7 @@ namespace CockpitDisplay
 
         public frmMain()
         {
-            AutoUpdater.Start("https://dragonlaird.visualstudio.com/_git/RemoteCockpit/FSRemoteCockpit.xml");
+            AutoUpdater.Start("https://dragonlaird.visualstudio.com/_git/RemoteCockpit?path=%2FFSRemoteCockpit.xml");
             InitializeComponent();
             Initialize();
 
