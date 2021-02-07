@@ -11,10 +11,13 @@ namespace FSCockpitTests
         [TestMethod]
         public void LoadJSONConfigTest()
         {
-            var pathToJSON = Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json");
-            Configuration config = new Configuration();
-            config.Load(pathToJSON);
-            Assert.IsFalse(string.IsNullOrEmpty(config.Name));
+            foreach (var pathToJSON in Directory.GetFiles("..\\..\\..\\InstrumentPlugins\\GenericInstruments", "*.json"))
+            {
+                //var pathToJSON = Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json");
+                Configuration config = new Configuration();
+                config.Load(pathToJSON);
+                Assert.IsFalse(string.IsNullOrEmpty(config.Name));
+            }
         }
     }
 }

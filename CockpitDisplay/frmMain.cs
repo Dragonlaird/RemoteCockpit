@@ -249,8 +249,8 @@ namespace CockpitDisplay
                 cockpit.Dispose();
             }
             cockpit = new frmCockpit();
-            cockpit.RequestValue += RequestVariable;
             cockpit.LogMessage += DebugMessage;
+            cockpit.RequestValue += RequestVariable;
             cockpit.FormClosed += Cockpit_Closed;
             if (cbFullScreen.Checked)
             {
@@ -284,9 +284,7 @@ namespace CockpitDisplay
             }
             catch { }
             RequestAllVariables(); // Resubmit all previous requests, in case server disconnected from FS
-            //cockpit.Update();
             cockpit.Focus();
-            this.Focus();
         }
 
         private void DebugMessage(object sender, string message)
@@ -296,13 +294,13 @@ namespace CockpitDisplay
                 if (txtDebugMessages.InvokeRequired)
                 {
                     var d = new SafeUpdateDelegate(DebugMessage);
-                    ((Control)txtDebugMessages).Invoke(d, new object[] { sender, message });
+                    txtDebugMessages.Invoke(d, new[] { sender, message });
                     return;
                 }
                 txtDebugMessages.Text += string.Format("{0:HH:mm:ss} ({1}) {2}\r\n", DateTime.Now, sender?.GetType().Name ?? "Unknown", message);
                 while(txtDebugMessages.Text.Count(x=> x=='\n') > 200)
                 {
-                    txtDebugMessages.Text = txtDebugMessages.Text.Substring(txtDebugMessages.Text.IndexOf('\n') + 1);
+                    txtDebugMessages.Text = txtDebugMessages.Text.Substring(0, txtDebugMessages.Text.IndexOf('\n') + 1);
                 }
                 txtDebugMessages.SelectionStart = txtDebugMessages.Text.Length;
                 txtDebugMessages.ScrollToCaret();

@@ -241,8 +241,8 @@ namespace CockpitDisplay
                     }
                 }
             }
-            this.Invalidate(true);
-            this.Update();
+            //this.Invalidate(true);
+            //this.Update();
         }
 
         private LayoutDefinition GetLayout(string name)

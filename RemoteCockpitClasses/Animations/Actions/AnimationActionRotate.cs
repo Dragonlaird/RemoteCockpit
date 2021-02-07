@@ -5,11 +5,9 @@ using System.Xml.Serialization;
 
 namespace RemoteCockpitClasses.Animations.Actions
 {
-    [XmlType("Action")]
     public class AnimationActionRotate : IAnimationAction
     {
-        [XmlAttribute(AttributeName = "type")]
-        public AnimationActionTypeEnum Type => AnimationActionTypeEnum.Rotate;
+        public AnimationActionTypeEnum Type { get; set; } = AnimationActionTypeEnum.Rotate;
         /// <summary>
         /// The relative point to rotate around.
         /// Default: (50, 50), equates to (50% width, 50% height), which is the centre of the image

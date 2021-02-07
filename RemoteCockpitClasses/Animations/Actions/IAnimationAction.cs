@@ -6,10 +6,9 @@ using System.Xml.Serialization;
 
 namespace RemoteCockpitClasses.Animations.Actions
 {
+    [JsonConverter(typeof(AnimationClassConverter))]
     public interface IAnimationAction
     {
-        [JsonConverter(typeof(ConcreteJSONConverter<AnimationActionRotate>))]
-        [XmlAttribute(AttributeName = "type")]
-        AnimationActionTypeEnum Type { get; }
+        AnimationActionTypeEnum Type { get; set; }
     }
 }

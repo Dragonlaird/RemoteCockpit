@@ -10,18 +10,15 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace RemoteCockpitClasses.Animations.Items
 {
-    //[JsonConverter(typeof(ConcreteConverter<AnimationImage[]>))]
-    [XmlType("Animation")]
     public class AnimationExternal : IAnimationItem
     {
-        public AnimationItemTypeEnum Type { get { return AnimationItemTypeEnum.External; } set { } }
+        public AnimationItemTypeEnum Type { get; set; } = AnimationItemTypeEnum.External;
         public string Name { get; set; }
         public string RemoteURL { get; set; }
         public string RemoteUsername { get; set; }
         public string RemoteToken { get; set; }
-        public HttpMethod RequestMethod { get; set; } = HttpMethod.Post;
+        public string RequestMethod { get; set; } = "GET"; // HttpMethod.Post;
         public string RequestFormat { get; set; }
-        [JsonConverter(typeof(ConcreteJSONConverter<AnimationTriggerClientRequest[]>))]
         public IAnimationTrigger[] Triggers { get; set; }
         [JsonIgnore]
         public object LastAppliedValue { get; set; }

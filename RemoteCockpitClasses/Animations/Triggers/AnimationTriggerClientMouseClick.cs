@@ -7,10 +7,8 @@ using System.Xml.Serialization;
 
 namespace RemoteCockpitClasses.Animations.Triggers
 {
-    [XmlType("Trigger")]
     public class AnimationTriggerClientMouseClick : IAnimationTrigger
     {
-        [XmlAttribute(AttributeName = "type")]
         public AnimationTriggerTypeEnum Type { get; set; }
         public string Name { get; set; }
         public IAnimationAction[] Actions { get; set; }

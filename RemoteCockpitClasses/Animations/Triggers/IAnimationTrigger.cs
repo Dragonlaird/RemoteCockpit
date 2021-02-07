@@ -7,12 +7,11 @@ using System.Xml.Serialization;
 
 namespace RemoteCockpitClasses.Animations.Triggers
 {
+    [JsonConverter(typeof(AnimationClassConverter))]
     public interface IAnimationTrigger
     {
-        [XmlAttribute(AttributeName = "type")]
         AnimationTriggerTypeEnum Type { get; set; }
         string Name { get; set; }
-        [JsonConverter(typeof(ConcreteJSONConverter<AnimationActionRotate[]>))]
         IAnimationAction[] Actions { get; set; }
     }
 }
