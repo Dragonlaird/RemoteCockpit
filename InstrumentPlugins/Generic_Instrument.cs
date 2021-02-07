@@ -409,7 +409,7 @@ namespace InstrumentPlugins
 
         private Image GenerateAnimationImage(IAnimationItem animation)
         {
-            var animationId = config.Animations.AsEnumerable().IndexOf(animation);
+            var animationId = Array.IndexOf(config.Animations, animation);
             var triggers = animation.Triggers?.Where(x => x is AnimationTriggerClientRequest).Select(x => (AnimationTriggerClientRequest)x).ToArray() ?? new IAnimationTrigger[0];
             Bitmap initialImage;
             lock (animationImages)

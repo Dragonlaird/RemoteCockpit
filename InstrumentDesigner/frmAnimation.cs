@@ -666,7 +666,7 @@ namespace InstrumentDesigner
                                 actionList.Add(new AnimationActionMove { Type = AnimationActionTypeEnum.MoveY });
                                 break;
                         }
-                        var iPos = _animation.Triggers.AsEnumerable().IndexOf(trigger);
+                        var iPos = Array.IndexOf(_animation.Triggers, trigger);
                         ((IEnumerable<IAnimationTrigger>)_animation.Triggers).ToArray()[iPos].Actions = actionList.ToArray();
                     }
                     //((DataGridView)sender).Rows[e.RowIndex].Selected = true;
@@ -725,11 +725,11 @@ namespace InstrumentDesigner
         {
             if (_animation != null && !populatingForm)
             {
-                var actionList = ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.IndexOf(GetSelectedTrigger())]).Actions.ToList();
+                var actionList = ((IAnimationTrigger)_animation.Triggers[Array.IndexOf(_animation.Triggers, GetSelectedTrigger())]).Actions.ToList();
                 if (e.RowIndex < actionList.Count)
                 {
                     actionList.Remove(actionList[e.RowIndex]);
-                    ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.AsEnumerable().IndexOf(GetSelectedTrigger())]).Actions = actionList.ToArray();
+                    ((IAnimationTrigger)_animation.Triggers[Array.IndexOf(_animation.Triggers, GetSelectedTrigger())]).Actions = actionList.ToArray();
                 }
                 PopulateTab(2);
             }
@@ -749,7 +749,7 @@ namespace InstrumentDesigner
                 var action = (AnimationActionMove)GetSelectedAction();
                 var rowIdx = dgAnimationActions.Rows.IndexOf(dgAnimationActions.SelectedRows[0]);
                 action.MaxValue = (float)txtAnimationActionMoveMax.Value;
-                ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.IndexOf(trigger)]).Actions.ToArray()[rowIdx] = action;
+                ((IAnimationTrigger)_animation.Triggers[Array.IndexOf(_animation.Triggers, trigger)]).Actions.ToArray()[rowIdx] = action;
             }
         }
 
@@ -761,7 +761,7 @@ namespace InstrumentDesigner
                 var action = (AnimationActionMove)GetSelectedAction();
                 var rowIdx = dgAnimationActions.Rows.IndexOf(dgAnimationActions.SelectedRows[0]);
                 action.Invert = cbAnimationActionMoveInvert.Checked;
-                ((IAnimationTrigger)_animation.Triggers.ToArray()[_animation.Triggers.IndexOf(trigger)]).Actions.ToArray()[rowIdx] = action;
+                ((IAnimationTrigger)_animation.Triggers.ToArray()[Array.IndexOf(_animation.Triggers, trigger)]).Actions.ToArray()[rowIdx] = action;
             }
         }
 
