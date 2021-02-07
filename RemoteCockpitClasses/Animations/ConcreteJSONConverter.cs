@@ -31,7 +31,7 @@ namespace RemoteCockpitClasses.Animations
             }
             catch (Exception ex)//(Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(string.Format("Unable to read Configuration: Could not parse {0}", reader.Path), "Config Parse Failed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                //System.Windows.Forms.MessageBox.Show(string.Format("Unable to read Configuration: Could not parse {0}", reader.Path), "Config Parse Failed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                 // Failed to deserialize
             }
             //if (objectType == typeof(AnimationXMLConverter))
@@ -253,7 +253,7 @@ namespace RemoteCockpitClasses.Animations
                         }
                         catch(Exception ex)
                         {
-                            System.Windows.Forms.MessageBox.Show(string.Format("Failed to convert: {0}", propertyName), "Config Malformed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
+                            //System.Windows.Forms.MessageBox.Show(string.Format("Failed to convert: {0}", propertyName), "Config Malformed", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Warning);
                         }
                     }
                 }
