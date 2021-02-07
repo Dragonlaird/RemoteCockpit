@@ -79,7 +79,6 @@ namespace InstrumentPlugins
             SetLayout(0, 0, maxHeight, maxWidth);
         }
 
-
         private void Initialize()
         {
             isStarting = true;
@@ -850,6 +849,7 @@ namespace InstrumentPlugins
                 WriteLog("ValueUpdate: Invalid ClientRequestValue supplied.", ex);
             }
         }
+
         private void UpdateAnimationStepSize(ref double stepSize, ClientRequestResult latestResult, ClientRequestResult currentResult, ClientRequestLimits limits, double stepCount)
         {
             // Old method for stepSize = ((double)(currentResults[resultIdx].Result ?? 0.0) - (double)(lastResult.Result ?? 0.0)) / animationStepCount;

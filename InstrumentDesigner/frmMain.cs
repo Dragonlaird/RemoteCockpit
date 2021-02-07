@@ -112,7 +112,12 @@ namespace InstrumentDesigner
                     {
                         currentActivity = string.Format("Loading Instrument Animation '{0}' Triggers ({1} triggers)", animation?.Name, animation.Triggers?.Count());
                         dgAnimations.Rows[rowIdx].Cells["When"].Value = string.Join(",", animation.Triggers?.Select(x => ((IAnimationTrigger)x).Type.ToString()));
-                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", animation.Triggers?.SelectMany(x => ((IAnimationTrigger)x).Actions?.Where(z => z != null && ((IAnimationAction)z).Type != null).Select(y => ((IAnimationAction)y)?.Type.ToString())));
+                        dgAnimations.Rows[rowIdx].Cells["How"].Value = string.Join(",", animation?
+                            .Triggers?.Where(a=> a.Actions!= null)
+                            .SelectMany(x => ((IAnimationTrigger)x)?
+                                .Actions?
+                                .Where(z => z != null && ((IAnimationAction)z).Type != null)
+                                    .Select(y => ((IAnimationAction)y)?.Type.ToString())));
                     }
                 }
             }
@@ -462,8 +467,11 @@ namespace InstrumentDesigner
 
         private void testInstrumentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmInstrumentTest frmTest = new frmInstrumentTest(config);
-            frmTest.ShowDialog(this);
+            Task.Run(() =>
+            {
+                new frmInstrumentTest(config)
+                    .ShowDialog();
+            });
         }
     }
 }
