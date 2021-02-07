@@ -14,6 +14,7 @@ using System.IO;
 using System.Windows.Forms;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 
 namespace RemoteCockpitServer
 {
@@ -21,20 +22,46 @@ namespace RemoteCockpitServer
     {
         public EventHandler<LogMessage> LogReceived;
         private readonly RemoteServer server;
-
-        public FSCockpitServer(Logger log)
+        private readonly Logger log;
+        public FSCockpitServer()
         {
-            server = new RemoteServer(log);
+            try
+            {
+                var logConfig = new LoggerConfiguration();
+                logConfig
+                    .WriteTo.EventLog("FS Remote Cockpit", "Application");
+                log = logConfig.CreateLogger();
+                server = new RemoteServer();
+                server.LogReceived += WriteLog;
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex);
+            }
         }
 
         protected override void OnStart(string[] args)
         {
-            server.Start();
+            try
+            {
+                server.Start();
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex);
+            }
         }
 
         protected override void OnStop()
         {
-            server.Stop();
+            try
+            {
+                server.Stop();
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex);
+            }
         }
         public bool IsRunning
         {
@@ -42,6 +69,44 @@ namespace RemoteCockpitServer
             {
                 return server?.IsRunning ?? false;
             }
+        }
+
+        private void WriteLog(Exception ex)
+        {
+            var msg = ex.Message;
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                msg += "\r" + ex.Message;
+            }
+            WriteLog(msg, LogEventLevel.Error);
+        }
+
+        private void WriteLog(string message, LogEventLevel type = LogEventLevel.Information)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                if (LogReceived != null)
+                    WriteLog(this, new LogMessage { Message = message, Type = type });
+                if (log != null)
+                {
+                    try
+                    {
+                        var msg = string.Format("{0:HH:mm:dd} [{1}] {2}", DateTime.Now, (type + "   ").ToString().Substring(0, 4), message);
+                        log.Write(type, msg);
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private void WriteLog(object sender, LogMessage e)
+        {
+            try
+            {
+                LogReceived.DynamicInvoke(this, e);
+            }
+            catch { }
         }
     }
 }

@@ -16,14 +16,5 @@ namespace RemoteCockpitServer
         {
             InitializeComponent();
         }
-        //public override void Install(IDictionary stateSaver)
-        //{
-        //    base.Install(stateSaver);
-        //    if(MessageBox.Show("Do you want to install FS Remote Cockpit Server as a Windows Service?", "Install Windows Service?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-        //    {
-        //        // Install project as a Windows Service
-
-        //    }
-        //}
     }
 }

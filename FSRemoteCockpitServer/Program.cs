@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RemoteCockpitClasses;
 using Serilog;
+using Serilog.Core;
+using Serilog.Sinks;
 
 namespace RemoteCockpitServer
 {
@@ -19,16 +21,30 @@ namespace RemoteCockpitServer
     {
         private static FSCockpitServer server;
         private static RemoteServer consoleServer;
+        private static Serilog.LoggerConfiguration logConfig;
+        private static Logger log;
         public static void Main(string[] args)
         {
-            var logConfig = new LoggerConfiguration();
-            logConfig
-                .WriteTo.EventLog("FS Remote Cockpit", "Application");
+            logConfig = new Serilog.LoggerConfiguration();
+            logConfig?
+                .WriteTo.Console();
+            try
+            {
+                logConfig?
+                    .WriteTo.EventLog("FS Remote Cockpit", "Application");
+            }
+            catch { }
             if (args.Contains("logtofile"))
             {
-                logConfig.WriteTo.File(Path.Combine(Path.GetTempPath(), string.Format("FSCockpitServer_{0:yyMMdd}", DateTime.Now))).ToString();
+                try
+                {
+                    logConfig?.WriteTo.File(Path.Combine(Path.GetTempPath(), string.Format("FSCockpitServer_{0:yyMMdd}", DateTime.Now))).ToString();
+                }
+                catch { }
             }
-            var log = logConfig.CreateLogger();
+            log = logConfig.CreateLogger();
+            //if (Environment.UserInteractive)
+            //    args = new string[] { "-c" };
             if (args != null && args.Length == 1 && args[0].Length > 1
                     && (args[0][0] == '-' || args[0][0] == '/'))
             {
@@ -38,51 +54,51 @@ namespace RemoteCockpitServer
                         break;
                     case "install":
                     case "i":
-                        log.Information("Installing Remote Cockpit as a Windows Service");
-                        SelfInstaller.InstallMe();
+                        log?.Information("Installing Remote Cockpit as a Windows Service");
+                        SelfInstaller.InstallMe(log);
                         break;
                     case "uninstall":
                     case "u":
-                        log.Information("Uninstalling Remote Cockpit Windows Service");
-                        SelfInstaller.UninstallMe();
+                        log?.Information("Uninstalling Remote Cockpit Windows Service");
+                        SelfInstaller.UninstallMe(log);
                         break;
                     case "console":
                     case "c":
                     case "start":
-                        log.Information("Starting Remote Cockpit Manually");
-                        if (server?.IsRunning != true)
-                        {
-                            consoleServer = new RemoteServer(logConfig.CreateLogger());
-                            consoleServer.Start();
-                        }
+                        log?.Information("Starting Remote Cockpit Manually");
+                        consoleServer = new RemoteServer(log);
+                        consoleServer.Start();
                         break;
                     case "stop":
-                        log.Information("Stopping Remote Cockpit Manually");
-                        if (server?.IsRunning == true)
-                        {
-                            server.Stop();
-                            while (server?.IsRunning == true)
-                            {
-                                Thread.Sleep(10);
-                            }
-                            server = null;
-                        }
-                        if(consoleServer?.IsRunning == true)
+                        log?.Information("Stopping Remote Cockpit Manually");
+                        if (consoleServer?.IsRunning == true)
                         {
                             consoleServer.Stop();
                         }
+                        consoleServer?.Dispose();
                         break;
                 }
             }
             else
             {
                 ServiceBase[] ServicesToRun;
+                server = new FSCockpitServer();
+                server.LogReceived += WriteLog;
                 ServicesToRun = new ServiceBase[]
                 {
-                    new FSCockpitServer(log)
+                    server
                 };
                 ServiceBase.Run(ServicesToRun);
             }
+        }
+
+        private static void WriteLog(object sender, LogMessage e)
+        {
+            try
+            {
+                log?.Write(e.Type, e.Message);
+            }
+            catch { }
         }
     }
 }

@@ -116,14 +116,14 @@ namespace InstrumentDesigner
                             .Triggers?.Where(a=> a.Actions!= null)
                             .SelectMany(x => ((IAnimationTrigger)x)?
                                 .Actions?
-                                .Where(z => z != null && ((IAnimationAction)z).Type != null)
-                                    .Select(y => ((IAnimationAction)y)?.Type.ToString())));
+                                .Where(z => z != null)
+                                    .Select(z => ((IAnimationAction)z)?.Type.ToString())));
                     }
                 }
             }
             catch(Exception ex)
             {
-                MessageBox.Show(string.Format("Failed to load Config.\r\nStep {0}", currentActivity), "Config Load Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("Failed to load Config.\r\nStep {0}\r\nError: {1}", currentActivity, ex.Message), "Config Load Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             populatingForm = false;
         }
