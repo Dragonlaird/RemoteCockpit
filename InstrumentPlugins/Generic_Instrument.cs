@@ -788,11 +788,11 @@ namespace InstrumentPlugins
         {
             get
             {
-                return animationTimeInMs / 1000;
+                return animationTimeInMs;
             }
             set
             {
-                animationTimeInMs = value * 1000;
+                animationTimeInMs = value;
             }
         }
 

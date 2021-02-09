@@ -55,7 +55,7 @@ namespace CockpitDisplay
             // Assume FS Connection is not established - the re-request the Connection State
             // If FS Connection returns true, it will automatially resubmit all variable requests
             cbFSRunning.Checked = false;
-            RequestVariable(new ClientRequest { Name = "FS CONNECTION", Unit = "second" });
+            RequestVariable(new ClientRequest { Name = "FS CONNECTION", Unit = "bool" });
         }
 
         private void Initialize()
@@ -95,7 +95,7 @@ namespace CockpitDisplay
                 RequestVariable(new ClientRequest
                 {
                     Name = "UPDATE FREQUENCY",
-                    Unit = "second"
+                    Unit = "millisecond"
                 });
                 cbConnected.Checked = connector.Connected;
             }

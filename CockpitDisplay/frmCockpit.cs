@@ -99,11 +99,11 @@ namespace CockpitDisplay
                         {
                             Task.Run(() =>
                             {
-                                if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "second")
+                                if (requestResult.Request.Name == "UPDATE FREQUENCY" && requestResult.Request.Unit == "millisecond")
                                 {
                                     try
                                     {
-                                        instrument.UpdateFrequency = int.Parse(requestResult.Result?.ToString() ?? "3");
+                                        instrument.UpdateFrequency = int.Parse(requestResult.Result?.ToString() ?? "3000");
                                     }
                                     catch { }
                                 }

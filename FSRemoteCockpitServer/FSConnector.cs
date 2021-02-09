@@ -16,7 +16,7 @@ namespace RemoteCockpitServer
     public class FSConnector : IDisposable
     {
         private const int connectionCheckInterval = 10; // Seconds to recheck for FS connection 
-        private int _valueRequestInterval = 1; // Seconds between each batch of requests for variable updates
+        private int _valueRequestInterval = 1000; // Millieconds between each batch of requests for variable updates
         private MessagePumpManager handler;
         private bool disposedValue;
         private List<SimVarRequest> simVarRequests;
@@ -37,13 +37,13 @@ namespace RemoteCockpitServer
             {
                 if (value != _valueRequestInterval && value > 0)
                 {
-                    WriteLog(string.Format("Value Request Frequency changed from {0} to {1} seconds", _valueRequestInterval, value));
+                    WriteLog(string.Format("Value Request Frequency changed from {0} to {1} milliseconds", _valueRequestInterval, value));
                     _valueRequestInterval = value;
                     if (requestTimer != null)
                     {
                         requestTimer.Dispose();
                         requestTimer = new System.Threading.Timer(RequestAllValues);
-                        requestTimer.Change(10, _valueRequestInterval * 1000);
+                        requestTimer.Change(10, _valueRequestInterval);
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace RemoteCockpitServer
             System.Threading.Timer connectTimer = new System.Threading.Timer(StartConnector);
             connectTimer.Change(10, connectionCheckInterval * 1000);
             requestTimer = new System.Threading.Timer(RequestAllValues);
-            requestTimer.Change(10, ValueRequestInterval * 1000);
+            requestTimer.Change(10, ValueRequestInterval);
 
             //StartConnector();
         }

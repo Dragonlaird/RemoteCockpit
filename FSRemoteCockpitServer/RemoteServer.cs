@@ -20,8 +20,7 @@ namespace RemoteCockpitServer
         private SocketListener listener;
         private List<SimVarRequestResult> requestResults;
         private bool AlwaysSendVariable { get; set; } = true;// Should variable always be retransmitted to clients, even if value hasn't changed?
-        private int _updateFrequency = 1; // How may seconds between each SimConnect poll?
-        //private EventLog logger = null;
+        private int _updateFrequency = 1000; // How may milliseconds between each SimConnect poll?
         private readonly Logger _log;
         public bool IsRunning = false;
 
@@ -57,7 +56,7 @@ namespace RemoteCockpitServer
                 requestResults = new List<SimVarRequestResult>();
                 // Add the first Request Variable for Connection State
                 requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
-                requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = _updateFrequency });
+                requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "millisecond" }, Value = _updateFrequency });
                 requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "TITLE", Unit = "string" }, Value = "None" });
             }
             catch (Exception ex)
@@ -113,7 +112,7 @@ namespace RemoteCockpitServer
                 fsConnector.ConnectionStateChange += ConnectionStateChanged;
                 fsConnector.Start();
                 _updateFrequency = fsConnector.ValueRequestInterval;
-                requestResults.First(x => x.Request.Name == "UPDATE FREQUENCY" && x.Request.Unit == "second").Value = _updateFrequency;
+                requestResults.First(x => x.Request.Name == "UPDATE FREQUENCY" && x.Request.Unit == "millisecond").Value = _updateFrequency;
             }
             catch (Exception ex)
             {
@@ -150,7 +149,7 @@ namespace RemoteCockpitServer
                 if (currentConnection != null)
                     listener.SendVariable(currentConnection, true);
                 // Fetch the current Update Frequency
-                currentConnection = new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "second" }, Value = _updateFrequency };
+                currentConnection = new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "millisecond" }, Value = _updateFrequency };
                 if (currentConnection != null)
                     listener.SendVariable(currentConnection, true);
             }
@@ -272,26 +271,31 @@ namespace RemoteCockpitServer
             var logMsg = string.Format("({0}) [{1}] {2}", sender?.GetType().Name, strType, msg.Message);
             try
             {
-                switch (msg.Type)
+                if (_log != null)
+                    switch (msg.Type)
+                    {
+                        case LogEventLevel.Fatal:
+                            _log.Fatal(logMsg);
+                            break;
+                        case LogEventLevel.Error:
+                            _log.Error(logMsg);
+                            break;
+                        case LogEventLevel.Warning:
+                            _log.Warning(logMsg);
+                            break;
+                        case LogEventLevel.Verbose:
+                            _log.Verbose(logMsg);
+                            break;
+                        case LogEventLevel.Debug:
+                            _log.Debug(logMsg);
+                            break;
+                        default:
+                            _log.Information(logMsg);
+                            break;
+                    }
+                else
                 {
-                    case LogEventLevel.Fatal:
-                        _log.Fatal(logMsg);
-                        break;
-                    case LogEventLevel.Error:
-                        _log.Error(logMsg);
-                        break;
-                    case LogEventLevel.Warning:
-                        _log.Warning(logMsg);
-                        break;
-                    case LogEventLevel.Verbose:
-                        _log.Verbose(logMsg);
-                        break;
-                    case LogEventLevel.Debug:
-                        _log.Debug(logMsg);
-                        break;
-                    default:
-                        _log.Information(logMsg);
-                        break;
+                    Console.WriteLine(msg);
                 }
             }
             catch
