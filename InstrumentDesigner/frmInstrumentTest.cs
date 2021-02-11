@@ -64,17 +64,35 @@ namespace InstrumentDesigner
             if (e != null && e.RowIndex > -1 && e.ColumnIndex > -1)
             {
                 var row = dgSimVarValues.Rows[e.RowIndex];
-                if (row.Cells["VariableValue"].Value == null)
-                    row.Cells["VariableValue"].Value = 0;
-                var newValue = new ClientRequestResult
+                var val = row.Cells["VariableValue"].Value;
+                val = val ?? 0;
+                double dblVal;
+                ClientRequestResult newValue;
+                if (double.TryParse(val.ToString(), out dblVal))
                 {
-                    Request = new ClientRequest
+                    newValue = new ClientRequestResult
                     {
-                        Name = row.Cells["VariableName"].Value?.ToString(),
-                        Unit = row.Cells["VariableUnit"].Value?.ToString()
-                    },
-                    Result = double.Parse(row.Cells["VariableValue"].Value.ToString())
-                };
+                        Request = new ClientRequest
+                        {
+                            Name = row.Cells["VariableName"].Value?.ToString(),
+                            Unit = row.Cells["VariableUnit"].Value?.ToString()
+                        },
+                        Result = dblVal
+                    };
+                }
+                else
+                {
+                    DebugMessage(this, string.Format("Invalid value supplied for SimVar: {0} ({1})", row.Cells["VariableName"].Value, val));
+                    newValue = new ClientRequestResult
+                    {
+                        Request = new ClientRequest
+                        {
+                            Name = row.Cells["VariableName"].Value?.ToString(),
+                            Unit = row.Cells["VariableUnit"].Value?.ToString()
+                        },
+                        Result = 0
+                    };
+                }
                 instrument.ValueUpdate(newValue);
             }
         }

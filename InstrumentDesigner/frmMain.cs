@@ -257,7 +257,7 @@ namespace InstrumentDesigner
         }
         private void NewInstrument_Click(object sender, EventArgs e)
         {
-            if (config == null || !config.HasChanged || MessageBox.Show("Are you sure you want to discard the current Instrument Configuraion and define a new Instrument?", "Discard existing Configuration?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            if (config == null || !config.HasChanged || MessageBox.Show("Are you sure you want to discard the current Instrument Configuration and define a new Instrument?", "Discard existing Configuration?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
                 config = new Configuration();
                 PopulateConfigForm();

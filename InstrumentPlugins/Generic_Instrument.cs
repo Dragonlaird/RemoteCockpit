@@ -432,7 +432,7 @@ namespace InstrumentPlugins
                     {
                         if (action is AnimationActionRotate)
                         {
-                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of te Request Result
+                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of the Request Result
                             var rotateAction = (AnimationActionRotate)action;
                             var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
                             var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
@@ -823,7 +823,7 @@ namespace InstrumentPlugins
                     }
                     foreach (var animation in config.Animations)
                     {
-                        if (animation is AnimationExternal && ((IAnimationItem)animation).Triggers.Any(x => ((AnimationTriggerClientRequest)x).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == value.Request.Unit))
+                        if (animation is AnimationExternal && ((IAnimationItem)animation).Triggers.Where(x=> x is AnimationTriggerClientRequest).Any(x => ((AnimationTriggerClientRequest)x).Request.Name == value.Request.Name && ((AnimationTriggerClientRequest)x).Request.Unit == value.Request.Unit))
                         {
                             // Need to update an external image
                             animationImages[config.Animations.ToList().IndexOf(animation)] = LoadImageFromRemote((AnimationExternal)animation);
@@ -890,11 +890,15 @@ namespace InstrumentPlugins
 
         private double GetNumericDistance(double currentValue, double targetValue, ClientRequestLimits limits, bool direct)
         {
+            var target = targetValue;
+            if (target < limits.Min)
+                target = target + limits.Max;
+            target = target % limits.Max;
             if (direct)
             {
-                return targetValue < currentValue ? currentValue - targetValue : targetValue - currentValue;
+                return target < currentValue ? currentValue - target : target - currentValue;
             }
-            return targetValue < currentValue ? (limits.Max - currentValue + targetValue) : (limits.Max - targetValue + currentValue);
+            return target < currentValue ? (limits.Max - currentValue + target) : (limits.Max - target + currentValue);
         }
 
         private void UpdateStepCount(int serverUpdateTimeInMs)

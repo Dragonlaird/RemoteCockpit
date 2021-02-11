@@ -29,7 +29,8 @@
                 "Y": 50.0
               },
               "RotateClockwise": true,
-              "MaximumValueExpected": 6.2832
+              "MaximumValueExpected": 3.1416,
+              "MinimumValueExpected": -3.1416
             }
           ]
         },
@@ -43,7 +44,8 @@
           "Actions": [
             {
               "Type": 2,
-              "MaxValue": 6.2832,
+              "MaxValue": 3.1416,
+              "MinValue": -3.1416,
               "Invert": false
             },
             {

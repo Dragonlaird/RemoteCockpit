@@ -18,6 +18,14 @@ namespace RemoteCockpitClasses.Animations
             return (objectType == typeof(IAnimationItem));
         }
 
+        /// <summary>
+        /// Allow base class to generate JSON
+        /// </summary>
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if(objectType.IsArray)
@@ -148,7 +156,6 @@ namespace RemoteCockpitClasses.Animations
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            // Left as an exercise to the reader :)
             throw new NotImplementedException();
         }
     }
