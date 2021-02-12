@@ -63,6 +63,70 @@
           ]
         }
       ]
+    },
+    {
+      "Type": 1,
+      "Name": "Overlay",
+      "PointMap": [
+        {
+          "X": 50.0,
+          "Y": 51.0
+        },
+        {
+          "X": 40.0,
+          "Y": 51.0
+        },
+        {
+          "X": 38.0,
+          "Y": 48.0
+        },
+        {
+          "X": 39.0,
+          "Y": 48.0
+        },
+        {
+          "X": 40.0,
+          "Y": 49.0
+        },
+        {
+          "X": 60.0,
+          "Y": 49.0
+        },
+        {
+          "X": 61.0,
+          "Y": 48.0
+        },
+        {
+          "X": 62.0,
+          "Y": 48.0
+        },
+        {
+          "X": 60.0,
+          "Y": 49.0
+        }
+      ],
+      "FillMethod": 1,
+      "FillColor": "White",
+      "OffsetX": 0.0,
+      "OffsetY": 0.0,
+      "Triggers": [
+        {
+          "Name": "Update1",
+          "Type": 1,
+          "Request": {
+            "Name": "ATTITUDE INDICATOR BANK DEGREES",
+            "Unit": "radians"
+          }
+        },
+        {
+          "Name": "Update2",
+          "Type": 1,
+          "Request": {
+            "Name": "ATTITUDE INDICATOR PITCH DEGREES",
+            "Unit": "radians"
+          }
+        }
+      ]
     }
   ]
 }

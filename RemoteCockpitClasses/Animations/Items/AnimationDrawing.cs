@@ -18,7 +18,7 @@ namespace RemoteCockpitClasses.Animations.Items
         public double OffsetX { get; set; }
         public double OffsetY { get; set; }
         public IAnimationTrigger[] Triggers { get; set; }
-        [JsonIgnore]
-        public object LastAppliedValue { get; set; }
+        //[JsonIgnore]
+        //public object LastAppliedValue { get; set; }
     }
 }

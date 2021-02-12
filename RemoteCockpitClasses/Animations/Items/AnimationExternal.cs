@@ -20,7 +20,7 @@ namespace RemoteCockpitClasses.Animations.Items
         public string RequestMethod { get; set; } = "GET"; // HttpMethod.Post;
         public string RequestFormat { get; set; }
         public IAnimationTrigger[] Triggers { get; set; }
-        [JsonIgnore]
-        public object LastAppliedValue { get; set; }
+        //[JsonIgnore]
+        //public object LastAppliedValue { get; set; }
     }
 }

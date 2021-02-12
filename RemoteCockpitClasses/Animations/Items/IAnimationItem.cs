@@ -13,6 +13,6 @@ namespace RemoteCockpitClasses.Animations.Items
         AnimationItemTypeEnum Type { get; set; }
         string Name { get; set; }
         IAnimationTrigger[] Triggers { get; set; }
-        object LastAppliedValue { get; set; }
+        //object LastAppliedValue { get; set; }
     }
 }

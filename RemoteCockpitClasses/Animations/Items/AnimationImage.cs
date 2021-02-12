@@ -14,7 +14,7 @@ namespace RemoteCockpitClasses.Animations.Items
         public string Name { get; set; }
         public string ImagePath { get; set; }
         public IAnimationTrigger[] Triggers { get; set; }
-        [JsonIgnore]
-        public object LastAppliedValue { get; set; }
+        //[JsonIgnore]
+        //public object LastAppliedValue { get; set; }
     }
 }

@@ -418,43 +418,46 @@ namespace InstrumentPlugins
                 initialImage = animationImages[animationId];
                 foreach (var trigger in triggers)
                 {
-                    var nextValue = animation.LastAppliedValue ?? 0;
+                    object nextValue = 0.0; //= animation.LastAppliedValue ?? 0;
                     if (trigger is AnimationTriggerClientRequest)
                     {
                         nextValue = previousResults.First(x => x.Request.Name == ((AnimationTriggerClientRequest)trigger).Request.Name && x.Request.Unit == ((AnimationTriggerClientRequest)trigger).Request.Unit).Result;
                     }
-                    animation.LastAppliedValue = nextValue;
+                    //animation.LastAppliedValue = nextValue;
                     lock (config.Animations)
                     {
                         config.Animations.ToArray()[animationId] = animation;
                     }
-                    foreach (var action in ((IAnimationTrigger)trigger).Actions)
+                    if (trigger.Actions != null)
                     {
-                        if (action is AnimationActionRotate)
+                        foreach (var action in trigger.Actions)
                         {
-                            // Rotate our control background, either clockwise or counter-clockwise, depending on the value of the Request Result
-                            var rotateAction = (AnimationActionRotate)action;
-                            var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
-                            var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
-                            if (!rotateAction.RotateClockwise)
+                            if (action is AnimationActionRotate)
                             {
-                                rotateAngle = -rotateAngle;
+                                // Rotate our control background, either clockwise or counter-clockwise, depending on the value of the Request Result
+                                var rotateAction = (AnimationActionRotate)action;
+                                var displayVal = (double)nextValue % rotateAction.MaximumValueExpected;
+                                var rotateAngle = (float)((360 * displayVal) / rotateAction.MaximumValueExpected);
+                                if (!rotateAction.RotateClockwise)
+                                {
+                                    rotateAngle = -rotateAngle;
+                                }
+                                var centrePoint = new PointF { X = initialImage.Width * rotateAction.CentrePoint.X / 100, Y = initialImage.Height * rotateAction.CentrePoint.Y / 100 };
+                                initialImage = RotateImage(initialImage, centrePoint, rotateAngle);
                             }
-                            var centrePoint = new PointF { X = initialImage.Width * rotateAction.CentrePoint.X / 100, Y = initialImage.Height * rotateAction.CentrePoint.Y / 100 };
-                            initialImage = RotateImage(initialImage, centrePoint, rotateAngle);
-                        }
-                        if (action is AnimationActionClip)
-                        {
-                            // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
-                            initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
-                        }
-                        if(action is AnimationActionMove)
-                        {
-                            var moveAction = (AnimationActionMove)action;
-                            bool moveVertically = moveAction.Type == AnimationActionTypeEnum.MoveY;
-                            var moveAmount = moveAction.Invert ? -1 : 1 * (double)nextValue % moveAction.MaxValue / moveAction.MaxValue;
-                            //var moveAmount = moveAction.Invert ? -1 : 1 * ((double)nextValue % moveAction.MaxValue);
-                            initialImage = MoveImage(initialImage, moveVertically, moveAmount);
+                            if (action is AnimationActionClip)
+                            {
+                                // Clip a circle or square using the 2 points to mark the outer edge or top-left/bottom-right
+                                initialImage = ClipImage(initialImage, ((AnimationActionClip)action).Style, ((AnimationActionClip)action).StartPoint, ((AnimationActionClip)action).EndPoint);
+                            }
+                            if (action is AnimationActionMove)
+                            {
+                                var moveAction = (AnimationActionMove)action;
+                                bool moveVertically = moveAction.Type == AnimationActionTypeEnum.MoveY;
+                                var moveAmount = moveAction.Invert ? -1 : 1 * (double)nextValue % moveAction.MaxValue / moveAction.MaxValue;
+                                //var moveAmount = moveAction.Invert ? -1 : 1 * ((double)nextValue % moveAction.MaxValue);
+                                initialImage = MoveImage(initialImage, moveVertically, moveAmount);
+                            }
                         }
                     }
                 }
