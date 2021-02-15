@@ -13,13 +13,13 @@ namespace AvionicsInstrumentsControls.Wrappers
 {
     public class FS_Altimeter : ICockpitInstrument
     {
-        public IEnumerable<ClientRequest> RequiredValues => throw new NotImplementedException();
+        public IEnumerable<ClientRequest> RequiredValues => new ClientRequest[] { new ClientRequest { Name = "AIRSPEED INDICATED", Unit = "knots" } };
 
         public string Name => "Guillaume CHOUTEAU - AirSpeedIndicatorInstrumentControl";
 
         public string Author => "Guillaume CHOUTEAU";
 
-        public string[] Aircraft => new string[] { "Generic" };
+        public string[] Aircraft => new string[] { "Cessna 152 Asobo" };
 
         public DateTime PluginDate => DateTime.Parse("13-Feb-2021 10:00:00");
 

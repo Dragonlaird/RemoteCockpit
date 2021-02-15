@@ -15,26 +15,34 @@ namespace RemoteCockpitServer
     /// <summary>
     /// Original code from: https://docs.microsoft.com/en-us/dotnet/framework/network-programming/asynchronous-server-socket-example
     /// </summary>
-    // State object for reading client data asynchronously  
-
-
     public static class AsynchronousSocketListener
     {
-        private const string requestSeparator = "\r\r";
+        #region Event Handlers
         public static EventHandler<StateObject> NewConnection;
         public static EventHandler<Exception> SocketError;
         public static EventHandler<ClientRequest> RequestReceived;
+        #endregion
 
+        #region Provate Constants and Variables
+        private const string requestSeparator = "\r\r";
         private static int lastConnectionId = 0;
-        // Thread signal.  
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
-
         private static IPEndPoint _endPoint;
         private static Socket listener;
+        #endregion
 
+        #region Prublic Properties
         public static bool IsRunning { get; set; } = false;
         public static int MaxConnections { get; private set; }
 
+        // Thread signal.  
+        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        #endregion
+
+        #region Public Method
+        /// <summary>
+        /// Listen for new connections on configured EndPoint
+        /// </summary>
+        /// <param name="endPoint">EndPoint to listen for Client Connections</param>
         public static void StartListening(IPEndPoint endPoint)
         {
             _endPoint = endPoint;
@@ -77,6 +85,9 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Stop listending for Client connections and close endpoint
+        /// </summary>
         public static void StopListening()
         {
             if (listener != null)
@@ -89,6 +100,10 @@ namespace RemoteCockpitServer
             IsRunning = false;
         }
 
+        /// <summary>
+        /// New connection attempt
+        /// </summary>
+        /// <param name="ar">Connection info</param>
         public static void AcceptCallback(IAsyncResult ar)
         {
             // Signal the main thread to continue.  
@@ -116,6 +131,10 @@ namespace RemoteCockpitServer
                 }
         }
 
+        /// <summary>
+        /// Read data from client
+        /// </summary>
+        /// <param name="ar">Client connection</param>
         public static void ReadCallback(IAsyncResult ar)
         {
             String content = String.Empty;
@@ -177,7 +196,14 @@ namespace RemoteCockpitServer
                 ErrorHandler(listener, ex);
             }
         }
+        #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// Send data to client
+        /// </summary>
+        /// <param name="handler">Socket to stream data to</param>
+        /// <param name="data">Data to stream</param>
         private static void Send(Socket handler, String data)
         {
             if (handler.Connected)
@@ -198,6 +224,11 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Socket has an error - report it to parent class to handle it
+        /// </summary>
+        /// <param name="sender">Class reporting the error</param>
+        /// <param name="ex">Exception info</param>
         private static void ErrorHandler(object sender, Exception ex)
         {
             if(SocketError != null)
@@ -210,11 +241,19 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Client socket is disconnected
+        /// </summary>
+        /// <param name="socketState">Socket disconnecting</param>
         private static void ClientDisconnect(StateObject socketState)
         {
 
         }
 
+        /// <summary>
+        /// Stream data to client and disconnect
+        /// </summary>
+        /// <param name="ar">Socket details</param>
         private static void SendCallback(IAsyncResult ar)
         {
             Socket handler = null;
@@ -234,5 +273,6 @@ namespace RemoteCockpitServer
                 ErrorHandler(handler, ex);
             }
         }
+        #endregion
     }
 }
