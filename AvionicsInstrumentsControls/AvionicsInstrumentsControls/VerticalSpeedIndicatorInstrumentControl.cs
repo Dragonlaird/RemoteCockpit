@@ -17,7 +17,8 @@ using System.Drawing;
 using System.Text;
 using System.Data;
 
-namespace AvionicsInstrumentControlDemo
+
+namespace AvionicsInstrumentControl
 {
     class VerticalSpeedIndicatorInstrumentControl : InstrumentControl
     {
@@ -27,8 +28,8 @@ namespace AvionicsInstrumentControlDemo
         int verticalSpeed; 
 
         // Images
-        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.VerticalSpeedIndicator_Background);
-        Bitmap bmpNeedle = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.VerticalSpeedNeedle);
+        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.VerticalSpeedIndicator_Background);
+        Bitmap bmpNeedle = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.VerticalSpeedNeedle);
 
         #endregion
 

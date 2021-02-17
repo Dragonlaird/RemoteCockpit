@@ -52,7 +52,11 @@ namespace CockpitDisplay
                 this.Invoke(d, new object[] { ctrl });
                 return;
             }
-            ctrl.BackColor = Color.Transparent;
+            try
+            {
+                ctrl.BackColor = Color.Transparent; // Not all controls support transparency
+            }
+            catch { }
             this.Controls.Add(ctrl);
             ctrl.BringToFront();
         }

@@ -17,7 +17,7 @@ using System.Drawing;
 using System.Text;
 using System.Data;
 
-namespace AvionicsInstrumentControlDemo
+namespace AvionicsInstrumentControl
 {
     class AltimeterInstrumentControl : InstrumentControl
     {
@@ -27,10 +27,10 @@ namespace AvionicsInstrumentControlDemo
         int altitude; 
 
         // Images
-        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Altimeter_Background);
-        Bitmap bmpSmallNeedle = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.SmallNeedleAltimeter);
-        Bitmap bmpLongNeedle = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.LongNeedleAltimeter);
-        Bitmap bmpScroll = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Bandeau_Dérouleur);
+        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Altimeter_Background);
+        Bitmap bmpSmallNeedle = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.SmallNeedleAltimeter);
+        Bitmap bmpLongNeedle = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.LongNeedleAltimeter);
+        Bitmap bmpScroll = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Bandeau_Dérouleur);
 
         #endregion
 

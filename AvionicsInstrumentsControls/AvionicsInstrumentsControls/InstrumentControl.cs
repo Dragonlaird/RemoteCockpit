@@ -18,7 +18,7 @@ using System.Text;
 using System.Data;
 
 
-namespace AvionicsInstrumentControlDemo
+namespace AvionicsInstrumentControl
 {
     class InstrumentControl : System.Windows.Forms.Control
     {

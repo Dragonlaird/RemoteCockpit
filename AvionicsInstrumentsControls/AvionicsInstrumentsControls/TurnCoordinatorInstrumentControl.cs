@@ -16,7 +16,8 @@ using System.Drawing;
 using System.Text;
 using System.Data;
 
-namespace AvionicsInstrumentControlDemo
+
+namespace AvionicsInstrumentControl
 {
     class TurnCoordinatorInstrumentControl : InstrumentControl
     {
@@ -27,10 +28,10 @@ namespace AvionicsInstrumentControlDemo
         float TurnQuality;
 
         // Images
-        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinator_Background);
-        Bitmap bmpBall = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinatorBall);
-        Bitmap bmpAircraft = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinatorAircraft);
-        Bitmap bmpMarks = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinatorMarks);
+        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinator_Background);
+        Bitmap bmpBall = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinatorBall);
+        Bitmap bmpAircraft = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinatorAircraft);
+        Bitmap bmpMarks = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.TurnCoordinatorMarks);
 
         #endregion
 

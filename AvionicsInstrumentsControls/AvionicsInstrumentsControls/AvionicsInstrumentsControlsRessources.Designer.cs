@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AvionicsInstrumentControlDemo.AvionicsInstrumentsControls {
+namespace AvionicsInstrumentsControls.AvionicsInstrumentsControls {
     using System;
     
     
@@ -39,8 +39,8 @@ namespace AvionicsInstrumentControlDemo.AvionicsInstrumentsControls {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsCont" +
-                            "rolsRessources", typeof(AvionicsInstrumentsControlsRessources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsContro" +
+                            "lsRessources", typeof(AvionicsInstrumentsControlsRessources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

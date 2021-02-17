@@ -17,7 +17,7 @@ using System.Drawing;
 using System.Text;
 using System.Data;
 
-namespace AvionicsInstrumentControlDemo
+namespace AvionicsInstrumentControl
 {
     class AttitudeIndicatorInstrumentControl : InstrumentControl
     {
@@ -28,9 +28,9 @@ namespace AvionicsInstrumentControlDemo
 		double RollAngle = 0; // Theta
 
         // Images
-        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Horizon_Background);
-        Bitmap bmpBoule = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Horizon_GroundSky);
-        Bitmap bmpAvion = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Maquette_Avion);
+        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Horizon_Background);
+        Bitmap bmpBoule = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Horizon_GroundSky);
+        Bitmap bmpAvion = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.Maquette_Avion);
 
         #endregion
 

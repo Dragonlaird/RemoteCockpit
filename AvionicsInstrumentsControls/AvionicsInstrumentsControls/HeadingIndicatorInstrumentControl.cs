@@ -17,7 +17,7 @@ using System.Drawing;
 using System.Text;
 using System.Data;
 
-namespace AvionicsInstrumentControlDemo
+namespace AvionicsInstrumentControl
 {
     class HeadingIndicatorInstrumentControl : InstrumentControl
     {
@@ -27,9 +27,9 @@ namespace AvionicsInstrumentControlDemo
         int Heading; 
 
         // Images
-        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.HeadingIndicator_Background);
-        Bitmap bmpHedingWeel = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.HeadingWeel);
-        Bitmap bmpAircaft = new Bitmap(AvionicsInstrumentControlDemo.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.HeadingIndicator_Aircraft);        
+        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.HeadingIndicator_Background);
+        Bitmap bmpHedingWeel = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.HeadingWeel);
+        Bitmap bmpAircaft = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.HeadingIndicator_Aircraft);        
 
         #endregion
 

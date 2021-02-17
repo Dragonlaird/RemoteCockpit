@@ -1,5 +1,4 @@
-﻿using AvionicsInstrumentControlDemo;
-using InstrumentPlugins;
+﻿using InstrumentPlugins;
 using RemoteCockpitClasses;
 using System;
 using System.Collections.Generic;
@@ -8,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AvionicsInstrumentControl;
 
-namespace AvionicsInstrumentsControls.Wrappers
+namespace AvionicsInstrumentsControl.Wrappers
 {
     public class FS_Altimeter : ICockpitInstrument
     {
+        private readonly AirSpeedIndicatorInstrumentControl instrument = new AirSpeedIndicatorInstrumentControl();
         public IEnumerable<ClientRequest> RequiredValues => new ClientRequest[] { new ClientRequest { Name = "AIRSPEED INDICATED", Unit = "knots" } };
 
         public string Name => "Guillaume CHOUTEAU - AirSpeedIndicatorInstrumentControl";
@@ -27,7 +28,7 @@ namespace AvionicsInstrumentsControls.Wrappers
 
         public InstrumentType Type => InstrumentType.Airspeed_Indicator;
 
-        public Control Control =>  new AirSpeedIndicatorInstrumentControl();
+        public Control Control =>  instrument;
 
         public ISite Site { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -36,23 +37,21 @@ namespace AvionicsInstrumentsControls.Wrappers
 
         public void Dispose()
         {
-            Control.Dispose();
-            if(Disposed!= null)
-            {
+            instrument.Dispose();
+            if(Disposed != null)
                 try
                 {
                     Disposed.DynamicInvoke();
                 }
                 catch { }
-            }
         }
 
         public void SetLayout(int top, int left, int height, int width)
         {
-            Control.Height = height;
-            Control.Width = width;
-            Control.Top = top;
-            Control.Left = left;
+            instrument.Height = height;
+            instrument.Width = width;
+            instrument.Top = top;
+            instrument.Left = left;
         }
 
         public void ValueUpdate(ClientRequestResult value)

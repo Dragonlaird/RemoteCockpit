@@ -17,7 +17,7 @@ using System.Drawing;
 using System.Text;
 using System.Data;
 
-namespace AvionicsInstrumentControlDemo
+namespace AvionicsInstrumentControl
 {
     class AirSpeedIndicatorInstrumentControl : InstrumentControl
     {
@@ -27,8 +27,8 @@ namespace AvionicsInstrumentControlDemo
         int airSpeed; 
 
         // Images
-        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.AirSpeedIndicator_Background);
-        Bitmap bmpNeedle = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.AirSpeedNeedle);
+        Bitmap bmpCadran = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.AirSpeedIndicator_Background);
+        Bitmap bmpNeedle = new Bitmap(AvionicsInstrumentsControls.AvionicsInstrumentsControls.AvionicsInstrumentsControlsRessources.AirSpeedNeedle);
 
         #endregion
 

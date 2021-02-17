@@ -58,7 +58,11 @@
     <Compile Include="AvionicsInstrumentsControls\AttitudeIndicatorInstrumentControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="AvionicsInstrumentsControlsRessources.Designer.cs" />
+    <Compile Include="AvionicsInstrumentsControls\AvionicsInstrumentsControlsRessources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AvionicsInstrumentsControlsRessources.resx</DependentUpon>
+    </Compile>
     <Compile Include="AvionicsInstrumentsControls\HeadingIndicatorInstrumentControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -74,8 +78,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Wrappers\FS_Altimeter.cs" />
-    <EmbeddedResource Include="AvionicsInstrumentsControlsRessources.resx">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="AvionicsInstrumentsControls\AvionicsInstrumentsControlsRessources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AvionicsInstrumentsControlsRessources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
