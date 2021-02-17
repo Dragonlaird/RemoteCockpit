@@ -58,9 +58,19 @@ namespace AvionicsInstrumentsControl.Wrappers
         {
             try
             {
-                ((AirSpeedIndicatorInstrumentControl)Control).SetAirSpeedIndicatorParameters((int)value.Result);
+                if (((AirSpeedIndicatorInstrumentControl)Control).InvokeRequired)
+                {
+                    ((AirSpeedIndicatorInstrumentControl)Control).Invoke(new Action(() =>
+                    {
+                        ((AirSpeedIndicatorInstrumentControl)Control).SetAirSpeedIndicatorParameters((int)(double)value.Result);
+                    }));
+                    return;
+                }
+                ((AirSpeedIndicatorInstrumentControl)Control).SetAirSpeedIndicatorParameters((int)(double)value.Result);
             }
-            catch { }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }
