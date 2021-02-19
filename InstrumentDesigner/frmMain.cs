@@ -35,7 +35,7 @@ namespace InstrumentDesigner
 
             configFilePath = "";
             openFileDialog.FileName = "";
-            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             ResetForm();
             config = new Configuration();
         }

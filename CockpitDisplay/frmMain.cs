@@ -21,12 +21,11 @@ namespace CockpitDisplay
         private RemoteConnector connector;
         private delegate void SafeCallDelegate(object obj, string propertyName, object value);
         private delegate void SafeUpdateDelegate(object sender, string e);
+        private string appDataFolder;
 
         //private ClientRequestResult altitude = new ClientRequestResult { Request = new ClientRequest { Name = "INDICATED ALTITUDE", Unit = "feet" }, Result = 14250 };
 
         private frmCockpit cockpit;
-
-        private System.Timers.Timer testTimer;
 
         public frmMain()
         {
@@ -62,6 +61,7 @@ namespace CockpitDisplay
         {
             try
             {
+                appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 requestResults = new List<RemoteCockpitClasses.ClientRequestResult>();
                 var ipAddress = IPAddress.Parse(txtServerAddress.Text);
                 var ipPort = (int)txtServerPort.Value;
@@ -70,7 +70,7 @@ namespace CockpitDisplay
                 connector.ReceiveData += ReceiveResultFromServer;
                 connector.Connect();
 
-                var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
+                var layoutsDefinitionsText = File.ReadAllText(Path.Combine(appDataFolder, @".\Layouts\Layouts.json"));
                 var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
                 cmbCockpitLayout.Items.Clear();
                 foreach (var layoutJson in layouts["Layouts"])

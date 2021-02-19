@@ -21,12 +21,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_05806BEF1ED34CB78B34BF82B1121975"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_06F462FFA31E87DE0681B09EAD546F97"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,6 +82,12 @@
         "Entry"
         {
         "MsmKey" = "8:_3112ECF213AA67540418ACBCE03324EF"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3112ECF213AA67540418ACBCE03324EF"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -141,25 +141,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_392DA5B8EE4F4468B71B3DD74CE87B76"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_395152D4BF1841A39CA6C4E3B16781DB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3B1DAF68E6C044F8B0056FC428795B90"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3C0305BC39874CB6A496596F84F6C567"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -267,18 +249,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_541B49C8E6E646EFA86E08862779375A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5761FFDD394F450D94D723977B76DBE8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_585EC5FA9EE749119A973211D048C3E1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -305,6 +275,12 @@
         {
         "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
         "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -363,24 +339,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6B64B5B311464F55A55FE8E57D8545A8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7425680BC96949BB92705B04B7E7B541"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_76383475FF3A46339E13BB0C8C73A72C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_76A069025254E8F528938321678CE42D"
         "OwnerKey" = "8:_A442CDB876754C3CB016F7343F12CD44"
         "MsmSig" = "8:_UNDEFINED"
@@ -393,12 +351,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_782DA9896BE84784A7CA8E98EAA1B9EA"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7A1C734BB11BC19ABB27590BA78ACBE1"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
         "MsmSig" = "8:_UNDEFINED"
@@ -407,6 +359,12 @@
         {
         "MsmKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
         "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -483,12 +441,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9CD232FF4507462994C9031FF93C4414"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_9F0A1B95EB49A849160EC4F672285726"
         "OwnerKey" = "8:_63083A641BBA903378ABA96024239AFD"
         "MsmSig" = "8:_UNDEFINED"
@@ -502,12 +454,6 @@
         "Entry"
         {
         "MsmKey" = "8:_A442CDB876754C3CB016F7343F12CD44"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A7A957831C394D48989A574077A77B03"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -549,14 +495,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D208A2213BBF4415972C3A02C223B662"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
+        "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
-        "OwnerKey" = "8:_31BC42D1F89848F889B2E71E9864BAD5"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -616,6 +562,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D4DBB4505698EE0B4F1DA0B7BEF76217"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D4DBB4505698EE0B4F1DA0B7BEF76217"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -657,7 +609,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D99E6C19DD3F407E8449458E9E38F9F3"
+        "MsmKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -675,7 +627,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E262E524C1244EDFA391D1A093F5881A"
+        "MsmKey" = "8:_E243DFCDB3854C2888B1A87A14ACAE61"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -688,12 +640,6 @@
         "Entry"
         {
         "MsmKey" = "8:_E51D139A26EC4E5287A1219020E67A1F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E65F7789C692410BAB924D104E5B19B0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -729,8 +675,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F99A540028E0437E8FB314A038F57420"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -982,7 +940,7 @@
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_0A317C8D2A274DABAD3D74471E0B4E35"
             {
             "Name" = "8:Primary output from RemoteCockpitServer (Active)"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLSERVER"
             "Object" = "8:_A442CDB876754C3CB016F7343F12CD44"
             "FileType" = "3:2"
             "InstallAction" = "3:4"
@@ -997,7 +955,7 @@
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_7E69B44F64B64D9485D9AE6BF4FDE532"
             {
             "Name" = "8:Primary output from RemoteCockpitServer (Active)"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLSERVER"
             "Object" = "8:_A442CDB876754C3CB016F7343F12CD44"
             "FileType" = "3:2"
             "InstallAction" = "3:3"
@@ -1012,7 +970,7 @@
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_C550F1F259374A14B5F0B81151B18F53"
             {
             "Name" = "8:Primary output from RemoteCockpitServer (Active)"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLSERVER"
             "Object" = "8:_A442CDB876754C3CB016F7343F12CD44"
             "FileType" = "3:2"
             "InstallAction" = "3:1"
@@ -1052,28 +1010,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Cessna_152_Altimeter.json"
             "TargetName" = "8:Cessna_152_Altimeter.json"
             "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05806BEF1ED34CB78B34BF82B1121975"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Generic_Altitude_Background.png"
-            "TargetName" = "8:Generic_Altitude_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1143,8 +1081,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\GPS_Generic_Background.png"
             "TargetName" = "8:GPS_Generic_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1163,8 +1101,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json"
             "TargetName" = "8:Generic_Attitude_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
+            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1291,73 +1229,13 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_392DA5B8EE4F4468B71B3DD74CE87B76"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Altitude_Indicator.json"
-            "TargetName" = "8:Generic_Altitude_Indicator.json"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_395152D4BF1841A39CA6C4E3B16781DB"
             {
             "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Dashboards\\Cessna_152_Dashboard.png"
             "TargetName" = "8:Cessna_152_Dashboard.png"
             "Tag" = "8:"
             "Folder" = "8:_F1FE109987D84A5C910C80C5EE88FFE1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3B1DAF68E6C044F8B0056FC428795B90"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json"
-            "TargetName" = "8:Generic_Attitude_Indicator.json"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3C0305BC39874CB6A496596F84F6C567"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png"
-            "TargetName" = "8:Cessna_152_Airspeed_Indicator.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1376,8 +1254,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
             "TargetName" = "8:Generic_Bearing_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
+            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1427,8 +1305,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Airspeed_Indicator.json"
             "TargetName" = "8:Generic_Airspeed_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
+            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1447,8 +1325,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Indicator_Gimbal.png"
             "TargetName" = "8:Attitude_Indicator_Gimbal.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1493,46 +1371,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_541B49C8E6E646EFA86E08862779375A"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
-            "TargetName" = "8:Bearing_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5761FFDD394F450D94D723977B76DBE8"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\GPS_Generic_Background.png"
-            "TargetName" = "8:GPS_Generic_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_585EC5FA9EE749119A973211D048C3E1"
             {
             "SourcePath" = "8:..\\FSRemoteCockpitServer\\SimConnectSDK\\SimConnect.dll"
@@ -1558,8 +1396,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Altitude_Indicator.json"
             "TargetName" = "8:Generic_Altitude_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
+            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1609,8 +1447,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
             "TargetName" = "8:Bearing_Foreground.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1686,66 +1524,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B64B5B311464F55A55FE8E57D8545A8"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Airspeed_Background.png"
-            "TargetName" = "8:Airspeed_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7425680BC96949BB92705B04B7E7B541"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_GPS.json"
-            "TargetName" = "8:Generic_GPS.json"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_76383475FF3A46339E13BB0C8C73A72C"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Airspeed_Indicator.json"
-            "TargetName" = "8:Generic_Airspeed_Indicator.json"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_76A069025254E8F528938321678CE42D"
             {
             "AssemblyRegister" = "3:1"
@@ -1775,26 +1553,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_782DA9896BE84784A7CA8E98EAA1B9EA"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
-            "TargetName" = "8:Generic_Bearing_Indicator.json"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7A1C734BB11BC19ABB27590BA78ACBE1"
@@ -1896,7 +1654,7 @@
             "TargetName" = "8:Generic_Dashboard.png"
             "Tag" = "8:"
             "Folder" = "8:_F1FE109987D84A5C910C80C5EE88FFE1"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1961,26 +1719,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9CD232FF4507462994C9031FF93C4414"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Generic_Background.png"
-            "TargetName" = "8:Attitude_Generic_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9F0A1B95EB49A849160EC4F672285726"
             {
             "AssemblyRegister" = "3:1"
@@ -2017,28 +1755,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png"
             "TargetName" = "8:Cessna_152_Airspeed_Indicator.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A7A957831C394D48989A574077A77B03"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Generic_Background.png"
-            "TargetName" = "8:Attitude_Generic_Background.png"
-            "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2088,8 +1806,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
             "TargetName" = "8:Bearing_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2154,26 +1872,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D208A2213BBF4415972C3A02C223B662"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
-            "TargetName" = "8:Bearing_Foreground.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D3072D5E67E7FF5994E90EFFF2AB773E"
             {
             "AssemblyRegister" = "3:1"
@@ -2236,26 +1934,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D99E6C19DD3F407E8449458E9E38F9F3"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Cessna_152_Altimeter.json"
-            "TargetName" = "8:Cessna_152_Altimeter.json"
-            "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DCD37FFB812F422BC91AA2FD2E4DA13F"
             {
             "AssemblyRegister" = "3:1"
@@ -2292,8 +1970,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Generic_Altitude_Background.png"
             "TargetName" = "8:Generic_Altitude_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2307,13 +1985,13 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E262E524C1244EDFA391D1A093F5881A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E243DFCDB3854C2888B1A87A14ACAE61"
             {
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Airspeed_Background.png"
             "TargetName" = "8:Airspeed_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_0D6D490A23C74BACB937DAFB924FE39D"
-            "Condition" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2332,28 +2010,8 @@
             "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Layouts.json"
             "TargetName" = "8:Layouts.json"
             "Tag" = "8:"
-            "Folder" = "8:_951E43929E6D41E8AE0F37702D1E6EC3"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E65F7789C692410BAB924D104E5B19B0"
-            {
-            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Indicator_Gimbal.png"
-            "TargetName" = "8:Attitude_Indicator_Gimbal.png"
-            "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Folder" = "8:_423E477FBD8D4E959718CF1A3A3F52E2"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2403,8 +2061,8 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_GPS.json"
             "TargetName" = "8:Generic_GPS.json"
             "Tag" = "8:"
-            "Folder" = "8:_22F6FE3070184C83A94265E96BBD58AB"
-            "Condition" = "8:"
+            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2438,12 +2096,87 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F99A540028E0437E8FB314A038F57420"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Generic_Background.png"
+            "TargetName" = "8:Attitude_Generic_Background.png"
+            "Tag" = "8:"
+            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
         }
         "Folder"
         {
+            "{1525181F-901A-416C-8A58-119130FE478E}:_2C4778C88B3E49509EDACC83553A65AD"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_086A4643345B451CAE921902527176BC"
+                    {
+                    "Name" = "8:InstrumentImages"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9EF87A3F456A452FA14728B7E76319BD"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_423E477FBD8D4E959718CF1A3A3F52E2"
+                    {
+                    "Name" = "8:Layouts"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:INSTALLCLIENT"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_A5A269AE44B14B6CA68AB7710EEB85EF"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F1FE109987D84A5C910C80C5EE88FFE1"
+                            {
+                            "Name" = "8:Dashboards"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_3835CA0E58474D578FE136EED8879E7E"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_7FBD45211AB040A4BA8366EB78F8671D"
+                    {
+                    "Name" = "8:GenericInstruments"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_8B7DE07625A44994AD00BF1688AFA08C"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_6DCC9EA78B4D480BB9D31EB34F8A9566"
             {
             "Name" = "8:#1916"
@@ -2509,59 +2242,15 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0D6D490A23C74BACB937DAFB924FE39D"
-                    {
-                    "Name" = "8:InstrumentImages"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_9EF87A3F456A452FA14728B7E76319BD"
-                        "Folders"
-                        {
-                        }
-                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_1852EB9E91CD4B9E8200420E383F55D7"
                     {
                     "Name" = "8:Plugins"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_197EAD7968D3496BAEE990E9EDBE0EC6"
                         "Folders"
                         {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_22F6FE3070184C83A94265E96BBD58AB"
-                    {
-                    "Name" = "8:GenericInstruments"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_8B7DE07625A44994AD00BF1688AFA08C"
-                        "Folders"
-                        {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_951E43929E6D41E8AE0F37702D1E6EC3"
-                    {
-                    "Name" = "8:Layouts"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_A5A269AE44B14B6CA68AB7710EEB85EF"
-                        "Folders"
-                        {
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F1FE109987D84A5C910C80C5EE88FFE1"
-                            {
-                            "Name" = "8:Dashboards"
-                            "AlwaysCreate" = "11:FALSE"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "Property" = "8:_3835CA0E58474D578FE136EED8879E7E"
-                                "Folders"
-                                {
-                                }
-                            }
                         }
                     }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_9D78675B3E80427CA432FA626F0C4CF5"
@@ -2594,7 +2283,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FS Remote Cockpit"
         "ProductCode" = "8:{2BABE3B9-265B-49F4-BB2D-0A0F41E8A897}"
-        "PackageCode" = "8:{CB0F3CAA-66A7-4257-AA04-1A4C6CF9E694}"
+        "PackageCode" = "8:{49E9E134-8C17-4B81-B1F0-70A46FB914A1}"
         "UpgradeCode" = "8:{F25817B9-883E-4FFF-947D-0B68B0F1BA9F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -2617,7 +2306,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:\"C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.18362.0\\x86\\signtool.exe\" sign /a  \"$(BuiltOuputPath)\" /f \"C:\\Users\\drago\\OneDrive\\My Documents\\Code Signing Certificate\\James Reeves Code Signing Certificate.pfx\""
+        "PostBuildEvent" = "8:\"C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.18362.0\\x86\\signtool.exe\" sign /a  \"$(BuiltOuputPath)\""
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
@@ -2991,7 +2680,263 @@
                             "ContextData" = "8:1;True=1;False=0"
                             "Attributes" = "3:0"
                             "Setting" = "3:0"
+                            "Value" = "3:0"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F727B743BF674B4784A6FADE6EA7E026"
+                    {
+                    "Sequence" = "3:210"
+                    "DisplayName" = "8:Checkboxes   (A)"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdCustomCheck1Dlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "BannerText"
+                            {
+                            "Name" = "8:BannerText"
+                            "DisplayName" = "8:#1014"
+                            "Description" = "8:#1114"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Install Options"
+                            "DefaultValue" = "8:#1214"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "BodyText"
+                            {
+                            "Name" = "8:BodyText"
+                            "DisplayName" = "8:#1015"
+                            "Description" = "8:#1115"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Please select the applications you want to install"
+                            "DefaultValue" = "8:#1215"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Label"
+                            {
+                            "Name" = "8:Checkbox1Label"
+                            "DisplayName" = "8:#1034"
+                            "Description" = "8:#1134"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Install Server as Windows Service"
+                            "DefaultValue" = "8:#1234"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Property"
+                            {
+                            "Name" = "8:Checkbox1Property"
+                            "DisplayName" = "8:#1030"
+                            "Description" = "8:#1130"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:INSTALLSERVER"
+                            "DefaultValue" = "8:CHECKBOXA1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Value"
+                            {
+                            "Name" = "8:Checkbox1Value"
+                            "DisplayName" = "8:#1038"
+                            "Description" = "8:#1138"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox1Visible"
+                            {
+                            "Name" = "8:Checkbox1Visible"
+                            "DisplayName" = "8:#1026"
+                            "Description" = "8:#1126"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
                             "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Label"
+                            {
+                            "Name" = "8:Checkbox2Label"
+                            "DisplayName" = "8:#1035"
+                            "Description" = "8:#1135"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Install Remote Cockpit Display"
+                            "DefaultValue" = "8:#1235"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Property"
+                            {
+                            "Name" = "8:Checkbox2Property"
+                            "DisplayName" = "8:#1031"
+                            "Description" = "8:#1131"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:INSTALLCLIENT"
+                            "DefaultValue" = "8:CHECKBOXA2"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Value"
+                            {
+                            "Name" = "8:Checkbox2Value"
+                            "DisplayName" = "8:#1039"
+                            "Description" = "8:#1139"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox2Visible"
+                            {
+                            "Name" = "8:Checkbox2Visible"
+                            "DisplayName" = "8:#1027"
+                            "Description" = "8:#1127"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Label"
+                            {
+                            "Name" = "8:Checkbox3Label"
+                            "DisplayName" = "8:#1036"
+                            "Description" = "8:#1136"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:Install Custom Instrument Designer"
+                            "DefaultValue" = "8:#1236"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Property"
+                            {
+                            "Name" = "8:Checkbox3Property"
+                            "DisplayName" = "8:#1032"
+                            "Description" = "8:#1132"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:INSTALLDESIGNER"
+                            "DefaultValue" = "8:CHECKBOXA3"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Value"
+                            {
+                            "Name" = "8:Checkbox3Value"
+                            "DisplayName" = "8:#1040"
+                            "Description" = "8:#1140"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:1"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox3Visible"
+                            {
+                            "Name" = "8:Checkbox3Visible"
+                            "DisplayName" = "8:#1028"
+                            "Description" = "8:#1128"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:1"
+                            "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Label"
+                            {
+                            "Name" = "8:Checkbox4Label"
+                            "DisplayName" = "8:#1037"
+                            "Description" = "8:#1137"
+                            "Type" = "3:3"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
+                            "DefaultValue" = "8:#1237"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Property"
+                            {
+                            "Name" = "8:Checkbox4Property"
+                            "DisplayName" = "8:#1033"
+                            "Description" = "8:#1133"
+                            "Type" = "3:14"
+                            "ContextData" = "8:Public"
+                            "Attributes" = "3:2"
+                            "Setting" = "3:2"
+                            "Value" = "8:UNUSED"
+                            "DefaultValue" = "8:CHECKBOXA4"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Value"
+                            {
+                            "Name" = "8:Checkbox4Value"
+                            "DisplayName" = "8:#1041"
+                            "Description" = "8:#1141"
+                            "Type" = "3:2"
+                            "ContextData" = "8:Unchecked=;Checked=1"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
+                            "DefaultValue" = "8:"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Checkbox4Visible"
+                            {
+                            "Name" = "8:Checkbox4Visible"
+                            "DisplayName" = "8:#1029"
+                            "Description" = "8:#1129"
+                            "Type" = "3:5"
+                            "ContextData" = "8:1;True=1;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:0"
                             "DefaultValue" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -3287,7 +3232,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3315,7 +3260,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3371,7 +3316,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3399,7 +3344,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3427,7 +3372,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLSERVER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3455,7 +3400,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3477,13 +3422,41 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D6BBB8F7E934450483DC4E066683CA49"
+            {
+            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\Release\\InstrumentPlugins.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{6A197BAC-121C-4D34-A215-14DA7AF32C86}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E2DC23420F1D42C1808F3F266702F954"
             {
             "SourcePath" = "8:..\\FSServiceInstaller\\obj\\Release\\FSServiceInstaller.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLSERVER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3511,7 +3484,7 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Condition" = "8:INSTALLCLIENT"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -3538,8 +3511,8 @@
             "SourcePath" = "8:..\\AvionicsInstrumentsControls\\obj\\Release\\AvionicsInstrumentsControls.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
-            "Condition" = "8:"
+            "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
+            "Condition" = "8:INSTALLCLIENT"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
