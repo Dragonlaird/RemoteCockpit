@@ -18,6 +18,9 @@ using Serilog.Events;
 
 namespace RemoteCockpitServer
 {
+    /// <summary>
+    /// Wrapper for RemoteCockpit to install as a Windows Service
+    /// </summary>
     public partial class FSCockpitServer : ServiceBase
     {
         public EventHandler<LogMessage> LogReceived;
@@ -106,7 +109,7 @@ namespace RemoteCockpitServer
             {
                 LogReceived.DynamicInvoke(this, e);
             }
-            catch { }
+            catch { } // Parent class logger has an error - nothing we can do about it here
         }
     }
 }

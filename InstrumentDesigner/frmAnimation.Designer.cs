@@ -121,6 +121,7 @@ namespace InstrumentDesigner
             this.cmdAnimationSave = new System.Windows.Forms.Button();
             this.cmdAnimationCancel = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.lblNotImplemented = new System.Windows.Forms.Label();
             this.tabCollection.SuspendLayout();
             this.tabWhat.SuspendLayout();
             this.gpAnimationDrawing.SuspendLayout();
@@ -417,6 +418,7 @@ namespace InstrumentDesigner
             // 
             this.tabWhen.Controls.Add(this.gpAnimationClientRequest);
             this.tabWhen.Controls.Add(this.gdAnimationTriggers);
+            this.tabWhen.Controls.Add(this.gpAnimationMouseClick);
             this.tabWhen.Location = new System.Drawing.Point(4, 22);
             this.tabWhen.Name = "tabWhen";
             this.tabWhen.Padding = new System.Windows.Forms.Padding(3);
@@ -427,7 +429,6 @@ namespace InstrumentDesigner
             // 
             // gpAnimationClientRequest
             // 
-            this.gpAnimationClientRequest.Controls.Add(this.gpAnimationMouseClick);
             this.gpAnimationClientRequest.Controls.Add(this.txtAnimationClientRequestDescription);
             this.gpAnimationClientRequest.Controls.Add(this.lblAnimationClientRequestDescription);
             this.gpAnimationClientRequest.Controls.Add(this.cbAnimationClientRequestUnitsOverride);
@@ -445,6 +446,7 @@ namespace InstrumentDesigner
             // 
             // gpAnimationMouseClick
             // 
+            this.gpAnimationMouseClick.Controls.Add(this.lblNotImplemented);
             this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseMin);
             this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseMax);
             this.gpAnimationMouseClick.Controls.Add(this.txtAnimationMouseIncrement);
@@ -461,12 +463,13 @@ namespace InstrumentDesigner
             this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseHeight);
             this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseX);
             this.gpAnimationMouseClick.Controls.Add(this.lblAnimationMouseY);
-            this.gpAnimationMouseClick.Location = new System.Drawing.Point(1, 0);
+            this.gpAnimationMouseClick.Location = new System.Drawing.Point(6, 160);
             this.gpAnimationMouseClick.Name = "gpAnimationMouseClick";
             this.gpAnimationMouseClick.Size = new System.Drawing.Size(453, 172);
             this.gpAnimationMouseClick.TabIndex = 3;
             this.gpAnimationMouseClick.TabStop = false;
             this.gpAnimationMouseClick.Text = "Mouse Click";
+            this.gpAnimationMouseClick.Visible = false;
             // 
             // txtAnimationMouseMin
             // 
@@ -1120,6 +1123,16 @@ namespace InstrumentDesigner
             this.cmdAnimationCancel.Text = "Cancel";
             this.cmdAnimationCancel.UseVisualStyleBackColor = true;
             // 
+            // lblNotImplemented
+            // 
+            this.lblNotImplemented.AutoSize = true;
+            this.lblNotImplemented.ForeColor = System.Drawing.Color.Red;
+            this.lblNotImplemented.Location = new System.Drawing.Point(9, 150);
+            this.lblNotImplemented.Name = "lblNotImplemented";
+            this.lblNotImplemented.Size = new System.Drawing.Size(103, 13);
+            this.lblNotImplemented.TabIndex = 16;
+            this.lblNotImplemented.Text = "Not yet implemented";
+            // 
             // frmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1267,5 +1280,6 @@ namespace InstrumentDesigner
         private NumericUpDown txtAnimationMouseMax;
         private NumericUpDown txtAnimationMouseIncrement;
         private NumericUpDown txtAnimationMouseVal;
+        private Label lblNotImplemented;
     }
 }

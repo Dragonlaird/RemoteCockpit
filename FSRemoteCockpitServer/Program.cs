@@ -14,10 +14,21 @@ using RemoteCockpitClasses;
 
 namespace RemoteCockpitServer
 {
+    /// <summary>
+    /// Execute Remote Server as a Console App or Windows Service, with ability to Install/Uninstall Service
+    /// </summary>
     public class Program
     {
         private static FSCockpitServer server;
         private static RemoteServer consoleServer;
+        /// <summary>
+        /// If Command Line Arguments are supplied, Remote Server runs as a Console App
+        /// </summary>
+        /// <param name="args">No Aarguments - Run as Windows Service
+        /// -install [-i] Install Windows Service
+        /// -uninstall [-u] Uninstall Windows Service
+        /// -console [-c] [-start] Start Console App
+        /// -stop Stop Console App</param>
         public static void Main(string[] args)
         {
 

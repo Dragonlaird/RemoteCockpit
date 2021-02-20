@@ -35,6 +35,7 @@ namespace InstrumentPlugins
         private int controlWidth = 50;
         private double scaleFactor = 1;
         private bool disposedValue;
+        private string appDataFolder;
         private List<ClientRequestResult> previousResults = new List<ClientRequestResult>();
         private List<ClientRequestResult> currentResults = new List<ClientRequestResult>();
         private List<ClientRequestLimits> resultLimits = new List<ClientRequestLimits>();
@@ -82,6 +83,7 @@ namespace InstrumentPlugins
         private void Initialize()
         {
             isStarting = true;
+            appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".\\FS Remote Cockpit");
             UpdateStepCount(animationTimeInMs);
             if (Control == null)
                 Control = new Panel();
@@ -711,8 +713,7 @@ namespace InstrumentPlugins
             {
                 if (!string.IsNullOrEmpty(imagePath))
                 {
-                    var diretory = Directory.GetCurrentDirectory();
-                    var imageFile = File.OpenRead(Path.Combine(diretory, imagePath));
+                    var imageFile = File.OpenRead(Path.Combine(appDataFolder, imagePath));
                     var image = Image.FromStream(imageFile);
                     aspectRatio = (double)image.Height / image.Width;
                     var resizedImage = new Bitmap(image, new Size((int)(image.Width * scaleFactor), (int)(image.Height * scaleFactor)));
