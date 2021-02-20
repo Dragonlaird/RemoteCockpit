@@ -24,6 +24,8 @@ namespace InstrumentDesigner
         private string configFilePath;
         private string cockpitDirectory;
         private bool populatingForm = false;
+        private string appDataFolder;
+
         public frmInstrumentDesigner()
         {
             InitializeComponent();
@@ -32,10 +34,10 @@ namespace InstrumentDesigner
 
         private void Initialize()
         {
-
-            configFilePath = "";
+            appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".\\FS Remote Cockpit");
+            configFilePath = Path.Combine(appDataFolder, ".\\GenericInstruments");
             openFileDialog.FileName = "";
-            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            openFileDialog.InitialDirectory = configFilePath;
             ResetForm();
             config = new Configuration();
         }
@@ -177,7 +179,8 @@ namespace InstrumentDesigner
             openFileDialog.Title = "Load Instrument Configuration";
             openFileDialog.Filter = "Instrument Configurations|*.json";
             openFileDialog.FileName = "";
-            openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".\\GenericInstruments"));
+            var initialPath = Path.GetFullPath(Path.Combine(appDataFolder, ".\\GenericInstruments\\"));
+            openFileDialog.InitialDirectory = initialPath;
             var dialogResult = openFileDialog.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {

@@ -13,8 +13,12 @@ using Serilog.Events;
 
 namespace RemoteCockpitServer
 {
+    /// <summary>
+    /// Check if MSFS2020 is running and send any requested valiable values to connected clients
+    /// </summary>
     public class FSConnector : IDisposable
     {
+        #region Private Variables
         private const int connectionCheckInterval = 10; // Seconds to recheck for FS connection 
         private int _valueRequestInterval = 1000; // Millieconds between each batch of requests for variable updates
         private MessagePumpManager handler;
@@ -22,11 +26,16 @@ namespace RemoteCockpitServer
         private List<SimVarRequest> simVarRequests;
         private bool bConnected = false;
         private System.Threading.Timer requestTimer;
+        #endregion
+
+        #region Event Handlers
         public EventHandler<SimVarRequestResult> DataReceived;
         public EventHandler<LogMessage> LogReceived;
         public EventHandler<bool> ConnectionStateChange;
         public EventHandler<Exception> ErrorEvent;
+        #endregion
 
+        #region Public Properties
         public int ValueRequestInterval
         {
             get
@@ -70,13 +79,19 @@ namespace RemoteCockpitServer
                 }
             }
         }
+        #endregion
 
+        #region ctor
         public FSConnector()
         {
             Initialize();
         }
+        #endregion
 
         #region Start/Stop/Initialize/Dispose
+        /// <summary>
+        /// Prepare local classes and variables
+        /// </summary>
         private void Initialize()
         {
             DisposeHandler();
@@ -84,6 +99,7 @@ namespace RemoteCockpitServer
             Connecting = false;
             Connected = false;
         }
+
 
         public void Start()
         {
@@ -95,11 +111,18 @@ namespace RemoteCockpitServer
             //StartConnector();
         }
 
+        /// <summary>
+        /// Start connecting to MSFS2020
+        /// </summary>
+        /// <param name="state"></param>
         private void StartConnector(object state)
         {
             StartConnector();
         }
 
+        /// <summary>
+        /// Start connecting to MSFS2020
+        /// </summary>
         private void StartConnector()
         {
             if (!Connected)
@@ -121,6 +144,9 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Stop checking for MSFS 2020 running
+        /// </summary>
         public void Stop()
         {
             WriteLog("Disconnecting");
@@ -151,6 +177,10 @@ namespace RemoteCockpitServer
         #endregion
 
         #region SimVar Request Handlers
+        /// <summary>
+        /// Client has requested a variable, add it to the ist of variables being checked, if not already requested
+        /// </summary>
+        /// <param name="request">Variable to listen for</param>
         public void RequestVariable(SimVarRequest request)
         {
             if (request != null && !string.IsNullOrWhiteSpace(request.Name))
@@ -196,6 +226,10 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Add new variable request to SimConnect handler
+        /// </summary>
+        /// <param name="request">SimVar request</param>
         private void AddSimVarRequest(SimVarRequest request)
         {
             if (Connected && handler != null)
@@ -210,6 +244,10 @@ namespace RemoteCockpitServer
                 }
         }
 
+        /// <summary>
+        /// Get latest value for every SimVar variable requested
+        /// </summary>
+        /// <param name="state"></param>
         private void RequestAllValues(object state)
         {
             if (Connected && handler != null)
@@ -224,6 +262,9 @@ namespace RemoteCockpitServer
         #endregion
 
         #region Window Message Handler Emulator
+        /// <summary>
+        /// Use a simulated Windows Message Pump to send/receive windows messages via SimConnect to/from MSFS2020
+        /// </summary>
         private void CreateHandler()
         {
             if (handler == null)
@@ -235,6 +276,9 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Dispose of local instances of classes
+        /// </summary>
         private void DisposeHandler()
         {
             handler = null;
@@ -242,6 +286,11 @@ namespace RemoteCockpitServer
         #endregion
 
         #region SimConnect Event Handlers
+        /// <summary>
+        /// Called by SimConnect for any error
+        /// </summary>
+        /// <param name="sender">SimConnect</param>
+        /// <param name="error">Error supplied by MSFS2020</param>
         void Sim_Error(object sender, SIMCONNECT_RECV_EXCEPTION error)
         {
             var reqId = error.dwSendID;
@@ -255,6 +304,11 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Which SimCOnnect parameter caused the MSFS2020 error
+        /// </summary>
+        /// <param name="index">Parameter Index</param>
+        /// <returns>Name of parameter</returns>
         private string GetSimErrorParameter(int index)
         {
             var result = "";
@@ -285,6 +339,11 @@ namespace RemoteCockpitServer
             return result;
         }
 
+        /// <summary>
+        /// Fnd which type of error was generated
+        /// </summary>
+        /// <param name="errorId">Error index value</param>
+        /// <returns>Name of error type generated</returns>
         private string GetSimError(int errorId)
         {
             var result = "";
@@ -408,9 +467,13 @@ namespace RemoteCockpitServer
             return result;
         }
 
+        /// <summary>
+        /// Process SinVar result from MSFS2020
+        /// </summary>
+        /// <param name="sender">SimConnect</param>
+        /// <param name="data">SimVariable value</param>
         void Sim_Data(object sender, SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
         {
-            //WriteLog(string.Format("SimConnect Data: {0}={1}", data.dwRequestID, data.dwData));
             var request = simVarRequests.SingleOrDefault(x => (int)x.ReqID == (int)data.dwRequestID);
             if (request != null && data?.dwData?.Length > 0 && DataReceived != null)
             {
@@ -419,6 +482,11 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Called when connection to MSFS2020 is established or stopped
+        /// </summary>
+        /// <param name="sender">SimConnect</param>
+        /// <param name="connected">Connection State</param>
         void Sim_Connection(object sender, bool connected)
         {
             if (connected)
@@ -446,19 +514,36 @@ namespace RemoteCockpitServer
         #endregion
 
         #region Message and Log Handlers
+        /// <summary>
+        /// Send any log messages to parent class, if logger connected.
+        /// If not connected, use Console to write log
+        /// </summary>
+        /// <param name="sender">Class reporting this log message</param>
+        /// <param name="message">Log message, including severity</param>
         private void WriteLog(object sender, LogMessage message)
         {
             if (LogReceived != null)
             {
-                LogReceived.DynamicInvoke(sender, message);
+                // Attempt to send log message to parent class
+                try
+                {
+                    LogReceived.DynamicInvoke(sender, message);
+                }
+                catch { } // Parent error reporter has a problem - can't do anything about it here
             }
             else
             {
+                // No parent logger, write to Console
                 var strType = message.Type.ToString().Substring(0, 3);
                 Console.WriteLine("[{0}] {1}", strType, message);
             }
         }
 
+        /// <summary>
+        /// Default helper for locally generated log messages
+        /// </summary>
+        /// <param name="message">Log message to report</param>
+        /// <param name="type">Severity (default: Information)</param>
         private void WriteLog(string message, LogEventLevel type = LogEventLevel.Information)
         {
             WriteLog(this, new LogMessage { Message = message, Type = type });

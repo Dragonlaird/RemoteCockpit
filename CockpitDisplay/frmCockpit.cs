@@ -27,6 +27,7 @@ namespace CockpitDisplay
         public EventHandler<ClientRequest> RequestValue;
         public EventHandler<string> LogMessage;
         private Point ScreenDimensions;
+        private string appDataFolder;
         public frmCockpit()
         {
             InitializeComponent();
@@ -37,6 +38,7 @@ namespace CockpitDisplay
         {
             this.Show();
             this.Update();
+            appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".\\FS Remote Cockpit");
             layoutDefinitions = new List<LayoutDefinition>();
             instrumentPlugins = new List<ICockpitInstrument>();
             usedInstrumentPlugins = new List<ICockpitInstrument>();
@@ -52,7 +54,11 @@ namespace CockpitDisplay
                 this.Invoke(d, new object[] { ctrl });
                 return;
             }
-            ctrl.BackColor = Color.Transparent;
+            try
+            {
+                ctrl.BackColor = Color.Transparent; // Not all controls support transparency
+            }
+            catch { }
             this.Controls.Add(ctrl);
             ctrl.BringToFront();
         }
@@ -166,7 +172,7 @@ namespace CockpitDisplay
                 try
                 {
                     this.FindForm().BackColor = Color.Black;
-                    var imageFile = File.OpenRead(string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background));
+                    var imageFile = File.OpenRead(Path.Combine(appDataFolder,string.Format(@".\Layouts\Dashboards\{0}", layoutDefinition.Background)));
                     var image = Image.FromStream(imageFile);
                     var imageScaleFactor = (double)this.DisplayRectangle.Width / (double)image.Width;
                     aspectRatio = (double)image.Height / image.Width;
@@ -251,7 +257,7 @@ namespace CockpitDisplay
             {
                 string message = string.Format("Loading Layout: {0}", name);
                 ConsoleLog(message);
-                var layoutsDefinitionsText = File.ReadAllText(@".\Layouts\Layouts.json");
+                var layoutsDefinitionsText = File.ReadAllText(Path.Combine(appDataFolder,@".\Layouts\Layouts.json"));
                 var layouts = (JObject)JsonConvert.DeserializeObject(layoutsDefinitionsText);
                 foreach (var layoutJson in layouts["Layouts"])
                 {
@@ -335,7 +341,7 @@ namespace CockpitDisplay
             }).Where(x => x != null).ToList();
             message = string.Format("Fetching Generic plugins");
             ConsoleLog(message);
-            foreach (var instrumentDefinition in Directory.GetFiles(".\\GenericInstruments"))
+            foreach (var instrumentDefinition in Directory.GetFiles(Path.Combine(appDataFolder,".\\GenericInstruments")))
             {
                 if (instrumentDefinition?.ToLower().EndsWith(".json") == true)
                     try

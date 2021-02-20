@@ -13,17 +13,32 @@ using System.Threading.Tasks;
 
 namespace RemoteCockpitServer
 {
+    /// <summary>
+    /// Remove Cockpit Server - Runs as a Windows Service.
+    /// Will check for MSFS20 running on local computer
+    /// and listen for client connections via the network
+    /// </summary>
     public class RemoteServer : IDisposable
     {
+        #region Event Handlers
         public EventHandler<LogMessage> LogReceived;
+        #endregion
+
+        #region Private variables
         private FSConnector fsConnector;
         private SocketListener listener;
         private List<SimVarRequestResult> requestResults;
-        private bool AlwaysSendVariable { get; set; } = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
+        private bool AlwaysSendVariable = false;// Should variable always be retransmitted to clients, even if value hasn't changed?
         private int _updateFrequency = 1000; // How may milliseconds between each SimConnect poll?
         private readonly Logger _log;
-        public bool IsRunning = false;
+        private IPEndPoint endPoint = null;
+        #endregion
 
+        #region Public IsRunning flag
+        public bool IsRunning = false;
+        #endregion
+
+        #region ctor
         public RemoteServer()
         {
             try
@@ -48,13 +63,42 @@ namespace RemoteCockpitServer
                 WriteLog(ex);
             }
         }
+        #endregion
 
+        #region Private Methods
+        /// <summary>
+        /// Prepare local values and classes for use
+        /// </summary>
         private void Initialize()
         {
             try
             {
+                // Read App.config settings
+                if (ConfigurationManager.AppSettings.AllKeys.Any(x => x == "AlwaysSendVariables"))
+                    bool.TryParse(ConfigurationManager.AppSettings["AlwaysSendVariables"], out AlwaysSendVariable);
+                var ipAddress = ConfigurationManager.AppSettings.Get(@"ipAddress");
+                var ipPort = int.Parse(ConfigurationManager.AppSettings.Get(@"ipPort"));
+                IPAddress address = null;
+                // Supplied an actual address?
+                if (!IPAddress.TryParse(ipAddress, out address))
+                {
+                    // Not an IP Address - Check if machine name
+                    var addresses = Dns.GetHostAddresses(ipAddress);
+                    foreach (var addr in addresses)
+                    {
+                        if (addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && addr != IPAddress.Loopback)
+                        {
+                            address = addr;
+                            break;
+                        }
+                    }
+                }
+                if (address == null)
+                    address = IPAddress.Loopback;
+                endPoint = new IPEndPoint(address, ipPort);
+                WriteLog(this, new LogMessage { Message = string.Format("Listen on IP/Port: {0}/{1}", endPoint.Address.ToString(), endPoint.Port), Type = LogEventLevel.Information });
+                // Add the default Request Variables for a new Connection State
                 requestResults = new List<SimVarRequestResult>();
-                // Add the first Request Variable for Connection State
                 requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "FS CONNECTION", Unit = "bool" }, Value = false });
                 requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "UPDATE FREQUENCY", Unit = "millisecond" }, Value = _updateFrequency });
                 requestResults.Add(new SimVarRequestResult { Request = new SimVarRequest { Name = "TITLE", Unit = "string" }, Value = "None" });
@@ -65,43 +109,9 @@ namespace RemoteCockpitServer
             }
         }
 
-        public void Start()
-        {
-            IsRunning = true;
-            try
-            {
-                WriteLog(this, new LogMessage { Message = "FSCockpit Starting", Type = LogEventLevel.Information });
-                StartConnector();
-                StartListener();
-                WriteLog(this, new LogMessage { Message = "FSCockpit Started", Type = LogEventLevel.Information });
-                if (Environment.UserInteractive)
-                    while (this.IsRunning)
-                    {
-                        Thread.Sleep(10);
-                    }
-            }
-            catch (Exception ex)
-            {
-                WriteLog(ex);
-            }
-        }
-
-        public void Stop()
-        {
-            try
-            {
-                WriteLog(this, new LogMessage { Message = "FSCockpit Stopping", Type = LogEventLevel.Information });
-                fsConnector?.Stop();
-                listener?.Stop();
-                WriteLog(this, new LogMessage { Message = "FSCockpit Stopped", Type = LogEventLevel.Information });
-                IsRunning = false;
-            }
-            catch(Exception ex)
-            {
-                WriteLog(ex);
-            }
-        }
-
+        /// <summary>
+        /// Check to see if MSFS2020 is running, if running, instantiate SimConnect communication
+        /// </summary>
         private void StartConnector()
         {
             try
@@ -121,13 +131,13 @@ namespace RemoteCockpitServer
 
         }
 
+        /// <summary>
+        /// Start listening for client connection requests on configured IP Address/Port
+        /// </summary>
         private void StartListener()
         {
             try
             {
-                var ipAddress = ConfigurationManager.AppSettings.Get(@"ipAddress");
-                var ipPort = int.Parse(ConfigurationManager.AppSettings.Get(@"ipPort"));
-                var endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), ipPort);
                 listener = new SocketListener(endPoint);
                 listener.LogReceived += WriteLog;
                 listener.ClientConnect += ClientConnect;
@@ -140,6 +150,11 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Client connection request received
+        /// </summary>
+        /// <param name="sender">Connection Handler</param>
+        /// <param name="e">Connection Request</param>
         private void ClientConnect(object sender, StateObject e)
         {
             try
@@ -205,6 +220,7 @@ namespace RemoteCockpitServer
             try
             {
                 var lastRequest = requestResults.SingleOrDefault(x => x.Request.Name == e.Request.Name && x.Request.Unit == e.Request.Unit);
+                // Only send value to client if values is different from last value sent, or we configured to alsways send value
                 if (lastRequest != null && ((lastRequest.Value == null && e.Value != null) || !lastRequest.Value.Equals(e.Value) || AlwaysSendVariable))
                 {
                     // Request has changed value or we are forcing retransmission - send to SockListener, for retransmission to remote clients
@@ -242,6 +258,10 @@ namespace RemoteCockpitServer
             }
         }
 
+        /// <summary>
+        /// Convert a supplied exception to a LogMessage and call WriteLog(sender, msg)
+        /// </summary>
+        /// <param name="ex">Exception to be logged</param>
         private void WriteLog(Exception ex)
         {
             var logMsg = string.Empty;
@@ -254,6 +274,13 @@ namespace RemoteCockpitServer
             WriteLog(this, new LogMessage { Type = LogEventLevel.Error, Message = logMsg });
         }
 
+        /// <summary>
+        /// If parent has a log writer, send log message
+        /// Also try writing to any supplied logger
+        /// If no logger was supplied, rite to Console
+        /// </summary>
+        /// <param name="sender">Class generating this log entry</param>
+        /// <param name="msg">Log message to write, including log severity</param>
         private void WriteLog(object sender, LogMessage msg)
         {
             if (LogReceived != null)
@@ -303,7 +330,55 @@ namespace RemoteCockpitServer
                 // Logger has an error - nothing we can do about it now
             }
         }
+        #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Start RemoteCockpit as a Windows Service
+        /// </summary>
+        public void Start()
+        {
+            IsRunning = true;
+            try
+            {
+                WriteLog(this, new LogMessage { Message = "FSCockpit Starting", Type = LogEventLevel.Information });
+                StartConnector();
+                StartListener();
+                WriteLog(this, new LogMessage { Message = "FSCockpit Started", Type = LogEventLevel.Information });
+                if (Environment.UserInteractive)
+                    while (this.IsRunning)
+                    {
+                        Thread.Sleep(10);
+                    }
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex);
+            }
+        }
+
+        /// <summary>
+        /// Stop Windows Service, if running
+        /// </summary>
+        public void Stop()
+        {
+            try
+            {
+                WriteLog(this, new LogMessage { Message = "FSCockpit Stopping", Type = LogEventLevel.Information });
+                fsConnector?.Stop();
+                listener?.Stop();
+                WriteLog(this, new LogMessage { Message = "FSCockpit Stopped", Type = LogEventLevel.Information });
+                IsRunning = false;
+            }
+            catch (Exception ex)
+            {
+                WriteLog(ex);
+            }
+        }
+
+        /// <summary>
+        /// Dispose any instanciated classes and clear any provate variables used
+        /// </summary>
         public void Dispose()
         {
             if (IsRunning)
@@ -311,7 +386,11 @@ namespace RemoteCockpitServer
             fsConnector?.Dispose();
             listener?.Dispose();
             listener = null;
+            endPoint = null;
+            requestResults?.Clear();
+            requestResults = null;
             fsConnector = null;
         }
+        #endregion
     }
 }
