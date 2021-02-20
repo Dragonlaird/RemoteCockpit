@@ -83,7 +83,7 @@ namespace InstrumentPlugins
         private void Initialize()
         {
             isStarting = true;
-            appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".\\FS Remote Cockpit");
             UpdateStepCount(animationTimeInMs);
             if (Control == null)
                 Control = new Panel();

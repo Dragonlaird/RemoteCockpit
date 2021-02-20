@@ -329,6 +329,7 @@ namespace InstrumentDesigner
             if (!populatingForm)
             {
                 gpAnimationClientRequest.Visible = false;
+                gpAnimationMouseClick.Visible = false;
                 var senderGrid = (DataGridView)sender;
                 if (senderGrid.SelectedRows.Count == 1)
                 {
@@ -344,7 +345,9 @@ namespace InstrumentDesigner
                             }
                             break;
                         case "Timer":
+                            break;
                         case "MouseClick":
+                            gpAnimationMouseClick.Visible = true;
                             break;
                     }
                 }

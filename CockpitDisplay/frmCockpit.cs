@@ -38,12 +38,12 @@ namespace CockpitDisplay
         {
             this.Show();
             this.Update();
+            appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".\\FS Remote Cockpit");
             layoutDefinitions = new List<LayoutDefinition>();
             instrumentPlugins = new List<ICockpitInstrument>();
             usedInstrumentPlugins = new List<ICockpitInstrument>();
             var allAssemblies = LoadAvailableAssemblies();
             instrumentPlugins = GetPlugIns(allAssemblies);
-            appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         }
 
         private void AddControl(Control ctrl)

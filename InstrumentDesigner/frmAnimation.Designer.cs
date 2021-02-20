@@ -467,6 +467,7 @@ namespace InstrumentDesigner
             this.gpAnimationMouseClick.TabIndex = 3;
             this.gpAnimationMouseClick.TabStop = false;
             this.gpAnimationMouseClick.Text = "Mouse Click";
+            this.gpAnimationMouseClick.Visible = false;
             // 
             // txtAnimationMouseMin
             // 

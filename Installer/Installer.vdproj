@@ -82,6 +82,12 @@
         "Entry"
         {
         "MsmKey" = "8:_3112ECF213AA67540418ACBCE03324EF"
+        "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3112ECF213AA67540418ACBCE03324EF"
         "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -89,12 +95,6 @@
         {
         "MsmKey" = "8:_3112ECF213AA67540418ACBCE03324EF"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3112ECF213AA67540418ACBCE03324EF"
-        "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -167,12 +167,6 @@
         {
         "MsmKey" = "8:_4BE9DD269E20F43700545F0C9CE8E9E5"
         "OwnerKey" = "8:_A442CDB876754C3CB016F7343F12CD44"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4BE9DD269E20F43700545F0C9CE8E9E5"
-        "OwnerKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -280,6 +274,12 @@
         "Entry"
         {
         "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
+        "OwnerKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
         "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -287,12 +287,6 @@
         {
         "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_63083A641BBA903378ABA96024239AFD"
-        "OwnerKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -364,12 +358,6 @@
         "Entry"
         {
         "MsmKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
-        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -377,6 +365,12 @@
         {
         "MsmKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
         "OwnerKey" = "8:_ECAFCD88074A44C99461181FDAA8906E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7B5F6B690155F8CF55ECB58E72554A80"
+        "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -502,6 +496,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
+        "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
         "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -509,12 +509,6 @@
         {
         "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D3072D5E67E7FF5994E90EFFF2AB773E"
-        "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -688,6 +682,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D6BBB8F7E934450483DC4E066683CA49"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -701,12 +701,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_F586B1EEBFC6426390DEA8D7D1EADC62"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5064C270514AA2CFB1637FD939C88F53"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1010,7 +1004,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Cessna_152_Altimeter.json"
             "TargetName" = "8:Cessna_152_Altimeter.json"
             "Tag" = "8:"
-            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Folder" = "8:_41A5C68DF10A48C08F1888CC7448AE7C"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1081,7 +1075,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\GPS_Generic_Background.png"
             "TargetName" = "8:GPS_Generic_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1101,7 +1095,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Attitude_Indicator.json"
             "TargetName" = "8:Generic_Attitude_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Folder" = "8:_41A5C68DF10A48C08F1888CC7448AE7C"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1254,7 +1248,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Bearing_Indicator.json"
             "TargetName" = "8:Generic_Bearing_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Folder" = "8:_41A5C68DF10A48C08F1888CC7448AE7C"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1305,7 +1299,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Airspeed_Indicator.json"
             "TargetName" = "8:Generic_Airspeed_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Folder" = "8:_41A5C68DF10A48C08F1888CC7448AE7C"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1325,7 +1319,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Indicator_Gimbal.png"
             "TargetName" = "8:Attitude_Indicator_Gimbal.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1396,7 +1390,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_Altitude_Indicator.json"
             "TargetName" = "8:Generic_Altitude_Indicator.json"
             "Tag" = "8:"
-            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Folder" = "8:_41A5C68DF10A48C08F1888CC7448AE7C"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1447,7 +1441,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Foreground.png"
             "TargetName" = "8:Bearing_Foreground.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1755,7 +1749,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Cessna_152_Airspeed_Indicator.png"
             "TargetName" = "8:Cessna_152_Airspeed_Indicator.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1806,7 +1800,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Bearing_Background.png"
             "TargetName" = "8:Bearing_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1970,7 +1964,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Generic_Altitude_Background.png"
             "TargetName" = "8:Generic_Altitude_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1990,7 +1984,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Airspeed_Background.png"
             "TargetName" = "8:Airspeed_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2010,7 +2004,7 @@
             "SourcePath" = "8:..\\CockpitDisplay\\Layouts\\Layouts.json"
             "TargetName" = "8:Layouts.json"
             "Tag" = "8:"
-            "Folder" = "8:_423E477FBD8D4E959718CF1A3A3F52E2"
+            "Folder" = "8:_366EB19064CA48AB852A8A6ECADF86F2"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2061,7 +2055,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\GenericInstruments\\Generic_GPS.json"
             "TargetName" = "8:Generic_GPS.json"
             "Tag" = "8:"
-            "Folder" = "8:_7FBD45211AB040A4BA8366EB78F8671D"
+            "Folder" = "8:_41A5C68DF10A48C08F1888CC7448AE7C"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2101,7 +2095,7 @@
             "SourcePath" = "8:..\\InstrumentPlugins\\InstrumentImages\\Attitude_Generic_Background.png"
             "TargetName" = "8:Attitude_Generic_Background.png"
             "Tag" = "8:"
-            "Folder" = "8:_086A4643345B451CAE921902527176BC"
+            "Folder" = "8:_2D24459850B946698B06B547DA2264AC"
             "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2131,48 +2125,59 @@
             "Property" = "8:AppDataFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_086A4643345B451CAE921902527176BC"
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F3922135E15A43DF8B72B158CD3F98C3"
                     {
-                    "Name" = "8:InstrumentImages"
+                    "Name" = "8:FS Remote Cockpit"
                     "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
+                    "Condition" = "8:"
                     "Transitive" = "11:FALSE"
-                    "Property" = "8:_9EF87A3F456A452FA14728B7E76319BD"
+                    "Property" = "8:_8CA7DC494CA345348963EB6307237105"
                         "Folders"
                         {
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_423E477FBD8D4E959718CF1A3A3F52E2"
-                    {
-                    "Name" = "8:Layouts"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:INSTALLCLIENT"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_A5A269AE44B14B6CA68AB7710EEB85EF"
-                        "Folders"
-                        {
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F1FE109987D84A5C910C80C5EE88FFE1"
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_2D24459850B946698B06B547DA2264AC"
                             {
-                            "Name" = "8:Dashboards"
+                            "Name" = "8:InstrumentImages"
                             "AlwaysCreate" = "11:FALSE"
-                            "Condition" = "8:"
+                            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
                             "Transitive" = "11:FALSE"
-                            "Property" = "8:_3835CA0E58474D578FE136EED8879E7E"
+                            "Property" = "8:_9EF87A3F456A452FA14728B7E76319BD"
                                 "Folders"
                                 {
                                 }
                             }
-                        }
-                    }
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_7FBD45211AB040A4BA8366EB78F8671D"
-                    {
-                    "Name" = "8:GenericInstruments"
-                    "AlwaysCreate" = "11:FALSE"
-                    "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_8B7DE07625A44994AD00BF1688AFA08C"
-                        "Folders"
-                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_366EB19064CA48AB852A8A6ECADF86F2"
+                            {
+                            "Name" = "8:Layouts"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:INSTALLCLIENT"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_A5A269AE44B14B6CA68AB7710EEB85EF"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F1FE109987D84A5C910C80C5EE88FFE1"
+                                    {
+                                    "Name" = "8:Dashboards"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_3835CA0E58474D578FE136EED8879E7E"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_41A5C68DF10A48C08F1888CC7448AE7C"
+                            {
+                            "Name" = "8:GenericInstruments"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:INSTALLCLIENT || INSTALLDESIGNER"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_8B7DE07625A44994AD00BF1688AFA08C"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -2283,7 +2288,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FS Remote Cockpit"
         "ProductCode" = "8:{2BABE3B9-265B-49F4-BB2D-0A0F41E8A897}"
-        "PackageCode" = "8:{49E9E134-8C17-4B81-B1F0-70A46FB914A1}"
+        "PackageCode" = "8:{9C0DD71E-1DA4-4467-8318-A5B935299D92}"
         "UpgradeCode" = "8:{F25817B9-883E-4FFF-947D-0B68B0F1BA9F}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -3228,7 +3233,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_31BC42D1F89848F889B2E71E9864BAD5"
             {
-            "SourcePath" = "8:..\\Generic_Altitude_Indicator\\obj\\Release\\Generic_Altitude_Indicator.dll"
+            "SourcePath" = "8:..\\Generic_Altitude_Indicator\\obj\\x64\\Debug\\Generic_Altitude_Indicator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -3256,7 +3261,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4290235A07F64AFAA49FF3C5A7CF9A82"
             {
-            "SourcePath" = "8:..\\Generic_Airspeed_Indicator\\obj\\Release\\Generic_Airspeed_Indicator.dll"
+            "SourcePath" = "8:..\\Generic_Airspeed_Indicator\\obj\\x64\\Debug\\Generic_Airspeed_Indicator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -3284,7 +3289,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_46C28EC82D8C46E5800851B15EFAA52E"
             {
-            "SourcePath" = "8:..\\RemoteCockpitClasses\\obj\\Release\\netstandard2.0\\RemoteCockpitClasses.dll"
+            "SourcePath" = "8:..\\RemoteCockpitClasses\\obj\\x64\\Debug\\netstandard2.0\\RemoteCockpitClasses.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -3312,7 +3317,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4974562789034C4695C851EE7F36C1F7"
             {
-            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\Release\\InstrumentPlugins.dll"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -3340,7 +3345,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_91881D9096F642EABC8371E4AF1A9671"
             {
-            "SourcePath" = "8:..\\Generic_Attitude_Indicator\\obj\\Release\\Generic_Attitude_Indicator.dll"
+            "SourcePath" = "8:..\\Generic_Attitude_Indicator\\obj\\x64\\Debug\\Generic_Attitude_Indicator.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -3368,7 +3373,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A442CDB876754C3CB016F7343F12CD44"
             {
-            "SourcePath" = "8:..\\FSRemoteCockpitServer\\obj\\Release\\RemoteCockpitServer.exe"
+            "SourcePath" = "8:..\\FSRemoteCockpitServer\\obj\\x64\\Debug\\RemoteCockpitServer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -3396,7 +3401,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_BF5F53DC3C344849BF183E39919D017A"
             {
-            "SourcePath" = "8:..\\InstrumentDesigner\\obj\\Release\\InstrumentDesigner.exe"
+            "SourcePath" = "8:..\\InstrumentDesigner\\obj\\x64\\Debug\\InstrumentDesigner.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -3424,7 +3429,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D6BBB8F7E934450483DC4E066683CA49"
             {
-            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\Release\\InstrumentPlugins.dll"
+            "SourcePath" = "8:..\\InstrumentPlugins\\obj\\x64\\Debug\\InstrumentPlugins.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_1852EB9E91CD4B9E8200420E383F55D7"
@@ -3452,7 +3457,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E2DC23420F1D42C1808F3F266702F954"
             {
-            "SourcePath" = "8:..\\FSServiceInstaller\\obj\\Release\\FSServiceInstaller.exe"
+            "SourcePath" = "8:"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"
@@ -3480,7 +3485,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_ECAFCD88074A44C99461181FDAA8906E"
             {
-            "SourcePath" = "8:..\\CockpitDisplay\\obj\\Release\\CockpitDisplay.exe"
+            "SourcePath" = "8:..\\CockpitDisplay\\obj\\x64\\Debug\\CockpitDisplay.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_DB021720326240E1AF78943127E5E9C7"

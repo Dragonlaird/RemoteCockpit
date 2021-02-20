@@ -61,7 +61,7 @@ namespace CockpitDisplay
         {
             try
             {
-                appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                appDataFolder = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".\\FS Remote Cockpit"));
                 requestResults = new List<RemoteCockpitClasses.ClientRequestResult>();
                 var ipAddress = IPAddress.Parse(txtServerAddress.Text);
                 var ipPort = (int)txtServerPort.Value;
